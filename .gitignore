@@ -1,0 +1,35 @@
+# Binaries and object files
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.exe
+bin/
+build/
+dist/
+
+# Editor and IDE metadata
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Test outputs & temporary files
+*.tmp
+*.log
+*.out
+
+# Firebase cache
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+ui-debug.log*
+
+# Node / NPM (if initialized locally)
+node_modules/
+package-lock.json
+npm-debug.log*
