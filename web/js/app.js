@@ -19,21 +19,41 @@ class App {
   }
 
   setupTabs() {
-    const tabButtons = document.querySelectorAll('.nav-tab-btn');
+    const tabButtons = document.querySelectorAll('.header .nav-tab-btn');
     tabButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         const targetTab = e.currentTarget.dataset.tab;
-        this.switchTab(targetTab);
+        if (targetTab) this.switchTab(targetTab);
+      });
+    });
+
+    // Course pills in Academic Hero
+    document.querySelectorAll('.course-chip').forEach(chip => {
+      chip.addEventListener('click', (e) => {
+        const target = e.currentTarget.dataset.goto;
+        if (target) {
+          this.switchTab(target);
+          const tabPane = document.getElementById(`tab-${target}`);
+          if (tabPane) {
+            tabPane.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
       });
     });
   }
 
   switchTab(tabId) {
+    if (!tabId) return;
     this.currentTab = tabId;
 
     // Update tab buttons
-    document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+    document.querySelectorAll('.header .nav-tab-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.tab === tabId);
+    });
+
+    // Update course chips in hero
+    document.querySelectorAll('.course-chip').forEach(chip => {
+      chip.classList.toggle('active-chip', chip.dataset.goto === tabId);
     });
 
     // Update tab panes

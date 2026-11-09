@@ -111,7 +111,24 @@ class ConcurrencyLab {
         this.vehicles = [];
         this.quadrants.forEach(q => q.count = 0);
         this.deadlockDetected = false;
-        document.getElementById('deadlockAlertBanner').style.display = 'none';
+        const alertBanner = document.getElementById('deadlockAlertBanner');
+        if (alertBanner) alertBanner.style.display = 'none';
+      });
+    }
+
+    // Force Deadlock Button (Educational Coffman Demo)
+    const btnForceDeadlock = document.getElementById('btnForceDeadlock');
+    if (btnForceDeadlock) {
+      btnForceDeadlock.addEventListener('click', () => {
+        this.forceCoffmanDeadlock();
+      });
+    }
+
+    // Resolve Deadlock Button
+    const btnResolveDeadlock = document.getElementById('btnResolveDeadlock');
+    if (btnResolveDeadlock) {
+      btnResolveDeadlock.addEventListener('click', () => {
+        this.resolveCoffmanDeadlock();
       });
     }
 
@@ -152,10 +169,82 @@ class ConcurrencyLab {
     const roundPanel = document.getElementById('roundaboutControls');
     const heatPanel = document.getElementById('heatControls');
     const patPanel = document.getElementById('patternsControls');
+    const compPanel = document.getElementById('comparisonControls');
+    const concViewport = document.getElementById('concurrencyViewport');
+    const compViewport = document.getElementById('comparisonViewport');
 
     if (roundPanel) roundPanel.style.display = this.activeSubtab === 'roundabout' ? 'block' : 'none';
     if (heatPanel) heatPanel.style.display = this.activeSubtab === 'heat' ? 'block' : 'none';
     if (patPanel) patPanel.style.display = this.activeSubtab === 'patterns' ? 'block' : 'none';
+    if (compPanel) compPanel.style.display = this.activeSubtab === 'comparison' ? 'block' : 'none';
+
+    if (concViewport) concViewport.style.display = this.activeSubtab === 'comparison' ? 'none' : 'flex';
+    if (compViewport) compViewport.style.display = this.activeSubtab === 'comparison' ? 'block' : 'none';
+  }
+
+  forceCoffmanDeadlock() {
+    this.vehicles = [];
+    this.quadrants.forEach(q => q.count = 0);
+    this.semaphoresEnabled = false;
+    const semToggle = document.getElementById('toggleSemaphores');
+    if (semToggle) semToggle.checked = false;
+    const statusEl = document.getElementById('semStatusText');
+    if (statusEl) {
+      statusEl.textContent = 'DISABLED (Coffman Circular Wait)';
+      statusEl.style.color = 'var(--rose)';
+    }
+
+    const routes = [
+      { startQuad: 0, targetQuad: 1, path: [0, 1], entry: 'W', exit: 'E' },
+      { startQuad: 1, targetQuad: 2, path: [1, 2], entry: 'N', exit: 'S' },
+      { startQuad: 2, targetQuad: 3, path: [2, 3], entry: 'E', exit: 'W' },
+      { startQuad: 3, targetQuad: 0, path: [3, 0], entry: 'S', exit: 'N' }
+    ];
+
+    routes.forEach(r => {
+      this.quadrants[r.startQuad].count++;
+      this.vehicles.push({
+        id: this.nextVehicleId++,
+        entry: r.entry,
+        exit: r.exit,
+        path: r.path,
+        pathIndex: 0,
+        currentQuad: r.startQuad,
+        progress: 0.95,
+        speed: 0.015,
+        state: 'IN_QUADRANT',
+        blockedTime: 2000,
+        color: '#f43f5e'
+      });
+    });
+
+    this.deadlockDetected = true;
+    window.soundController.playDeadlockAlert();
+    const alertBanner = document.getElementById('deadlockAlertBanner');
+    if (alertBanner) alertBanner.style.display = 'flex';
+  }
+
+  resolveCoffmanDeadlock() {
+    this.semaphoresEnabled = true;
+    const semToggle = document.getElementById('toggleSemaphores');
+    if (semToggle) semToggle.checked = true;
+    const statusEl = document.getElementById('semStatusText');
+    if (statusEl) {
+      statusEl.textContent = 'ENABLED (Deadlock-Free)';
+      statusEl.style.color = 'var(--emerald)';
+    }
+    this.deadlockDetected = false;
+    const alertBanner = document.getElementById('deadlockAlertBanner');
+    if (alertBanner) alertBanner.style.display = 'none';
+
+    if (this.vehicles.length > 0) {
+      const v = this.vehicles[0];
+      v.state = 'EXITING';
+      this.quadrants[v.currentQuad].count--;
+      v.currentQuad = -1;
+      v.progress = 0;
+    }
+    window.soundController.playTone(660, 'sine', 0.1, 0.4);
   }
 
   // --- Roundabout Simulator Engine ---

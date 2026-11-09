@@ -15,24 +15,24 @@
       <a href="#" class="brand">
         <div class="brand-icon">&gt;_</div>
         <div class="brand-text">
-          <h1>CS Interactive Lab <span class="brand-badge">v2.0</span></h1>
-          <p>Algorithms • Concurrency • Distributed Systems</p>
+          <h1>CS Interactive Lab <span class="brand-badge">UCR • ECCI</span></h1>
+          <p>Plataforma de Apoyo Académico • Ciencias de la Computación</p>
         </div>
       </a>
 
       <!-- Primary Navigation Tabs -->
       <nav class="nav-tabs" role="tablist">
         <button class="nav-tab-btn active" data-tab="algorithms" role="tab">
-          <span>📊</span> Algorithms
+          <span>📊</span> Algoritmos (CI-0112)
         </button>
         <button class="nav-tab-btn" data-tab="concurrency" role="tab">
-          <span>🚦</span> Concurrency
+          <span>🚦</span> Concurrencia (CI-0117)
         </button>
         <button class="nav-tab-btn" data-tab="networking" role="tab">
-          <span>🌐</span> Distributed Networks
+          <span>🌐</span> Redes (CI-0123)
         </button>
         <button class="nav-tab-btn" data-tab="cheatsheets" role="tab">
-          <span>📖</span> Theory & Docs
+          <span>📖</span> Guías & Recursos UCR
         </button>
       </nav>
 
@@ -40,7 +40,7 @@
       <div class="header-actions">
         <button id="btnToggleSound" class="icon-btn" title="Toggle Sound Feedback">🔊</button>
         <button id="btnToggleFullscreen" class="icon-btn" title="Toggle Fullscreen">⛶</button>
-        <a href="https://github.com/josuetorres27/cs-interactive-lab" target="_blank" class="icon-btn" title="View Source on GitHub">
+        <a href="https://github.com/josuetorres27/cs-interactive-lab" target="_blank" class="icon-btn" title="Ver código en GitHub">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
           </svg>
@@ -52,6 +52,34 @@
   <!-- Main Application Body -->
   <main class="main-content">
 
+    <!-- Academic Support Platform Hero (UCR ECCI) -->
+    <div class="academic-hero">
+      <div class="academic-badge-row">
+        <span class="ucr-badge">🏛️ Universidad de Costa Rica</span>
+        <span class="ecci-badge">Escuela de Ciencias de la Computación e Informática (ECCI)</span>
+      </div>
+      <h2 class="academic-hero-title">CS Interactive Lab • Plataforma de Apoyo Académico</h2>
+      <p class="academic-hero-desc">
+        Laboratorio virtual interactivo diseñado para fortalecer el aprendizaje en los cursos troncales de Computación en la UCR. 
+        Traduce conceptos teóricos complejos en <strong>intuición visual directa</strong> mediante simulaciones en tiempo real, comparativas de control de flujo 
+        y motores nativos en C/C++.
+      </p>
+      <div class="course-chips-container">
+        <button class="course-chip active-chip" data-goto="algorithms">
+          <span>📘</span> CI-0112 / CI-0113 Algoritmos
+        </button>
+        <button class="course-chip" data-goto="concurrency">
+          <span>🚦</span> CI-0117 Sistemas Concurrentes
+        </button>
+        <button class="course-chip" data-goto="networking">
+          <span>🌐</span> CI-0123 Principios de Redes
+        </button>
+        <button class="course-chip" data-goto="cheatsheets">
+          <span>📖</span> Guías & Recursos Teóricos
+        </button>
+      </div>
+    </div>
+
     <!-- ========================================== -->
     <!-- TAB 1: ALGORITHMS & DATA STRUCTURES        -->
     <!-- ========================================== -->
@@ -60,37 +88,44 @@
         <!-- Controls Panel -->
         <div class="glass-card">
           <div class="card-title">
-            <span>⚙️ Configuration</span>
-            <span class="badge badge-cyan">C++ Engine</span>
+            <span>⚙️ Configuración & Casos</span>
+            <span class="badge badge-cyan">C++17 Engine</span>
           </div>
 
           <div class="control-group">
-            <label class="control-label">Algorithm</label>
+            <label class="control-label">Algoritmo de Ordenamiento</label>
             <select id="algoSelect">
-              <option value="quick">Quick Sort (Partitioning)</option>
-              <option value="merge">Merge Sort (Divide & Conquer)</option>
-              <option value="heap">Heap Sort (Priority Queue)</option>
-              <option value="shell">Shell Sort (Diminishing Increments)</option>
-              <option value="insertion">Insertion Sort (Incremental)</option>
-              <option value="selection">Selection Sort (Minimum Scan)</option>
-              <option value="bubble">Bubble Sort (Adjacent Swaps)</option>
-              <option value="radix">Radix Sort (LSD Non-Comparative)</option>
+              <option value="quick">Quick Sort (Partición Divide y Vencerás)</option>
+              <option value="merge">Merge Sort (Fusión Divide y Vencerás)</option>
+              <option value="heap">Heap Sort (Montículo Binario In-Place)</option>
+              <option value="shell">Shell Sort (Brechas Decrecientes)</option>
+              <option value="insertion">Insertion Sort (Inserción Progresiva)</option>
+              <option value="selection">Selection Sort (Selección de Mínimo)</option>
+              <option value="bubble">Bubble Sort (Burbujeo de Adyacentes)</option>
+              <option value="radix">Radix Sort (LSD No Comparativo)</option>
             </select>
           </div>
 
+          <!-- 1-Click Presets for Students -->
           <div class="control-group">
-            <label class="control-label">Distribution</label>
-            <select id="arrayDist">
+            <label class="control-label">Distribución del Arreglo (Casos Típicos)</label>
+            <div class="preset-pills-row">
+              <button class="preset-pill-btn active" data-dist="random">🎲 Aleatorio</button>
+              <button class="preset-pill-btn" data-dist="nearly-sorted">📈 Casi Ordenado</button>
+              <button class="preset-pill-btn" data-dist="reversed">📉 Invertido (Peor)</button>
+              <button class="preset-pill-btn" data-dist="few-unique">🔄 Pocos Únicos</button>
+            </div>
+            <select id="arrayDist" style="display:none;">
               <option value="random">Random Uniform</option>
               <option value="nearly-sorted">Nearly Sorted</option>
-              <option value="reversed">Reversed (Worst Case)</option>
-              <option value="few-unique">Few Unique Elements</option>
+              <option value="reversed">Reversed</option>
+              <option value="few-unique">Few Unique</option>
             </select>
           </div>
 
           <div class="control-group">
             <div class="control-label">
-              <span>Array Size</span>
+              <span>Tamaño de Muestra (n)</span>
               <span id="arraySizeVal" class="control-value">50</span>
             </div>
             <input type="range" id="arraySize" min="10" max="150" value="50">
@@ -98,39 +133,39 @@
 
           <div class="control-group">
             <div class="control-label">
-              <span>Execution Speed</span>
+              <span>Velocidad de Simulación</span>
               <span id="algoSpeedVal" class="control-value">80%</span>
             </div>
             <input type="range" id="algoSpeed" min="1" max="100" value="80">
           </div>
 
           <div class="btn-group">
-            <button id="btnRunAlgo" class="btn btn-primary" style="flex:1;">▶ Run Algorithm</button>
-            <button id="btnResetAlgo" class="btn" style="flex:1;">↺ Reset Array</button>
+            <button id="btnRunAlgo" class="btn btn-primary" style="flex:1;">▶ Iniciar Simulación</button>
+            <button id="btnResetAlgo" class="btn" style="flex:1;">↺ Reiniciar Arreglo</button>
           </div>
 
           <!-- Complexity Badges -->
-          <div style="margin-top: 1.5rem; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
-            <div class="card-title" style="font-size:0.8rem; margin-bottom:0.6rem;">Asymptotic Complexity</div>
-            <div style="display:flex; flex-direction:column; gap:0.4rem; font-size:0.8rem;">
+          <div style="margin-top: 1.25rem; border-top: 1px solid var(--border-subtle); padding-top: 0.85rem;">
+            <div class="card-title" style="font-size:0.8rem; margin-bottom:0.6rem;">Complejidad Asintótica (Cota Superior O)</div>
+            <div style="display:flex; flex-direction:column; gap:0.35rem; font-size:0.8rem;">
               <div style="display:flex; justify-content:space-between;">
-                <span style="color:var(--text-dim);">Best Time:</span>
+                <span style="color:var(--text-dim);">Mejor Caso:</span>
                 <span id="badgeBest" class="badge badge-emerald">O(n log n)</span>
               </div>
               <div style="display:flex; justify-content:space-between;">
-                <span style="color:var(--text-dim);">Avg Time:</span>
+                <span style="color:var(--text-dim);">Caso Promedio:</span>
                 <span id="badgeAvg" class="badge badge-cyan">O(n log n)</span>
               </div>
               <div style="display:flex; justify-content:space-between;">
-                <span style="color:var(--text-dim);">Worst Time:</span>
+                <span style="color:var(--text-dim);">Peor Caso:</span>
                 <span id="badgeWorst" class="badge badge-amber">O(n²)</span>
               </div>
               <div style="display:flex; justify-content:space-between;">
-                <span style="color:var(--text-dim);">Space:</span>
+                <span style="color:var(--text-dim);">Memoria Extra:</span>
                 <span id="badgeSpace" class="badge badge-rose">O(log n)</span>
               </div>
               <div style="display:flex; justify-content:space-between;">
-                <span style="color:var(--text-dim);">Stable:</span>
+                <span style="color:var(--text-dim);">Estabilidad:</span>
                 <span id="badgeStable" class="badge badge-cyan">NO</span>
               </div>
             </div>
@@ -143,22 +178,56 @@
             <canvas id="algoCanvas"></canvas>
           </div>
 
+          <!-- Color Legend for Students -->
+          <div class="legend-bar">
+            <div class="legend-item">
+              <span class="legend-color-dot" style="background:#3b82f6;"></span>
+              <span>Sin ordenar</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color-dot" style="background:#f59e0b;"></span>
+              <span>Comparando</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color-dot" style="background:#f43f5e;"></span>
+              <span>Intercambio / Pivote</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color-dot" style="background:#10b981;"></span>
+              <span>Posición Final</span>
+            </div>
+          </div>
+
           <div class="metrics-grid">
             <div class="metric-box">
-              <div class="metric-label">Status</div>
+              <div class="metric-label">Estado</div>
               <div id="algoStatus" class="metric-value" style="color:var(--cyan); font-size:0.95rem;">IDLE</div>
             </div>
             <div class="metric-box">
-              <div class="metric-label">Comparisons</div>
+              <div class="metric-label">Comparaciones</div>
               <div id="algoComparisons" class="metric-value">0</div>
             </div>
             <div class="metric-box">
-              <div class="metric-label">Swaps / Writes</div>
+              <div class="metric-label">Intercambios / Escrituras</div>
               <div id="algoSwaps" class="metric-value">0</div>
             </div>
             <div class="metric-box">
-              <div class="metric-label">Elapsed Time</div>
+              <div class="metric-label">Tiempo Transcurrido</div>
               <div id="algoTime" class="metric-value">0.00s</div>
+            </div>
+          </div>
+
+          <!-- Educational Concept Card -->
+          <div class="concept-card">
+            <div class="concept-card-title">
+              <span>💡</span>
+              <span id="algoIntuitionTitle">Quick Sort (Partición Divide y Vencerás)</span>
+            </div>
+            <div class="concept-card-text" id="algoIntuitionConcept">
+              Elige un elemento 'pivote' y particiona el arreglo: menores a la izquierda, mayores a la derecha. Luego procesa recursivamente cada mitad. Es el estándar en producción por su uso óptimo de la memoria caché.
+            </div>
+            <div class="concept-card-tip" id="algoIntuitionTip">
+              ⚠️ Examen UCR: Si el pivote es el peor posible (ej: arreglo ya ordenado sin pivote aleatorio), su complejidad degenera a O(n²).
             </div>
           </div>
         </div>
@@ -170,10 +239,11 @@
     <!-- ========================================== -->
     <section id="tab-concurrency" class="tab-pane">
       <!-- Subtabs -->
-      <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
-        <button class="nav-tab-btn conc-subtab-btn active" data-subtab="roundabout">🚗 Roundabout (Semaphores)</button>
-        <button class="nav-tab-btn conc-subtab-btn" data-subtab="heat">🔥 2D Heat Diffusion (OpenMP)</button>
-        <button class="nav-tab-btn conc-subtab-btn" data-subtab="patterns">⚡ Patterns & Benchmarks</button>
+      <div style="display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap;">
+        <button class="nav-tab-btn conc-subtab-btn active" data-subtab="roundabout">🚗 Rotonda (Semáforos vs Deadlock)</button>
+        <button class="nav-tab-btn conc-subtab-btn" data-subtab="comparison">⚖️ Comparativa: Mutex vs Semáforo vs Barrera</button>
+        <button class="nav-tab-btn conc-subtab-btn" data-subtab="heat">🔥 Difusión de Calor 2D (OpenMP)</button>
+        <button class="nav-tab-btn conc-subtab-btn" data-subtab="patterns">⚡ Patrones C11 (Buffer & Filósofos)</button>
       </div>
 
       <div class="lab-grid">
@@ -182,14 +252,14 @@
           <!-- Panel for Roundabout -->
           <div id="roundaboutControls">
             <div class="card-title">
-              <span>Traffic Synchronization</span>
+              <span>Sincronización de Tráfico</span>
               <span class="badge badge-emerald">POSIX Semaphores</span>
             </div>
 
             <div class="control-group" style="background:var(--bg-tertiary); padding:0.75rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
               <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-weight:600; font-size:0.85rem;">
                 <input type="checkbox" id="toggleSemaphores" checked style="width:18px; height:18px; accent-color:var(--emerald);">
-                <span>Semaphore Guards</span>
+                <span>Control de Capacidad con Semáforos</span>
               </label>
               <div id="semStatusText" style="font-size:0.75rem; color:var(--emerald); margin-top:0.3rem;">
                 ENABLED (Deadlock-Free)
@@ -198,7 +268,7 @@
 
             <div class="control-group">
               <div class="control-label">
-                <span>Arrival Traffic Rate</span>
+                <span>Tasa de Llegada de Vehículos</span>
                 <span id="trafficRateVal" class="control-value">60%</span>
               </div>
               <input type="range" id="trafficRate" min="10" max="100" value="60">
@@ -207,48 +277,79 @@
             <div class="control-group">
               <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-size:0.8rem; color:var(--text-dim);">
                 <input type="checkbox" id="toggleAutoSpawn" checked style="width:16px; height:16px; accent-color:var(--cyan);">
-                <span>Continuous Vehicle Arrival</span>
+                <span>Llegada Continua Automática</span>
               </label>
             </div>
 
+            <div class="btn-group" style="margin-bottom:0.6rem;">
+              <button id="btnSpawnVehicle" class="btn btn-primary" style="flex:1;">+ Agregar Vehículo</button>
+              <button id="btnClearRoundabout" class="btn" style="flex:1;">↺ Limpiar Pista</button>
+            </div>
+
+            <!-- Didactic Experiment Buttons -->
             <div class="btn-group">
-              <button id="btnSpawnVehicle" class="btn btn-primary" style="flex:1;">+ Spawn Vehicle</button>
-              <button id="btnClearRoundabout" class="btn" style="flex:1;">↺ Clear Track</button>
+              <button id="btnForceDeadlock" class="btn btn-danger" style="flex:1; font-size:0.78rem;">💥 Provocar Deadlock</button>
+              <button id="btnResolveDeadlock" class="btn btn-emerald" style="flex:1; font-size:0.78rem; background:var(--emerald); color:#000;">🛡️ Activar Semáforo</button>
+            </div>
+
+            <div class="concept-card" style="margin-top:1rem; padding:0.75rem;">
+              <div class="concept-card-title" style="font-size:0.8rem;">
+                <span>💡</span>
+                <span>¿Por qué se traba la rotonda?</span>
+              </div>
+              <div class="concept-card-text" style="font-size:0.78rem;">
+                Cuando 4 vehículos ocupan los 4 cuadrantes al mismo tiempo y cada uno espera el cuadrante de adelante, se cumple la <strong>Espera Circular de Coffman</strong>. Un semáforo de capacidad 3 rompe matemáticamente el ciclo.
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel for Comparison Controls -->
+          <div id="comparisonControls" style="display:none;">
+            <div class="card-title">
+              <span>Primitivas de Control</span>
+              <span class="badge badge-purple">Guía Didáctica UCR</span>
+            </div>
+            <p style="font-size:0.82rem; color:var(--text-dim); line-height:1.5; margin-bottom:1rem;">
+              En el curso <strong>CI-0117 (Sistemas Concurrentes)</strong>, la confusión número uno es cuándo usar un <code>Mutex</code> frente a un <code>Semáforo</code> o una <code>Barrera</code>.
+            </p>
+            <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--cyan); background:var(--bg-tertiary); padding:0.6rem; border-radius:var(--radius-sm);">
+              // Verificación en C:<br>
+              $ make -C tests run
             </div>
           </div>
 
           <!-- Panel for Heat -->
           <div id="heatControls" style="display:none;">
             <div class="card-title">
-              <span>Heat Equation Solver</span>
-              <span class="badge badge-amber">PDE 5-Point Stencil</span>
+              <span>Ecuación de Calor 2D</span>
+              <span class="badge badge-amber">PDE Stencil 5 Puntos</span>
             </div>
 
             <div class="control-group">
-              <label class="control-label">Thread Partitioning</label>
+              <label class="control-label">Partición de Hilos (Dominio 1D)</label>
               <select id="heatThreadsSelect">
-                <option value="1">1 Thread (Sequential Baseline)</option>
-                <option value="2">2 Threads (Domain Slicing)</option>
-                <option value="4" selected>4 Threads (Multi-Core Pthreads/OpenMP)</option>
-                <option value="8">8 Threads (High Parallelism)</option>
+                <option value="1">1 Hilo (Secuencial Base)</option>
+                <option value="2">2 Hilos (Partición Horizontal)</option>
+                <option value="4" selected>4 Hilos (Multi-Core Paralelo)</option>
+                <option value="8">8 Hilos (Alto Paralelismo OpenMP)</option>
               </select>
             </div>
 
             <div class="btn-group">
-              <button id="btnRunHeat" class="btn btn-primary" style="flex:1;">▶ Run Heat Solver</button>
-              <button id="btnStepHeat" class="btn" style="flex:1;">⏭ Step</button>
-              <button id="btnResetHeat" class="btn" style="width:100%;">↺ Reset Grid</button>
+              <button id="btnRunHeat" class="btn btn-primary" style="flex:1;">▶ Iniciar Solver</button>
+              <button id="btnStepHeat" class="btn" style="flex:1;">⏭ Paso</button>
+              <button id="btnResetHeat" class="btn" style="width:100%;">↺ Reiniciar Malla</button>
             </div>
           </div>
 
           <!-- Panel for Patterns -->
           <div id="patternsControls" style="display:none;">
             <div class="card-title">
-              <span>Classic Patterns</span>
+              <span>Patrones Clásicos</span>
               <span class="badge badge-purple">Dijkstra & Atomics</span>
             </div>
             <p style="font-size:0.8rem; color:var(--text-dim); margin-bottom:1rem;">
-              Visual monitors demonstrating the Bounded Buffer (dual semaphores) and Dining Philosophers (resource hierarchy).
+              Monitores en tiempo real que demuestran el Buffer Acotado (semáforos dobles) y Filósofos Cenando (jerarquía de recursos de Dijkstra).
             </p>
             <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--cyan); background:var(--bg-tertiary); padding:0.6rem; border-radius:var(--radius-sm);">
               $ make -C core-c-engines/concurrency test
@@ -256,11 +357,11 @@
           </div>
         </div>
 
-        <!-- Concurrency Viewport -->
-        <div class="glass-card viewport-card">
+        <!-- Concurrency Viewport (Canvas) -->
+        <div id="concurrencyViewport" class="glass-card viewport-card">
           <!-- Deadlock alert banner -->
           <div id="deadlockAlertBanner" style="display:none; background:var(--rose-dim); border:1px solid var(--rose); padding:0.6rem 1rem; border-radius:var(--radius-sm); color:var(--rose); font-size:0.85rem; font-weight:600; align-items:center; justify-content:space-between;">
-            <span>⚠️ COFFMAN CIRCULAR WAIT DETECTED! Roundabout is in complete gridlock. Enable semaphores to resolve.</span>
+            <span>⚠️ ¡INTERBLOQUEO DE COFFMAN DETECTADO! Rotonda en parálisis circular total. Usa el botón "🛡️ Activar Semáforo" para resolverlo.</span>
           </div>
 
           <div class="canvas-container">
@@ -269,28 +370,106 @@
 
           <div class="metrics-grid">
             <div class="metric-box">
-              <div class="metric-label">System State</div>
+              <div class="metric-label">Estado del Sistema</div>
               <div id="concDeadlockState" class="metric-value" style="color:var(--emerald); font-size:0.95rem;">LIVENESS OK ✅</div>
             </div>
             <div class="metric-box">
-              <div class="metric-label">Active Threads/Vehicles</div>
+              <div class="metric-label">Hilos / Vehículos Activos</div>
               <div id="concActive" class="metric-value">0</div>
             </div>
             <div class="metric-box">
-              <div class="metric-label">Occupancy in Ring</div>
+              <div class="metric-label">Ocupación en Anillo</div>
               <div id="concInRing" class="metric-value">0</div>
             </div>
             <div class="metric-box">
-              <div class="metric-label">Vehicles Passed</div>
+              <div class="metric-label">Vehículos Despachados</div>
               <div id="concPassed" class="metric-value">0</div>
             </div>
             <div class="metric-box">
-              <div class="metric-label">Heat Iterations</div>
+              <div class="metric-label">Iteraciones Térmicas</div>
               <div id="heatIterCount" class="metric-value">0</div>
             </div>
             <div class="metric-box">
-              <div class="metric-label">Max Heat Delta (ε)</div>
+              <div class="metric-label">Delta Máximo (ε)</div>
               <div id="heatMaxDelta" class="metric-value">0.0000</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparison Viewport (Didactic Cards) -->
+        <div id="comparisonViewport" class="glass-card viewport-card" style="display:none;">
+          <div class="card-title">
+            <span>Comparativa Fundamental de Control de Flujo</span>
+            <span class="badge badge-emerald">CI-0117 Conceptos Clave</span>
+          </div>
+
+          <div class="sync-comparison-grid">
+            <!-- Mutex Card -->
+            <div class="sync-card">
+              <div class="sync-card-header">
+                <span class="sync-card-title">🔐 Mutex (Cerrojo)</span>
+                <span class="badge badge-cyan">Exclusión Mutua</span>
+              </div>
+              <div class="sync-card-analogy">
+                <strong>🔑 Analogía:</strong> La llave de un baño individual. Solo una persona puede tenerla; quien entra cierra con seguro y al salir DEBE devolver la llave.
+              </div>
+              <ul class="sync-card-props">
+                <li><strong>Dueño:</strong> Sí (Ownership estricto). Solo el hilo que hace <code>lock()</code> puede hacer <code>unlock()</code>.</li>
+                <li><strong>Valores:</strong> Binario (0 o 1).</li>
+                <li><strong>Uso clave:</strong> Proteger secciones críticas pequeñas donde se modifican variables o estructuras compartidas.</li>
+                <li><strong>C / POSIX:</strong> <code>pthread_mutex_lock(&m)</code></li>
+              </ul>
+            </div>
+
+            <!-- Semaphore Card -->
+            <div class="sync-card">
+              <div class="sync-card-header">
+                <span class="sync-card-title">🚦 Semáforo Contador</span>
+                <span class="badge badge-emerald">Señalización & Capacidad</span>
+              </div>
+              <div class="sync-card-analogy">
+                <strong>🎫 Analogía:</strong> Estacionamiento con N espacios y tiquetes. Si hay tiquetes disponibles pasas; si llega a 0, esperas.
+              </div>
+              <ul class="sync-card-props">
+                <li><strong>Dueño:</strong> NO tiene dueño. Un hilo productor puede hacer <code>post()</code> para despertar a un consumidor en <code>wait()</code>.</li>
+                <li><strong>Valores:</strong> Entero no negativo (0 a N).</li>
+                <li><strong>Uso clave:</strong> Notificación entre hilos y control de cupo (Buffer Acotado, Rotonda).</li>
+                <li><strong>C / POSIX:</strong> <code>sem_wait(&s)</code> / <code>sem_post(&s)</code></li>
+              </ul>
+            </div>
+
+            <!-- Barrier Card -->
+            <div class="sync-card">
+              <div class="sync-card-header">
+                <span class="sync-card-title">🛑 Barrera de Fase</span>
+                <span class="badge badge-amber">Punto de Encuentro</span>
+              </div>
+              <div class="sync-card-analogy">
+                <strong>👥 Analogía:</strong> Punto de reunión de un tour guiado. Nadie avanza a la siguiente atracción hasta que los N turistas lleguen.
+              </div>
+              <ul class="sync-card-props">
+                <li><strong>Propósito:</strong> Forzar a N hilos a esperar hasta que todos hayan concluido la fase de cálculo actual.</li>
+                <li><strong>Valores:</strong> Contador decreciente hasta 0.</li>
+                <li><strong>Uso clave:</strong> Algoritmos numéricos iterativos (Difusión de calor 2D, simulación de partículas).</li>
+                <li><strong>C / POSIX:</strong> <code>pthread_barrier_wait(&b)</code></li>
+              </ul>
+            </div>
+
+            <!-- Atomic Card -->
+            <div class="sync-card">
+              <div class="sync-card-header">
+                <span class="sync-card-title">⚡ Atomics (C11)</span>
+                <span class="badge badge-rose">Lock-Free Hardware</span>
+              </div>
+              <div class="sync-card-analogy">
+                <strong>⚙️ Analogía:</strong> Torniquete mecánico de metro: avanza con un clic a nivel hardware sin necesidad de poner candados.
+              </div>
+              <ul class="sync-card-props">
+                <li><strong>Propósito:</strong> Modificar enteros o banderas en memoria mediante instrucciones atómicas del CPU (Fetch-and-Add).</li>
+                <li><strong>Ventaja:</strong> 0 costo de llamadas al sistema operativo ni cambios de contexto de hilos.</li>
+                <li><strong>Uso clave:</strong> Contadores de métricas de alto rendimiento y banderas de parada.</li>
+                <li><strong>C11 Standard:</strong> <code>atomic_fetch_add(&val, 1)</code></li>
+              </ul>
             </div>
           </div>
         </div>
@@ -301,40 +480,40 @@
     <!-- TAB 3: NETWORKING & DISTRIBUTED SYSTEMS   -->
     <!-- ========================================== -->
     <section id="tab-networking" class="tab-pane">
-      <div class="lab-grid" style="grid-template-columns: 280px 1fr;">
+      <div class="lab-grid" style="grid-template-columns: 300px 1fr;">
         <!-- Left: ASCII Asset Catalog -->
         <div class="glass-card">
           <div class="card-title">
-            <span>ASCII Figures Catalog</span>
-            <span class="badge badge-cyan">12 Assets</span>
+            <span>Catálogo de Figuras ASCII</span>
+            <span class="badge badge-cyan">12 Recursos</span>
           </div>
 
           <div class="control-group">
-            <input type="text" id="netSearchInput" placeholder="Filter figures (e.g. spiderman)..." style="background:var(--bg-tertiary); border:1px solid var(--border-subtle); color:#fff; padding:0.4rem 0.6rem; border-radius:var(--radius-sm); font-size:0.8rem; width:100%;">
+            <input type="text" id="netSearchInput" placeholder="Filtrar figuras (ej: spiderman)..." style="background:var(--bg-tertiary); border:1px solid var(--border-subtle); color:#fff; padding:0.45rem 0.65rem; border-radius:var(--radius-sm); font-size:0.8rem; width:100%;">
           </div>
 
           <div style="display:flex; gap:0.3rem; margin-bottom:0.75rem; flex-wrap:wrap;">
-            <button class="badge net-cat-pill active" data-cat="all" style="cursor:pointer; border:none; background:var(--bg-tertiary); color:var(--text-main);">All</button>
-            <button class="badge net-cat-pill" data-cat="heroes" style="cursor:pointer; border:none; background:var(--bg-tertiary); color:var(--text-dim);">Heroes</button>
+            <button class="badge net-cat-pill active" data-cat="all" style="cursor:pointer; border:none; background:var(--bg-tertiary); color:var(--text-main);">Todas</button>
+            <button class="badge net-cat-pill" data-cat="heroes" style="cursor:pointer; border:none; background:var(--bg-tertiary); color:var(--text-dim);">Héroes</button>
             <button class="badge net-cat-pill" data-cat="gaming" style="cursor:pointer; border:none; background:var(--bg-tertiary); color:var(--text-dim);">Gaming</button>
             <button class="badge net-cat-pill" data-cat="tech" style="cursor:pointer; border:none; background:var(--bg-tertiary); color:var(--text-dim);">Tech</button>
           </div>
 
-          <div id="netFigureList" style="max-height:280px; overflow-y:auto; border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:0.3rem;">
+          <div id="netFigureList" style="max-height:260px; overflow-y:auto; border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:0.3rem;">
             <!-- Injected dynamically -->
           </div>
 
           <div style="margin-top:1rem; border-top:1px solid var(--border-subtle); padding-top:0.75rem;">
             <div class="control-label">
-              <span>Font Size</span>
+              <span>Tamaño de Fuente Terminal</span>
               <span id="asciiFontSizeVal" class="control-value">11px</span>
             </div>
             <input type="range" id="asciiFontSize" min="7" max="18" value="11">
           </div>
 
           <div class="btn-group">
-            <button id="btnCopyAscii" class="btn btn-primary" style="flex:1;">📋 Copy</button>
-            <button id="btnDownloadAscii" class="btn" style="flex:1;">💾 Export .txt</button>
+            <button id="btnCopyAscii" class="btn btn-primary" style="flex:1;">📋 Copiar</button>
+            <button id="btnDownloadAscii" class="btn" style="flex:1;">💾 Exportar .txt</button>
           </div>
         </div>
 
@@ -353,17 +532,21 @@
                 <span id="figLinesCount">0 lines</span> • <span id="figCharsCount">0 chars</span>
               </div>
             </div>
-            <div id="asciiDisplay" class="terminal-body" style="font-size:11px; max-height:360px;">
-              Loading ASCII figure...
+            <div id="asciiDisplay" class="terminal-body" style="font-size:11px; max-height:340px;">
+              Cargando figura ASCII...
             </div>
           </div>
 
           <!-- Distributed Client-Server Simulation Card -->
           <div class="glass-card">
             <div class="card-title">
-              <span>Distributed Socket Protocol & Worker Pool</span>
-              <span class="badge badge-emerald">C++ Sockets / HTTP 1.1</span>
+              <span>Protocolo de Sockets BSD & Pool de Hilos del Servidor</span>
+              <span class="badge badge-emerald">CI-0123 Redes / HTTP 1.1</span>
             </div>
+
+            <p style="font-size:0.8rem; color:var(--text-dim); margin-bottom:0.75rem;">
+              Simulación del flujo cliente-servidor: el cliente envía una petición HTTP mediante un socket TCP. El servidor (en C++) delega la atención de la conexión a un hilo trabajador de su <em>Thread Pool</em>.
+            </p>
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-bottom:1rem;">
               <!-- Dispatch Form -->
@@ -377,7 +560,7 @@
                   <input type="text" id="socketUriInput" value="/figures/batman" style="flex:1; background:var(--bg-tertiary); border:1px solid var(--border-subtle); color:#fff; padding:0.4rem 0.6rem; border-radius:var(--radius-sm); font-family:var(--font-mono); font-size:0.8rem;">
                 </div>
                 <button id="btnSendSocketReq" class="btn btn-primary" style="width:100%;">
-                  ⚡ Send Socket Packet to Server
+                  ⚡ Despachar Petición Socket al Servidor
                 </button>
               </div>
 
@@ -390,14 +573,14 @@
             <!-- Packet Inspector -->
             <div class="terminal-window">
               <div class="terminal-header">
-                <span>Packet Wire Inspector (Wireshark Emulation)</span>
+                <span>Inspector de Paquetes en el Cable (Emulador Wireshark)</span>
                 <div style="font-size:0.7rem;">
-                  Packets: <span id="netPacketsCount" style="color:var(--cyan); font-weight:700;">0</span> | 
-                  Data: <span id="netBytesCount" style="color:var(--emerald); font-weight:700;">0 KB</span>
+                  Paquetes: <span id="netPacketsCount" style="color:var(--cyan); font-weight:700;">0</span> | 
+                  Datos: <span id="netBytesCount" style="color:var(--emerald); font-weight:700;">0 KB</span>
                 </div>
               </div>
               <div id="packetInspector" class="terminal-body" style="max-height:160px; font-size:0.75rem; color:#38bdf8;">
-Waiting for socket dispatch request...
+Esperando despacho de paquete socket...
               </div>
             </div>
           </div>
@@ -412,12 +595,15 @@ Waiting for socket dispatch request...
       <div class="theory-grid">
         <!-- Card 1: Amdahl's Law Calculator -->
         <div class="theory-card">
-          <h3>⚡ Amdahl's Law Calculator</h3>
-          <p>Compute theoretical speedup limits for parallel computing based on parallel fraction.</p>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <h3 style="margin:0;">⚡ Ley de Amdahl</h3>
+            <span class="badge badge-amber">CI-0117 Paralela</span>
+          </div>
+          <p>Calcula el límite teórico de aceleración (Speedup) al paralelizar un programa según su fracción paralelizable (f):</p>
           
           <div class="control-group">
             <div class="control-label">
-              <span>Parallel Fraction (f)</span>
+              <span>Fracción Paralela (f)</span>
               <span id="amdahlFractionVal" class="control-value">85%</span>
             </div>
             <input type="range" id="amdahlFraction" min="10" max="99" value="85">
@@ -425,7 +611,7 @@ Waiting for socket dispatch request...
 
           <div class="control-group">
             <div class="control-label">
-              <span>Processors / Cores (N)</span>
+              <span>Procesadores / Cores (N)</span>
               <span id="amdahlProcVal" class="control-value">8 Cores</span>
             </div>
             <input type="range" id="amdahlProcessors" min="1" max="64" value="8">
@@ -433,15 +619,15 @@ Waiting for socket dispatch request...
 
           <div class="metrics-grid" style="margin-top:1rem;">
             <div class="metric-box">
-              <div class="metric-label">Speedup S(N)</div>
+              <div class="metric-label">Aceleración S(N)</div>
               <div id="amdahlSpeedupVal" class="metric-value" style="color:var(--cyan);">3.90x</div>
             </div>
             <div class="metric-box">
-              <div class="metric-label">Max Speedup S(∞)</div>
+              <div class="metric-label">Límite Teórico S(∞)</div>
               <div id="amdahlMaxSpeedupVal" class="metric-value" style="color:var(--emerald);">6.67x</div>
             </div>
             <div class="metric-box">
-              <div class="metric-label">Efficiency</div>
+              <div class="metric-label">Eficiencia</div>
               <div id="amdahlEfficiencyVal" class="metric-value" style="color:var(--amber);">48.8%</div>
             </div>
           </div>
@@ -449,42 +635,58 @@ Waiting for socket dispatch request...
 
         <!-- Card 2: Coffman Deadlock Conditions -->
         <div class="theory-card">
-          <h3>🔒 Coffman Deadlock Conditions</h3>
-          <p>All four conditions must hold simultaneously for a system deadlock to manifest:</p>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <h3 style="margin:0;">🔒 Condiciones de Coffman</h3>
+            <span class="badge badge-rose">CI-0117 Concurrente</span>
+          </div>
+          <p>Las 4 condiciones que deben cumplirse simultáneamente para que ocurra un interbloqueo (deadlock):</p>
           <ul style="font-size:0.8rem; color:var(--text-dim); padding-left:1.2rem; display:flex; flex-direction:column; gap:0.4rem;">
-            <li><strong>Mutual Exclusion:</strong> Exclusive non-shareable resource ownership.</li>
-            <li><strong>Hold & Wait:</strong> Threads holding resources while requesting additional ones.</li>
-            <li><strong>No Preemption:</strong> Resources can only be released voluntarily by the owner.</li>
-            <li><strong>Circular Wait:</strong> Closed cycle of threads waiting for next thread's resource.</li>
+            <li><strong>1. Exclusión Mutua:</strong> Un recurso solo puede ser usado por un hilo a la vez.</li>
+            <li><strong>2. Retención y Espera (Hold & Wait):</strong> Hilos retienen recursos mientras solicitan nuevos.</li>
+            <li><strong>3. No Apropiación (No Preemption):</strong> Ningún recurso puede ser quitado por la fuerza.</li>
+            <li><strong>4. Espera Circular (Circular Wait):</strong> Cadena cerrada donde $H_1$ espera a $H_2$, y $H_2$ espera a $H_1$.</li>
           </ul>
           <div class="code-snippet" style="margin-top:0.75rem;">
-            // Prevention: Dijkstra hierarchy or total capacity - 1
-            sem_t entry_permit; // Breaks circular wait!
+            // Prevención en C: Jerarquía de recursos de Dijkstra
+            sem_t entry_permit; // ¡Rompe matemáticamente la espera circular!
           </div>
         </div>
 
         <!-- Card 3: BSD Socket Lifecycle -->
         <div class="theory-card">
-          <h3>🌐 BSD Sockets Architecture</h3>
-          <p>Standard life-cycle state transitions for concurrent TCP servers and clients:</p>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <h3 style="margin:0;">🌐 Ciclo de Vida Sockets BSD</h3>
+            <span class="badge badge-cyan">CI-0123 Redes</span>
+          </div>
+          <p>Máquina de estados estándar para servidores y clientes TCP en sistemas POSIX / Linux:</p>
           <div class="code-snippet">
-Server: socket() -> bind() -> listen() -> accept() -> recv/send() -> close()
-Client: socket() -> connect() -> send/recv() -> close()
+Servidor: socket() -> bind() -> listen() -> accept() -> recv/send() -> close()
+Cliente:  socket() -> connect() -> send/recv() -> close()
           </div>
           <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.5rem;">
-            In multi-threaded servers, accept() delegates the active client fd to a worker thread from a pool.
+            En servidores concurrentes con Thread Pool, <code>accept()</code> entrega el file descriptor resultante a una cola protegida por semáforos.
           </p>
         </div>
 
         <!-- Card 4: POSIX Synchronization Primitives -->
         <div class="theory-card">
-          <h3>🧵 POSIX & Atomics Cheatsheet</h3>
-          <p>Standard synchronization patterns in C99/C11:</p>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+            <h3 style="margin:0;">🧵 Primitivas POSIX & Atomics</h3>
+            <span class="badge badge-purple">Guía de Código en C</span>
+          </div>
+          <p>Sintaxis estándar para compilación con <code>gcc -std=c11 -pthread -O2</code>:</p>
           <div class="code-snippet">
-// 1. Mutex: pthread_mutex_lock(&m) / unlock(&m)
-// 2. Semaphore: sem_wait(&s) / sem_post(&s)
-// 3. Barrier: pthread_barrier_wait(&b)
-// 4. Atomic: atomic_fetch_add(&val, 1)
+// 1. Mutex (Exclusión con dueño):
+pthread_mutex_lock(&m); /* SC */ pthread_mutex_unlock(&m);
+
+// 2. Semáforo (Cupo / Notificación):
+sem_wait(&s);           /* Cupo */ sem_post(&s);
+
+// 3. Barrera (Fase grupal):
+pthread_barrier_wait(&b);
+
+// 4. Operación Atómica (Hardware lock-free):
+atomic_fetch_add(&contador, 1);
           </div>
         </div>
       </div>
@@ -492,30 +694,31 @@ Client: socket() -> connect() -> send/recv() -> close()
       <!-- Complexity Table -->
       <div class="glass-card" style="margin-top:1.5rem;">
         <div class="card-title">
-          <span>Comparative Big-O Complexity Reference</span>
-          <span class="badge badge-cyan">Cheat Sheet</span>
+          <span>Tabla Comparativa Big-O de Algoritmos de Ordenamiento (CI-0112)</span>
+          <span class="badge badge-cyan">Cheat Sheet Exámenes</span>
         </div>
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th>Algorithm</th>
-                <th>Best Time</th>
-                <th>Average Time</th>
-                <th>Worst Time</th>
-                <th>Space Complexity</th>
-                <th>Stability</th>
+                <th>Algoritmo</th>
+                <th>Mejor Caso</th>
+                <th>Caso Promedio</th>
+                <th>Peor Caso</th>
+                <th>Memoria Auxiliar</th>
+                <th>Estabilidad</th>
+                <th>¿Cuándo usarlo en proyectos?</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td>Quick Sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n)</td><td>No</td></tr>
-              <tr><td>Merge Sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>Yes</td></tr>
-              <tr><td>Heap Sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>No</td></tr>
-              <tr><td>Shell Sort</td><td>O(n log n)</td><td>O(n^(4/3))</td><td>O(n²)</td><td>O(1)</td><td>No</td></tr>
-              <tr><td>Insertion Sort</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Yes</td></tr>
-              <tr><td>Selection Sort</td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>No</td></tr>
-              <tr><td>Bubble Sort</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Yes</td></tr>
-              <tr><td>Radix Sort</td><td>O(nk)</td><td>O(nk)</td><td>O(nk)</td><td>O(n + k)</td><td>Yes</td></tr>
+              <tr><td><strong>Quick Sort</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n)</td><td>No</td><td>Propósito general en memoria RAM (alta localidad de caché).</td></tr>
+              <tr><td><strong>Merge Sort</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>Sí</td><td>Cuando se requiere estabilidad y garantía estricta O(n log n).</td></tr>
+              <tr><td><strong>Heap Sort</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>No</td><td>Sistemas embebidos con memoria RAM sumamente restringida.</td></tr>
+              <tr><td><strong>Shell Sort</strong></td><td>O(n log n)</td><td>O(n^(4/3))</td><td>O(n²)</td><td>O(1)</td><td>No</td><td>Arreglos medianos donde se busca rapidez sin recursión.</td></tr>
+              <tr><td><strong>Insertion Sort</strong></td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Sí</td><td>Arreglos casi ordenados o muy pequeños (n ≤ 16).</td></tr>
+              <tr><td><strong>Selection Sort</strong></td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>No</td><td>Fines pedagógicos o cuando el costo de escritura es muy alto.</td></tr>
+              <tr><td><strong>Bubble Sort</strong></td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Sí</td><td>Comprender inversiones e invariantes en primer año.</td></tr>
+              <tr><td><strong>Radix Sort (LSD)</strong></td><td>O(n · k)</td><td>O(n · k)</td><td>O(n · k)</td><td>O(n + k)</td><td>Sí</td><td>Ordenar enteros o claves de longitud fija en tiempo lineal.</td></tr>
             </tbody>
           </table>
         </div>

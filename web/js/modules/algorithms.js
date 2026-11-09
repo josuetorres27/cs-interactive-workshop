@@ -28,6 +28,49 @@ class AlgorithmsLab {
       heap: { name: 'Heap Sort', timeBest: 'O(n log n)', timeAvg: 'O(n log n)', timeWorst: 'O(n log n)', space: 'O(1)', stable: false },
       radix: { name: 'Radix Sort (LSD)', timeBest: 'O(nk)', timeAvg: 'O(nk)', timeWorst: 'O(nk)', space: 'O(n + k)', stable: true }
     };
+
+    this.intuitions = {
+      quick: {
+        title: "Quick Sort (Partición Divide y Vencerás)",
+        concept: "Elige un elemento 'pivote' y particiona el arreglo: menores a la izquierda, mayores a la derecha. Luego procesa recursivamente cada mitad. Es el estándar en producción por su uso óptimo de la memoria caché.",
+        tip: "⚠️ Examen UCR: Si el pivote es el peor posible (ej: arreglo ya ordenado sin pivote aleatorio), su complejidad degenera a O(n²)."
+      },
+      merge: {
+        title: "Merge Sort (Fusión Divide y Vencerás)",
+        concept: "Divide el arreglo a la mitad recursivamente hasta subarreglos de 1 elemento, y luego fusiona las mitades en orden ascendente.",
+        tip: "💡 Clave: Garantiza O(n log n) SIEMPRE (incluso en el peor caso) y es ESTABLE, pero requiere O(n) de memoria auxiliar."
+      },
+      heap: {
+        title: "Heap Sort (Montículo Binario)",
+        concept: "Construye un Max-Heap in-place. La raíz (máximo elemento) se intercambia al final y se reajusta el montículo recursivamente.",
+        tip: "💡 Clave: Tiempo O(n log n) garantizado en el peor caso con O(1) de memoria adicional. No es estable."
+      },
+      shell: {
+        title: "Shell Sort (Inserción por Brechas)",
+        concept: "Extensión de Insertion Sort que compara elementos distanciados por un intervalo (gap) decreciente, permitiendo saltos grandes.",
+        tip: "💡 Clave: Reduce drásticamente los desplazamientos de Insertion Sort sin requerir memoria adicional."
+      },
+      insertion: {
+        title: "Insertion Sort (Inserción Progresiva)",
+        concept: "Como ordenar cartas en la mano: toma cada elemento y desplázalo hacia la izquierda hasta insertarlo en su posición correcta.",
+        tip: "💡 Clave: En arreglos casi ordenados o muy pequeños (n ≤ 16), es el más veloz de todos: tiempo lineal O(n)."
+      },
+      selection: {
+        title: "Selection Sort (Selección de Mínimo)",
+        concept: "Recorre todo el arreglo no ordenado para encontrar el elemento más pequeño y lo intercambia con la posición inicial disponible.",
+        tip: "⚠️ Examen UCR: Realiza a lo sumo n intercambios, pero siempre ejecuta O(n²) comparaciones sin importar el estado inicial."
+      },
+      bubble: {
+        title: "Bubble Sort (Burbujeo de Adyacentes)",
+        concept: "Compara pares contiguos y los intercambia si están desordenados, haciendo 'flotar' los valores mayores hacia el final.",
+        tip: "💡 Clave: Excelente para comprender inversiones y estabilidad en primeros años, pero ineficiente en producción."
+      },
+      radix: {
+        title: "Radix Sort LSD (Ordenamiento No Comparativo)",
+        concept: "Ordena los enteros procesando dígito por dígito desde el menos significativo (LSD) usando conteo o baldes (buckets).",
+        tip: "💡 Clave: Rompe la cota inferior teórica Ω(n log n) de los ordenamientos comparativos, alcanzando O(n · k) tiempo lineal."
+      }
+    };
   }
 
   init() {
@@ -103,6 +146,18 @@ class AlgorithmsLab {
         this.generateArray(dist);
       });
     }
+
+    // Educational Preset Buttons (1-Click for Students)
+    document.querySelectorAll('.preset-pill-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.preset-pill-btn').forEach(b => b.classList.remove('active'));
+        e.currentTarget.classList.add('active');
+        const dist = e.currentTarget.dataset.dist;
+        const distSelect = document.getElementById('arrayDist');
+        if (distSelect) distSelect.value = dist;
+        if (!this.isRunning) this.generateArray(dist);
+      });
+    });
   }
 
   generateArray(type = 'random') {
@@ -156,6 +211,17 @@ class AlgorithmsLab {
     document.getElementById('badgeWorst').textContent = data.timeWorst;
     document.getElementById('badgeSpace').textContent = data.space;
     document.getElementById('badgeStable').textContent = data.stable ? 'YES' : 'NO';
+
+    // Update Student Intuition Card
+    const info = this.intuitions[this.currentAlgo];
+    if (info) {
+      const titleEl = document.getElementById('algoIntuitionTitle');
+      const conceptEl = document.getElementById('algoIntuitionConcept');
+      const tipEl = document.getElementById('algoIntuitionTip');
+      if (titleEl) titleEl.textContent = info.title;
+      if (conceptEl) conceptEl.textContent = info.concept;
+      if (tipEl) tipEl.textContent = info.tip;
+    }
   }
 
   draw() {
