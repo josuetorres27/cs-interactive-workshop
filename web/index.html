@@ -22,7 +22,10 @@
 
       <!-- Primary Navigation Tabs -->
       <nav class="nav-tabs" role="tablist">
-        <button class="nav-tab-btn active" data-tab="algorithms" role="tab">
+        <button id="btnNavHome" class="nav-tab-btn active">
+          <span>🏠</span> Inicio
+        </button>
+        <button class="nav-tab-btn" data-tab="algorithms" role="tab">
           <span>📊</span> Algoritmos (CI-0112)
         </button>
         <button class="nav-tab-btn" data-tab="concurrency" role="tab">
@@ -32,7 +35,7 @@
           <span>🌐</span> Redes (CI-0123)
         </button>
         <button class="nav-tab-btn" data-tab="cheatsheets" role="tab">
-          <span>📖</span> Guías & Recursos UCR
+          <span>📖</span> Recursos & Guías
         </button>
       </nav>
 
@@ -52,33 +55,161 @@
   <!-- Main Application Body -->
   <main class="main-content">
 
-    <!-- Academic Support Platform Hero (UCR ECCI) -->
-    <div class="academic-hero">
-      <div class="academic-badge-row">
-        <span class="ucr-badge">🏛️ Universidad de Costa Rica</span>
-        <span class="ecci-badge">Escuela de Ciencias de la Computación e Informática (ECCI)</span>
+    <!-- ========================================== -->
+    <!-- VIEW 1: WELCOME & MISSION SELECTOR (HUB)   -->
+    <!-- ========================================== -->
+    <div id="view-welcome" class="welcome-container">
+      
+      <!-- Hero Welcome Banner -->
+      <div class="welcome-hero">
+        <div class="welcome-badge-row">
+          <span class="ucr-badge">🏛️ Universidad de Costa Rica</span>
+          <span class="ecci-badge">Escuela de Ciencias de la Computación e Informática (ECCI)</span>
+          <span class="gamified-badge">🎮 Modo Interactivo</span>
+        </div>
+
+        <h1 class="welcome-hero-title">
+          Aprende Computación <span class="gradient-text">Jugando &amp; Experimentando</span>
+        </h1>
+
+        <p class="welcome-hero-subtitle">
+          El laboratorio virtual interactivo diseñado para estudiantes de la UCR. 
+          Aquí no vienes a memorizar código aburrido: vienes a escuchar cómo suena QuickSort, 
+          provocar atascos en rotondas para entender interbloqueos, y cazar paquetes TCP en vivo.
+        </p>
+
+        <div class="welcome-hero-actions">
+          <button id="btnEnterLabHero" class="btn btn-hero">
+            <span>🚀 Entrar al Laboratorio</span>
+          </button>
+          <a href="#missionsSection" class="btn btn-outline">
+            <span>🕹️ Ver Misiones</span>
+          </a>
+        </div>
+
+        <!-- 3 Simple How-It-Works Steps (Inspired by MiVueltica UX) -->
+        <div class="how-it-works-grid">
+          <div class="how-step-card">
+            <div class="how-step-number">01</div>
+            <div class="how-step-icon">🎯</div>
+            <h3>Elige tu Reto</h3>
+            <p>Selecciona un área clave de la carrera: Algoritmos (CI-0112), Concurrencia (CI-0117) o Redes (CI-0123).</p>
+          </div>
+
+          <div class="how-step-card">
+            <div class="how-step-number">02</div>
+            <div class="how-step-icon">🕹️</div>
+            <h3>Experimenta &amp; Juega</h3>
+            <p>Modifica parámetros en vivo, pon a competir algoritmos o apaga los semáforos para desatar el caos.</p>
+          </div>
+
+          <div class="how-step-card">
+            <div class="how-step-number">03</div>
+            <div class="how-step-icon">💡</div>
+            <h3>Gana Intuición Real</h3>
+            <p>Conecta la experiencia visual y sonora con lo que realmente te evalúan en proyectos y exámenes.</p>
+          </div>
+        </div>
       </div>
-      <h2 class="academic-hero-title">CS Interactive Lab • Plataforma de Apoyo Académico</h2>
-      <p class="academic-hero-desc">
-        Laboratorio virtual interactivo diseñado para fortalecer el aprendizaje en los cursos troncales de Computación en la UCR. 
-        Traduce conceptos teóricos complejos en <strong>intuición visual directa</strong> mediante simulaciones en tiempo real, comparativas de control de flujo 
-        y motores nativos en C/C++.
-      </p>
-      <div class="course-chips-container">
-        <button class="course-chip active-chip" data-goto="algorithms">
-          <span>📘</span> CI-0112 / CI-0113 Algoritmos
-        </button>
-        <button class="course-chip" data-goto="concurrency">
-          <span>🚦</span> CI-0117 Sistemas Concurrentes
-        </button>
-        <button class="course-chip" data-goto="networking">
-          <span>🌐</span> CI-0123 Principios de Redes
-        </button>
-        <button class="course-chip" data-goto="cheatsheets">
-          <span>📖</span> Guías & Recursos Teóricos
-        </button>
+
+      <!-- Gamified Mission Cards Grid -->
+      <div id="missionsSection" class="missions-section">
+        <div class="section-header">
+          <div class="section-tag">ACCESO AL LABORATORIO</div>
+          <h2 class="section-title">Elige tu Misión de Aprendizaje</h2>
+          <p class="section-subtitle">Haz clic en cualquier simulador para entrar directamente a la estación interactiva.</p>
+        </div>
+
+        <div class="mission-cards-grid">
+          <!-- Mission 1: Algorithms -->
+          <div class="mission-card" data-launch="algorithms">
+            <div class="mission-card-badge">CI-0112 • ALGORITMOS</div>
+            <div class="mission-icon">📊</div>
+            <h3 class="mission-title">Arena de Algoritmos</h3>
+            <p class="mission-desc">
+              Pon a prueba tu intuición: ¿Quién gana la carrera de ordenamiento? Visualiza particiones, compara en tiempo real y escucha cada intercambio con síntesis de sonido.
+            </p>
+            <div class="mission-features">
+              <span>🎵 Audio Web API</span>
+              <span>⚡ 8 Algoritmos</span>
+              <span>🎯 Casos de Examen</span>
+            </div>
+            <button class="btn btn-mission">
+              <span>Entrar a la Arena →</span>
+            </button>
+          </div>
+
+          <!-- Mission 2: Concurrency -->
+          <div class="mission-card" data-launch="concurrency">
+            <div class="mission-card-badge badge-concurrency">CI-0117 • CONCURRENCIA</div>
+            <div class="mission-icon">🚦</div>
+            <h3 class="mission-title">Rotonda &amp; Control de Caos</h3>
+            <p class="mission-desc">
+              Controla una rotonda multi-hilo usando semáforos POSIX o desata el temido interbloqueo de Coffman provocando una espera circular en vivo.
+            </p>
+            <div class="mission-features">
+              <span>🚗 Tráfico 2D</span>
+              <span>💥 Coffman Deadlock</span>
+              <span>⚖️ Mutex vs Semáforo</span>
+            </div>
+            <button class="btn btn-mission">
+              <span>Controlar Tráfico →</span>
+            </button>
+          </div>
+
+          <!-- Mission 3: Networking -->
+          <div class="mission-card" data-launch="networking">
+            <div class="mission-card-badge badge-networking">CI-0123 • REDES</div>
+            <div class="mission-icon">🌐</div>
+            <h3 class="mission-title">Hack Studio &amp; Sockets TCP</h3>
+            <p class="mission-desc">
+              Conéctate al servidor C++, despacha peticiones HTTP/1.1 por el cable, inspecciona el socket y desbloquea la galería secreta de 12 figuras ASCII.
+            </p>
+            <div class="mission-features">
+              <span>🔌 BSD Sockets</span>
+              <span>📡 Wireshark Wire</span>
+              <span>🎨 12 Figuras ASCII</span>
+            </div>
+            <button class="btn btn-mission">
+              <span>Abrir Terminal →</span>
+            </button>
+          </div>
+
+          <!-- Mission 4: Theory & Cheatsheets -->
+          <div class="mission-card" data-launch="cheatsheets">
+            <div class="mission-card-badge badge-theory">ECCI • RECURSOS</div>
+            <div class="mission-icon">📖</div>
+            <h3 class="mission-title">Zona de Métricas &amp; Cheatsheets</h3>
+            <p class="mission-desc">
+              Calculadora de la Ley de Amdahl, resumen de condiciones de Coffman, máquina de estados de sockets y matriz Big-O para tus quices y proyectos.
+            </p>
+            <div class="mission-features">
+              <span>⚡ Ley de Amdahl</span>
+              <span>📋 Tabla Big-O</span>
+              <span>🔒 Fórmulas C11</span>
+            </div>
+            <button class="btn btn-mission">
+              <span>Ver Recursos →</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: ACTIVE LAB WORKBENCH               -->
+    <!-- ========================================== -->
+    <div id="view-lab" style="display:none;">
+      
+      <!-- Workspace Top Navigation -->
+      <div class="lab-workspace-header">
+        <button id="btnBackToWelcome" class="btn btn-back">
+          <span>← Volver al Menú de Misiones</span>
+        </button>
+        <div class="active-mission-pill">
+          <span id="activeMissionLabel">Misión Activa: Arena de Algoritmos</span>
+        </div>
+      </div>
 
     <!-- ========================================== -->
     <!-- TAB 1: ALGORITHMS & DATA STRUCTURES        -->
@@ -724,6 +855,8 @@ atomic_fetch_add(&contador, 1);
         </div>
       </div>
     </section>
+
+    </div> <!-- End of #view-lab -->
 
   </main>
 

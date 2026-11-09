@@ -5,6 +5,7 @@ class App {
   }
 
   init() {
+    this.setupWelcomeView();
     this.setupTabs();
     this.setupGlobalControls();
     this.setupKeyboardShortcuts();
@@ -15,7 +16,79 @@ class App {
     if (window.networkingLab) window.networkingLab.init();
     if (window.cheatsheetsLab) window.cheatsheetsLab.init();
 
-    this.showToast('CS Interactive Lab initialized. Welcome!');
+    this.showToast('CS Interactive Lab listo. ¡Bienvenido!');
+  }
+
+  setupWelcomeView() {
+    const btnEnterHero = document.getElementById('btnEnterLabHero');
+    if (btnEnterHero) {
+      btnEnterHero.addEventListener('click', () => {
+        this.openLab('algorithms');
+      });
+    }
+
+    document.querySelectorAll('.mission-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const mission = card.dataset.launch;
+        if (mission) this.openLab(mission);
+      });
+    });
+
+    const btnBack = document.getElementById('btnBackToWelcome');
+    if (btnBack) {
+      btnBack.addEventListener('click', () => {
+        this.showWelcome();
+      });
+    }
+
+    const brand = document.querySelector('.brand');
+    if (brand) {
+      brand.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.showWelcome();
+      });
+    }
+
+    const btnNavHome = document.getElementById('btnNavHome');
+    if (btnNavHome) {
+      btnNavHome.addEventListener('click', () => {
+        this.showWelcome();
+      });
+    }
+  }
+
+  openLab(tabId = 'algorithms') {
+    const welcomeView = document.getElementById('view-welcome');
+    const labView = document.getElementById('view-lab');
+    if (welcomeView) welcomeView.style.display = 'none';
+    if (labView) labView.style.display = 'block';
+
+    const missionNames = {
+      algorithms: 'Misión 1: Arena de Algoritmos (CI-0112)',
+      concurrency: 'Misión 2: Rotonda & Concurrencia (CI-0117)',
+      networking: 'Misión 3: Hack Studio & Sockets (CI-0123)',
+      cheatsheets: 'Misión 4: Métricas & Recursos Teóricos'
+    };
+
+    const label = document.getElementById('activeMissionLabel');
+    if (label && missionNames[tabId]) {
+      label.textContent = missionNames[tabId];
+    }
+
+    this.switchTab(tabId);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.soundController.playTone(720, 'sine', 0.04, 0.4);
+  }
+
+  showWelcome() {
+    const welcomeView = document.getElementById('view-welcome');
+    const labView = document.getElementById('view-lab');
+    if (welcomeView) welcomeView.style.display = 'block';
+    if (labView) labView.style.display = 'none';
+
+    document.querySelectorAll('.header .nav-tab-btn').forEach(btn => btn.classList.remove('active'));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.soundController.playClick();
   }
 
   setupTabs() {
@@ -23,7 +96,7 @@ class App {
     tabButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         const targetTab = e.currentTarget.dataset.tab;
-        if (targetTab) this.switchTab(targetTab);
+        if (targetTab) this.openLab(targetTab);
       });
     });
 
@@ -32,7 +105,7 @@ class App {
       chip.addEventListener('click', (e) => {
         const target = e.currentTarget.dataset.goto;
         if (target) {
-          this.switchTab(target);
+          this.openLab(target);
           const tabPane = document.getElementById(`tab-${target}`);
           if (tabPane) {
             tabPane.scrollIntoView({ behavior: 'smooth' });
@@ -45,6 +118,24 @@ class App {
   switchTab(tabId) {
     if (!tabId) return;
     this.currentTab = tabId;
+
+    const welcomeView = document.getElementById('view-welcome');
+    const labView = document.getElementById('view-lab');
+    if (welcomeView && welcomeView.style.display !== 'none' && labView) {
+      welcomeView.style.display = 'none';
+      labView.style.display = 'block';
+    }
+
+    const missionNames = {
+      algorithms: 'Misión 1: Arena de Algoritmos (CI-0112)',
+      concurrency: 'Misión 2: Rotonda & Concurrencia (CI-0117)',
+      networking: 'Misión 3: Hack Studio & Sockets (CI-0123)',
+      cheatsheets: 'Misión 4: Métricas & Recursos Teóricos'
+    };
+    const label = document.getElementById('activeMissionLabel');
+    if (label && missionNames[tabId]) {
+      label.textContent = missionNames[tabId];
+    }
 
     // Update tab buttons
     document.querySelectorAll('.header .nav-tab-btn').forEach(btn => {
