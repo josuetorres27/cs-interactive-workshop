@@ -176,7 +176,6 @@ static void test_symmetry_preservation(void) {
 static void test_domain_decomposition_partitions(void) {
     // 10 tests: verify 1D row slicing partitions cover exactly all internal rows with 0 gaps or overlaps
     int thread_counts[10] = {1, 2, 3, 4, 5, 6, 7, 8, 12, 16};
-    int total_rows = 102; // internal rows = 100 (1..100)
 
     for (int t = 0; t < 10; ++t) {
         int P = thread_counts[t];

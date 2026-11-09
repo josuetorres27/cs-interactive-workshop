@@ -1,7 +1,7 @@
 # Compiler configuration
 CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -I.
-LDFLAGS := -lstdc++fs
+LDFLAGS :=
 
 # Directories
 SRCDIR := src

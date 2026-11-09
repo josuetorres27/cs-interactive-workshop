@@ -5,7 +5,7 @@ CC ?= gcc
 CXX ?= g++
 CFLAGS := -std=c11 -Wall -Wextra -O2 -I. -pthread
 CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -I. -I../core-c-engines/networking/src -pthread
-LDFLAGS := -lstdc++fs -lm
+LDFLAGS := -lm
 
 BINDIR := bin
 TARGETS := \

@@ -15,8 +15,12 @@
 #ifndef ROUNDABOUT_H
 #define ROUNDABOUT_H
 
+#ifndef _DEFAULT_SOURCE
 #define _DEFAULT_SOURCE
-#define _POSIX_C_SOURCE 199309L
+#endif
+#ifndef _POSIX_C_SOURCE
+#define _POSIX_C_SOURCE 200809L
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
