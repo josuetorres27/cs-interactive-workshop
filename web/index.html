@@ -112,6 +112,33 @@
         </div>
       </div>
 
+
+      <!-- About the Lab Section -->
+      <div class="about-section">
+        <div class="about-header">
+          <span class="about-tag">SOBRE LA PLATAFORMA</span>
+          <h2 class="about-title">¿Qué es el CS Interactive Lab?</h2>
+          <p class="about-subtitle">Una herramienta de apoyo académico para estudiantes de la ECCI-UCR</p>
+        </div>
+        <div class="about-cards-grid">
+          <div class="about-card">
+            <div class="about-card-icon sky">🎯</div>
+            <h3>Qué es</h3>
+            <p>Un laboratorio virtual interactivo que complementa los cursos de Ciencias de la Computación de la UCR con simulaciones en tiempo real, visualizaciones y ejercicios prácticos.</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon sun">👥</div>
+            <h3>¿Para quién?</h3>
+            <p>Diseñado para estudiantes de CI-0112 (Algoritmos), CI-0117 (Concurrencia) y CI-0123 (Redes) que quieran reforzar conceptos con experimentación directa.</p>
+          </div>
+          <div class="about-card">
+            <div class="about-card-icon leaf">🚀</div>
+            <h3>¿Cómo funciona?</h3>
+            <p>Elige un módulo, ajusta parámetros en tiempo real y observa cómo se comportan los algoritmos, hilos y conexiones. No se necesita instalar nada.</p>
+          </div>
+        </div>
+      </div>
+
       <!-- Gamified Mission Cards Grid -->
       <div id="missionsSection" class="missions-section">
         <div class="section-header">
@@ -620,7 +647,7 @@
           </div>
 
           <div class="control-group">
-            <input type="text" id="netSearchInput" placeholder="Filtrar figuras (ej: spiderman)..." style="background:var(--bg-tertiary); border:1px solid var(--border-subtle); color:#fff; padding:0.45rem 0.65rem; border-radius:var(--radius-sm); font-size:0.8rem; width:100%;">
+            <input type="text" id="netSearchInput" placeholder="Filtrar figuras (ej: spiderman)..." style="padding:0.45rem 0.65rem; font-size:0.8rem; width:100%;">
           </div>
 
           <div style="display:flex; gap:0.3rem; margin-bottom:0.75rem; flex-wrap:wrap;">
@@ -688,7 +715,7 @@
                     <option value="POST">POST</option>
                     <option value="HEAD">HEAD</option>
                   </select>
-                  <input type="text" id="socketUriInput" value="/figures/batman" style="flex:1; background:var(--bg-tertiary); border:1px solid var(--border-subtle); color:#fff; padding:0.4rem 0.6rem; border-radius:var(--radius-sm); font-family:var(--font-mono); font-size:0.8rem;">
+                  <input type="text" id="socketUriInput" value="/figures/batman" style="flex:1; padding:0.4rem 0.6rem; font-family:var(--font-mono); font-size:0.8rem;">
                 </div>
                 <button id="btnSendSocketReq" class="btn btn-primary" style="width:100%;">
                   ⚡ Despachar Petición Socket al Servidor
