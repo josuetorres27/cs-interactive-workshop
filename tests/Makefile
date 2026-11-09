@@ -1,0 +1,56 @@
+# CS Interactive Lab - Test Suite Makefile
+# Compiles and runs all 330 automated tests
+
+CC ?= gcc
+CXX ?= g++
+CFLAGS := -std=c11 -Wall -Wextra -O2 -I. -pthread
+CXXFLAGS := -std=c++17 -Wall -Wextra -O2 -I. -I../core-c-engines/networking/src -pthread
+LDFLAGS := -lstdc++fs -lm
+
+BINDIR := bin
+TARGETS := \
+	$(BINDIR)/test_sorting \
+	$(BINDIR)/test_roundabout \
+	$(BINDIR)/test_heat_diffusion \
+	$(BINDIR)/test_patterns \
+	$(BINDIR)/test_networking
+
+.PHONY: all clean run $(TARGETS)
+
+all: $(TARGETS)
+
+$(BINDIR):
+	@mkdir -p $(BINDIR)
+
+$(BINDIR)/test_sorting: algorithms/test_sorting.cpp | $(BINDIR)
+	$(CXX) $(CXXFLAGS) $< -o $@
+
+$(BINDIR)/test_roundabout: concurrency/test_roundabout.c ../core-c-engines/concurrency/simulations/roundabout/src/roundabout.c | $(BINDIR)
+	$(CC) $(CFLAGS) $^ -o $@
+
+$(BINDIR)/test_heat_diffusion: concurrency/test_heat_diffusion.c | $(BINDIR)
+	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS)
+
+$(BINDIR)/test_patterns: concurrency/test_patterns.c | $(BINDIR)
+	$(CC) $(CFLAGS) $< -o $@
+
+$(BINDIR)/test_networking: networking/test_networking.cpp ../core-c-engines/networking/src/FileSystem.cc | $(BINDIR)
+	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+
+clean:
+	rm -rf $(BINDIR) test_disk_tmp.bin
+
+run: all
+	@echo "\n===================================================================="
+	@echo "            RUNNING CS INTERACTIVE LAB MASTER TEST SUITE             "
+	@echo "                     (330+ AUTOMATED TESTS)                         "
+	@echo "===================================================================="
+	@./$(BINDIR)/test_sorting
+	@./$(BINDIR)/test_roundabout
+	@./$(BINDIR)/test_heat_diffusion
+	@./$(BINDIR)/test_patterns
+	@./$(BINDIR)/test_networking
+	@python3 web/test_web_assets.py
+	@echo "\n===================================================================="
+	@echo "                ALL 330 TESTS PASSED SUCCESSFULLY! ✅               "
+	@echo "===================================================================="

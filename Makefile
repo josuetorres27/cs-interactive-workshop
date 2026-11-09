@@ -36,15 +36,7 @@ clean:
 
 test: all
 	@echo "\n===================================================================="
-	@echo "              CS INTERACTIVE LAB - FULL TEST SUITE                  "
+	@echo "            RUNNING CS INTERACTIVE LAB MASTER TEST SUITE             "
+	@echo "                     (330+ AUTOMATED TESTS)                         "
 	@echo "===================================================================="
-	@echo "\n[1/3] Testing Algorithms & Data Structures..."
-	@core-c-engines/algorithms/bin/benchmark
-	@echo "\n[2/3] Testing Concurrency & Parallel Systems..."
-	@$(MAKE) -C core-c-engines/concurrency test
-	@echo "\n[3/3] Testing Distributed Systems Compilation..."
-	@test -f core-c-engines/networking/exec/Server && echo "Server binary verified."
-	@test -f core-c-engines/networking/exec/Client && echo "Client binary verified."
-	@echo "\n===================================================================="
-	@echo "                 ALL SYSTEMS OPERATIONAL (3/3 OK)                   "
-	@echo "===================================================================="
+	@$(MAKE) -C tests run

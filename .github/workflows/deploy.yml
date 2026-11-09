@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages & Firebase Hosting
+name: CI/CD - Automated Tests & Deployment
 
 on:
   push:
@@ -16,7 +16,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  test:
+    name: Run 330+ Automated Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential gcc g++ libomp-dev python3
+
+      - name: Build All Engines & Run Master Test Suite
+        run: |
+          make test
+
   deploy-pages:
+    name: Deploy to GitHub Pages
+    needs: test
+    if: github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -27,6 +46,7 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
+        continue-on-error: true
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
