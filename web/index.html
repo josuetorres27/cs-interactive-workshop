@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS Interactive Lab | Computer Science Workbench & Visualizer</title>
+  <meta name="description" content="An interactive web workbench exploring Algorithms, Concurrency, and Distributed Systems through real-time simulations and C engines.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Top Application Header -->
+  <header class="header">
+    <div class="header-container">
+      <a href="#" class="brand">
+        <div class="brand-icon">&gt;_</div>
+        <div class="brand-text">
+          <h1>CS Interactive Lab <span class="brand-badge">v2.0</span></h1>
+          <p>Algorithms • Concurrency • Distributed Systems</p>
+        </div>
+      </a>
+
+      <!-- Primary Navigation Tabs -->
+      <nav class="nav-tabs" role="tablist">
+        <button class="nav-tab-btn active" data-tab="algorithms" role="tab">
+          <span>📊</span> Algorithms
+        </button>
+        <button class="nav-tab-btn" data-tab="concurrency" role="tab">
+          <span>🚦</span> Concurrency
+        </button>
+        <button class="nav-tab-btn" data-tab="networking" role="tab">
+          <span>🌐</span> Distributed Networks
+        </button>
+        <button class="nav-tab-btn" data-tab="cheatsheets" role="tab">
+          <span>📖</span> Theory & Docs
+        </button>
+      </nav>
+
+      <!-- Global Actions -->
+      <div class="header-actions">
+        <button id="btnToggleSound" class="icon-btn" title="Toggle Sound Feedback">🔊</button>
+        <button id="btnToggleFullscreen" class="icon-btn" title="Toggle Fullscreen">⛶</button>
+        <a href="https://github.com/josuetorres27/cs-interactive-lab" target="_blank" class="icon-btn" title="View Source on GitHub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Body -->
+  <main class="main-content">
+
+    <!-- ========================================== -->
+    <!-- TAB 1: ALGORITHMS & DATA STRUCTURES        -->
+    <!-- ========================================== -->
+    <section id="tab-algorithms" class="tab-pane active">
+      <div class="lab-grid">
+        <!-- Controls Panel -->
+        <div class="glass-card">
+          <div class="card-title">
+            <span>⚙️ Configuration</span>
+            <span class="badge badge-cyan">C++ Engine</span>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Algorithm</label>
+            <select id="algoSelect">
+              <option value="quick">Quick Sort (Partitioning)</option>
+              <option value="merge">Merge Sort (Divide & Conquer)</option>
+              <option value="heap">Heap Sort (Priority Queue)</option>
+              <option value="shell">Shell Sort (Diminishing Increments)</option>
+              <option value="insertion">Insertion Sort (Incremental)</option>
+              <option value="selection">Selection Sort (Minimum Scan)</option>
+              <option value="bubble">Bubble Sort (Adjacent Swaps)</option>
+              <option value="radix">Radix Sort (LSD Non-Comparative)</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Distribution</label>
+            <select id="arrayDist">
+              <option value="random">Random Uniform</option>
+              <option value="nearly-sorted">Nearly Sorted</option>
+              <option value="reversed">Reversed (Worst Case)</option>
+              <option value="few-unique">Few Unique Elements</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <div class="control-label">
+              <span>Array Size</span>
+              <span id="arraySizeVal" class="control-value">50</span>
+            </div>
+            <input type="range" id="arraySize" min="10" max="150" value="50">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label">
+              <span>Execution Speed</span>
+              <span id="algoSpeedVal" class="control-value">80%</span>
+            </div>
+            <input type="range" id="algoSpeed" min="1" max="100" value="80">
+          </div>
+
+          <div class="btn-group">
+            <button id="btnRunAlgo" class="btn btn-primary" style="flex:1;">▶ Run Algorithm</button>
+            <button id="btnResetAlgo" class="btn" style="flex:1;">↺ Reset Array</button>
+          </div>
+
+          <!-- Complexity Badges -->
+          <div style="margin-top: 1.5rem; border-top: 1px solid var(--border-subtle); padding-top: 1rem;">
+            <div class="card-title" style="font-size:0.8rem; margin-bottom:0.6rem;">Asymptotic Complexity</div>
+            <div style="display:flex; flex-direction:column; gap:0.4rem; font-size:0.8rem;">
+              <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--text-dim);">Best Time:</span>
+                <span id="badgeBest" class="badge badge-emerald">O(n log n)</span>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--text-dim);">Avg Time:</span>
+                <span id="badgeAvg" class="badge badge-cyan">O(n log n)</span>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--text-dim);">Worst Time:</span>
+                <span id="badgeWorst" class="badge badge-amber">O(n²)</span>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--text-dim);">Space:</span>
+                <span id="badgeSpace" class="badge badge-rose">O(log n)</span>
+              </div>
+              <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--text-dim);">Stable:</span>
+                <span id="badgeStable" class="badge badge-cyan">NO</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visualizer Canvas & Metrics -->
+        <div class="glass-card viewport-card">
+          <div class="canvas-container">
+            <canvas id="algoCanvas"></canvas>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <div class="metric-label">Status</div>
+              <div id="algoStatus" class="metric-value" style="color:var(--cyan); font-size:0.95rem;">IDLE</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Comparisons</div>
+              <div id="algoComparisons" class="metric-value">0</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Swaps / Writes</div>
+              <div id="algoSwaps" class="metric-value">0</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Elapsed Time</div>
+              <div id="algoTime" class="metric-value">0.00s</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: CONCURRENCY & PARALLEL SYSTEMS      -->
+    <!-- ========================================== -->
+    <section id="tab-concurrency" class="tab-pane">
+      <!-- Subtabs -->
+      <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+        <button class="nav-tab-btn conc-subtab-btn active" data-subtab="roundabout">🚗 Roundabout (Semaphores)</button>
+        <button class="nav-tab-btn conc-subtab-btn" data-subtab="heat">🔥 2D Heat Diffusion (OpenMP)</button>
+        <button class="nav-tab-btn conc-subtab-btn" data-subtab="patterns">⚡ Patterns & Benchmarks</button>
+      </div>
+
+      <div class="lab-grid">
+        <!-- Controls Panel -->
+        <div class="glass-card">
+          <!-- Panel for Roundabout -->
+          <div id="roundaboutControls">
+            <div class="card-title">
+              <span>Traffic Synchronization</span>
+              <span class="badge badge-emerald">POSIX Semaphores</span>
+            </div>
+
+            <div class="control-group" style="background:var(--bg-tertiary); padding:0.75rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
+              <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-weight:600; font-size:0.85rem;">
+                <input type="checkbox" id="toggleSemaphores" checked style="width:18px; height:18px; accent-color:var(--emerald);">
+                <span>Semaphore Guards</span>
+              </label>
+              <div id="semStatusText" style="font-size:0.75rem; color:var(--emerald); margin-top:0.3rem;">
+                ENABLED (Deadlock-Free)
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label">
+                <span>Arrival Traffic Rate</span>
+                <span id="trafficRateVal" class="control-value">60%</span>
+              </div>
+              <input type="range" id="trafficRate" min="10" max="100" value="60">
+            </div>
+
+            <div class="control-group">
+              <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-size:0.8rem; color:var(--text-dim);">
+                <input type="checkbox" id="toggleAutoSpawn" checked style="width:16px; height:16px; accent-color:var(--cyan);">
+                <span>Continuous Vehicle Arrival</span>
+              </label>
+            </div>
+
+            <div class="btn-group">
+              <button id="btnSpawnVehicle" class="btn btn-primary" style="flex:1;">+ Spawn Vehicle</button>
+              <button id="btnClearRoundabout" class="btn" style="flex:1;">↺ Clear Track</button>
+            </div>
+          </div>
+
+          <!-- Panel for Heat -->
+          <div id="heatControls" style="display:none;">
+            <div class="card-title">
+              <span>Heat Equation Solver</span>
+              <span class="badge badge-amber">PDE 5-Point Stencil</span>
+            </div>
+
+            <div class="control-group">
+              <label class="control-label">Thread Partitioning</label>
+              <select id="heatThreadsSelect">
+                <option value="1">1 Thread (Sequential Baseline)</option>
+                <option value="2">2 Threads (Domain Slicing)</option>
+                <option value="4" selected>4 Threads (Multi-Core Pthreads/OpenMP)</option>
+                <option value="8">8 Threads (High Parallelism)</option>
+              </select>
+            </div>
+
+            <div class="btn-group">
+              <button id="btnRunHeat" class="btn btn-primary" style="flex:1;">▶ Run Heat Solver</button>
+              <button id="btnStepHeat" class="btn" style="flex:1;">⏭ Step</button>
+              <button id="btnResetHeat" class="btn" style="width:100%;">↺ Reset Grid</button>
+            </div>
+          </div>
+
+          <!-- Panel for Patterns -->
+          <div id="patternsControls" style="display:none;">
+            <div class="card-title">
+              <span>Classic Patterns</span>
+              <span class="badge badge-purple">Dijkstra & Atomics</span>
+            </div>
+            <p style="font-size:0.8rem; color:var(--text-dim); margin-bottom:1rem;">
+              Visual monitors demonstrating the Bounded Buffer (dual semaphores) and Dining Philosophers (resource hierarchy).
+            </p>
+            <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--cyan); background:var(--bg-tertiary); padding:0.6rem; border-radius:var(--radius-sm);">
+              $ make -C core-c-engines/concurrency test
+            </div>
+          </div>
+        </div>
+
+        <!-- Concurrency Viewport -->
+        <div class="glass-card viewport-card">
+          <!-- Deadlock alert banner -->
+          <div id="deadlockAlertBanner" style="display:none; background:var(--rose-dim); border:1px solid var(--rose); padding:0.6rem 1rem; border-radius:var(--radius-sm); color:var(--rose); font-size:0.85rem; font-weight:600; align-items:center; justify-content:space-between;">
+            <span>⚠️ COFFMAN CIRCULAR WAIT DETECTED! Roundabout is in complete gridlock. Enable semaphores to resolve.</span>
+          </div>
+
+          <div class="canvas-container">
+            <canvas id="concurrencyCanvas"></canvas>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-box">
+              <div class="metric-label">System State</div>
+              <div id="concDeadlockState" class="metric-value" style="color:var(--emerald); font-size:0.95rem;">LIVENESS OK ✅</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Active Threads/Vehicles</div>
+              <div id="concActive" class="metric-value">0</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Occupancy in Ring</div>
+              <div id="concInRing" class="metric-value">0</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Vehicles Passed</div>
+              <div id="concPassed" class="metric-value">0</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Heat Iterations</div>
+              <div id="heatIterCount" class="metric-value">0</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Max Heat Delta (ε)</div>
+              <div id="heatMaxDelta" class="metric-value">0.0000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: NETWORKING & DISTRIBUTED SYSTEMS   -->
+    <!-- ========================================== -->
+    <section id="tab-networking" class="tab-pane">
+      <div class="lab-grid" style="grid-template-columns: 280px 1fr;">
+        <!-- Left: ASCII Asset Catalog -->
+        <div class="glass-card">
+          <div class="card-title">
+            <span>ASCII Figures Catalog</span>
+            <span class="badge badge-cyan">12 Assets</span>
+          </div>
+
+          <div class="control-group">
+            <input type="text" id="netSearchInput" placeholder="Filter figures (e.g. spiderman)..." style="background:var(--bg-tertiary); border:1px solid var(--border-subtle); color:#fff; padding:0.4rem 0.6rem; border-radius:var(--radius-sm); font-size:0.8rem; width:100%;">
+          </div>
+
+          <div style="display:flex; gap:0.3rem; margin-bottom:0.75rem; flex-wrap:wrap;">
+            <button class="badge net-cat-pill active" data-cat="all" style="cursor:pointer; border:none; background:var(--bg-tertiary); color:var(--text-main);">All</button>
+            <button class="badge net-cat-pill" data-cat="heroes" style="cursor:pointer; border:none; background:var(--bg-tertiary); color:var(--text-dim);">Heroes</button>
+            <button class="badge net-cat-pill" data-cat="gaming" style="cursor:pointer; border:none; background:var(--bg-tertiary); color:var(--text-dim);">Gaming</button>
+            <button class="badge net-cat-pill" data-cat="tech" style="cursor:pointer; border:none; background:var(--bg-tertiary); color:var(--text-dim);">Tech</button>
+          </div>
+
+          <div id="netFigureList" style="max-height:280px; overflow-y:auto; border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:0.3rem;">
+            <!-- Injected dynamically -->
+          </div>
+
+          <div style="margin-top:1rem; border-top:1px solid var(--border-subtle); padding-top:0.75rem;">
+            <div class="control-label">
+              <span>Font Size</span>
+              <span id="asciiFontSizeVal" class="control-value">11px</span>
+            </div>
+            <input type="range" id="asciiFontSize" min="7" max="18" value="11">
+          </div>
+
+          <div class="btn-group">
+            <button id="btnCopyAscii" class="btn btn-primary" style="flex:1;">📋 Copy</button>
+            <button id="btnDownloadAscii" class="btn" style="flex:1;">💾 Export .txt</button>
+          </div>
+        </div>
+
+        <!-- Right: ASCII Display & Socket Dispatcher -->
+        <div style="display:flex; flex-direction:column; gap:1.25rem;">
+          <!-- ASCII Art Terminal View -->
+          <div class="terminal-window">
+            <div class="terminal-header">
+              <div class="terminal-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+              </div>
+              <div id="currentFigTitle" style="font-weight:700; color:var(--cyan);">BATMAN</div>
+              <div style="font-size:0.7rem; color:var(--text-muted);">
+                <span id="figLinesCount">0 lines</span> • <span id="figCharsCount">0 chars</span>
+              </div>
+            </div>
+            <div id="asciiDisplay" class="terminal-body" style="font-size:11px; max-height:360px;">
+              Loading ASCII figure...
+            </div>
+          </div>
+
+          <!-- Distributed Client-Server Simulation Card -->
+          <div class="glass-card">
+            <div class="card-title">
+              <span>Distributed Socket Protocol & Worker Pool</span>
+              <span class="badge badge-emerald">C++ Sockets / HTTP 1.1</span>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-bottom:1rem;">
+              <!-- Dispatch Form -->
+              <div>
+                <div style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
+                  <select id="socketMethodSelect" style="width:110px;">
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                    <option value="HEAD">HEAD</option>
+                  </select>
+                  <input type="text" id="socketUriInput" value="/figures/batman" style="flex:1; background:var(--bg-tertiary); border:1px solid var(--border-subtle); color:#fff; padding:0.4rem 0.6rem; border-radius:var(--radius-sm); font-family:var(--font-mono); font-size:0.8rem;">
+                </div>
+                <button id="btnSendSocketReq" class="btn btn-primary" style="width:100%;">
+                  ⚡ Send Socket Packet to Server
+                </button>
+              </div>
+
+              <!-- Worker Threads Pool State -->
+              <div id="workerPoolContainer" style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem;">
+                <!-- Injected dynamically -->
+              </div>
+            </div>
+
+            <!-- Packet Inspector -->
+            <div class="terminal-window">
+              <div class="terminal-header">
+                <span>Packet Wire Inspector (Wireshark Emulation)</span>
+                <div style="font-size:0.7rem;">
+                  Packets: <span id="netPacketsCount" style="color:var(--cyan); font-weight:700;">0</span> | 
+                  Data: <span id="netBytesCount" style="color:var(--emerald); font-weight:700;">0 KB</span>
+                </div>
+              </div>
+              <div id="packetInspector" class="terminal-body" style="max-height:160px; font-size:0.75rem; color:#38bdf8;">
+Waiting for socket dispatch request...
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: THEORY & CHEATSHEETS                -->
+    <!-- ========================================== -->
+    <section id="tab-cheatsheets" class="tab-pane">
+      <div class="theory-grid">
+        <!-- Card 1: Amdahl's Law Calculator -->
+        <div class="theory-card">
+          <h3>⚡ Amdahl's Law Calculator</h3>
+          <p>Compute theoretical speedup limits for parallel computing based on parallel fraction.</p>
+          
+          <div class="control-group">
+            <div class="control-label">
+              <span>Parallel Fraction (f)</span>
+              <span id="amdahlFractionVal" class="control-value">85%</span>
+            </div>
+            <input type="range" id="amdahlFraction" min="10" max="99" value="85">
+          </div>
+
+          <div class="control-group">
+            <div class="control-label">
+              <span>Processors / Cores (N)</span>
+              <span id="amdahlProcVal" class="control-value">8 Cores</span>
+            </div>
+            <input type="range" id="amdahlProcessors" min="1" max="64" value="8">
+          </div>
+
+          <div class="metrics-grid" style="margin-top:1rem;">
+            <div class="metric-box">
+              <div class="metric-label">Speedup S(N)</div>
+              <div id="amdahlSpeedupVal" class="metric-value" style="color:var(--cyan);">3.90x</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Max Speedup S(∞)</div>
+              <div id="amdahlMaxSpeedupVal" class="metric-value" style="color:var(--emerald);">6.67x</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-label">Efficiency</div>
+              <div id="amdahlEfficiencyVal" class="metric-value" style="color:var(--amber);">48.8%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Coffman Deadlock Conditions -->
+        <div class="theory-card">
+          <h3>🔒 Coffman Deadlock Conditions</h3>
+          <p>All four conditions must hold simultaneously for a system deadlock to manifest:</p>
+          <ul style="font-size:0.8rem; color:var(--text-dim); padding-left:1.2rem; display:flex; flex-direction:column; gap:0.4rem;">
+            <li><strong>Mutual Exclusion:</strong> Exclusive non-shareable resource ownership.</li>
+            <li><strong>Hold & Wait:</strong> Threads holding resources while requesting additional ones.</li>
+            <li><strong>No Preemption:</strong> Resources can only be released voluntarily by the owner.</li>
+            <li><strong>Circular Wait:</strong> Closed cycle of threads waiting for next thread's resource.</li>
+          </ul>
+          <div class="code-snippet" style="margin-top:0.75rem;">
+            // Prevention: Dijkstra hierarchy or total capacity - 1
+            sem_t entry_permit; // Breaks circular wait!
+          </div>
+        </div>
+
+        <!-- Card 3: BSD Socket Lifecycle -->
+        <div class="theory-card">
+          <h3>🌐 BSD Sockets Architecture</h3>
+          <p>Standard life-cycle state transitions for concurrent TCP servers and clients:</p>
+          <div class="code-snippet">
+Server: socket() -> bind() -> listen() -> accept() -> recv/send() -> close()
+Client: socket() -> connect() -> send/recv() -> close()
+          </div>
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.5rem;">
+            In multi-threaded servers, accept() delegates the active client fd to a worker thread from a pool.
+          </p>
+        </div>
+
+        <!-- Card 4: POSIX Synchronization Primitives -->
+        <div class="theory-card">
+          <h3>🧵 POSIX & Atomics Cheatsheet</h3>
+          <p>Standard synchronization patterns in C99/C11:</p>
+          <div class="code-snippet">
+// 1. Mutex: pthread_mutex_lock(&m) / unlock(&m)
+// 2. Semaphore: sem_wait(&s) / sem_post(&s)
+// 3. Barrier: pthread_barrier_wait(&b)
+// 4. Atomic: atomic_fetch_add(&val, 1)
+          </div>
+        </div>
+      </div>
+
+      <!-- Complexity Table -->
+      <div class="glass-card" style="margin-top:1.5rem;">
+        <div class="card-title">
+          <span>Comparative Big-O Complexity Reference</span>
+          <span class="badge badge-cyan">Cheat Sheet</span>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Algorithm</th>
+                <th>Best Time</th>
+                <th>Average Time</th>
+                <th>Worst Time</th>
+                <th>Space Complexity</th>
+                <th>Stability</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Quick Sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n)</td><td>No</td></tr>
+              <tr><td>Merge Sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>Yes</td></tr>
+              <tr><td>Heap Sort</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>No</td></tr>
+              <tr><td>Shell Sort</td><td>O(n log n)</td><td>O(n^(4/3))</td><td>O(n²)</td><td>O(1)</td><td>No</td></tr>
+              <tr><td>Insertion Sort</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Yes</td></tr>
+              <tr><td>Selection Sort</td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>No</td></tr>
+              <tr><td>Bubble Sort</td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Yes</td></tr>
+              <tr><td>Radix Sort</td><td>O(nk)</td><td>O(nk)</td><td>O(nk)</td><td>O(n + k)</td><td>Yes</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Application Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div>
+        <strong>CS Interactive Lab</strong> • Designed & Engineered by <a href="https://github.com/josuetorres27" target="_blank">Josué Torres Sibaja</a>
+      </div>
+      <div>
+        Licensed under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a> • Open-Source Educational Suite
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/modules/figuresData.js"></script>
+  <script src="js/modules/algorithms.js"></script>
+  <script src="js/modules/concurrency.js"></script>
+  <script src="js/modules/networking.js"></script>
+  <script src="js/modules/cheatsheets.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

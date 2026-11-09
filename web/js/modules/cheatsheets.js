@@ -1,0 +1,43 @@
+// CS Interactive Lab - Theory & Cheatsheets Module
+class CheatsheetsLab {
+  constructor() {
+    this.parallelFraction = 0.85;
+    this.processorCount = 8;
+  }
+
+  init() {
+    this.setupAmdahlCalculator();
+  }
+
+  setupAmdahlCalculator() {
+    const fractionSlider = document.getElementById('amdahlFraction');
+    const procSlider = document.getElementById('amdahlProcessors');
+
+    const updateCalc = () => {
+      const f = parseFloat(fractionSlider.value) / 100;
+      const n = parseInt(procSlider.value);
+      this.parallelFraction = f;
+      this.processorCount = n;
+
+      document.getElementById('amdahlFractionVal').textContent = `${(f * 100).toFixed(0)}%`;
+      document.getElementById('amdahlProcVal').textContent = `${n} Cores`;
+
+      // Amdahl's formula: S(n) = 1 / ((1 - f) + f / n)
+      const speedup = 1 / ((1 - f) + f / n);
+      const maxSpeedup = f === 1 ? Infinity : 1 / (1 - f);
+      const efficiency = (speedup / n) * 100;
+
+      document.getElementById('amdahlSpeedupVal').textContent = `${speedup.toFixed(2)}x`;
+      document.getElementById('amdahlMaxSpeedupVal').textContent = maxSpeedup === Infinity ? '∞' : `${maxSpeedup.toFixed(2)}x`;
+      document.getElementById('amdahlEfficiencyVal').textContent = `${efficiency.toFixed(1)}%`;
+    };
+
+    if (fractionSlider && procSlider) {
+      fractionSlider.addEventListener('input', updateCalc);
+      procSlider.addEventListener('input', updateCalc);
+      updateCalc();
+    }
+  }
+}
+
+window.cheatsheetsLab = new CheatsheetsLab();
