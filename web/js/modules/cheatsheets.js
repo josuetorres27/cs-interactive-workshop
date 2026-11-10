@@ -20,7 +20,7 @@ class CheatsheetsLab {
       this.processorCount = n;
 
       document.getElementById('amdahlFractionVal').textContent = `${(f * 100).toFixed(0)}%`;
-      document.getElementById('amdahlProcVal').textContent = `${n} Cores`;
+      document.getElementById('amdahlProcVal').textContent = `${n} núcleos`;
 
       // Amdahl's formula: S(n) = 1 / ((1 - f) + f / n)
       const speedup = 1 / ((1 - f) + f / n);
