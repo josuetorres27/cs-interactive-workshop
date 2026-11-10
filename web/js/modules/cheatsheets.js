@@ -35,6 +35,9 @@ class CheatsheetsLab {
     if (fractionSlider && procSlider) {
       fractionSlider.addEventListener('input', updateCalc);
       procSlider.addEventListener('input', updateCalc);
+      const mark = () => { if (window.account) window.account.record('cheatsheets', 'amdahl'); };
+      fractionSlider.addEventListener('change', mark);
+      procSlider.addEventListener('change', mark);
       updateCalc();
     }
   }
