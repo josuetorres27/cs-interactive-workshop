@@ -14,12 +14,13 @@ const MODULES = {
   algorithms:     { title: 'Ordenamiento',            area: 'algoritmos',  steps: true },
   datastructures: { title: 'Estructuras de datos',    area: 'algoritmos',  steps: true, tracer: 'dsLab' },
   concurrency:    { title: 'La Rotonda',              area: 'paralela',    steps: true },
+  heat:           { title: 'Difusión de calor',       area: 'paralela',    steps: true },
   networking:     { title: 'Sockets TCP',             area: 'redes',       steps: true, tracer: 'networkingLab' },
   interview:      { title: 'Patrones de entrevista',  area: 'entrevistas', steps: true, tracer: 'interviewLab' },
   sql:            { title: 'SQL paso a paso',         area: 'datos',       steps: true, tracer: 'sqlLab' },
   cheatsheets:    { title: 'El Cuaderno',             area: null,          steps: false }
 };
-const MODULE_ORDER = ['algorithms', 'datastructures', 'concurrency', 'networking', 'interview', 'sql', 'cheatsheets'];
+const MODULE_ORDER = ['algorithms', 'datastructures', 'concurrency', 'heat', 'networking', 'interview', 'sql', 'cheatsheets'];
 const STEP_IDS = ['play', 'learn', 'build'];
 
 // What Bit says on each screen/step
@@ -40,6 +41,11 @@ const GUIDE_LINES = {
     play: 'Los autos son hilos. Apaga los semáforos o pulsa «Provocar deadlock» para ver la rotonda trabarse.',
     learn: 'Un deadlock necesita cuatro condiciones a la vez. Rompe una y desaparece.',
     build: 'Una versión simplificada de la rotonda con semáforos POSIX, lista para estudiar.'
+  },
+  heat: {
+    play: 'Pon la velocidad en 1 y mira a cada hilo calcular su franja. Luego activa el hilo lento: verás a los demás esperando en la barrera.',
+    learn: 'Doble búfer, franjas, barrera y reducción: las cuatro ideas que hacen correcto y rápido este cálculo.',
+    build: 'El motor en C de este proyecto, con pthreads y OpenMP, y cómo correrlo para comparar.'
   },
   networking: {
     play: 'Envía una petición y mira cada paquete cruzar el cable. Usa ← y → para ir paso a paso.',
@@ -72,10 +78,16 @@ const TOURS = {
     { sel: '#modSteps', title: 'Después, entiende', text: 'En «Entiende» está la idea y su costo. En «Implementa», el código.' }
   ],
   concurrency: [
-    { sel: '#concSubtabs', title: 'Tres simulaciones', text: 'La rotonda, una placa de calor en paralelo y dos patrones clásicos.' },
+    { sel: '#concSubtabs', title: 'Dos simulaciones', text: 'La rotonda y dos patrones clásicos: el buffer acotado y los filósofos comensales.' },
     { sel: '#concurrencyViewport', title: 'La rotonda', text: 'Cada auto es un hilo; cada cuadrante, un recurso con capacidad limitada.' },
     { sel: '#deadlockButtons', title: 'Rómpela', text: 'Provoca un deadlock y luego resuélvelo con un semáforo.' },
     { sel: '#modSteps', title: '¿Y por qué pasó?', text: 'La explicación está en «Entiende».' }
+  ],
+  heat: [
+    { sel: '#heatCanvas', title: 'Una placa de metal', text: 'El color es la temperatura. Las líneas punteadas dividen la placa en franjas: una por hilo.' },
+    { sel: '#heatThreadCtl', title: '¿Cuántos hilos?', text: 'Cambia entre 1 y 8. El resultado final es idéntico; lo que cambia es cuánto tarda.' },
+    { sel: '#heatLanesPanel', title: 'Los hilos trabajando', text: 'Cada barra es un hilo. La parte rayada es tiempo perdido esperando en la barrera al más lento.' },
+    { sel: '#heatChartPanel', title: '¿Cuándo parar?', text: 'Cuando el cambio más grande baja de ε, la placa llegó al equilibrio.' }
   ],
   networking: [
     { sel: '#netRequestForm', title: 'Lo que pide el cliente', text: 'Escoge una figura (o LIST) y envía la petición. Prueba también una figura que no existe o el método POST.' },
@@ -121,7 +133,7 @@ class App {
   init() {
     document.querySelectorAll('.bit-slot').forEach(el => { el.innerHTML = BIT_SVG; });
 
-    ['algorithmsLab', 'concurrencyLab', 'networkingLab', 'cheatsheetsLab', 'interviewLab', 'dsLab', 'sqlLab']
+    ['algorithmsLab', 'concurrencyLab', 'heatLab', 'networkingLab', 'cheatsheetsLab', 'interviewLab', 'dsLab', 'sqlLab']
       .forEach(name => { if (window[name]) window[name].init(); });
 
     this.setupAccount();
