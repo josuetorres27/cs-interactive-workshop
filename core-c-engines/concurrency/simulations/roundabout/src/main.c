@@ -33,9 +33,9 @@ int main(int argc, char* argv[]) {
   printf("====================================================================\n");
   printf("      ROUNDABOUT TRAFFIC CONCURRENCY SIMULATOR - POSIX THREADS      \n");
   printf("====================================================================\n");
-  printf(" [✓] Segment Capacity: %d vehicles per quadrant\n", segment_capacity);
-  printf(" [✓] Transit Delay:    %d - %d ms\n", min_time, max_time);
-  printf(" [✓] Verbose Mode:     %s\n", verbose_mode ? "ENABLED" : "DISABLED");
+  printf(" [OK] Segment Capacity: %d vehicles per quadrant\n", segment_capacity);
+  printf(" [OK] Transit Delay:    %d - %d ms\n", min_time, max_time);
+  printf(" [OK] Verbose Mode:     %s\n", verbose_mode ? "ENABLED" : "DISABLED");
   printf("====================================================================\n\n");
 
   SimulationState* sim_state = init_simulation(min_time, max_time, verbose_mode, segment_capacity);
@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
       count++;
     }
     fclose(f);
-    printf(" [✓] Loaded %d vehicles from input file: %s\n\n", count, input_file);
+    printf(" [OK] Loaded %d vehicles from input file: %s\n\n", count, input_file);
   } else {
     /* Synthetic automated traffic stream */
     char directions[] = {'N', 'E', 'S', 'W'};
@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
       sim_state->vehicles[i].exit = directions[x_idx];
       count++;
     }
-    printf(" [✓] Generated %d synthetic vehicles for traffic flow.\n\n", count);
+    printf(" [OK] Generated %d synthetic vehicles for traffic flow.\n\n", count);
   }
 
   sim_state->num_vehicles = count;
@@ -104,7 +104,7 @@ int main(int argc, char* argv[]) {
   }
 
   printf("\n====================================================================\n");
-  printf(" [✓] Simulation completed successfully with 0 deadlocks.\n");
+  printf(" [OK] Simulation completed successfully with 0 deadlocks.\n");
   printf("====================================================================\n");
 
   cleanup_simulation(sim_state);
