@@ -1204,6 +1204,59 @@ pre.code .t-k { color: #f6c33b; }
   .profile-top { grid-template-columns: 1fr; }
 }
 
+/* ================================================================
+   HEAT DIFFUSION · a plate split into one band of rows per thread
+   ================================================================ */
+.heat-canvas-wrap { background: var(--box-ink); border: var(--outline); border-radius: 12px; }
+.heat-canvas-wrap canvas { cursor: crosshair; touch-action: none; image-rendering: pixelated; }
+.heat-scale { display: flex; align-items: center; gap: .5rem; padding: .6rem .2rem 0; font-family: var(--font-mono); font-size: .75rem; font-weight: 600; color: var(--text-dim); }
+.heat-scale i { flex: 1; height: 14px; border: 2.5px solid var(--box-ink); border-radius: 999px;
+  background: linear-gradient(90deg, #2b4c7e, #3d8fd6 25%, #8fd3a5 50%, #f6c33b 75%, #e8512a); }
+.heat-r-hint { color: var(--mint-dark); }
+.heat-r-hint.bad { color: var(--tomato-dark); font-weight: 700; }
+.heat-note { margin: 1.4rem 0; }
+
+.heat-panels { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 1.4rem; }
+.heat-panel { padding: 1.6rem 1.5rem 1.3rem; }
+.heat-panel.wide { grid-column: 1 / -1; }
+.heat-panel h3 { font-family: var(--font-display); font-weight: 400; font-size: 1.3rem; color: var(--box-ink); margin-bottom: .7rem; }
+.heat-svg svg { width: 100%; height: auto; display: block; }
+.hl-label { font: 800 11px var(--font-sans); fill: var(--box-ink); text-anchor: end; }
+.hl-axis, .hc-axis { font: 600 10px var(--font-mono); fill: var(--text-muted); }
+.hc-grid { stroke: rgba(61, 36, 20, .12); stroke-width: 1; }
+.hc-base { stroke: var(--box-ink); stroke-width: 3; }
+.hc-eps { stroke: var(--mint-dark); stroke-width: 2.5; stroke-dasharray: 6 5; }
+.hc-eps-label { font: 700 11px var(--font-mono); fill: var(--mint-dark); }
+.hc-line { fill: none; stroke: var(--tomato); stroke-width: 3.5; stroke-linejoin: round; stroke-linecap: round; }
+.hc-line.bad { stroke: var(--plum); }
+
+.lanes { display: grid; gap: .55rem; }
+.lane { display: grid; grid-template-columns: 4.6rem minmax(0, 1fr) 6.6rem; grid-template-areas: "name bar state" "rows rows rows"; align-items: center; gap: .15rem .6rem; }
+.lane-name { grid-area: name; display: inline-flex; align-items: center; gap: .35rem; font-weight: 800; font-size: .88rem; color: var(--box-ink); }
+.lane-name::before { content: ''; width: 12px; height: 12px; border-radius: 4px; background: var(--c); border: 2px solid var(--box-ink); }
+.lane-rows { grid-area: rows; font-family: var(--font-mono); font-size: .7rem; color: var(--text-muted); }
+.lane-bar { grid-area: bar; display: flex; height: 16px; border: 2.5px solid var(--box-ink); border-radius: 999px; overflow: hidden; background: #fff8ea; }
+.lane-busy { display: block; height: 100%; background: var(--c); transition: width .12s linear; }
+.lane-wait { display: block; height: 100%; background: repeating-linear-gradient(45deg, #efe1c6 0 4px, #c9a06a 4px 7px); }
+.lane-state { grid-area: state; justify-self: end; font-size: .74rem; font-weight: 800; padding: .08rem .5rem; border-radius: 999px; border: 2px solid var(--box-ink); background: #fff8ea; color: var(--box-ink); white-space: nowrap; }
+.lane-state[data-state="en la barrera"] { background: var(--sun-y); }
+.lane-state[data-state="calculando"] { background: #d6eafa; }
+.lane-state[data-state="terminó"] { background: #bfe7cd; }
+.heat-key { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: .8rem; font-size: .78rem; font-weight: 700; color: var(--text-dim); }
+.heat-key span { display: inline-flex; align-items: center; gap: .35rem; }
+.heat-key i { width: 18px; height: 12px; border-radius: 4px; border: 2px solid var(--box-ink); }
+.k-busy { background: var(--sky-b); }
+.k-wait { background: repeating-linear-gradient(45deg, #efe1c6 0 4px, #c9a06a 4px 7px); }
+
+.stencil { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 1.4rem; align-items: center; margin-top: 1rem; }
+.stencil svg { width: 100%; height: auto; }
+
+@media (max-width: 900px) {
+  .heat-panels { grid-template-columns: 1fr; }
+  .stencil { grid-template-columns: 1fr; justify-items: center; }
+  .stencil svg { max-width: 180px; }
+}
+
 /* ── Art direction: outlines for paper surfaces ───────────── */
 .faq, .note, .tr-vars, .net-inspector, .bench.notebook { border: var(--outline); }
 .faq, .note, .tr-vars, .net-inspector { box-shadow: var(--lift); }
