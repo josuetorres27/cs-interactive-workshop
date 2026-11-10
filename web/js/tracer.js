@@ -423,5 +423,5 @@
     }
   }
 
-  window.Tracer = { TraceLab, Recorder, viz, highlight, esc };
+  window.Tracer = { TraceLab, Recorder, viz, highlight, esc, fmt };
 })();
