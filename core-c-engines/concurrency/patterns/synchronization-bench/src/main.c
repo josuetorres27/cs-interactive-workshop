@@ -6,8 +6,8 @@
  * Micro-benchmarking suite comparing Mutex, POSIX Semaphore, Spinlock,
  * and C11 Atomic operations under high thread contention.
  *
- * Author: Josue Torres Sibaja
- * Copyright (c) 2024-2025 Josue Torres Sibaja
+ * Author: Josue Torres
+ * Copyright (c) 2024-2025 Josue Torres
  * Licensed under the MIT License.
  */
 
