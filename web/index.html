@@ -729,48 +729,89 @@ sem_t cuadrante[QUADRANTS];          <span class="c">// capacidad de cada cuadra
         <section id="tab-networking" class="tab-pane">
 
           <div class="step-pane active" data-step="play">
-            <div class="lab-grid">
-              <div class="clipboard">
-                <div class="ctl" id="netFigurePicker">
-                  <div class="ctl-label">1 · Escoge una figura</div>
-                  <div id="netFigureList" class="figure-grid"></div>
+            <div class="net-sim" id="netSim">
+
+              <!-- What the client types -->
+              <form class="net-request board" id="netRequestForm">
+                <div class="net-request-main">
+                  <div class="ctl-label">El cliente ejecuta</div>
+                  <div class="net-cmd">
+                    <code class="net-prompt">$ ./client</code>
+                    <select id="netCommand" aria-label="Comando del cliente">
+                      <option value="GET">GET</option>
+                      <option value="LIST">LIST</option>
+                    </select>
+                    <select id="netFigure" aria-label="Figura"></select>
+                  </div>
                 </div>
-                <div class="btn-row">
-                  <button id="btnCopyAscii" class="btn btn-sm"><svg class="ic"><use href="#i-copy"/></svg>Copiar</button>
-                  <button id="btnDownloadAscii" class="btn btn-sm"><svg class="ic"><use href="#i-download"/></svg>.txt</button>
+                <div class="net-request-opts">
+                  <div class="ctl-label">Método HTTP</div>
+                  <div class="chips" id="netMethod">
+                    <button type="button" class="chip active" data-method="GET">GET</button>
+                    <button type="button" class="chip" data-method="POST">POST</button>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary net-send" id="btnNetSend"><svg class="ic"><use href="#i-send"/></svg>Enviar petición</button>
+              </form>
+
+              <!-- The two computers and the cable -->
+              <div class="net-scene" id="netScene">
+                <div class="machine client" id="netClient">
+                  <div class="machine-head">
+                    <span class="machine-name">Cliente</span>
+                    <span class="machine-addr">[2001:db8::2]:52814</span>
+                  </div>
+                  <div class="machine-state">TCP <b class="tcp-state" id="netClientState">CLOSED</b></div>
+                  <pre class="machine-screen" id="netClientScreen"></pre>
+                </div>
+
+                <div class="net-wire" id="netWire" aria-hidden="true">
+                  <div class="net-cable"></div>
+                  <div class="net-packet" id="netPacket" hidden><span class="net-packet-label" id="netPacketLabel"></span></div>
+                  <span class="net-wire-label">cable Ethernet<br>IPv6 · TCP</span>
+                </div>
+
+                <div class="machine server" id="netServer">
+                  <div class="machine-head">
+                    <span class="machine-name">Servidor</span>
+                    <span class="machine-addr">[2001:db8::1]:1234</span>
+                  </div>
+                  <div class="machine-state">TCP <b class="tcp-state" id="netServerState">LISTEN</b></div>
+                  <div class="net-threads" id="netThreads"></div>
+                  <div class="net-disk"><span class="vz-label">disk.bin</span><div class="net-files" id="netFiles"></div></div>
+                  <pre class="machine-log" id="netServerLog"></pre>
                 </div>
               </div>
 
-              <div class="net-stack">
-                <div class="terminal-window">
-                  <div class="terminal-header">
-                    <span id="currentFigTitle">BATMAN</span>
-                    <span class="meta"><span id="figLinesCount">0 líneas</span> · <span id="figCharsCount">0 caracteres</span></span>
-                  </div>
-                  <div id="asciiDisplay" class="terminal-body" style="font-size:11px; max-height:320px;">Cargando figura…</div>
+              <!-- Player -->
+              <div class="net-player" id="netPlayer">
+                <div class="tr-controls">
+                  <button class="round-btn sm" id="netFirst" title="Al inicio" aria-label="Al inicio"><svg class="ic"><use href="#i-first"/></svg></button>
+                  <button class="round-btn sm" id="netPrev" title="Paso anterior (←)" aria-label="Paso anterior"><svg class="ic"><use href="#i-back"/></svg></button>
+                  <button class="btn btn-primary btn-sm tr-play" id="netPlay"><svg class="ic"><use href="#i-play"/></svg>Reproducir</button>
+                  <button class="round-btn sm" id="netNext" title="Siguiente paso (→)" aria-label="Siguiente paso"><svg class="ic"><use href="#i-step"/></svg></button>
+                  <button class="round-btn sm" id="netLast" title="Al final" aria-label="Al final"><svg class="ic"><use href="#i-last"/></svg></button>
+                  <span class="tr-count" id="netCount"></span>
                 </div>
+                <div class="net-timeline" id="netTimeline"></div>
+              </div>
 
-                <div class="stage" id="netRequestStage">
-                  <div class="ctl-label">2 · Pídela al servidor</div>
-                  <div class="request-row">
-                    <select id="socketMethodSelect" aria-label="Método HTTP">
-                      <option value="GET">GET</option>
-                      <option value="POST">POST</option>
-                      <option value="HEAD">HEAD</option>
-                    </select>
-                    <input type="text" id="socketUriInput" value="/figures/batman" aria-label="Ruta solicitada">
+              <div class="net-bottom">
+                <div class="note net-note"><strong id="netNoteTitle">Paso</strong><span id="netNote"></span></div>
+
+                <div class="net-inspector" id="packetInspector">
+                  <div class="net-insp-head"><span id="netInspTitle">Paquete en el cable</span><span class="meta" id="netInspMeta"></span></div>
+                  <div class="net-layer" id="netLayerIp"><span class="net-layer-tag">IPv6</span><span id="netIp"></span></div>
+                  <div class="net-layer" id="netLayerTcp">
+                    <span class="net-layer-tag">TCP</span>
+                    <dl class="net-tcp" id="netTcp"></dl>
                   </div>
-                  <button id="btnSendSocketReq" class="btn btn-primary" style="width:100%"><svg class="ic"><use href="#i-send"/></svg>Enviar petición</button>
-
-                  <div class="workers" id="workerPoolContainer"></div>
-
-                  <div class="terminal-window">
-                    <div class="terminal-header">
-                      <span>3 · Lo que viaja por el cable</span>
-                      <span class="meta">paquetes <span id="netPacketsCount">0</span> · <span id="netBytesCount">0 KB</span></span>
-                    </div>
-                    <div id="packetInspector" class="terminal-body" style="max-height:200px; font-size:.75rem;">Esperando una petición…</div>
+                  <div class="net-layer http" id="netLayerHttp">
+                    <span class="net-layer-tag">HTTP</span>
+                    <pre class="net-http" id="netHttp"></pre>
+                    <div class="net-legend"><span><i class="lg-start"></i>línea de petición / estado</span><span><i class="lg-head"></i>encabezados</span><span><i class="lg-crlf"></i>\r\n (fin de línea)</span><span><i class="lg-body"></i>cuerpo</span></div>
                   </div>
+                  <div class="net-layer empty" id="netLayerEmpty">Nada viaja por el cable en este paso: el trabajo ocurre dentro de una computadora.</div>
                 </div>
               </div>
             </div>
@@ -779,21 +820,34 @@ sem_t cuadrante[QUADRANTS];          <span class="c">// capacidad de cada cuadra
           <div class="step-pane" data-step="learn">
             <div class="learn-grid">
               <article class="learn-card wide">
-                <h3>¿Qué acaba de pasar?</h3>
-                <p>Tu navegador hizo de <strong>cliente</strong>: abrió una conexión TCP con el <strong>servidor</strong>, le mandó un mensaje HTTP pidiendo una figura, y el servidor respondió con el texto. TCP garantiza que los bytes lleguen completos y en orden.</p>
-                <h4>La vida de un socket</h4>
-                <div class="flow"><span>socket()</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>bind()</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>listen()</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>accept()</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>recv / send</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>close()</span></div>
-                <p class="ctl-hint">Servidor. El cliente solo hace socket() → connect() → send / recv → close().</p>
+                <h3>¿Qué acabas de ver?</h3>
+                <p>Dos programas en dos computadoras: el <strong>cliente</strong> pide una figura y el <strong>servidor</strong> la busca en su disco y la devuelve. Por debajo hay dos protocolos trabajando juntos: <strong>TCP</strong> se encarga de que los bytes lleguen completos y en orden, y <strong>HTTP</strong> define qué dicen esos bytes.</p>
+                <h4>La vida de un socket en el servidor</h4>
+                <div class="flow"><span>socket()</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>bind(1234)</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>listen()</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>accept()</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>Read / Write</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>Close()</span></div>
+                <p class="ctl-hint">El cliente solo hace socket() → connect() → Write → Read → Close().</p>
               </article>
               <article class="learn-card">
-                <h3>El pool de hilos</h3>
-                <p class="analogy">Una soda con cuatro meseros: el que esté libre atiende la mesa nueva.</p>
-                <p>El hilo principal solo hace <code>accept()</code> y deja cada conexión en una cola. Los hilos trabajadores la sacan, leen el archivo y responden. Así un cliente lento no detiene a los demás.</p>
+                <h3>El saludo de tres vías</h3>
+                <p class="analogy">"¿Me oyes?" "Sí, ¿y tú a mí?" "Sí." Y ya pueden hablar.</p>
+                <p><b>SYN</b>, <b>SYN-ACK</b> y <b>ACK</b> sincronizan los números de secuencia de ambos lados. Desde ahí, cada byte enviado tiene un número, y el <code>ack</code> dice "ya recibí todo hasta aquí".</p>
               </article>
               <article class="learn-card">
                 <h3>Anatomía de HTTP</h3>
-                <p>Una petición es texto plano: una línea con <strong>método, ruta y versión</strong>, luego encabezados, luego una línea vacía.</p>
-                <p>La respuesta empieza con el <strong>código de estado</strong> (<code>200 OK</code>, <code>404 Not Found</code>) y trae <code>Content-Length</code> para saber cuántos bytes leer.</p>
+                <p>Un mensaje HTTP es <strong>texto plano</strong>: una primera línea (método y ruta, o código de estado), encabezados <code>Nombre: valor</code>, una línea vacía y después el cuerpo. Cada línea termina en <code>\r\n</code>.</p>
+                <p>Tu servidor no envía <code>Content-Length</code> en las figuras: el cliente sabe que terminó cuando el servidor cierra la conexión (<code>Connection: close</code>).</p>
+              </article>
+              <article class="learn-card">
+                <h3>Un hilo por cliente</h3>
+                <p class="analogy">Cada cliente que entra recibe su propio mesero.</p>
+                <p>El hilo principal solo hace <code>accept()</code>. Por cada conexión crea un <code>std::thread(task, client)</code> que lee, responde y cierra. Así un cliente lento no bloquea a los demás. Con miles de clientes conviene un <strong>pool</strong> fijo de hilos.</p>
+              </article>
+              <article class="learn-card">
+                <h3>Segmentos y MSS</h3>
+                <p>TCP no manda mensajes, manda un <strong>flujo de bytes</strong> partido en segmentos. En Ethernet con IPv6 cada segmento lleva como máximo 1440 bytes de datos (el MSS). Pide <b>charizard</b> y verás la respuesta llegar en varios pedazos.</p>
+              </article>
+              <article class="learn-card">
+                <h3>¿Quién cierra primero?</h3>
+                <p>Tu servidor llama a <code>Close()</code> apenas termina de escribir, así que él envía el primer <b>FIN</b>. Por eso es el servidor el que queda en <b>TIME_WAIT</b>: un detalle que importa cuando reinicias el servidor y el puerto parece ocupado.</p>
               </article>
             </div>
           </div>
@@ -814,7 +868,7 @@ sem_t cuadrante[QUADRANTS];          <span class="c">// capacidad de cada cuadra
 
   sockaddr_in addr{};
   addr.sin_family = AF_INET;
-  addr.sin_port = htons(8080);          <span class="c">// ¡orden de red!</span>
+  addr.sin_port = htons(1234);          <span class="c">// ¡orden de red!</span>
   addr.sin_addr.s_addr = INADDR_ANY;
   bind(server, (sockaddr*)&amp;addr, <span class="k">sizeof</span> addr);
   listen(server, 16);
@@ -825,7 +879,7 @@ sem_t cuadrante[QUADRANTS];          <span class="c">// capacidad de cada cuadra
     ssize_t n = recv(client, buf, <span class="k">sizeof</span> buf, 0);  <span class="c">// puede llegar incompleto</span>
     <span class="k">const char</span>* res = <span class="s">"HTTP/1.1 200 OK\r\nContent-Length: 5\r\n\r\nhola\n"</span>;
     send(client, res, strlen(res), 0);
-    close(client);                         <span class="c">// en un pool: encolar client</span>
+    close(client);                         <span class="c">// tu servidor: std::thread(task, client)</span>
   }
 }</pre>
               </article>
@@ -841,9 +895,9 @@ sem_t cuadrante[QUADRANTS];          <span class="c">// capacidad de cada cuadra
               <article class="learn-card">
                 <h3>Para probar</h3>
                 <ul class="plain">
-                  <li><code>curl -v http://localhost:8080/figures/batman</code> muestra la petición y la respuesta completas.</li>
-                  <li><code>nc localhost 8080</code> te deja escribir HTTP a mano.</li>
-                  <li>Wireshark con el filtro <code>tcp.port == 8080</code> te enseña cada paquete real.</li>
+                  <li><code>curl -v http://localhost:1234/GET/batman</code> muestra la petición y la respuesta completas.</li>
+                  <li><code>nc localhost 1234</code> te deja escribir HTTP a mano.</li>
+                  <li>Wireshark con el filtro <code>tcp.port == 1234</code> te enseña cada paquete real.</li>
                 </ul>
               </article>
             </div>
@@ -971,6 +1025,7 @@ atomic_fetch_add(&amp;contador, 1);</pre>
   <script src="js/modules/figuresData.js"></script>
   <script src="js/modules/algorithms.js"></script>
   <script src="js/modules/concurrency.js"></script>
+  <script src="js/modules/httpsim.js"></script>
   <script src="js/modules/networking.js"></script>
   <script src="js/modules/cheatsheets.js"></script>
   <script src="js/tracer.js"></script>
