@@ -6,8 +6,8 @@
  * of Selection, Insertion, Merge, Heap, Quick, and Radix Sort across
  * Random, Sorted (Best Case), and Reversed (Worst Case) datasets.
  *
- * Author: Josue Torres Sibaja
- * Copyright (c) 2024-2025 Josue Torres Sibaja
+ * Author: Josue Torres
+ * Copyright (c) 2024-2025 Josue Torres
  * Licensed under the MIT License.
  */
 
