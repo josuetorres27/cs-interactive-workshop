@@ -50,7 +50,7 @@ class ConcurrencyLab {
     if (!this.canvas) return;
     const rect = this.canvas.parentElement.getBoundingClientRect();
     this.canvas.width = rect.width || 800;
-    this.canvas.height = 440;
+    this.canvas.height = Math.round(Math.min(440, Math.max(320, (rect.width || 800) * 0.62)));
   }
 
   setupEventListeners() {
@@ -71,8 +71,8 @@ class ConcurrencyLab {
         this.semaphoresEnabled = e.target.checked;
         const statusEl = document.getElementById('semStatusText');
         if (statusEl) {
-          statusEl.textContent = this.semaphoresEnabled ? 'ENABLED (Deadlock-Free)' : 'DISABLED (Coffman Circular Wait)';
-          statusEl.style.color = this.semaphoresEnabled ? 'var(--emerald)' : 'var(--rose)';
+          statusEl.textContent = this.semaphoresEnabled ? 'Sin riesgo de deadlock' : 'Sin control: puede trabarse';
+          statusEl.style.color = this.semaphoresEnabled ? 'var(--mint-dark)' : 'var(--tomato-dark)';
         }
       });
     }
@@ -137,7 +137,7 @@ class ConcurrencyLab {
     if (btnRunHeat) {
       btnRunHeat.addEventListener('click', () => {
         this.heatRunning = !this.heatRunning;
-        btnRunHeat.textContent = this.heatRunning ? '⏸ Pause Heat Solver' : '▶ Run Heat Solver';
+        btnRunHeat.innerHTML = this.heatRunning ? '<svg class="ic"><use href="#i-pause"/></svg>Pausar' : '<svg class="ic"><use href="#i-play"/></svg>Iniciar';
         btnRunHeat.className = this.heatRunning ? 'btn btn-danger' : 'btn btn-primary';
       });
     }
@@ -169,17 +169,16 @@ class ConcurrencyLab {
     const roundPanel = document.getElementById('roundaboutControls');
     const heatPanel = document.getElementById('heatControls');
     const patPanel = document.getElementById('patternsControls');
-    const compPanel = document.getElementById('comparisonControls');
-    const concViewport = document.getElementById('concurrencyViewport');
-    const compViewport = document.getElementById('comparisonViewport');
-
     if (roundPanel) roundPanel.style.display = this.activeSubtab === 'roundabout' ? 'block' : 'none';
     if (heatPanel) heatPanel.style.display = this.activeSubtab === 'heat' ? 'block' : 'none';
     if (patPanel) patPanel.style.display = this.activeSubtab === 'patterns' ? 'block' : 'none';
-    if (compPanel) compPanel.style.display = this.activeSubtab === 'comparison' ? 'block' : 'none';
 
-    if (concViewport) concViewport.style.display = this.activeSubtab === 'comparison' ? 'none' : 'flex';
-    if (compViewport) compViewport.style.display = this.activeSubtab === 'comparison' ? 'block' : 'none';
+    // Only show the scoreboard cells that belong to the active simulation
+    document.querySelectorAll('#concurrencyViewport [data-sim]').forEach(el => {
+      el.style.display = el.dataset.sim === this.activeSubtab ? '' : 'none';
+    });
+    const alertBanner = document.getElementById('deadlockAlertBanner');
+    if (alertBanner && this.activeSubtab !== 'roundabout') alertBanner.style.display = 'none';
   }
 
   forceCoffmanDeadlock() {
@@ -190,33 +189,33 @@ class ConcurrencyLab {
     if (semToggle) semToggle.checked = false;
     const statusEl = document.getElementById('semStatusText');
     if (statusEl) {
-      statusEl.textContent = 'DISABLED (Coffman Circular Wait)';
-      statusEl.style.color = 'var(--rose)';
+      statusEl.textContent = 'Sin control: puede trabarse';
+      statusEl.style.color = 'var(--tomato-dark)';
     }
 
-    const routes = [
-      { startQuad: 0, targetQuad: 1, path: [0, 1], entry: 'W', exit: 'E' },
-      { startQuad: 1, targetQuad: 2, path: [1, 2], entry: 'N', exit: 'S' },
-      { startQuad: 2, targetQuad: 3, path: [2, 3], entry: 'E', exit: 'W' },
-      { startQuad: 3, targetQuad: 0, path: [3, 0], entry: 'S', exit: 'N' }
-    ];
-
-    routes.forEach(r => {
-      this.quadrants[r.startQuad].count++;
-      this.vehicles.push({
-        id: this.nextVehicleId++,
-        entry: r.entry,
-        exit: r.exit,
-        path: r.path,
-        pathIndex: 0,
-        currentQuad: r.startQuad,
-        progress: 0.95,
-        speed: 0.015,
-        state: 'IN_QUADRANT',
-        blockedTime: 2000,
-        color: '#f43f5e'
-      });
-    });
+    // Fill every quadrant to capacity; each car wants the next (full) quadrant.
+    // That is a textbook circular wait.
+    const entryOf = { 0: 'W', 1: 'N', 2: 'E', 3: 'S' };
+    const exitOf = { 0: 'N', 1: 'E', 2: 'S', 3: 'W' };
+    for (let q = 0; q < 4; q++) {
+      for (let k = 0; k < this.quadrantCapacity; k++) {
+        const route = [q, (q + 1) % 4, (q + 2) % 4];
+        this.quadrants[q].count++;
+        this.vehicles.push({
+          id: this.nextVehicleId++,
+          entry: entryOf[q],
+          exit: exitOf[route[2]],
+          route,
+          routeIndex: 0,
+          currentQuad: q,
+          progress: k === 0 ? 1.0 : 0.55,
+          speed: 0.015,
+          state: 'IN_QUADRANT',
+          blockedTime: 2000,
+          color: '#f6c33b'
+        });
+      }
+    }
 
     this.deadlockDetected = true;
     window.soundController.playDeadlockAlert();
@@ -230,15 +229,16 @@ class ConcurrencyLab {
     if (semToggle) semToggle.checked = true;
     const statusEl = document.getElementById('semStatusText');
     if (statusEl) {
-      statusEl.textContent = 'ENABLED (Deadlock-Free)';
-      statusEl.style.color = 'var(--emerald)';
+      statusEl.textContent = 'Sin riesgo de deadlock';
+      statusEl.style.color = 'var(--mint-dark)';
     }
     this.deadlockDetected = false;
     const alertBanner = document.getElementById('deadlockAlertBanner');
     if (alertBanner) alertBanner.style.display = 'none';
 
-    if (this.vehicles.length > 0) {
-      const v = this.vehicles[0];
+    // Break the cycle: let one car leave the ring so the others can advance
+    const v = this.vehicles.find(c => c.state === 'IN_QUADRANT');
+    if (v) {
       v.state = 'EXITING';
       this.quadrants[v.currentQuad].count--;
       v.currentQuad = -1;
@@ -318,9 +318,12 @@ class ConcurrencyLab {
 
       if (v.state === 'WAITING_ENTRY') {
         const nextQuad = v.route[0];
-        const canEnter = !this.semaphoresEnabled || 
-          (this.quadrants[nextQuad].count < this.quadrantCapacity && 
-           this.getTotalInRing() < 4 * this.quadrantCapacity - 1);
+        // A quadrant can physically hold `quadrantCapacity` cars (mutual exclusion).
+        // The entry semaphore additionally keeps one free slot in the ring, which
+        // makes a full circular wait impossible.
+        const hasRoom = this.quadrants[nextQuad].count < this.quadrantCapacity;
+        const entryPermit = !this.semaphoresEnabled || this.getTotalInRing() < 4 * this.quadrantCapacity - 1;
+        const canEnter = hasRoom && entryPermit;
 
         if (canEnter) {
           v.state = 'IN_QUADRANT';
@@ -340,7 +343,7 @@ class ConcurrencyLab {
           // Ready to move to next quadrant in route or exit
           if (v.routeIndex < v.route.length - 1) {
             const nextQuad = v.route[v.routeIndex + 1];
-            const canAdvance = !this.semaphoresEnabled || this.quadrants[nextQuad].count < this.quadrantCapacity;
+            const canAdvance = this.quadrants[nextQuad].count < this.quadrantCapacity;
 
             if (canAdvance) {
               this.quadrants[v.currentQuad].count--;
@@ -380,7 +383,7 @@ class ConcurrencyLab {
     const inRingVehicles = this.vehicles.filter(v => v.state === 'IN_QUADRANT');
     const severelyBlocked = inRingVehicles.filter(v => v.blockedTime > 1800);
     
-    if (inRingVehicles.length >= 4 && severelyBlocked.length === inRingVehicles.length && !this.semaphoresEnabled) {
+    if (inRingVehicles.length >= 4 && severelyBlocked.length === inRingVehicles.length) {
       if (!this.deadlockDetected) {
         this.deadlockDetected = true;
         window.soundController.playDeadlockAlert();
@@ -396,8 +399,8 @@ class ConcurrencyLab {
     // Telemetry updates
     document.getElementById('concActive').textContent = this.vehicles.length;
     document.getElementById('concInRing').textContent = vehiclesInRing;
-    document.getElementById('concDeadlockState').textContent = this.deadlockDetected ? 'DEADLOCKED ⚠️' : (this.semaphoresEnabled ? 'LIVENESS OK ✅' : 'RISK (No Locks)');
-    document.getElementById('concDeadlockState').style.color = this.deadlockDetected ? 'var(--rose)' : (this.semaphoresEnabled ? 'var(--emerald)' : 'var(--amber)');
+    document.getElementById('concDeadlockState').textContent = this.deadlockDetected ? 'Trabada' : (this.semaphoresEnabled ? 'Fluye' : 'En riesgo');
+    document.getElementById('concDeadlockState').style.color = this.deadlockDetected ? 'var(--tomato-dark)' : (this.semaphoresEnabled ? 'var(--mint-dark)' : 'var(--amber)');
   }
 
   getTotalInRing() {
@@ -413,61 +416,72 @@ class ConcurrencyLab {
     const innerR = outerR * 0.45;
     const trackR = (outerR + innerR) / 2;
 
+    const fontFamily = getComputedStyle(document.body).fontFamily;
     this.ctx.clearRect(0, 0, w, h);
-
-    // Background road ring
-    this.ctx.beginPath();
-    this.ctx.arc(cx, cy, outerR, 0, 2 * Math.PI);
-    this.ctx.fillStyle = '#111827';
-    this.ctx.fill();
-    this.ctx.lineWidth = 2;
-    this.ctx.strokeStyle = '#374151';
-    this.ctx.stroke();
-
-    // Central island
-    this.ctx.beginPath();
-    this.ctx.arc(cx, cy, innerR, 0, 2 * Math.PI);
-    this.ctx.fillStyle = '#06090e';
-    this.ctx.fill();
-    this.ctx.strokeStyle = '#1f2937';
-    this.ctx.stroke();
-
-    // Center icon / title
-    this.ctx.fillStyle = this.deadlockDetected ? '#ef4444' : '#00f0ff';
-    this.ctx.font = 'bold 12px ' + getComputedStyle(document.body).fontFamily;
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'middle';
-    this.ctx.fillText(this.deadlockDetected ? 'DEADLOCK' : (this.semaphoresEnabled ? 'SEMAPHORES ON' : 'NO LOCKS'), cx, cy);
 
-    // Draw 4 Quadrants dividing lines & capacity indicators
-    const quadNames = ['NW (Q0)', 'NE (Q1)', 'SE (Q2)', 'SW (Q3)'];
+    // Approaches (North, East, South, West roads) go underneath the ring
+    const armWidth = 48;
+    this.drawRoadArm(cx - armWidth / 2, -4, armWidth, cy - outerR + 10, 'N');
+    this.drawRoadArm(cx + outerR - 6, cy - armWidth / 2, cx - outerR + 10, armWidth, 'E');
+    this.drawRoadArm(cx - armWidth / 2, cy + outerR - 6, armWidth, h - (cy + outerR) + 10, 'S');
+    this.drawRoadArm(-4, cy - armWidth / 2, cx - outerR + 10, armWidth, 'O');
+
+    // Road ring
+    this.ctx.beginPath();
+    this.ctx.arc(cx, cy, outerR, 0, 2 * Math.PI);
+    this.ctx.fillStyle = '#5b4a3d';
+    this.ctx.fill();
+    this.ctx.lineWidth = 3;
+    this.ctx.strokeStyle = '#4a2c14';
+    this.ctx.stroke();
+
+    // Lane marking
+    this.ctx.beginPath();
+    this.ctx.arc(cx, cy, trackR, 0, 2 * Math.PI);
+    this.ctx.strokeStyle = 'rgba(251, 244, 228, 0.35)';
+    this.ctx.lineWidth = 2;
+    this.ctx.setLineDash([8, 10]);
+    this.ctx.stroke();
+    this.ctx.setLineDash([]);
+
+    // Central island (grass)
+    this.ctx.beginPath();
+    this.ctx.arc(cx, cy, innerR, 0, 2 * Math.PI);
+    this.ctx.fillStyle = this.deadlockDetected ? '#f4a48a' : '#8fd3a5';
+    this.ctx.fill();
+    this.ctx.lineWidth = 3;
+    this.ctx.strokeStyle = '#4a2c14';
+    this.ctx.stroke();
+
+    this.ctx.fillStyle = '#4a2c14';
+    this.ctx.font = `800 ${Math.max(11, Math.round(innerR / 4.5))}px ${fontFamily}`;
+    this.ctx.fillText(this.deadlockDetected ? 'TRABADA' : (this.semaphoresEnabled ? 'CON SEMÁFOROS' : 'SIN CONTROL'), cx, cy);
+
+    // Quadrant dividers & capacity labels
+    const quadNames = ['NO', 'NE', 'SE', 'SO'];
     for (let i = 0; i < 4; i++) {
       const angle = (i * 0.5) * Math.PI;
       this.ctx.beginPath();
       this.ctx.moveTo(cx + innerR * Math.cos(angle), cy + innerR * Math.sin(angle));
       this.ctx.lineTo(cx + outerR * Math.cos(angle), cy + outerR * Math.sin(angle));
-      this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      this.ctx.strokeStyle = 'rgba(251, 244, 228, 0.6)';
+      this.ctx.lineWidth = 2;
       this.ctx.setLineDash([4, 4]);
       this.ctx.stroke();
       this.ctx.setLineDash([]);
 
-      // Quadrant label & sem capacity
-      const textAngle = angle + 0.25 * Math.PI;
-      const labelR = outerR + 25;
+      const textAngle = Math.PI + angle + 0.25 * Math.PI; // quadrant i spans [PI + i*PI/2, ...]
+      const labelR = outerR + 30;
       const lx = cx + labelR * Math.cos(textAngle);
       const ly = cy + labelR * Math.sin(textAngle);
+      const full = this.quadrants[i].count >= this.quadrants[i].max;
 
-      this.ctx.font = '10px monospace';
-      this.ctx.fillStyle = this.quadrants[i].count >= this.quadrants[i].max ? '#f43f5e' : '#10b981';
-      this.ctx.fillText(`${this.quadrants[i].name}: ${this.quadrants[i].count}/${this.quadrants[i].max}`, lx, ly);
+      this.ctx.font = `800 12px ${fontFamily}`;
+      this.ctx.fillStyle = full ? '#b13817' : '#2f8653';
+      this.ctx.fillText(`${quadNames[i]} ${this.quadrants[i].count}/${this.quadrants[i].max}`, lx, ly);
     }
-
-    // Draw approaches (North, East, South, West roads)
-    const armWidth = 44;
-    this.drawRoadArm(cx - armWidth / 2, 0, armWidth, cy - outerR, 'N');
-    this.drawRoadArm(cx + outerR, cy - armWidth / 2, cx - outerR, armWidth, 'E');
-    this.drawRoadArm(cx - armWidth / 2, cy + outerR, armWidth, h - (cy + outerR), 'S');
-    this.drawRoadArm(0, cy - armWidth / 2, cx - outerR, armWidth, 'W');
 
     // Draw vehicles
     this.vehicles.forEach(v => {
@@ -497,29 +511,34 @@ class ConcurrencyLab {
 
       // Render vehicle particle
       this.ctx.beginPath();
-      this.ctx.arc(vx, vy, 7, 0, 2 * Math.PI);
-      this.ctx.fillStyle = v.blockedTime > 1500 ? '#ef4444' : v.color;
+      this.ctx.arc(vx, vy, 9, 0, 2 * Math.PI);
+      this.ctx.fillStyle = v.blockedTime > 1500 ? '#e8512a' : v.color;
       this.ctx.fill();
-      this.ctx.strokeStyle = '#ffffff';
-      this.ctx.lineWidth = 1.5;
+      this.ctx.strokeStyle = '#4a2c14';
+      this.ctx.lineWidth = 2.5;
       this.ctx.stroke();
 
       // Vehicle ID
-      this.ctx.fillStyle = '#ffffff';
-      this.ctx.font = 'bold 8px monospace';
-      this.ctx.fillText(v.id, vx, vy);
+      this.ctx.fillStyle = '#4a2c14';
+      this.ctx.font = 'bold 9px "JetBrains Mono", monospace';
+      this.ctx.fillText(v.id, vx, vy + 0.5);
     });
   }
 
   drawRoadArm(x, y, w, h, label) {
-    this.ctx.fillStyle = '#111827';
+    this.ctx.fillStyle = '#5b4a3d';
     this.ctx.fillRect(x, y, w, h);
-    this.ctx.strokeStyle = '#374151';
+    this.ctx.lineWidth = 3;
+    this.ctx.strokeStyle = '#4a2c14';
     this.ctx.strokeRect(x, y, w, h);
 
-    this.ctx.fillStyle = '#4b5563';
-    this.ctx.font = '10px monospace';
-    this.ctx.fillText(`Gate ${label}`, x + w / 2, y + h / 2);
+    this.ctx.fillStyle = 'rgba(251, 244, 228, 0.55)';
+    this.ctx.font = `800 11px ${getComputedStyle(document.body).fontFamily}`;
+    const vertical = h > w;
+    const lx = x + w / 2;
+    const ly = vertical ? (label === 'N' ? y + 16 : y + h - 16) : y + h / 2;
+    const lx2 = vertical ? lx : (label === 'O' ? x + 16 : x + w - 16);
+    this.ctx.fillText(label, lx2, ly);
   }
 
   // --- Heat Diffusion Engine ---
@@ -612,8 +631,10 @@ class ConcurrencyLab {
         this.ctx.setLineDash([]);
 
         this.ctx.fillStyle = '#ffffff';
-        this.ctx.font = '10px monospace';
-        this.ctx.fillText(`Thread Slicing [T${t-1} | T${t}]`, 10, splitY - 4);
+        this.ctx.textAlign = 'left';
+        this.ctx.textBaseline = 'alphabetic';
+        this.ctx.font = `800 11px ${getComputedStyle(document.body).fontFamily}`;
+        this.ctx.fillText(`hilo ${t - 1} ↑  ·  ↓ hilo ${t}`, 10, splitY - 5);
       }
     }
   }
@@ -640,8 +661,14 @@ class ConcurrencyLab {
   startLoop() {
     let lastTime = performance.now();
     const frame = (now) => {
-      const dt = now - lastTime;
+      const dt = Math.min(now - lastTime, 100);
       lastTime = now;
+
+      // Nothing to animate while the canvas is off-screen (other screen/step)
+      if (!this.canvas.offsetParent) {
+        this.animationId = requestAnimationFrame(frame);
+        return;
+      }
 
       if (this.activeSubtab === 'roundabout') {
         this.updateRoundabout(dt);
@@ -665,89 +692,116 @@ class ConcurrencyLab {
     const h = this.canvas.height;
     this.ctx.clearRect(0, 0, w, h);
 
-    // Split canvas: Left Bounded Buffer, Right Dining Philosophers
-    this.drawBoundedBufferWidget(20, 30, w / 2 - 40, h - 60);
-    this.drawPhilosophersWidget(w / 2 + 20, 30, w / 2 - 40, h - 60);
+    // Side by side on wide screens, stacked on narrow ones
+    if (w >= 640) {
+      this.drawBoundedBufferWidget(16, 16, w / 2 - 24, h - 32);
+      this.drawPhilosophersWidget(w / 2 + 8, 16, w / 2 - 24, h - 32);
+    } else {
+      this.drawBoundedBufferWidget(12, 12, w - 24, h / 2 - 18);
+      this.drawPhilosophersWidget(12, h / 2 + 6, w - 24, h / 2 - 18);
+    }
+  }
+
+  drawPanel(x, y, w, h, title) {
+    const font = getComputedStyle(document.body).fontFamily;
+    this.ctx.fillStyle = '#fbf4e4';
+    this.ctx.beginPath();
+    this.ctx.roundRect(x, y, w, h, 14);
+    this.ctx.fill();
+    this.ctx.lineWidth = 2.5;
+    this.ctx.strokeStyle = '#4a2c14';
+    this.ctx.stroke();
+    this.ctx.textAlign = 'left';
+    this.ctx.textBaseline = 'alphabetic';
+    this.ctx.fillStyle = '#4a2c14';
+    this.ctx.font = `800 14px ${font}`;
+    this.ctx.fillText(title, x + 16, y + 28);
+    return font;
   }
 
   drawBoundedBufferWidget(x, y, w, h) {
-    this.ctx.fillStyle = '#101522';
-    this.ctx.fillRect(x, y, w, h);
-    this.ctx.strokeStyle = '#232d46';
-    this.ctx.strokeRect(x, y, w, h);
-
-    this.ctx.fillStyle = '#00f0ff';
-    this.ctx.font = 'bold 12px monospace';
-    this.ctx.fillText('BOUNDED BUFFER (Ring Buffer Capacity = 8)', x + 15, y + 25);
+    const font = this.drawPanel(x, y, w, h, 'Buffer acotado (capacidad 8)');
 
     const slots = 8;
     const filled = 3 + Math.floor(Math.sin(Date.now() / 800) * 2.5);
-    const slotW = (w - 40) / slots;
-    const slotH = 50;
-    const startY = y + 60;
+    const slotW = (w - 32) / slots;
+    const slotH = Math.min(50, h * 0.25);
+    const startY = y + 48;
 
     for (let i = 0; i < slots; i++) {
-      const sx = x + 20 + i * slotW;
-      this.ctx.fillStyle = i < filled ? '#10b981' : '#1e293b';
-      this.ctx.fillRect(sx, startY, slotW - 4, slotH);
-      this.ctx.strokeStyle = '#334155';
-      this.ctx.strokeRect(sx, startY, slotW - 4, slotH);
+      const sx = x + 16 + i * slotW;
+      this.ctx.beginPath();
+      this.ctx.roundRect(sx, startY, slotW - 5, slotH, 6);
+      this.ctx.fillStyle = i < filled ? '#4fb477' : '#f3e7cc';
+      this.ctx.fill();
+      this.ctx.lineWidth = 2;
+      this.ctx.strokeStyle = '#4a2c14';
+      this.ctx.stroke();
 
-      this.ctx.fillStyle = '#ffffff';
-      this.ctx.font = '10px monospace';
-      this.ctx.fillText(`[${i}]`, sx + 6, startY + 28);
+      this.ctx.fillStyle = i < filled ? '#ffffff' : '#a48663';
+      this.ctx.font = `600 10px "JetBrains Mono", monospace`;
+      this.ctx.textAlign = 'center';
+      this.ctx.fillText(`${i}`, sx + (slotW - 5) / 2, startY + slotH / 2 + 4);
     }
 
-    this.ctx.fillStyle = '#94a3b8';
-    this.ctx.font = '11px sans-serif';
-    this.ctx.fillText(`• sem_empty = ${slots - filled} (slots available)`, x + 20, y + 140);
-    this.ctx.fillText(`• sem_full  = ${filled} (items in buffer)`, x + 20, y + 165);
-    this.ctx.fillText(`• pthread_mutex_t: UNLOCKED`, x + 20, y + 190);
+    this.ctx.textAlign = 'left';
+    this.ctx.fillStyle = '#7a5a3e';
+    this.ctx.font = `700 13px ${font}`;
+    const ty = startY + slotH + 28;
+    this.ctx.fillText(`vacíos  (sem_empty) = ${slots - filled}`, x + 16, ty);
+    this.ctx.fillText(`llenos  (sem_full)  = ${filled}`, x + 16, ty + 22);
+    if (ty + 44 < y + h - 8) this.ctx.fillText('El mutex protege el índice de la cola.', x + 16, ty + 44);
   }
 
   drawPhilosophersWidget(x, y, w, h) {
-    this.ctx.fillStyle = '#101522';
-    this.ctx.fillRect(x, y, w, h);
-    this.ctx.strokeStyle = '#232d46';
-    this.ctx.strokeRect(x, y, w, h);
-
-    this.ctx.fillStyle = '#8b5cf6';
-    this.ctx.font = 'bold 12px monospace';
-    this.ctx.fillText('DINING PHILOSOPHERS (Dijkstra Hierarchy)', x + 15, y + 25);
+    const font = this.drawPanel(x, y, w, h, 'Filósofos comensales');
 
     const pcx = x + w / 2;
-    const pcy = y + h / 2 + 10;
-    const radius = Math.min(w, h) * 0.32;
+    const pcy = y + 20 + (h - 20) / 2;
+    const radius = Math.min(w, h - 40) * 0.34;
 
     // Table
     this.ctx.beginPath();
-    this.ctx.arc(pcx, pcy, radius * 0.55, 0, 2 * Math.PI);
-    this.ctx.fillStyle = '#06090e';
+    this.ctx.arc(pcx, pcy, radius * 0.58, 0, 2 * Math.PI);
+    this.ctx.fillStyle = '#c99560';
     this.ctx.fill();
-    this.ctx.strokeStyle = '#334155';
+    this.ctx.lineWidth = 2.5;
+    this.ctx.strokeStyle = '#4a2c14';
     this.ctx.stroke();
 
+    // Two non-neighbours eat at a time (5 forks -> at most 2 eaters)
     const n = 5;
+    const tick = Math.floor(Date.now() / 1500);
+    const eating = new Set([tick % n, (tick + 2) % n]);
+
     for (let i = 0; i < n; i++) {
       const angle = (i / n) * 2 * Math.PI - Math.PI / 2;
       const px = pcx + radius * Math.cos(angle);
       const py = pcy + radius * Math.sin(angle);
-
-      // Status: eating vs thinking
-      const isEating = (Math.floor(Date.now() / 1500) + i) % 2 === 0;
+      const isEating = eating.has(i);
 
       this.ctx.beginPath();
-      this.ctx.arc(px, py, 14, 0, 2 * Math.PI);
-      this.ctx.fillStyle = isEating ? '#10b981' : '#3b82f6';
+      this.ctx.arc(px, py, 16, 0, 2 * Math.PI);
+      this.ctx.fillStyle = isEating ? '#4fb477' : '#3d8fd6';
       this.ctx.fill();
-      this.ctx.strokeStyle = '#ffffff';
+      this.ctx.lineWidth = 2.5;
+      this.ctx.strokeStyle = '#4a2c14';
       this.ctx.stroke();
 
       this.ctx.fillStyle = '#ffffff';
-      this.ctx.font = 'bold 9px monospace';
+      this.ctx.font = `800 11px ${font}`;
       this.ctx.textAlign = 'center';
-      this.ctx.fillText(`P${i}`, px, py + 3);
+      this.ctx.textBaseline = 'middle';
+      this.ctx.fillText(`F${i}`, px, py + 1);
+      this.ctx.textBaseline = 'alphabetic';
     }
+
+    this.ctx.textAlign = 'left';
+    this.ctx.font = `700 12px ${font}`;
+    this.ctx.fillStyle = '#2f8653';
+    this.ctx.fillText('verde: come', x + 16, y + h - 14);
+    this.ctx.fillStyle = '#2565a3';
+    this.ctx.fillText('azul: piensa', x + 110, y + h - 14);
   }
 }
 
