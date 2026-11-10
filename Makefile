@@ -6,7 +6,7 @@ CXX ?= g++
 
 ENGINES := core-c-engines/algorithms core-c-engines/concurrency core-c-engines/networking
 
-.PHONY: all clean test algorithms concurrency networking $(ENGINES)
+.PHONY: all clean test test-web algorithms concurrency networking $(ENGINES)
 
 all: $(ENGINES)
 	@echo "\n>>> All CS Interactive Lab engines built successfully."
@@ -37,6 +37,10 @@ clean:
 test: all
 	@echo "\n===================================================================="
 	@echo "            RUNNING CS INTERACTIVE LAB MASTER TEST SUITE             "
-	@echo "                     (330+ AUTOMATED TESTS)                         "
+	@echo "                     (720+ AUTOMATED TESTS)                         "
 	@echo "===================================================================="
 	@$(MAKE) -C tests run
+
+# Web lab tests only (no compiler needed, just Node.js)
+test-web:
+	@node tests/web/run.js
