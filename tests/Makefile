@@ -1,5 +1,5 @@
 # CS Interactive Lab - Test Suite Makefile
-# Compiles and runs all 330 automated tests
+# Compiles and runs all 720+ automated tests (C/C++, Python and JavaScript)
 
 CC ?= gcc
 CXX ?= g++
@@ -43,7 +43,7 @@ clean:
 run: all
 	@echo "\n===================================================================="
 	@echo "            RUNNING CS INTERACTIVE LAB MASTER TEST SUITE             "
-	@echo "                     (330+ AUTOMATED TESTS)                         "
+	@echo "                     (720+ AUTOMATED TESTS)                         "
 	@echo "===================================================================="
 	@./$(BINDIR)/test_sorting
 	@./$(BINDIR)/test_roundabout
@@ -51,6 +51,7 @@ run: all
 	@./$(BINDIR)/test_patterns
 	@./$(BINDIR)/test_networking
 	@python3 web/test_web_assets.py
+	@node web/run.js
 	@echo "\n===================================================================="
-	@echo "                ALL 330 TESTS PASSED SUCCESSFULLY! ✅               "
+	@echo "                 ALL 723 TESTS PASSED SUCCESSFULLY!                 "
 	@echo "===================================================================="
