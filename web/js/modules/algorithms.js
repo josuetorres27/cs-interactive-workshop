@@ -31,45 +31,153 @@ class AlgorithmsLab {
 
     this.intuitions = {
       quick: {
-        title: "Quick Sort (Partición Divide y Vencerás)",
-        concept: "Elige un elemento 'pivote' y particiona el arreglo: menores a la izquierda, mayores a la derecha. Luego procesa recursivamente cada mitad. Es el estándar en producción por su uso óptimo de la memoria caché.",
-        tip: "⚠️ Examen UCR: Si el pivote es el peor posible (ej: arreglo ya ordenado sin pivote aleatorio), su complejidad degenera a O(n²)."
+        title: "Quick Sort",
+        concept: "Elige un elemento pivote y reparte el arreglo: los menores a la izquierda, los mayores a la derecha. Después repite lo mismo en cada lado. Es el más usado en la práctica porque aprovecha muy bien la memoria caché.",
+        tip: "Si el pivote siempre cae en un extremo (por ejemplo, un arreglo ya ordenado y pivote al final), se degrada a O(n²)."
       },
       merge: {
-        title: "Merge Sort (Fusión Divide y Vencerás)",
-        concept: "Divide el arreglo a la mitad recursivamente hasta subarreglos de 1 elemento, y luego fusiona las mitades en orden ascendente.",
-        tip: "💡 Clave: Garantiza O(n log n) SIEMPRE (incluso en el peor caso) y es ESTABLE, pero requiere O(n) de memoria auxiliar."
+        title: "Merge Sort",
+        concept: "Parte el arreglo a la mitad una y otra vez hasta tener pedazos de un elemento, y luego los va mezclando en orden.",
+        tip: "Siempre es O(n log n), incluso en el peor caso, y es estable. El precio: necesita O(n) de memoria extra."
       },
       heap: {
-        title: "Heap Sort (Montículo Binario)",
-        concept: "Construye un Max-Heap in-place. La raíz (máximo elemento) se intercambia al final y se reajusta el montículo recursivamente.",
-        tip: "💡 Clave: Tiempo O(n log n) garantizado en el peor caso con O(1) de memoria adicional. No es estable."
+        title: "Heap Sort",
+        concept: "Convierte el arreglo en un montículo (heap) donde el mayor está en la raíz. Lo manda al final, rearma el montículo y repite.",
+        tip: "O(n log n) garantizado sin memoria extra, pero no es estable y salta mucho por la memoria."
       },
       shell: {
-        title: "Shell Sort (Inserción por Brechas)",
-        concept: "Extensión de Insertion Sort que compara elementos distanciados por un intervalo (gap) decreciente, permitiendo saltos grandes.",
-        tip: "💡 Clave: Reduce drásticamente los desplazamientos de Insertion Sort sin requerir memoria adicional."
+        title: "Shell Sort",
+        concept: "Es Insertion Sort con saltos: primero compara elementos lejanos y va reduciendo la distancia hasta comparar vecinos.",
+        tip: "Los saltos grandes mueven rápido los elementos que están muy fuera de lugar, sin usar memoria extra."
       },
       insertion: {
-        title: "Insertion Sort (Inserción Progresiva)",
-        concept: "Como ordenar cartas en la mano: toma cada elemento y desplázalo hacia la izquierda hasta insertarlo en su posición correcta.",
-        tip: "💡 Clave: En arreglos casi ordenados o muy pequeños (n ≤ 16), es el más veloz de todos: tiempo lineal O(n)."
+        title: "Insertion Sort",
+        concept: "Como ordenar cartas en la mano: toma cada elemento y córrelo a la izquierda hasta que quede en su lugar.",
+        tip: "En arreglos casi ordenados o muy pequeños es el más rápido de todos: llega a O(n)."
       },
       selection: {
-        title: "Selection Sort (Selección de Mínimo)",
-        concept: "Recorre todo el arreglo no ordenado para encontrar el elemento más pequeño y lo intercambia con la posición inicial disponible.",
-        tip: "⚠️ Examen UCR: Realiza a lo sumo n intercambios, pero siempre ejecuta O(n²) comparaciones sin importar el estado inicial."
+        title: "Selection Sort",
+        concept: "Busca el menor de lo que falta por ordenar y lo pone al inicio. Repite hasta terminar.",
+        tip: "Hace muy pocos intercambios (a lo sumo n), pero siempre O(n²) comparaciones, sin importar cómo empiece el arreglo."
       },
       bubble: {
-        title: "Bubble Sort (Burbujeo de Adyacentes)",
-        concept: "Compara pares contiguos y los intercambia si están desordenados, haciendo 'flotar' los valores mayores hacia el final.",
-        tip: "💡 Clave: Excelente para comprender inversiones y estabilidad en primeros años, pero ineficiente en producción."
+        title: "Bubble Sort",
+        concept: "Compara vecinos y los intercambia si están al revés. Los valores grandes van flotando hacia el final.",
+        tip: "Es ideal para aprender qué es una inversión y qué significa ser estable, pero casi nunca se usa en producción."
       },
       radix: {
-        title: "Radix Sort LSD (Ordenamiento No Comparativo)",
-        concept: "Ordena los enteros procesando dígito por dígito desde el menos significativo (LSD) usando conteo o baldes (buckets).",
-        tip: "💡 Clave: Rompe la cota inferior teórica Ω(n log n) de los ordenamientos comparativos, alcanzando O(n · k) tiempo lineal."
+        title: "Radix Sort (LSD)",
+        concept: "No compara nunca. Ordena los números dígito por dígito, empezando por las unidades, usando conteo.",
+        tip: "Rompe el límite de Ω(n log n) de los algoritmos que comparan: corre en O(n·k), con k = cantidad de dígitos."
       }
+    };
+
+    // Reference implementations shown in the "Implementa" step
+    this.snippets = {
+      quick: `int partition(std::vector<int>& a, int lo, int hi) {
+  std::swap(a[lo + rand() % (hi - lo + 1)], a[hi]); // pivote aleatorio
+  int pivot = a[hi], i = lo - 1;
+  for (int j = lo; j < hi; ++j)
+    if (a[j] < pivot) std::swap(a[++i], a[j]);
+  std::swap(a[i + 1], a[hi]);
+  return i + 1;
+}
+
+void quickSort(std::vector<int>& a, int lo, int hi) {
+  if (lo >= hi) return;
+  int p = partition(a, lo, hi);
+  quickSort(a, lo, p - 1);
+  quickSort(a, p + 1, hi);
+}`,
+      merge: `void merge(std::vector<int>& a, int lo, int mid, int hi) {
+  std::vector<int> tmp;
+  tmp.reserve(hi - lo + 1);
+  int i = lo, j = mid + 1;
+  while (i <= mid && j <= hi)
+    tmp.push_back(a[i] <= a[j] ? a[i++] : a[j++]); // <= lo hace estable
+  while (i <= mid) tmp.push_back(a[i++]);
+  while (j <= hi)  tmp.push_back(a[j++]);
+  std::copy(tmp.begin(), tmp.end(), a.begin() + lo);
+}
+
+void mergeSort(std::vector<int>& a, int lo, int hi) {
+  if (lo >= hi) return;
+  int mid = lo + (hi - lo) / 2;
+  mergeSort(a, lo, mid);
+  mergeSort(a, mid + 1, hi);
+  merge(a, lo, mid, hi);
+}`,
+      heap: `void siftDown(std::vector<int>& a, int n, int i) {
+  while (true) {
+    int big = i, l = 2 * i + 1, r = 2 * i + 2;
+    if (l < n && a[l] > a[big]) big = l;
+    if (r < n && a[r] > a[big]) big = r;
+    if (big == i) return;
+    std::swap(a[i], a[big]);
+    i = big;
+  }
+}
+
+void heapSort(std::vector<int>& a) {
+  int n = a.size();
+  for (int i = n / 2 - 1; i >= 0; --i) siftDown(a, n, i); // armar el heap
+  for (int end = n - 1; end > 0; --end) {
+    std::swap(a[0], a[end]);   // el mayor va al final
+    siftDown(a, end, 0);
+  }
+}`,
+      shell: `void shellSort(std::vector<int>& a) {
+  int n = a.size();
+  for (int gap = n / 2; gap > 0; gap /= 2) {
+    for (int i = gap; i < n; ++i) {
+      int x = a[i], j = i;
+      while (j >= gap && a[j - gap] > x) {
+        a[j] = a[j - gap];
+        j -= gap;
+      }
+      a[j] = x;
+    }
+  }
+}`,
+      insertion: `void insertionSort(std::vector<int>& a) {
+  for (size_t i = 1; i < a.size(); ++i) {
+    int x = a[i];
+    size_t j = i;
+    while (j > 0 && a[j - 1] > x) { // > (y no >=) lo hace estable
+      a[j] = a[j - 1];
+      --j;
+    }
+    a[j] = x;
+  }
+}`,
+      selection: `void selectionSort(std::vector<int>& a) {
+  for (size_t i = 0; i + 1 < a.size(); ++i) {
+    size_t min = i;
+    for (size_t j = i + 1; j < a.size(); ++j)
+      if (a[j] < a[min]) min = j;
+    if (min != i) std::swap(a[i], a[min]); // a lo sumo n-1 intercambios
+  }
+}`,
+      bubble: `void bubbleSort(std::vector<int>& a) {
+  for (size_t pass = 0; pass + 1 < a.size(); ++pass) {
+    bool swapped = false;
+    for (size_t j = 0; j + 1 < a.size() - pass; ++j)
+      if (a[j] > a[j + 1]) { std::swap(a[j], a[j + 1]); swapped = true; }
+    if (!swapped) break;   // ya estaba ordenado: mejor caso O(n)
+  }
+}`,
+      radix: `void radixSort(std::vector<int>& a) {   // enteros no negativos
+  int max = *std::max_element(a.begin(), a.end());
+  std::vector<int> out(a.size());
+  for (int exp = 1; max / exp > 0; exp *= 10) {
+    int count[10] = {0};
+    for (int x : a) count[(x / exp) % 10]++;
+    for (int d = 1; d < 10; ++d) count[d] += count[d - 1];
+    for (int i = (int)a.size() - 1; i >= 0; --i)   // de atrás: estable
+      out[--count[(a[i] / exp) % 10]] = a[i];
+    a = out;
+  }
+}`
     };
   }
 
@@ -89,7 +197,7 @@ class AlgorithmsLab {
     if (!this.canvas) return;
     const rect = this.canvas.parentElement.getBoundingClientRect();
     this.canvas.width = rect.width || 800;
-    this.canvas.height = 420;
+    this.canvas.height = Math.round(Math.min(420, Math.max(240, (rect.width || 800) * 0.55)));
     this.draw();
   }
 
@@ -200,7 +308,7 @@ class AlgorithmsLab {
     document.getElementById('algoComparisons').textContent = '0';
     document.getElementById('algoSwaps').textContent = '0';
     document.getElementById('algoTime').textContent = '0.00s';
-    document.getElementById('algoStatus').textContent = 'IDLE';
+    document.getElementById('algoStatus').textContent = 'Listo';
   }
 
   updateComplexityBadges() {
@@ -210,7 +318,12 @@ class AlgorithmsLab {
     document.getElementById('badgeAvg').textContent = data.timeAvg;
     document.getElementById('badgeWorst').textContent = data.timeWorst;
     document.getElementById('badgeSpace').textContent = data.space;
-    document.getElementById('badgeStable').textContent = data.stable ? 'YES' : 'NO';
+    document.getElementById('badgeStable').textContent = data.stable ? 'Sí' : 'No';
+
+    const codeTitle = document.getElementById('algoCodeTitle');
+    const codeEl = document.getElementById('algoCode');
+    if (codeTitle) codeTitle.textContent = `${data.name} en C++`;
+    if (codeEl && this.snippets[this.currentAlgo]) codeEl.textContent = this.snippets[this.currentAlgo];
 
     // Update Student Intuition Card
     const info = this.intuitions[this.currentAlgo];
@@ -229,6 +342,8 @@ class AlgorithmsLab {
     const w = this.canvas.width;
     const h = this.canvas.height;
     this.ctx.clearRect(0, 0, w, h);
+    this.ctx.fillStyle = '#e2cfa6'; // floor
+    this.ctx.fillRect(0, h - 10, w, 10);
 
     const n = this.array.length;
     const barWidth = Math.max(1, (w - (n + 1) * 2) / n);
@@ -241,18 +356,24 @@ class AlgorithmsLab {
       const y = h - barHeight - 10;
 
       if (this.highlightIndices.sorted.includes(i)) {
-        this.ctx.fillStyle = '#10b981'; // Emerald
+        this.ctx.fillStyle = '#4fb477'; // in place
       } else if (this.highlightIndices.comparing.includes(i)) {
-        this.ctx.fillStyle = '#f43f5e'; // Rose / Swapping
+        this.ctx.fillStyle = '#e8512a'; // swapping
       } else if (this.highlightIndices.active.includes(i)) {
-        this.ctx.fillStyle = '#00f0ff'; // Cyan / Active cursor
+        this.ctx.fillStyle = '#f6c33b'; // comparing
       } else {
-        this.ctx.fillStyle = '#3b82f6'; // Blue
+        this.ctx.fillStyle = '#3d8fd6'; // unsorted
       }
 
+      const r = Math.min(4, barWidth / 2);
       this.ctx.beginPath();
-      this.ctx.roundRect(x, y, barWidth, barHeight, [2, 2, 0, 0]);
+      this.ctx.roundRect(x, y, barWidth, barHeight, [r, r, 0, 0]);
       this.ctx.fill();
+      if (barWidth >= 6) {
+        this.ctx.lineWidth = 3;
+        this.ctx.strokeStyle = '#3d2414';
+        this.ctx.stroke();
+      }
     }
   }
 
@@ -267,12 +388,12 @@ class AlgorithmsLab {
 
     const btnRun = document.getElementById('btnRunAlgo');
     if (btnRun) {
-      btnRun.innerHTML = '⏸ Pause';
+      btnRun.innerHTML = '<svg class="ic"><use href="#i-pause"/></svg>Detener';
       btnRun.classList.remove('btn-primary');
       btnRun.classList.add('btn-danger');
     }
 
-    document.getElementById('algoStatus').textContent = 'SORTING';
+    document.getElementById('algoStatus').textContent = 'Ordenando';
     this.startTime = performance.now();
     this.timerInterval = setInterval(() => {
       const elapsed = (performance.now() - this.startTime) / 1000;
@@ -293,12 +414,14 @@ class AlgorithmsLab {
 
       if (!this.shouldStop) {
         await this.sweepComplete();
-        document.getElementById('algoStatus').textContent = 'SORTED';
+        document.getElementById('algoStatus').textContent = '¡Ordenado!';
+        if (window.account) window.account.record('algorithms', `run:${this.currentAlgo}`);
         window.soundController.playSuccess();
       }
     } catch (e) {
       // Interrupted
     } finally {
+      this.isRunning = false;
       this.cleanupRun();
     }
   }
@@ -308,7 +431,7 @@ class AlgorithmsLab {
     this.isPaused = true;
     this.shouldStop = true;
     this.cleanupRun();
-    document.getElementById('algoStatus').textContent = 'PAUSED';
+    document.getElementById('algoStatus').textContent = 'Detenido';
   }
 
   stop() {
@@ -322,7 +445,7 @@ class AlgorithmsLab {
     if (this.timerInterval) clearInterval(this.timerInterval);
     const btnRun = document.getElementById('btnRunAlgo');
     if (btnRun) {
-      btnRun.innerHTML = '▶ Run Algorithm';
+      btnRun.innerHTML = '<svg class="ic"><use href="#i-play"/></svg>Iniciar';
       btnRun.classList.remove('btn-danger');
       btnRun.classList.add('btn-primary');
     }

@@ -1,914 +1,1125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CS Interactive Lab | Computer Science Workbench & Visualizer</title>
-  <meta name="description" content="An interactive web workbench exploring Algorithms, Concurrency, and Distributed Systems through real-time simulations and C engines.">
+  <title>CS Interactive Lab | Laboratorio interactivo de Ciencias de la Computación</title>
+  <meta name="description" content="Un laboratorio de cartón para experimentar con algoritmos de ordenamiento, concurrencia y redes: simulaciones interactivas, explicaciones y consejos de implementación para estudiantes de computación.">
+  <meta name="theme-color" content="#c99560">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body class="on-intro">
 
-  <!-- Top Application Header -->
-  <header class="header">
-    <div class="header-container">
-      <a href="#" class="brand">
-        <div class="brand-icon">&gt;_</div>
-        <div class="brand-text">
-          <h1>CS Interactive Lab <span class="brand-badge">UCR • ECCI</span></h1>
-          <p>Plataforma de Apoyo Académico • Ciencias de la Computación</p>
-        </div>
-      </a>
+  <!-- Icon sprite (stroke icons, no emojis) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4.5" width="4" height="15" rx="1" fill="currentColor" stroke="none"/><rect x="14" y="4.5" width="4" height="15" rx="1" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-step" viewBox="0 0 24 24"><path d="M5 5v14l9-7z" fill="currentColor" stroke="none"/><rect x="16" y="5" width="3" height="14" rx="1" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3 7h3.5c4.5 0 6.5 10 11 10H21M3 17h3.5c1.8 0 3-1.6 4.2-3.6M13.3 9.6C14.5 8.4 15.8 7 17.5 7H21M18 4l3 3-3 3M18 14l3 3-3 3"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v4.5h4.5"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-arrow-r" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-arrow-l" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></symbol>
+    <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><path d="M9 9.2a3 3 0 1 1 4.2 2.8c-.8.4-1.2 1-1.2 1.9v.6"/><circle cx="12" cy="18" r=".6" fill="currentColor"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5M6.5 10v9h11v-9"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 5v14l-9-7z" fill="currentColor" stroke="none"/><rect x="5" y="5" width="3" height="14" rx="1" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-first" viewBox="0 0 24 24"><path d="M13 5v14l-7-7zM20 5v14l-7-7z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-last" viewBox="0 0 24 24"><path d="M4 5v14l7-7zM11 5v14l7-7z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20c1.2-3.8 4.2-5.5 7.5-5.5s6.3 1.7 7.5 5.5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M4 12 20 4l-5 16-3.5-6.5z"/><path d="M11.5 13.5 20 4"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3.5 5 6v5.5c0 4.3 3 7.6 7 9 4-1.4 7-4.7 7-9V6z"/><path d="m9 12 2.2 2.2L15.5 10"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 1.5C6.2 1.5 1.5 6.2 1.5 12c0 4.6 3 8.6 7.2 10 .5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.4-3.5-1.4-.5-1.2-1.2-1.5-1.2-1.5-1-.7.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.5 1.2 3.1.9.1-.7.4-1.2.7-1.4-2.3-.3-4.8-1.2-4.8-5.2 0-1.1.4-2.1 1.1-2.8-.1-.3-.5-1.4.1-2.8 0 0 .9-.3 2.9 1.1a10 10 0 0 1 5.2 0c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.5.1 2.8.7.8 1.1 1.7 1.1 2.8 0 4-2.5 4.9-4.8 5.2.4.3.7 1 .7 2v2.9c0 .3.2.6.7.5 4.2-1.4 7.2-5.4 7.2-10C22.5 6.2 17.8 1.5 12 1.5z"/></symbol>
+  </svg>
 
-      <!-- Primary Navigation Tabs -->
-      <nav class="nav-tabs" role="tablist">
-        <button id="btnNavHome" class="nav-tab-btn active">
-          <span>🏠</span> Inicio
-        </button>
-        <button class="nav-tab-btn" data-tab="algorithms" role="tab">
-          <span>📊</span> Algoritmos (CI-0112)
-        </button>
-        <button class="nav-tab-btn" data-tab="concurrency" role="tab">
-          <span>🚦</span> Concurrencia (CI-0117)
-        </button>
-        <button class="nav-tab-btn" data-tab="networking" role="tab">
-          <span>🌐</span> Redes (CI-0123)
-        </button>
-        <button class="nav-tab-btn" data-tab="cheatsheets" role="tab">
-          <span>📖</span> Recursos & Guías
-        </button>
-      </nav>
+  <!-- The workshop wall we are standing in front of (lighting + vignette) -->
+  <div class="box-frame" aria-hidden="true"></div>
 
-      <!-- Global Actions -->
-      <div class="header-actions">
-        <button id="btnToggleSound" class="icon-btn" title="Toggle Sound Feedback">🔊</button>
-        <button id="btnToggleFullscreen" class="icon-btn" title="Toggle Fullscreen">⛶</button>
-        <a href="https://github.com/josuetorres27/cs-interactive-lab" target="_blank" class="icon-btn" title="Ver código en GitHub">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
-        </a>
+  <!-- Corner toy buttons -->
+  <div class="corner-bar">
+    <a href="#/perfil" id="btnAccount" class="round-btn account-btn" title="Mi espacio" aria-label="Mi espacio"><svg class="ic"><use href="#i-user"/></svg></a>
+    <button id="btnHelp" class="round-btn" title="Ayuda" aria-label="Ayuda"><svg class="ic"><use href="#i-help"/></svg></button>
+    <button id="btnToggleSound" class="round-btn" title="Silenciar sonido" aria-label="Silenciar sonido"><svg class="ic"><use href="#i-sound"/></svg></button>
+    <button id="btnToggleFullscreen" class="round-btn" title="Pantalla completa" aria-label="Pantalla completa"><svg class="ic"><use href="#i-expand"/></svg></button>
+    <a href="https://github.com/josuetorres27/cs-interactive-lab" target="_blank" rel="noopener" class="round-btn" title="Código en GitHub" aria-label="Código en GitHub"><svg class="ic"><use href="#i-github"/></svg></a>
+  </div>
+
+  <main>
+
+    <!-- ======================================================
+         SCREEN 1 · INTRO  (#/)
+         ====================================================== -->
+    <section id="screen-intro" class="screen is-active" data-route="intro">
+      <div class="lamp" aria-hidden="true">
+        <span class="lamp-glow"></span>
+        <svg viewBox="0 0 120 120">
+          <line x1="60" y1="0" x2="60" y2="40" stroke="#3d2414" stroke-width="4" stroke-linecap="round"/>
+          <rect x="52" y="36" width="16" height="12" rx="3" fill="#8d939c" stroke="#3d2414" stroke-width="4"/>
+          <circle cx="60" cy="86" r="13" fill="#fff3c4" stroke="#3d2414" stroke-width="4"/>
+          <path d="M44 48h32l22 34H22z" fill="#56616c" stroke="#3d2414" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M34 72h52" stroke="#6f7b86" stroke-width="3" stroke-linecap="round"/>
+        </svg>
       </div>
-    </div>
-  </header>
 
-  <!-- Main Application Body -->
-  <main class="main-content">
+      <div class="pegboard" style="top:12%; left:4%; width:210px; height:170px" aria-hidden="true">
+        <!-- Screwdriver -->
+        <svg class="peg-tool" viewBox="0 0 120 120" style="left:26px; top:20px; width:78px">
+          <g stroke="#3d2414" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+            <rect x="52" y="8" width="16" height="56" rx="4" fill="#c9ced6"/>
+            <path d="M52 8h16v-2" fill="none"/>
+            <rect x="42" y="62" width="36" height="50" rx="12" fill="#e8512a"/>
+          </g>
+          <path d="M54 76v22M66 76v22" stroke="#b13817" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+        <!-- Hammer -->
+        <svg class="peg-tool" viewBox="0 0 120 120" style="left:108px; top:16px; width:82px; transform:rotate(14deg)">
+          <g stroke="#3d2414" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+            <rect x="53" y="38" width="14" height="74" rx="5" fill="#c68a50"/>
+            <path d="M26 14h56l12 10v18H26z" fill="#8d939c"/>
+          </g>
+          <path d="M60 52v50" stroke="#a96f3c" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="pegboard" style="top:46%; right:4%; width:180px; height:220px" aria-hidden="true">
+        <!-- Gear -->
+        <svg class="peg-tool" viewBox="0 0 120 120" style="left:34px; top:40px; width:110px">
+          <g stroke="#3d2414" stroke-width="6" stroke-linejoin="round">
+            <path d="M52 10h16l3 14 11 5 12-8 11 11-8 12 5 11 14 3v16l-14 3-5 11 8 12-11 11-12-8-11 5-3 14H52l-3-14-11-5-12 8-11-11 8-12-5-11-14-3V52l14-3 5-11-8-12 11-11 12 8 11-5z" fill="#f6c33b"/>
+            <circle cx="60" cy="60" r="16" fill="#c68a50"/>
+          </g>
+        </svg>
+      </div>
 
-    <!-- ========================================== -->
-    <!-- VIEW 1: WELCOME & MISSION SELECTOR (HUB)   -->
-    <!-- ========================================== -->
-    <div id="view-welcome" class="welcome-container">
-      
-      <!-- Hero Welcome Banner -->
-      <div class="welcome-hero">
-        <div class="welcome-badge-row">
-          <span class="ucr-badge">🏛️ Universidad de Costa Rica</span>
-          <span class="ecci-badge">Escuela de Ciencias de la Computación e Informática (ECCI)</span>
-          <span class="gamified-badge">🎮 Modo Interactivo</span>
+      <div class="sign">
+        <div class="sign-board">
+          <span class="screw" style="top:12px; left:12px"></span><span class="screw" style="top:12px; right:12px"></span>
+          <span class="screw" style="bottom:12px; left:12px"></span><span class="screw" style="bottom:12px; right:12px"></span>
+          <h1 class="logo">
+            <span class="logo-small">CS INTERACTIVE</span>
+            <span class="logo-lab">LAB</span>
+          </h1>
+          <p class="sign-sub">un taller de computación para aprender haciendo</p>
+        </div>
+      </div>
+
+      <div class="intro-actions">
+        <a href="#/lab" class="btn btn-hero" id="btnEnterLabHero">
+          ¡Empecemos! <svg class="ic"><use href="#i-arrow-r"/></svg>
+        </a>
+        <a href="#/que-es" class="link-btn">¿Qué es esto?</a>
+      </div>
+
+      <p class="intro-foot">Hecho para estudiantes de computación · ECCI · UCR</p>
+
+      <div class="bit-slot intro-bit" aria-hidden="true"></div>
+      <div class="intro-bubble bubble" aria-hidden="true">Hola, soy Bit. Te muestro el laboratorio.</div>
+    </section>
+
+    <!-- ======================================================
+         SCREEN 2 · WHAT IS IT  (#/que-es)
+         ====================================================== -->
+    <section id="screen-about" class="screen" data-route="about">
+      <a href="#/" class="round-btn back-link" title="Volver" aria-label="Volver al inicio"><svg class="ic"><use href="#i-arrow-l"/></svg></a>
+
+      <div class="wrap">
+        <header class="page-head">
+          <h2 class="page-title">¿Qué es esto?</h2>
+          <p class="page-lead">Todo lo que necesitas saber antes de entrar, en un minuto.</p>
+        </header>
+
+        <div class="faq-board">
+          <article class="faq lined">
+            <div class="faq-q"><span class="faq-num">1</span><h3>¿Qué es CS Interactive Lab?</h3></div>
+            <p>Un laboratorio en el navegador donde los temas difíciles de computación se <strong>ven, se oyen y se tocan</strong>. En vez de leer sobre un deadlock, lo provocas. En vez de memorizar Big-O, ves la diferencia.</p>
+          </article>
+
+          <article class="faq">
+            <div class="faq-q"><span class="faq-num">2</span><h3>¿Para quién es?</h3></div>
+            <p>Para estudiantes de Ciencias de la Computación, en especial de la <strong>ECCI de la UCR</strong>, que están llevando algoritmos, programación concurrente, redes o bases de datos, o que se preparan para <strong>entrevistas técnicas</strong>. También para cualquier curioso.</p>
+          </article>
+
+          <article class="faq">
+            <div class="faq-q"><span class="faq-num">3</span><h3>¿Qué puedo hacer aquí?</h3></div>
+            <p>Escoges una <strong>mesa de trabajo</strong> (un curso o tema) y luego una estación. Cada estación tiene tres pasos:</p>
+            <ul>
+              <li><strong>Experimenta:</strong> una simulación, o un depurador que recorre el código línea por línea.</li>
+              <li><strong>Entiende:</strong> la idea detrás, explicada simple.</li>
+              <li><strong>Implementa:</strong> código y consejos para tu proyecto.</li>
+            </ul>
+          </article>
+
+          <article class="faq lined">
+            <div class="faq-q"><span class="faq-num">4</span><h3>¿Qué voy a aprender?</h3></div>
+            <ul>
+              <li><strong>Algoritmos y estructuras:</strong> 8 ordenamientos compitiendo; pilas, listas y árboles.</li>
+              <li><strong>Concurrencia:</strong> hilos, mutex y semáforos en una rotonda.</li>
+              <li><strong>Redes:</strong> sockets TCP, HTTP y un servidor con pool de hilos.</li>
+              <li><strong>Entrevistas:</strong> dos punteros, intervalos y ventanas deslizantes, de nivel medio a difícil.</li>
+              <li><strong>Bases de datos:</strong> SQL ejecutado cláusula por cláusula.</li>
+            </ul>
+          </article>
+
+          <article class="faq">
+            <div class="faq-q"><span class="faq-num">5</span><h3>¿Tengo que instalar algo?</h3></div>
+            <p>No. Todo corre en tu navegador. Si quieres ir más lejos, el repositorio incluye los motores originales en C y C++ para compilarlos en tu máquina.</p>
+          </article>
+
+          <article class="faq">
+            <div class="faq-q"><span class="faq-num">6</span><h3>¿Quién lo hizo?</h3></div>
+            <p>Lo creó <a href="https://github.com/josuetorres27" target="_blank" rel="noopener">Josué Torres Sibaja</a>, estudiante de la ECCI, a partir de proyectos reales de sus cursos. Es código abierto (MIT): puedes usarlo, mejorarlo y proponer estaciones nuevas.</p>
+          </article>
         </div>
 
-        <h1 class="welcome-hero-title">
-          Aprende Computación <span class="gradient-text">Jugando &amp; Experimentando</span>
-        </h1>
+        <div class="faq-cta">
+          <span class="hand">¿Listo?</span>
+          <a href="#/lab" class="btn btn-hero">Entrar al laboratorio <svg class="ic"><use href="#i-arrow-r"/></svg></a>
+        </div>
+      </div>
+    </section>
 
-        <p class="welcome-hero-subtitle">
-          El laboratorio virtual interactivo diseñado para estudiantes de la UCR. 
-          Aquí no vienes a memorizar código aburrido: vienes a escuchar cómo suena QuickSort, 
-          provocar atascos en rotondas para entender interbloqueos, y cazar paquetes TCP en vivo.
-        </p>
+    <!-- ======================================================
+         SCREEN 3 · WORK AREAS  (#/lab)
+         ====================================================== -->
+    <section id="screen-lab" class="screen" data-route="lab">
+      <a href="#/" class="round-btn back-link" title="Inicio" aria-label="Volver al inicio"><svg class="ic"><use href="#i-home"/></svg></a>
 
-        <div class="welcome-hero-actions">
-          <button id="btnEnterLabHero" class="btn btn-hero">
-            <span>🚀 Entrar al Laboratorio</span>
-          </button>
-          <a href="#missionsSection" class="btn btn-outline">
-            <span>🕹️ Ver Misiones</span>
+      <div class="wrap">
+        <header class="hub-head">
+          <div>
+            <h2 class="page-title">El Taller</h2>
+            <p class="page-lead">Escoge tu mesa de trabajo.</p>
+          </div>
+        </header>
+
+        <div class="benches">
+          <a href="#/mesa/algoritmos" class="bench" style="--accent:#3d8fd6">
+            <div class="bench-art">
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="12" y="46" width="14" height="26" rx="2" fill="#fbf3e2"/><rect x="32" y="30" width="14" height="42" rx="2" fill="#f6c33b"/><rect x="52" y="52" width="14" height="20" rx="2" fill="#fbf3e2"/><rect x="72" y="18" width="14" height="54" rx="2" fill="#e8512a"/><rect x="92" y="8" width="14" height="64" rx="2" fill="#4fb477"/></g></svg>
+            </div>
+            <span class="station-code">CI-0112</span>
+            <h3 class="bench-name">Algoritmos y Estructuras de Datos</h3>
+            <p class="bench-line">Ordenamiento · Pilas, listas y árboles</p>
+            <span class="bench-go">2 estaciones <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+          </a>
+
+          <a href="#/mesa/paralela" class="bench" style="--accent:#4fb477">
+            <div class="bench-art">
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5"><rect x="52" y="0" width="16" height="80" fill="#5b4a3d"/><rect x="0" y="32" width="120" height="16" fill="#5b4a3d"/><circle cx="60" cy="40" r="28" fill="#5b4a3d"/><circle cx="60" cy="40" r="13" fill="#8fd3a5"/></g><g stroke="#3d2414" stroke-width="4"><circle cx="60" cy="19" r="5" fill="#e8512a"/><circle cx="81" cy="40" r="5" fill="#f6c33b"/><circle cx="45" cy="55" r="5" fill="#3d8fd6"/></g></svg>
+            </div>
+            <span class="station-code">CI-0117</span>
+            <h3 class="bench-name">Programación Paralela y Concurrente</h3>
+            <p class="bench-line">Hilos, semáforos, deadlocks y paralelismo</p>
+            <span class="bench-go">1 estación <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+          </a>
+
+          <a href="#/mesa/redes" class="bench" style="--accent:#8b5fbf">
+            <div class="bench-art">
+              <svg viewBox="0 0 120 80" aria-hidden="true"><path d="M30 44c16 26 44 26 60 0" stroke="#3d2414" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="2 6"/><g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="6" y="14" width="40" height="30" rx="4" fill="#fbf3e2"/><rect x="74" y="14" width="40" height="30" rx="4" fill="#fbf3e2"/><rect x="12" y="20" width="28" height="18" rx="2" fill="#2b2119"/><rect x="80" y="20" width="28" height="18" rx="2" fill="#2b2119"/><rect x="54" y="58" width="12" height="9" rx="2" fill="#f6c33b"/></g></svg>
+            </div>
+            <span class="station-code">CI-0123</span>
+            <h3 class="bench-name">Redes</h3>
+            <p class="bench-line">Sockets TCP, HTTP y servidores</p>
+            <span class="bench-go">1 estación <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+          </a>
+
+          <a href="#/mesa/entrevistas" class="bench" style="--accent:#e8512a">
+            <div class="bench-art">
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="10" y="8" width="100" height="56" rx="5" fill="#fbf3e2"/><path d="M40 64v12M80 64v12" /></g><g stroke-width="5" stroke-linecap="round" fill="none"><path d="M30 26l-8 10 8 10" stroke="#3d8fd6"/><path d="M90 26l8 10-8 10" stroke="#3d8fd6"/><path d="M44 30h32M44 42h22" stroke="#3d2414"/></g></svg>
+            </div>
+            <span class="station-code">PREPARACIÓN</span>
+            <h3 class="bench-name">Entrevistas Técnicas</h3>
+            <p class="bench-line">Dos punteros, intervalos, ventanas deslizantes</p>
+            <span class="bench-go">1 estación <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+          </a>
+
+          <a href="#/mesa/datos" class="bench" style="--accent:#f6c33b">
+            <div class="bench-art">
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5"><path d="M36 16v48c0 6 11 10 24 10s24-4 24-10V16" fill="#fbf3e2"/><ellipse cx="60" cy="16" rx="24" ry="9" fill="#fbf3e2"/><path d="M36 32c0 6 11 10 24 10s24-4 24-10M36 48c0 6 11 10 24 10s24-4 24-10" fill="none"/></g></svg>
+            </div>
+            <span class="station-code">BASES DE DATOS</span>
+            <h3 class="bench-name">Bases de Datos</h3>
+            <p class="bench-line">SQL ejecutado cláusula por cláusula</p>
+            <span class="bench-go">1 estación <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+          </a>
+
+          <a href="#/lab/cheatsheets" class="bench notebook" data-tab="cheatsheets" style="--accent:#c9975c">
+            <div class="bench-art">
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="32" y="6" width="56" height="68" rx="4" fill="#fbf3e2" transform="rotate(-4 60 40)"/></g><g stroke="#3d8fd6" stroke-width="2" opacity=".6" transform="rotate(-4 60 40)"><path d="M40 24h40M40 34h40M40 44h40M40 54h40"/></g><text x="44" y="42" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="#3d2414" transform="rotate(-4 60 40)">O(n)</text></svg>
+            </div>
+            <span class="station-code">REPASO</span>
+            <h3 class="bench-name">El Cuaderno</h3>
+            <p class="bench-line">Amdahl, Big-O y chuletas rápidas</p>
+            <span class="bench-go">Abrir <svg class="ic"><use href="#i-arrow-r"/></svg></span>
           </a>
         </div>
-
-        <!-- 3 Simple How-It-Works Steps (Inspired by MiVueltica UX) -->
-        <div class="how-it-works-grid">
-          <div class="how-step-card">
-            <div class="how-step-number">01</div>
-            <div class="how-step-icon">🎯</div>
-            <h3>Elige tu Reto</h3>
-            <p>Selecciona un área clave de la carrera: Algoritmos (CI-0112), Concurrencia (CI-0117) o Redes (CI-0123).</p>
-          </div>
-
-          <div class="how-step-card">
-            <div class="how-step-number">02</div>
-            <div class="how-step-icon">🕹️</div>
-            <h3>Experimenta &amp; Juega</h3>
-            <p>Modifica parámetros en vivo, pon a competir algoritmos o apaga los semáforos para desatar el caos.</p>
-          </div>
-
-          <div class="how-step-card">
-            <div class="how-step-number">03</div>
-            <div class="how-step-icon">💡</div>
-            <h3>Gana Intuición Real</h3>
-            <p>Conecta la experiencia visual y sonora con lo que realmente te evalúan en proyectos y exámenes.</p>
-          </div>
-        </div>
       </div>
+    </section>
 
+    <!-- ======================================================
+         SCREEN 3b · ONE WORK AREA  (#/mesa/<area>)
+         ====================================================== -->
+    <section id="screen-area" class="screen" data-route="area">
+      <a href="#/lab" class="round-btn back-link" title="Volver al taller" aria-label="Volver al taller"><svg class="ic"><use href="#i-arrow-l"/></svg></a>
 
-      <!-- About the Lab Section -->
-      <div class="about-section">
-        <div class="about-header">
-          <span class="about-tag">SOBRE LA PLATAFORMA</span>
-          <h2 class="about-title">¿Qué es el CS Interactive Lab?</h2>
-          <p class="about-subtitle">Una herramienta de apoyo académico para estudiantes de la ECCI-UCR</p>
-        </div>
-        <div class="about-cards-grid">
-          <div class="about-card">
-            <div class="about-card-icon sky">🎯</div>
-            <h3>Qué es</h3>
-            <p>Un laboratorio virtual interactivo que complementa los cursos de Ciencias de la Computación de la UCR con simulaciones en tiempo real, visualizaciones y ejercicios prácticos.</p>
-          </div>
-          <div class="about-card">
-            <div class="about-card-icon sun">👥</div>
-            <h3>¿Para quién?</h3>
-            <p>Diseñado para estudiantes de CI-0112 (Algoritmos), CI-0117 (Concurrencia) y CI-0123 (Redes) que quieran reforzar conceptos con experimentación directa.</p>
-          </div>
-          <div class="about-card">
-            <div class="about-card-icon leaf">🚀</div>
-            <h3>¿Cómo funciona?</h3>
-            <p>Elige un módulo, ajusta parámetros en tiempo real y observa cómo se comportan los algoritmos, hilos y conexiones. No se necesita instalar nada.</p>
-          </div>
-        </div>
-      </div>
+      <div class="wrap">
+        <header class="page-head">
+          <p class="crumb-light">El Taller /</p>
+          <h2 class="page-title" id="areaTitle">Mesa</h2>
+          <p class="page-lead" id="areaLine"></p>
+        </header>
 
-      <!-- Gamified Mission Cards Grid -->
-      <div id="missionsSection" class="missions-section">
-        <div class="section-header">
-          <div class="section-tag">ACCESO AL LABORATORIO</div>
-          <h2 class="section-title">Elige tu Misión de Aprendizaje</h2>
-          <p class="section-subtitle">Haz clic en cualquier simulador para entrar directamente a la estación interactiva.</p>
-        </div>
-
-        <div class="mission-cards-grid">
-          <!-- Mission 1: Algorithms -->
-          <div class="mission-card" data-launch="algorithms">
-            <div class="mission-card-badge">CI-0112 • ALGORITMOS</div>
-            <div class="mission-icon">📊</div>
-            <h3 class="mission-title">Arena de Algoritmos</h3>
-            <p class="mission-desc">
-              Pon a prueba tu intuición: ¿Quién gana la carrera de ordenamiento? Visualiza particiones, compara en tiempo real y escucha cada intercambio con síntesis de sonido.
-            </p>
-            <div class="mission-features">
-              <span>🎵 Audio Web API</span>
-              <span>⚡ 8 Algoritmos</span>
-              <span>🎯 Casos de Examen</span>
-            </div>
-            <button class="btn btn-mission">
-              <span>Entrar a la Arena →</span>
-            </button>
-          </div>
-
-          <!-- Mission 2: Concurrency -->
-          <div class="mission-card" data-launch="concurrency">
-            <div class="mission-card-badge badge-concurrency">CI-0117 • CONCURRENCIA</div>
-            <div class="mission-icon">🚦</div>
-            <h3 class="mission-title">Rotonda &amp; Control de Caos</h3>
-            <p class="mission-desc">
-              Controla una rotonda multi-hilo usando semáforos POSIX o desata el temido interbloqueo de Coffman provocando una espera circular en vivo.
-            </p>
-            <div class="mission-features">
-              <span>🚗 Tráfico 2D</span>
-              <span>💥 Coffman Deadlock</span>
-              <span>⚖️ Mutex vs Semáforo</span>
-            </div>
-            <button class="btn btn-mission">
-              <span>Controlar Tráfico →</span>
-            </button>
-          </div>
-
-          <!-- Mission 3: Networking -->
-          <div class="mission-card" data-launch="networking">
-            <div class="mission-card-badge badge-networking">CI-0123 • REDES</div>
-            <div class="mission-icon">🌐</div>
-            <h3 class="mission-title">Hack Studio &amp; Sockets TCP</h3>
-            <p class="mission-desc">
-              Conéctate al servidor C++, despacha peticiones HTTP/1.1 por el cable, inspecciona el socket y desbloquea la galería secreta de 12 figuras ASCII.
-            </p>
-            <div class="mission-features">
-              <span>🔌 BSD Sockets</span>
-              <span>📡 Wireshark Wire</span>
-              <span>🎨 12 Figuras ASCII</span>
-            </div>
-            <button class="btn btn-mission">
-              <span>Abrir Terminal →</span>
-            </button>
-          </div>
-
-          <!-- Mission 4: Theory & Cheatsheets -->
-          <div class="mission-card" data-launch="cheatsheets">
-            <div class="mission-card-badge badge-theory">ECCI • RECURSOS</div>
-            <div class="mission-icon">📖</div>
-            <h3 class="mission-title">Zona de Métricas &amp; Cheatsheets</h3>
-            <p class="mission-desc">
-              Calculadora de la Ley de Amdahl, resumen de condiciones de Coffman, máquina de estados de sockets y matriz Big-O para tus quices y proyectos.
-            </p>
-            <div class="mission-features">
-              <span>⚡ Ley de Amdahl</span>
-              <span>📋 Tabla Big-O</span>
-              <span>🔒 Fórmulas C11</span>
-            </div>
-            <button class="btn btn-mission">
-              <span>Ver Recursos →</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- VIEW 2: ACTIVE LAB WORKBENCH               -->
-    <!-- ========================================== -->
-    <div id="view-lab" style="display:none;">
-      
-      <!-- Workspace Top Navigation -->
-      <div class="lab-workspace-header">
-        <button id="btnBackToWelcome" class="btn btn-back">
-          <span>← Volver al Menú de Misiones</span>
-        </button>
-        <div class="active-mission-pill">
-          <span id="activeMissionLabel">Misión Activa: Arena de Algoritmos</span>
-        </div>
-      </div>
-
-    <!-- ========================================== -->
-    <!-- TAB 1: ALGORITHMS & DATA STRUCTURES        -->
-    <!-- ========================================== -->
-    <section id="tab-algorithms" class="tab-pane active">
-      <div class="lab-grid">
-        <!-- Controls Panel -->
-        <div class="glass-card">
-          <div class="card-title">
-            <span>⚙️ Configuración & Casos</span>
-            <span class="badge badge-cyan">C++17 Engine</span>
-          </div>
-
-          <div class="control-group">
-            <label class="control-label">Algoritmo de Ordenamiento</label>
-            <select id="algoSelect">
-              <option value="quick">Quick Sort (Partición Divide y Vencerás)</option>
-              <option value="merge">Merge Sort (Fusión Divide y Vencerás)</option>
-              <option value="heap">Heap Sort (Montículo Binario In-Place)</option>
-              <option value="shell">Shell Sort (Brechas Decrecientes)</option>
-              <option value="insertion">Insertion Sort (Inserción Progresiva)</option>
-              <option value="selection">Selection Sort (Selección de Mínimo)</option>
-              <option value="bubble">Bubble Sort (Burbujeo de Adyacentes)</option>
-              <option value="radix">Radix Sort (LSD No Comparativo)</option>
-            </select>
-          </div>
-
-          <!-- 1-Click Presets for Students -->
-          <div class="control-group">
-            <label class="control-label">Distribución del Arreglo (Casos Típicos)</label>
-            <div class="preset-pills-row">
-              <button class="preset-pill-btn active" data-dist="random">🎲 Aleatorio</button>
-              <button class="preset-pill-btn" data-dist="nearly-sorted">📈 Casi Ordenado</button>
-              <button class="preset-pill-btn" data-dist="reversed">📉 Invertido (Peor)</button>
-              <button class="preset-pill-btn" data-dist="few-unique">🔄 Pocos Únicos</button>
-            </div>
-            <select id="arrayDist" style="display:none;">
-              <option value="random">Random Uniform</option>
-              <option value="nearly-sorted">Nearly Sorted</option>
-              <option value="reversed">Reversed</option>
-              <option value="few-unique">Few Unique</option>
-            </select>
-          </div>
-
-          <div class="control-group">
-            <div class="control-label">
-              <span>Tamaño de Muestra (n)</span>
-              <span id="arraySizeVal" class="control-value">50</span>
-            </div>
-            <input type="range" id="arraySize" min="10" max="150" value="50">
-          </div>
-
-          <div class="control-group">
-            <div class="control-label">
-              <span>Velocidad de Simulación</span>
-              <span id="algoSpeedVal" class="control-value">80%</span>
-            </div>
-            <input type="range" id="algoSpeed" min="1" max="100" value="80">
-          </div>
-
-          <div class="btn-group">
-            <button id="btnRunAlgo" class="btn btn-primary" style="flex:1;">▶ Iniciar Simulación</button>
-            <button id="btnResetAlgo" class="btn" style="flex:1;">↺ Reiniciar Arreglo</button>
-          </div>
-
-          <!-- Complexity Badges -->
-          <div style="margin-top: 1.25rem; border-top: 1px solid var(--border-subtle); padding-top: 0.85rem;">
-            <div class="card-title" style="font-size:0.8rem; margin-bottom:0.6rem;">Complejidad Asintótica (Cota Superior O)</div>
-            <div style="display:flex; flex-direction:column; gap:0.35rem; font-size:0.8rem;">
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:var(--text-dim);">Mejor Caso:</span>
-                <span id="badgeBest" class="badge badge-emerald">O(n log n)</span>
+        <div class="shelf" id="areaShelf">
+          <!-- Algoritmos -->
+          <div class="station" data-area="algoritmos">
+            <a href="#/lab/algorithms" class="station-card" data-tab="algorithms" style="--accent:#3d8fd6">
+              <div class="station-art">
+                <svg viewBox="0 0 160 100" aria-hidden="true">
+                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round">
+                    <rect x="14" y="62" width="14" height="30" rx="2" fill="#fbf3e2"/>
+                    <rect x="34" y="40" width="14" height="52" rx="2" fill="#fbf3e2"/>
+                    <rect x="54" y="70" width="14" height="22" rx="2" fill="#f6c33b"/>
+                    <rect x="74" y="24" width="14" height="68" rx="2" fill="#e8512a"/>
+                    <rect x="94" y="50" width="14" height="42" rx="2" fill="#fbf3e2"/>
+                    <rect x="114" y="14" width="14" height="78" rx="2" fill="#4fb477"/>
+                    <rect x="134" y="8" width="14" height="84" rx="2" fill="#4fb477"/>
+                  </g>
+                </svg>
               </div>
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:var(--text-dim);">Caso Promedio:</span>
-                <span id="badgeAvg" class="badge badge-cyan">O(n log n)</span>
-              </div>
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:var(--text-dim);">Peor Caso:</span>
-                <span id="badgeWorst" class="badge badge-amber">O(n²)</span>
-              </div>
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:var(--text-dim);">Memoria Extra:</span>
-                <span id="badgeSpace" class="badge badge-rose">O(log n)</span>
-              </div>
-              <div style="display:flex; justify-content:space-between;">
-                <span style="color:var(--text-dim);">Estabilidad:</span>
-                <span id="badgeStable" class="badge badge-cyan">NO</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Visualizer Canvas & Metrics -->
-        <div class="glass-card viewport-card">
-          <div class="canvas-container">
-            <canvas id="algoCanvas"></canvas>
+              <span class="station-code">SIMULACIÓN</span>
+              <h3 class="station-name">Ordenamiento</h3>
+              <p class="station-line">¿Quién ordena más rápido? Míralos competir.</p>
+              <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            </a>
           </div>
 
-          <!-- Color Legend for Students -->
-          <div class="legend-bar">
-            <div class="legend-item">
-              <span class="legend-color-dot" style="background:#3b82f6;"></span>
-              <span>Sin ordenar</span>
-            </div>
-            <div class="legend-item">
-              <span class="legend-color-dot" style="background:#f59e0b;"></span>
-              <span>Comparando</span>
-            </div>
-            <div class="legend-item">
-              <span class="legend-color-dot" style="background:#f43f5e;"></span>
-              <span>Intercambio / Pivote</span>
-            </div>
-            <div class="legend-item">
-              <span class="legend-color-dot" style="background:#10b981;"></span>
-              <span>Posición Final</span>
-            </div>
+          <div class="station" data-area="algoritmos">
+            <a href="#/lab/datastructures" class="station-card" data-tab="datastructures" style="--accent:#4fb477">
+              <div class="station-art">
+                <svg viewBox="0 0 160 100" aria-hidden="true">
+                  <g stroke="#3d2414" stroke-width="5"><path d="M80 22 50 52M80 22l30 30M50 52 34 80M50 52l16 28M110 52l16 28"/></g>
+                  <g stroke="#3d2414" stroke-width="5"><circle cx="80" cy="22" r="12" fill="#f6c33b"/><circle cx="50" cy="52" r="12" fill="#fbf3e2"/><circle cx="110" cy="52" r="12" fill="#fbf3e2"/><circle cx="34" cy="80" r="11" fill="#fbf3e2"/><circle cx="66" cy="80" r="11" fill="#e8512a"/><circle cx="126" cy="80" r="11" fill="#fbf3e2"/></g>
+                </svg>
+              </div>
+              <span class="station-code">DEPURADOR</span>
+              <h3 class="station-name">Estructuras de datos</h3>
+              <p class="station-line">Pilas, listas enlazadas y árboles, línea por línea.</p>
+              <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            </a>
           </div>
 
-          <div class="metrics-grid">
-            <div class="metric-box">
-              <div class="metric-label">Estado</div>
-              <div id="algoStatus" class="metric-value" style="color:var(--cyan); font-size:0.95rem;">IDLE</div>
-            </div>
-            <div class="metric-box">
-              <div class="metric-label">Comparaciones</div>
-              <div id="algoComparisons" class="metric-value">0</div>
-            </div>
-            <div class="metric-box">
-              <div class="metric-label">Intercambios / Escrituras</div>
-              <div id="algoSwaps" class="metric-value">0</div>
-            </div>
-            <div class="metric-box">
-              <div class="metric-label">Tiempo Transcurrido</div>
-              <div id="algoTime" class="metric-value">0.00s</div>
-            </div>
+          <!-- Paralela -->
+          <div class="station" data-area="paralela">
+            <a href="#/lab/concurrency" class="station-card" data-tab="concurrency" style="--accent:#4fb477">
+              <div class="station-art">
+                <svg viewBox="0 0 160 100" aria-hidden="true">
+                  <g stroke="#3d2414" stroke-width="5">
+                    <rect x="70" y="0" width="20" height="100" fill="#5b4a3d"/>
+                    <rect x="0" y="40" width="160" height="20" fill="#5b4a3d"/>
+                    <circle cx="80" cy="50" r="36" fill="#5b4a3d"/>
+                    <circle cx="80" cy="50" r="17" fill="#8fd3a5"/>
+                  </g>
+                  <circle cx="80" cy="50" r="26.5" fill="none" stroke="#fbf3e2" stroke-width="2" stroke-dasharray="5 6"/>
+                  <g stroke="#3d2414" stroke-width="4">
+                    <circle cx="80" cy="23.5" r="6" fill="#e8512a"/>
+                    <circle cx="106.5" cy="50" r="6" fill="#f6c33b"/>
+                    <circle cx="61" cy="69" r="6" fill="#3d8fd6"/>
+                  </g>
+                </svg>
+              </div>
+              <span class="station-code">SIMULACIÓN</span>
+              <h3 class="station-name">La Rotonda</h3>
+              <p class="station-line">Hilos que manejan juntos sin chocar (o no).</p>
+              <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            </a>
           </div>
 
-          <!-- Educational Concept Card -->
-          <div class="concept-card">
-            <div class="concept-card-title">
-              <span>💡</span>
-              <span id="algoIntuitionTitle">Quick Sort (Partición Divide y Vencerás)</span>
-            </div>
-            <div class="concept-card-text" id="algoIntuitionConcept">
-              Elige un elemento 'pivote' y particiona el arreglo: menores a la izquierda, mayores a la derecha. Luego procesa recursivamente cada mitad. Es el estándar en producción por su uso óptimo de la memoria caché.
-            </div>
-            <div class="concept-card-tip" id="algoIntuitionTip">
-              ⚠️ Examen UCR: Si el pivote es el peor posible (ej: arreglo ya ordenado sin pivote aleatorio), su complejidad degenera a O(n²).
+          <!-- Redes -->
+          <div class="station" data-area="redes">
+            <a href="#/lab/networking" class="station-card" data-tab="networking" style="--accent:#8b5fbf">
+              <div class="station-art">
+                <svg viewBox="0 0 160 100" aria-hidden="true">
+                  <path d="M44 56c22 30 50 30 72 0" stroke="#3d2414" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="2 8"/>
+                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round">
+                    <rect x="10" y="22" width="48" height="36" rx="5" fill="#fbf3e2"/>
+                    <rect x="102" y="22" width="48" height="36" rx="5" fill="#fbf3e2"/>
+                    <rect x="17" y="29" width="34" height="22" rx="2" fill="#2b2119"/>
+                    <rect x="109" y="29" width="34" height="22" rx="2" fill="#2b2119"/>
+                    <rect x="73" y="70" width="14" height="10" rx="2" fill="#f6c33b"/>
+                  </g>
+                  <path d="M22 36h14M22 42h20M114 36h10M114 42h22" stroke="#8fd3a5" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <span class="station-code">SIMULACIÓN</span>
+              <h3 class="station-name">Sockets TCP</h3>
+              <p class="station-line">Pide arte ASCII a un servidor y mira el cable.</p>
+              <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            </a>
+          </div>
+
+          <!-- Entrevistas -->
+          <div class="station" data-area="entrevistas">
+            <a href="#/lab/interview" class="station-card" data-tab="interview" style="--accent:#e8512a">
+              <div class="station-art">
+                <svg viewBox="0 0 160 100" aria-hidden="true">
+                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round">
+                    <rect x="10" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/><rect x="36" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/><rect x="62" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/><rect x="88" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/><rect x="114" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/>
+                  </g>
+                  <g stroke="#3d2414" stroke-width="4"><rect x="8" y="66" width="26" height="16" rx="8" fill="#3d8fd6"/><rect x="112" y="66" width="26" height="16" rx="8" fill="#e8512a"/></g>
+                  <path d="M36 74h20M110 74H90" stroke="#3d2414" stroke-width="5" stroke-linecap="round"/><path d="m50 69 6 5-6 5M96 69l-6 5 6 5" stroke="#3d2414" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="station-code">DEPURADOR</span>
+              <h3 class="station-name">Patrones de entrevista</h3>
+              <p class="station-line">Problemas medios y difíciles, recorridos línea por línea.</p>
+              <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            </a>
+          </div>
+
+          <!-- Datos -->
+          <div class="station" data-area="datos">
+            <a href="#/lab/sql" class="station-card" data-tab="sql" style="--accent:#f6c33b">
+              <div class="station-art">
+                <svg viewBox="0 0 160 100" aria-hidden="true">
+                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="20" y="14" width="120" height="74" rx="6" fill="#fbf3e2"/><path d="M20 32h120M20 50h120M20 70h120M60 14v74M100 14v74"/></g>
+                  <rect x="22" y="52" width="116" height="16" fill="#e8512a" opacity=".35"/>
+                  <path d="M24 60h112" stroke="#b13817" stroke-width="5"/>
+                </svg>
+              </div>
+              <span class="station-code">DEPURADOR</span>
+              <h3 class="station-name">SQL paso a paso</h3>
+              <p class="station-line">Mira en qué orden se ejecuta de verdad una consulta.</p>
+              <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            </a>
+          </div>
+
+          <!-- Coming soon (shown on every bench) -->
+          <div class="station soon" data-area="all">
+            <div class="station-card" aria-label="Próximamente">
+              <div class="station-art">
+                <svg viewBox="0 0 160 100" aria-hidden="true"><path d="M80 32v36M62 50h36" stroke="#3d2414" stroke-width="5" stroke-linecap="round" opacity=".6"/></svg>
+              </div>
+              <h3 class="station-name">Próximamente</h3>
+              <p class="station-line">Más estaciones en construcción.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ========================================== -->
-    <!-- TAB 2: CONCURRENCY & PARALLEL SYSTEMS      -->
-    <!-- ========================================== -->
-    <section id="tab-concurrency" class="tab-pane">
-      <!-- Subtabs -->
-      <div style="display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap;">
-        <button class="nav-tab-btn conc-subtab-btn active" data-subtab="roundabout">🚗 Rotonda (Semáforos vs Deadlock)</button>
-        <button class="nav-tab-btn conc-subtab-btn" data-subtab="comparison">⚖️ Comparativa: Mutex vs Semáforo vs Barrera</button>
-        <button class="nav-tab-btn conc-subtab-btn" data-subtab="heat">🔥 Difusión de Calor 2D (OpenMP)</button>
-        <button class="nav-tab-btn conc-subtab-btn" data-subtab="patterns">⚡ Patrones C11 (Buffer & Filósofos)</button>
-      </div>
+    <!-- ======================================================
+         SCREEN · MY SPACE  (#/perfil)
+         ====================================================== -->
+    <section id="screen-profile" class="screen" data-route="profile">
+      <a href="#/lab" class="round-btn back-link" title="Volver al taller" aria-label="Volver al taller"><svg class="ic"><use href="#i-arrow-l"/></svg></a>
 
-      <div class="lab-grid">
-        <!-- Controls Panel -->
-        <div class="glass-card">
-          <!-- Panel for Roundabout -->
-          <div id="roundaboutControls">
-            <div class="card-title">
-              <span>Sincronización de Tráfico</span>
-              <span class="badge badge-emerald">POSIX Semaphores</span>
-            </div>
+      <div class="wrap">
+        <header class="page-head">
+          <h2 class="page-title">Mi espacio</h2>
+          <p class="page-lead" id="profileLead">Tu progreso en el taller.</p>
+        </header>
 
-            <div class="control-group" style="background:var(--bg-tertiary); padding:0.75rem; border-radius:var(--radius-sm); border:1px solid var(--border-subtle);">
-              <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-weight:600; font-size:0.85rem;">
-                <input type="checkbox" id="toggleSemaphores" checked style="width:18px; height:18px; accent-color:var(--emerald);">
-                <span>Control de Capacidad con Semáforos</span>
-              </label>
-              <div id="semStatusText" style="font-size:0.75rem; color:var(--emerald); margin-top:0.3rem;">
-                ENABLED (Deadlock-Free)
-              </div>
-            </div>
-
-            <div class="control-group">
-              <div class="control-label">
-                <span>Tasa de Llegada de Vehículos</span>
-                <span id="trafficRateVal" class="control-value">60%</span>
-              </div>
-              <input type="range" id="trafficRate" min="10" max="100" value="60">
-            </div>
-
-            <div class="control-group">
-              <label style="display:flex; align-items:center; gap:0.6rem; cursor:pointer; font-size:0.8rem; color:var(--text-dim);">
-                <input type="checkbox" id="toggleAutoSpawn" checked style="width:16px; height:16px; accent-color:var(--cyan);">
-                <span>Llegada Continua Automática</span>
-              </label>
-            </div>
-
-            <div class="btn-group" style="margin-bottom:0.6rem;">
-              <button id="btnSpawnVehicle" class="btn btn-primary" style="flex:1;">+ Agregar Vehículo</button>
-              <button id="btnClearRoundabout" class="btn" style="flex:1;">↺ Limpiar Pista</button>
-            </div>
-
-            <!-- Didactic Experiment Buttons -->
-            <div class="btn-group">
-              <button id="btnForceDeadlock" class="btn btn-danger" style="flex:1; font-size:0.78rem;">💥 Provocar Deadlock</button>
-              <button id="btnResolveDeadlock" class="btn btn-emerald" style="flex:1; font-size:0.78rem; background:var(--emerald); color:#000;">🛡️ Activar Semáforo</button>
-            </div>
-
-            <div class="concept-card" style="margin-top:1rem; padding:0.75rem;">
-              <div class="concept-card-title" style="font-size:0.8rem;">
-                <span>💡</span>
-                <span>¿Por qué se traba la rotonda?</span>
-              </div>
-              <div class="concept-card-text" style="font-size:0.78rem;">
-                Cuando 4 vehículos ocupan los 4 cuadrantes al mismo tiempo y cada uno espera el cuadrante de adelante, se cumple la <strong>Espera Circular de Coffman</strong>. Un semáforo de capacidad 3 rompe matemáticamente el ciclo.
-              </div>
-            </div>
-          </div>
-
-          <!-- Panel for Comparison Controls -->
-          <div id="comparisonControls" style="display:none;">
-            <div class="card-title">
-              <span>Primitivas de Control</span>
-              <span class="badge badge-purple">Guía Didáctica UCR</span>
-            </div>
-            <p style="font-size:0.82rem; color:var(--text-dim); line-height:1.5; margin-bottom:1rem;">
-              En el curso <strong>CI-0117 (Sistemas Concurrentes)</strong>, la confusión número uno es cuándo usar un <code>Mutex</code> frente a un <code>Semáforo</code> o una <code>Barrera</code>.
-            </p>
-            <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--cyan); background:var(--bg-tertiary); padding:0.6rem; border-radius:var(--radius-sm);">
-              // Verificación en C:<br>
-              $ make -C tests run
-            </div>
-          </div>
-
-          <!-- Panel for Heat -->
-          <div id="heatControls" style="display:none;">
-            <div class="card-title">
-              <span>Ecuación de Calor 2D</span>
-              <span class="badge badge-amber">PDE Stencil 5 Puntos</span>
-            </div>
-
-            <div class="control-group">
-              <label class="control-label">Partición de Hilos (Dominio 1D)</label>
-              <select id="heatThreadsSelect">
-                <option value="1">1 Hilo (Secuencial Base)</option>
-                <option value="2">2 Hilos (Partición Horizontal)</option>
-                <option value="4" selected>4 Hilos (Multi-Core Paralelo)</option>
-                <option value="8">8 Hilos (Alto Paralelismo OpenMP)</option>
-              </select>
-            </div>
-
-            <div class="btn-group">
-              <button id="btnRunHeat" class="btn btn-primary" style="flex:1;">▶ Iniciar Solver</button>
-              <button id="btnStepHeat" class="btn" style="flex:1;">⏭ Paso</button>
-              <button id="btnResetHeat" class="btn" style="width:100%;">↺ Reiniciar Malla</button>
-            </div>
-          </div>
-
-          <!-- Panel for Patterns -->
-          <div id="patternsControls" style="display:none;">
-            <div class="card-title">
-              <span>Patrones Clásicos</span>
-              <span class="badge badge-purple">Dijkstra & Atomics</span>
-            </div>
-            <p style="font-size:0.8rem; color:var(--text-dim); margin-bottom:1rem;">
-              Monitores en tiempo real que demuestran el Buffer Acotado (semáforos dobles) y Filósofos Cenando (jerarquía de recursos de Dijkstra).
-            </p>
-            <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--cyan); background:var(--bg-tertiary); padding:0.6rem; border-radius:var(--radius-sm);">
-              $ make -C core-c-engines/concurrency test
-            </div>
-          </div>
-        </div>
-
-        <!-- Concurrency Viewport (Canvas) -->
-        <div id="concurrencyViewport" class="glass-card viewport-card">
-          <!-- Deadlock alert banner -->
-          <div id="deadlockAlertBanner" style="display:none; background:var(--rose-dim); border:1px solid var(--rose); padding:0.6rem 1rem; border-radius:var(--radius-sm); color:var(--rose); font-size:0.85rem; font-weight:600; align-items:center; justify-content:space-between;">
-            <span>⚠️ ¡INTERBLOQUEO DE COFFMAN DETECTADO! Rotonda en parálisis circular total. Usa el botón "🛡️ Activar Semáforo" para resolverlo.</span>
-          </div>
-
-          <div class="canvas-container">
-            <canvas id="concurrencyCanvas"></canvas>
-          </div>
-
-          <div class="metrics-grid">
-            <div class="metric-box">
-              <div class="metric-label">Estado del Sistema</div>
-              <div id="concDeadlockState" class="metric-value" style="color:var(--emerald); font-size:0.95rem;">LIVENESS OK ✅</div>
-            </div>
-            <div class="metric-box">
-              <div class="metric-label">Hilos / Vehículos Activos</div>
-              <div id="concActive" class="metric-value">0</div>
-            </div>
-            <div class="metric-box">
-              <div class="metric-label">Ocupación en Anillo</div>
-              <div id="concInRing" class="metric-value">0</div>
-            </div>
-            <div class="metric-box">
-              <div class="metric-label">Vehículos Despachados</div>
-              <div id="concPassed" class="metric-value">0</div>
-            </div>
-            <div class="metric-box">
-              <div class="metric-label">Iteraciones Térmicas</div>
-              <div id="heatIterCount" class="metric-value">0</div>
-            </div>
-            <div class="metric-box">
-              <div class="metric-label">Delta Máximo (ε)</div>
-              <div id="heatMaxDelta" class="metric-value">0.0000</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Comparison Viewport (Didactic Cards) -->
-        <div id="comparisonViewport" class="glass-card viewport-card" style="display:none;">
-          <div class="card-title">
-            <span>Comparativa Fundamental de Control de Flujo</span>
-            <span class="badge badge-emerald">CI-0117 Conceptos Clave</span>
-          </div>
-
-          <div class="sync-comparison-grid">
-            <!-- Mutex Card -->
-            <div class="sync-card">
-              <div class="sync-card-header">
-                <span class="sync-card-title">🔐 Mutex (Cerrojo)</span>
-                <span class="badge badge-cyan">Exclusión Mutua</span>
-              </div>
-              <div class="sync-card-analogy">
-                <strong>🔑 Analogía:</strong> La llave de un baño individual. Solo una persona puede tenerla; quien entra cierra con seguro y al salir DEBE devolver la llave.
-              </div>
-              <ul class="sync-card-props">
-                <li><strong>Dueño:</strong> Sí (Ownership estricto). Solo el hilo que hace <code>lock()</code> puede hacer <code>unlock()</code>.</li>
-                <li><strong>Valores:</strong> Binario (0 o 1).</li>
-                <li><strong>Uso clave:</strong> Proteger secciones críticas pequeñas donde se modifican variables o estructuras compartidas.</li>
-                <li><strong>C / POSIX:</strong> <code>pthread_mutex_lock(&m)</code></li>
-              </ul>
-            </div>
-
-            <!-- Semaphore Card -->
-            <div class="sync-card">
-              <div class="sync-card-header">
-                <span class="sync-card-title">🚦 Semáforo Contador</span>
-                <span class="badge badge-emerald">Señalización & Capacidad</span>
-              </div>
-              <div class="sync-card-analogy">
-                <strong>🎫 Analogía:</strong> Estacionamiento con N espacios y tiquetes. Si hay tiquetes disponibles pasas; si llega a 0, esperas.
-              </div>
-              <ul class="sync-card-props">
-                <li><strong>Dueño:</strong> NO tiene dueño. Un hilo productor puede hacer <code>post()</code> para despertar a un consumidor en <code>wait()</code>.</li>
-                <li><strong>Valores:</strong> Entero no negativo (0 a N).</li>
-                <li><strong>Uso clave:</strong> Notificación entre hilos y control de cupo (Buffer Acotado, Rotonda).</li>
-                <li><strong>C / POSIX:</strong> <code>sem_wait(&s)</code> / <code>sem_post(&s)</code></li>
-              </ul>
-            </div>
-
-            <!-- Barrier Card -->
-            <div class="sync-card">
-              <div class="sync-card-header">
-                <span class="sync-card-title">🛑 Barrera de Fase</span>
-                <span class="badge badge-amber">Punto de Encuentro</span>
-              </div>
-              <div class="sync-card-analogy">
-                <strong>👥 Analogía:</strong> Punto de reunión de un tour guiado. Nadie avanza a la siguiente atracción hasta que los N turistas lleguen.
-              </div>
-              <ul class="sync-card-props">
-                <li><strong>Propósito:</strong> Forzar a N hilos a esperar hasta que todos hayan concluido la fase de cálculo actual.</li>
-                <li><strong>Valores:</strong> Contador decreciente hasta 0.</li>
-                <li><strong>Uso clave:</strong> Algoritmos numéricos iterativos (Difusión de calor 2D, simulación de partículas).</li>
-                <li><strong>C / POSIX:</strong> <code>pthread_barrier_wait(&b)</code></li>
-              </ul>
-            </div>
-
-            <!-- Atomic Card -->
-            <div class="sync-card">
-              <div class="sync-card-header">
-                <span class="sync-card-title">⚡ Atomics (C11)</span>
-                <span class="badge badge-rose">Lock-Free Hardware</span>
-              </div>
-              <div class="sync-card-analogy">
-                <strong>⚙️ Analogía:</strong> Torniquete mecánico de metro: avanza con un clic a nivel hardware sin necesidad de poner candados.
-              </div>
-              <ul class="sync-card-props">
-                <li><strong>Propósito:</strong> Modificar enteros o banderas en memoria mediante instrucciones atómicas del CPU (Fetch-and-Add).</li>
-                <li><strong>Ventaja:</strong> 0 costo de llamadas al sistema operativo ni cambios de contexto de hilos.</li>
-                <li><strong>Uso clave:</strong> Contadores de métricas de alto rendimiento y banderas de parada.</li>
-                <li><strong>C11 Standard:</strong> <code>atomic_fetch_add(&val, 1)</code></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- TAB 3: NETWORKING & DISTRIBUTED SYSTEMS   -->
-    <!-- ========================================== -->
-    <section id="tab-networking" class="tab-pane">
-      <div class="lab-grid" style="grid-template-columns: 300px 1fr;">
-        <!-- Left: ASCII Asset Catalog -->
-        <div class="glass-card">
-          <div class="card-title">
-            <span>Catálogo de Figuras ASCII</span>
-            <span class="badge badge-cyan">12 Recursos</span>
-          </div>
-
-          <div class="control-group">
-            <input type="text" id="netSearchInput" placeholder="Filtrar figuras (ej: spiderman)..." style="padding:0.45rem 0.65rem; font-size:0.8rem; width:100%;">
-          </div>
-
-          <div style="display:flex; gap:0.3rem; margin-bottom:0.75rem; flex-wrap:wrap;">
-            <button class="badge net-cat-pill active" data-cat="all" style="cursor:pointer; border:none; background:var(--bg-tertiary); color:var(--text-main);">Todas</button>
-            <button class="badge net-cat-pill" data-cat="heroes" style="cursor:pointer; border:none; background:var(--bg-tertiary); color:var(--text-dim);">Héroes</button>
-            <button class="badge net-cat-pill" data-cat="gaming" style="cursor:pointer; border:none; background:var(--bg-tertiary); color:var(--text-dim);">Gaming</button>
-            <button class="badge net-cat-pill" data-cat="tech" style="cursor:pointer; border:none; background:var(--bg-tertiary); color:var(--text-dim);">Tech</button>
-          </div>
-
-          <div id="netFigureList" style="max-height:260px; overflow-y:auto; border:1px solid var(--border-subtle); border-radius:var(--radius-sm); padding:0.3rem;">
-            <!-- Injected dynamically -->
-          </div>
-
-          <div style="margin-top:1rem; border-top:1px solid var(--border-subtle); padding-top:0.75rem;">
-            <div class="control-label">
-              <span>Tamaño de Fuente Terminal</span>
-              <span id="asciiFontSizeVal" class="control-value">11px</span>
-            </div>
-            <input type="range" id="asciiFontSize" min="7" max="18" value="11">
-          </div>
-
-          <div class="btn-group">
-            <button id="btnCopyAscii" class="btn btn-primary" style="flex:1;">📋 Copiar</button>
-            <button id="btnDownloadAscii" class="btn" style="flex:1;">💾 Exportar .txt</button>
-          </div>
-        </div>
-
-        <!-- Right: ASCII Display & Socket Dispatcher -->
-        <div style="display:flex; flex-direction:column; gap:1.25rem;">
-          <!-- ASCII Art Terminal View -->
-          <div class="terminal-window">
-            <div class="terminal-header">
-              <div class="terminal-dots">
-                <span class="dot dot-red"></span>
-                <span class="dot dot-yellow"></span>
-                <span class="dot dot-green"></span>
-              </div>
-              <div id="currentFigTitle" style="font-weight:700; color:var(--cyan);">BATMAN</div>
-              <div style="font-size:0.7rem; color:var(--text-muted);">
-                <span id="figLinesCount">0 lines</span> • <span id="figCharsCount">0 chars</span>
-              </div>
-            </div>
-            <div id="asciiDisplay" class="terminal-body" style="font-size:11px; max-height:340px;">
-              Cargando figura ASCII...
-            </div>
-          </div>
-
-          <!-- Distributed Client-Server Simulation Card -->
-          <div class="glass-card">
-            <div class="card-title">
-              <span>Protocolo de Sockets BSD & Pool de Hilos del Servidor</span>
-              <span class="badge badge-emerald">CI-0123 Redes / HTTP 1.1</span>
-            </div>
-
-            <p style="font-size:0.8rem; color:var(--text-dim); margin-bottom:0.75rem;">
-              Simulación del flujo cliente-servidor: el cliente envía una petición HTTP mediante un socket TCP. El servidor (en C++) delega la atención de la conexión a un hilo trabajador de su <em>Thread Pool</em>.
-            </p>
-
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-bottom:1rem;">
-              <!-- Dispatch Form -->
+        <div class="profile-top">
+          <div class="profile-card board" id="profileCard">
+            <div class="profile-id">
+              <div class="avatar" id="profileAvatar" aria-hidden="true"><svg class="ic"><use href="#i-user"/></svg></div>
               <div>
-                <div style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
-                  <select id="socketMethodSelect" style="width:110px;">
-                    <option value="GET">GET</option>
-                    <option value="POST">POST</option>
-                    <option value="HEAD">HEAD</option>
+                <div class="profile-name" id="profileName">Invitado</div>
+                <div class="profile-sub" id="profileSub">Tu progreso se guarda en este dispositivo.</div>
+              </div>
+            </div>
+            <div class="profile-actions">
+              <button class="btn-google" id="btnSignIn" type="button">
+                <svg class="g-logo" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.7c4.3-4 6.9-9.9 6.9-17.1z"/><path fill="#FBBC05" d="M10.6 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.9-6.1C1 16.6 0 20.2 0 24s1 7.4 2.7 10.7l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.7c-2.1 1.4-4.8 2.2-8.5 2.2-6.2 0-11.5-4.1-13.4-9.9l-7.9 6.1C6.6 42.6 14.6 48 24 48z"/></svg>
+                Continuar con Google
+              </button>
+              <button class="btn btn-sm" id="btnSignOut" type="button" hidden>Cerrar sesión</button>
+            </div>
+            <p class="profile-note" id="profileNote"></p>
+          </div>
+
+          <div class="profile-overview board">
+            <div class="ring" id="overallRing" role="img" aria-label="Progreso total">
+              <svg viewBox="0 0 120 120"><circle class="ring-bg" cx="60" cy="60" r="50"/><circle class="ring-fg" id="overallArc" cx="60" cy="60" r="50"/></svg>
+              <div class="ring-text"><b id="overallPct">0%</b><span>del taller</span></div>
+            </div>
+            <dl class="profile-stats">
+              <div><dt>Retos completados</dt><dd id="statItems">0 / 0</dd></div>
+              <div><dt>Estaciones terminadas</dt><dd id="statStations">0 / 0</dd></div>
+            </dl>
+            <a href="#/lab" class="btn btn-primary btn-sm" id="btnContinue"><svg class="ic"><use href="#i-arrow-r"/></svg>Empezar</a>
+          </div>
+        </div>
+
+        <div class="progress-list" id="progressList"></div>
+
+        <div class="profile-danger">
+          <button class="link-btn" id="btnResetProgress" type="button">Borrar mi progreso</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         SCREEN 4 · MODULE WORKSPACE  (#/lab/<module>)
+         ====================================================== -->
+    <section id="screen-module" class="screen" data-route="module">
+      <div class="mod-bar">
+        <div class="wrap">
+          <a href="#/lab" id="btnBackToWelcome" class="round-btn" title="Volver al laboratorio" aria-label="Volver al laboratorio"><svg class="ic"><use href="#i-arrow-l"/></svg></a>
+          <div class="mod-title">
+            <div class="crumb" id="modCrumb">Laboratorio /</div>
+            <h2 id="activeMissionLabel">Ordenamiento</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap mod-body" id="view-lab">
+        <nav class="steps" id="modSteps" aria-label="Pasos">
+          <button class="step active" data-step="play"><span class="step-n">1</span>Experimenta</button>
+          <button class="step" data-step="learn"><span class="step-n">2</span>Entiende</button>
+          <button class="step" data-step="build"><span class="step-n">3</span>Implementa</button>
+        </nav>
+
+        <!-- ============ MODULE: ALGORITHMS ============ -->
+        <section id="tab-algorithms" class="tab-pane active">
+
+          <div class="step-pane active" data-step="play">
+            <div class="lab-grid">
+              <div class="clipboard">
+                <div class="ctl">
+                  <label class="ctl-label" for="algoSelect">Algoritmo</label>
+                  <select id="algoSelect">
+                    <option value="quick">Quick Sort</option>
+                    <option value="merge">Merge Sort</option>
+                    <option value="heap">Heap Sort</option>
+                    <option value="shell">Shell Sort</option>
+                    <option value="insertion">Insertion Sort</option>
+                    <option value="selection">Selection Sort</option>
+                    <option value="bubble">Bubble Sort</option>
+                    <option value="radix">Radix Sort (LSD)</option>
                   </select>
-                  <input type="text" id="socketUriInput" value="/figures/batman" style="flex:1; padding:0.4rem 0.6rem; font-family:var(--font-mono); font-size:0.8rem;">
                 </div>
-                <button id="btnSendSocketReq" class="btn btn-primary" style="width:100%;">
-                  ⚡ Despachar Petición Socket al Servidor
-                </button>
+
+                <div class="ctl" id="algoPresets">
+                  <div class="ctl-label">Arreglo inicial</div>
+                  <div class="chips">
+                    <button class="chip preset-pill-btn active" data-dist="random">Aleatorio</button>
+                    <button class="chip preset-pill-btn" data-dist="nearly-sorted">Casi ordenado</button>
+                    <button class="chip preset-pill-btn" data-dist="reversed">Invertido</button>
+                    <button class="chip preset-pill-btn" data-dist="few-unique">Pocos valores</button>
+                  </div>
+                  <select id="arrayDist" hidden>
+                    <option value="random">random</option>
+                    <option value="nearly-sorted">nearly-sorted</option>
+                    <option value="reversed">reversed</option>
+                    <option value="few-unique">few-unique</option>
+                  </select>
+                </div>
+
+                <div class="ctl">
+                  <div class="ctl-label"><label for="arraySize">Cantidad de elementos</label><span id="arraySizeVal" class="ctl-value">50</span></div>
+                  <input type="range" id="arraySize" min="10" max="150" value="50">
+                </div>
+
+                <div class="ctl">
+                  <div class="ctl-label"><label for="algoSpeed">Velocidad</label><span id="algoSpeedVal" class="ctl-value">80%</span></div>
+                  <input type="range" id="algoSpeed" min="1" max="100" value="80">
+                </div>
+
+                <div class="btn-row">
+                  <button id="btnRunAlgo" class="btn btn-primary"><svg class="ic"><use href="#i-play"/></svg>Iniciar</button>
+                  <button id="btnResetAlgo" class="btn btn-sm" title="Generar otro arreglo"><svg class="ic"><use href="#i-shuffle"/></svg>Revolver</button>
+                </div>
               </div>
 
-              <!-- Worker Threads Pool State -->
-              <div id="workerPoolContainer" style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem;">
-                <!-- Injected dynamically -->
-              </div>
-            </div>
-
-            <!-- Packet Inspector -->
-            <div class="terminal-window">
-              <div class="terminal-header">
-                <span>Inspector de Paquetes en el Cable (Emulador Wireshark)</span>
-                <div style="font-size:0.7rem;">
-                  Paquetes: <span id="netPacketsCount" style="color:var(--cyan); font-weight:700;">0</span> | 
-                  Datos: <span id="netBytesCount" style="color:var(--emerald); font-weight:700;">0 KB</span>
+              <div class="stage" id="algoStage">
+                <div class="canvas-container"><canvas id="algoCanvas"></canvas></div>
+                <div class="legend">
+                  <span><i style="background:#3d8fd6"></i>Sin ordenar</span>
+                  <span><i style="background:#f6c33b"></i>Comparando</span>
+                  <span><i style="background:#e8512a"></i>Intercambiando</span>
+                  <span><i style="background:#4fb477"></i>En su lugar</span>
                 </div>
-              </div>
-              <div id="packetInspector" class="terminal-body" style="max-height:160px; font-size:0.75rem; color:#38bdf8;">
-Esperando despacho de paquete socket...
+                <div class="scoreboard">
+                  <div class="score"><div class="score-label">Estado</div><div id="algoStatus" class="score-value">Listo</div></div>
+                  <div class="score"><div class="score-label">Comparaciones</div><div id="algoComparisons" class="score-value">0</div></div>
+                  <div class="score"><div class="score-label">Escrituras</div><div id="algoSwaps" class="score-value">0</div></div>
+                  <div class="score"><div class="score-label">Tiempo</div><div id="algoTime" class="score-value">0.00s</div></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+
+          <div class="step-pane" data-step="learn">
+            <div class="learn-grid">
+              <article class="learn-card">
+                <h3 id="algoIntuitionTitle">Quick Sort</h3>
+                <p id="algoIntuitionConcept"></p>
+                <div class="note"><strong>Ojo</strong><span id="algoIntuitionTip"></span></div>
+              </article>
+
+              <article class="learn-card">
+                <h3>¿Cuánto cuesta?</h3>
+                <p>Así crece el trabajo cuando el arreglo crece.</p>
+                <dl class="kv">
+                  <dt>Mejor caso</dt><dd id="badgeBest">O(n log n)</dd>
+                  <dt>Caso promedio</dt><dd id="badgeAvg">O(n log n)</dd>
+                  <dt>Peor caso</dt><dd id="badgeWorst">O(n²)</dd>
+                  <dt>Memoria extra</dt><dd id="badgeSpace">O(log n)</dd>
+                  <dt>¿Estable?</dt><dd id="badgeStable">No</dd>
+                </dl>
+              </article>
+
+              <article class="learn-card wide">
+                <h3>Experimentos para probar</h3>
+                <ol class="numbered">
+                  <li><strong>Insertion Sort + Casi ordenado.</strong> Termina rapidísimo: su mejor caso es O(n). Ahora prueba Invertido.</li>
+                  <li><strong>Quick Sort + Pocos valores.</strong> Fíjate cómo muchos elementos iguales le cuestan más comparaciones de lo esperado.</li>
+                  <li><strong>Selection vs Bubble con 150 elementos.</strong> Compara cuántas escrituras hace cada uno. Selection casi no mueve nada.</li>
+                  <li><strong>Radix Sort.</strong> No compara nunca. Mira el contador de comparaciones quedarse en cero.</li>
+                </ol>
+              </article>
+            </div>
+          </div>
+
+          <div class="step-pane" data-step="build">
+            <div class="learn-grid">
+              <article class="learn-card wide">
+                <h3 id="algoCodeTitle">Quick Sort en C++</h3>
+                <pre class="code" id="algoCode"></pre>
+              </article>
+              <article class="learn-card">
+                <h3>Consejos</h3>
+                <ul class="plain">
+                  <li>Prueba siempre con arreglos <strong>vacíos, de un elemento, repetidos e invertidos</strong>.</li>
+                  <li>En Quick Sort, usa un <strong>pivote aleatorio</strong> o la mediana de tres para evitar el O(n²).</li>
+                  <li>Para n pequeño (≈16), cambiar a Insertion Sort acelera los algoritmos recursivos.</li>
+                  <li>Cuenta comparaciones e intercambios en tus pruebas: es la forma más clara de verificar la complejidad.</li>
+                </ul>
+              </article>
+              <article class="learn-card">
+                <h3>En la vida real</h3>
+                <ul class="plain">
+                  <li><code>std::sort</code> usa <strong>Introsort</strong>: Quick + Heap + Insertion.</li>
+                  <li><code>std::stable_sort</code> se basa en Merge Sort.</li>
+                  <li>Python y Java (objetos) usan <strong>Timsort</strong>, un híbrido de Merge e Insertion.</li>
+                  <li>Para enteros de tamaño fijo, Radix Sort puede ganarle a todos.</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ MODULE: CONCURRENCY ============ -->
+        <section id="tab-concurrency" class="tab-pane">
+
+          <div class="step-pane active" data-step="play">
+            <div class="subtabs" id="concSubtabs">
+              <button class="subtab conc-subtab-btn active" data-subtab="roundabout">Rotonda</button>
+              <button class="subtab conc-subtab-btn" data-subtab="heat">Calor en paralelo</button>
+              <button class="subtab conc-subtab-btn" data-subtab="patterns">Patrones clásicos</button>
+            </div>
+
+            <div class="lab-grid">
+              <div class="clipboard">
+                <div id="roundaboutControls">
+                  <div class="ctl">
+                    <label class="switch">
+                      <input type="checkbox" id="toggleSemaphores" checked>
+                      <span class="knob"></span>
+                      Semáforos activos
+                    </label>
+                    <div id="semStatusText" class="status-note">Sin riesgo de deadlock</div>
+                  </div>
+
+                  <div class="ctl">
+                    <div class="ctl-label"><label for="trafficRate">Tráfico</label><span id="trafficRateVal" class="ctl-value">60%</span></div>
+                    <input type="range" id="trafficRate" min="10" max="100" value="60">
+                  </div>
+
+                  <div class="ctl">
+                    <label class="switch">
+                      <input type="checkbox" id="toggleAutoSpawn" checked>
+                      <span class="knob"></span>
+                      Llegan autos solos
+                    </label>
+                  </div>
+
+                  <div class="btn-row">
+                    <button id="btnSpawnVehicle" class="btn btn-sm"><svg class="ic"><use href="#i-plus"/></svg>Auto</button>
+                    <button id="btnClearRoundabout" class="btn btn-sm"><svg class="ic"><use href="#i-reset"/></svg>Limpiar</button>
+                  </div>
+
+                  <hr class="divider">
+
+                  <div class="ctl-label">El experimento</div>
+                  <div class="btn-row" id="deadlockButtons">
+                    <button id="btnForceDeadlock" class="btn btn-danger btn-sm"><svg class="ic"><use href="#i-bolt"/></svg>Provocar deadlock</button>
+                    <button id="btnResolveDeadlock" class="btn btn-go btn-sm"><svg class="ic"><use href="#i-shield"/></svg>Resolver</button>
+                  </div>
+                  <p class="ctl-hint">Apaga los semáforos y mira qué pasa cuando cuatro autos se esperan en círculo.</p>
+                </div>
+
+                <div id="heatControls" style="display:none;">
+                  <div class="ctl">
+                    <label class="ctl-label" for="heatThreadsSelect">Hilos trabajando</label>
+                    <select id="heatThreadsSelect">
+                      <option value="1">1 hilo</option>
+                      <option value="2">2 hilos</option>
+                      <option value="4" selected>4 hilos</option>
+                      <option value="8">8 hilos</option>
+                    </select>
+                    <p class="ctl-hint">Cada hilo calcula una franja de la placa. Las líneas punteadas son sus fronteras.</p>
+                  </div>
+                  <div class="btn-row">
+                    <button id="btnRunHeat" class="btn btn-primary"><svg class="ic"><use href="#i-play"/></svg>Iniciar</button>
+                  </div>
+                  <div class="btn-row" style="margin-top:.7rem">
+                    <button id="btnStepHeat" class="btn btn-sm"><svg class="ic"><use href="#i-step"/></svg>Un paso</button>
+                    <button id="btnResetHeat" class="btn btn-sm"><svg class="ic"><use href="#i-reset"/></svg>Reiniciar</button>
+                  </div>
+                </div>
+
+                <div id="patternsControls" style="display:none;">
+                  <div class="ctl-label">Dos clásicos</div>
+                  <p class="ctl-hint">Izquierda: un <strong>buffer acotado</strong> con productores y consumidores. Derecha: los <strong>filósofos comensales</strong> turnándose los tenedores.</p>
+                  <div class="note"><strong>Pregunta</strong>¿Qué semáforo bloquea al productor cuando el buffer se llena?</div>
+                </div>
+              </div>
+
+              <div id="concurrencyViewport" class="stage">
+                <div id="deadlockAlertBanner" class="alert">
+                  <svg class="ic"><use href="#i-bolt"/></svg>
+                  <span>Deadlock: cada auto espera al de adelante y nadie avanza. Pulsa «Resolver».</span>
+                </div>
+                <div class="canvas-container"><canvas id="concurrencyCanvas"></canvas></div>
+                <div class="scoreboard">
+                  <div class="score" data-sim="roundabout"><div class="score-label">Estado</div><div id="concDeadlockState" class="score-value">Fluye</div></div>
+                  <div class="score" data-sim="roundabout"><div class="score-label">Autos (hilos)</div><div id="concActive" class="score-value">0</div></div>
+                  <div class="score" data-sim="roundabout"><div class="score-label">En la rotonda</div><div id="concInRing" class="score-value">0</div></div>
+                  <div class="score" data-sim="roundabout"><div class="score-label">Salieron</div><div id="concPassed" class="score-value">0</div></div>
+                  <div class="score" data-sim="heat" style="display:none"><div class="score-label">Iteraciones</div><div id="heatIterCount" class="score-value">0</div></div>
+                  <div class="score" data-sim="heat" style="display:none"><div class="score-label">Cambio máximo (ε)</div><div id="heatMaxDelta" class="score-value">0.0000</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-pane" data-step="learn">
+            <div class="learn-grid">
+              <article class="learn-card wide">
+                <h3>¿Por qué se traba la rotonda?</h3>
+                <p>Cada auto es un <strong>hilo</strong> y cada cuadrante es un <strong>recurso</strong>. Un deadlock aparece solo si se cumplen las cuatro condiciones de Coffman al mismo tiempo:</p>
+                <ol class="numbered" style="margin-top:.8rem">
+                  <li><strong>Exclusión mutua:</strong> en un cuadrante cabe un número limitado de autos.</li>
+                  <li><strong>Retener y esperar:</strong> un auto ocupa su cuadrante mientras espera el siguiente.</li>
+                  <li><strong>Sin expropiación:</strong> nadie puede sacar un auto de la rotonda a la fuerza.</li>
+                  <li><strong>Espera circular:</strong> A espera a B, B a C, C a D… y D espera a A.</li>
+                </ol>
+                <div class="note"><strong>La solución</strong>Un semáforo de entrada que nunca deja que la rotonda se llene por completo rompe la espera circular: siempre queda un hueco para avanzar.</div>
+              </article>
+
+              <article class="learn-card">
+                <span class="tag">pthread_mutex_t</span>
+                <h3>Mutex</h3>
+                <p class="analogy">La llave de un baño: una persona a la vez, y quien la toma la devuelve.</p>
+                <p>Protege secciones críticas cortas. Tiene dueño: solo el hilo que hizo <code>lock</code> puede hacer <code>unlock</code>.</p>
+              </article>
+
+              <article class="learn-card">
+                <span class="tag">sem_t</span>
+                <h3>Semáforo</h3>
+                <p class="analogy">Un parqueo con N espacios: si hay campo entras, si no esperas.</p>
+                <p>Un contador sin dueño. Sirve para limitar capacidad y para que un hilo le avise a otro.</p>
+              </article>
+
+              <article class="learn-card">
+                <span class="tag">pthread_barrier_t</span>
+                <h3>Barrera</h3>
+                <p class="analogy">El guía del tour: nadie sigue hasta que llegue todo el grupo.</p>
+                <p>Sincroniza fases. La simulación de calor la usa para que ningún hilo empiece la iteración siguiente antes de tiempo.</p>
+              </article>
+
+              <article class="learn-card">
+                <span class="tag">_Atomic</span>
+                <h3>Atómicos</h3>
+                <p class="analogy">Un torniquete: avanza de un clic, sin candados.</p>
+                <p>Operaciones que el procesador hace de una sola vez. Ideales para contadores y banderas compartidas.</p>
+              </article>
+            </div>
+          </div>
+
+          <div class="step-pane" data-step="build">
+            <div class="learn-grid">
+              <article class="learn-card wide">
+                <h3>La rotonda en C, simplificada</h3>
+<pre class="code"><span class="c">// Compila con: gcc -std=c11 -pthread rotonda.c</span>
+<span class="k">#include</span> &lt;pthread.h&gt;
+<span class="k">#include</span> &lt;semaphore.h&gt;
+
+<span class="k">#define</span> QUADRANTS 4
+<span class="k">#define</span> CAPACIDAD 2                  <span class="c">// autos por cuadrante</span>
+<span class="k">int</span> recorrido = 2;                    <span class="c">// cuadrantes que avanza cada auto</span>
+sem_t entrada;                       <span class="c">// cupo total de la rotonda</span>
+sem_t cuadrante[QUADRANTS];          <span class="c">// capacidad de cada cuadrante</span>
+
+<span class="k">void</span>* auto_hilo(<span class="k">void</span>* arg) {
+  <span class="k">int</span> q = *(<span class="k">int</span>*)arg;                   <span class="c">// cuadrante de entrada</span>
+  sem_wait(&amp;entrada);                  <span class="c">// nunca se llena del todo</span>
+  sem_wait(&amp;cuadrante[q]);
+  <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; recorrido; ++i) {
+    <span class="k">int</span> sig = (q + 1) % QUADRANTS;
+    sem_wait(&amp;cuadrante[sig]);         <span class="c">// pide el siguiente…</span>
+    sem_post(&amp;cuadrante[q]);           <span class="c">// …y suelta el actual</span>
+    q = sig;
+  }
+  sem_post(&amp;cuadrante[q]);
+  sem_post(&amp;entrada);
+  <span class="k">return</span> NULL;
+}
+
+<span class="k">int</span> main(<span class="k">void</span>) {
+  sem_init(&amp;entrada, 0, QUADRANTS * CAPACIDAD - 1);  <span class="c">// la clave: -1</span>
+  <span class="k">for</span> (<span class="k">int</span> i = 0; i &lt; QUADRANTS; ++i) sem_init(&amp;cuadrante[i], 0, CAPACIDAD);
+  <span class="c">/* crear hilos con pthread_create, esperarlos con pthread_join */</span>
+}</pre>
+              </article>
+              <article class="learn-card">
+                <h3>Consejos</h3>
+                <ul class="plain">
+                  <li>Toma los recursos <strong>siempre en el mismo orden</strong>. Es la forma más sencilla de evitar deadlocks.</li>
+                  <li>Mantén las secciones críticas cortas: nada de <code>printf</code> ni E/S con un mutex tomado.</li>
+                  <li>Cada <code>sem_init</code> y <code>pthread_mutex_init</code> lleva su <code>destroy</code>.</li>
+                  <li>Nunca uses espera activa (<code>while(!listo);</code>): bloquea con un semáforo o una variable de condición.</li>
+                </ul>
+              </article>
+              <article class="learn-card">
+                <h3>Para depurar</h3>
+                <ul class="plain">
+                  <li>Compila con <code>-fsanitize=thread</code> para detectar condiciones de carrera.</li>
+                  <li><code>valgrind --tool=helgrind ./prog</code> encuentra errores de sincronización.</li>
+                  <li>Si sospechas de un deadlock, adjunta <code>gdb</code> y mira dónde está cada hilo con <code>thread apply all bt</code>.</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ MODULE: NETWORKING ============ -->
+        <section id="tab-networking" class="tab-pane">
+
+          <div class="step-pane active" data-step="play">
+            <div class="net-sim" id="netSim">
+
+              <!-- What the client types -->
+              <form class="net-request board" id="netRequestForm">
+                <div class="net-request-main">
+                  <div class="ctl-label">El cliente ejecuta</div>
+                  <div class="net-cmd">
+                    <code class="net-prompt">$ ./client</code>
+                    <select id="netCommand" aria-label="Comando del cliente">
+                      <option value="GET">GET</option>
+                      <option value="LIST">LIST</option>
+                    </select>
+                    <select id="netFigure" aria-label="Figura"></select>
+                  </div>
+                </div>
+                <div class="net-request-opts">
+                  <div class="ctl-label">Método HTTP</div>
+                  <div class="chips" id="netMethod">
+                    <button type="button" class="chip active" data-method="GET">GET</button>
+                    <button type="button" class="chip" data-method="POST">POST</button>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary net-send" id="btnNetSend"><svg class="ic"><use href="#i-send"/></svg>Enviar petición</button>
+              </form>
+
+              <!-- The two computers and the cable -->
+              <div class="net-scene" id="netScene">
+                <div class="machine client" id="netClient">
+                  <div class="machine-head">
+                    <span class="machine-name">Cliente</span>
+                    <span class="machine-addr">[2001:db8::2]:52814</span>
+                  </div>
+                  <div class="machine-state">TCP <b class="tcp-state" id="netClientState">CLOSED</b></div>
+                  <pre class="machine-screen" id="netClientScreen"></pre>
+                </div>
+
+                <div class="net-wire" id="netWire" aria-hidden="true">
+                  <div class="net-cable"></div>
+                  <div class="net-packet" id="netPacket" hidden><span class="net-packet-label" id="netPacketLabel"></span></div>
+                  <span class="net-wire-label">cable Ethernet<br>IPv6 · TCP</span>
+                </div>
+
+                <div class="machine server" id="netServer">
+                  <div class="machine-head">
+                    <span class="machine-name">Servidor</span>
+                    <span class="machine-addr">[2001:db8::1]:1234</span>
+                  </div>
+                  <div class="machine-state">TCP <b class="tcp-state" id="netServerState">LISTEN</b></div>
+                  <div class="net-threads" id="netThreads"></div>
+                  <div class="net-disk"><span class="vz-label">disk.bin</span><div class="net-files" id="netFiles"></div></div>
+                  <pre class="machine-log" id="netServerLog"></pre>
+                </div>
+              </div>
+
+              <!-- Player -->
+              <div class="net-player" id="netPlayer">
+                <div class="tr-controls">
+                  <button class="round-btn sm" id="netFirst" title="Al inicio" aria-label="Al inicio"><svg class="ic"><use href="#i-first"/></svg></button>
+                  <button class="round-btn sm" id="netPrev" title="Paso anterior (←)" aria-label="Paso anterior"><svg class="ic"><use href="#i-back"/></svg></button>
+                  <button class="btn btn-primary btn-sm tr-play" id="netPlay"><svg class="ic"><use href="#i-play"/></svg>Reproducir</button>
+                  <button class="round-btn sm" id="netNext" title="Siguiente paso (→)" aria-label="Siguiente paso"><svg class="ic"><use href="#i-step"/></svg></button>
+                  <button class="round-btn sm" id="netLast" title="Al final" aria-label="Al final"><svg class="ic"><use href="#i-last"/></svg></button>
+                  <span class="tr-count" id="netCount"></span>
+                </div>
+                <div class="net-timeline" id="netTimeline"></div>
+              </div>
+
+              <div class="net-bottom">
+                <div class="note net-note"><strong id="netNoteTitle">Paso</strong><span id="netNote"></span></div>
+
+                <div class="net-inspector" id="packetInspector">
+                  <div class="net-insp-head"><span id="netInspTitle">Paquete en el cable</span><span class="meta" id="netInspMeta"></span></div>
+                  <div class="net-layer" id="netLayerIp"><span class="net-layer-tag">IPv6</span><span id="netIp"></span></div>
+                  <div class="net-layer" id="netLayerTcp">
+                    <span class="net-layer-tag">TCP</span>
+                    <dl class="net-tcp" id="netTcp"></dl>
+                  </div>
+                  <div class="net-layer http" id="netLayerHttp">
+                    <span class="net-layer-tag">HTTP</span>
+                    <pre class="net-http" id="netHttp"></pre>
+                    <div class="net-legend"><span><i class="lg-start"></i>línea de petición / estado</span><span><i class="lg-head"></i>encabezados</span><span><i class="lg-crlf"></i>\r\n (fin de línea)</span><span><i class="lg-body"></i>cuerpo</span></div>
+                  </div>
+                  <div class="net-layer empty" id="netLayerEmpty">Nada viaja por el cable en este paso: el trabajo ocurre dentro de una computadora.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-pane" data-step="learn">
+            <div class="learn-grid">
+              <article class="learn-card wide">
+                <h3>¿Qué acabas de ver?</h3>
+                <p>Dos programas en dos computadoras: el <strong>cliente</strong> pide una figura y el <strong>servidor</strong> la busca en su disco y la devuelve. Por debajo hay dos protocolos trabajando juntos: <strong>TCP</strong> se encarga de que los bytes lleguen completos y en orden, y <strong>HTTP</strong> define qué dicen esos bytes.</p>
+                <h4>La vida de un socket en el servidor</h4>
+                <div class="flow"><span>socket()</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>bind(1234)</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>listen()</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>accept()</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>Read / Write</span><svg class="ic"><use href="#i-arrow-r"/></svg><span>Close()</span></div>
+                <p class="ctl-hint">El cliente solo hace socket() → connect() → Write → Read → Close().</p>
+              </article>
+              <article class="learn-card">
+                <h3>El saludo de tres vías</h3>
+                <p class="analogy">"¿Me oyes?" "Sí, ¿y tú a mí?" "Sí." Y ya pueden hablar.</p>
+                <p><b>SYN</b>, <b>SYN-ACK</b> y <b>ACK</b> sincronizan los números de secuencia de ambos lados. Desde ahí, cada byte enviado tiene un número, y el <code>ack</code> dice "ya recibí todo hasta aquí".</p>
+              </article>
+              <article class="learn-card">
+                <h3>Anatomía de HTTP</h3>
+                <p>Un mensaje HTTP es <strong>texto plano</strong>: una primera línea (método y ruta, o código de estado), encabezados <code>Nombre: valor</code>, una línea vacía y después el cuerpo. Cada línea termina en <code>\r\n</code>.</p>
+                <p>Tu servidor no envía <code>Content-Length</code> en las figuras: el cliente sabe que terminó cuando el servidor cierra la conexión (<code>Connection: close</code>).</p>
+              </article>
+              <article class="learn-card">
+                <h3>Un hilo por cliente</h3>
+                <p class="analogy">Cada cliente que entra recibe su propio mesero.</p>
+                <p>El hilo principal solo hace <code>accept()</code>. Por cada conexión crea un <code>std::thread(task, client)</code> que lee, responde y cierra. Así un cliente lento no bloquea a los demás. Con miles de clientes conviene un <strong>pool</strong> fijo de hilos.</p>
+              </article>
+              <article class="learn-card">
+                <h3>Segmentos y MSS</h3>
+                <p>TCP no manda mensajes, manda un <strong>flujo de bytes</strong> partido en segmentos. En Ethernet con IPv6 cada segmento lleva como máximo 1440 bytes de datos (el MSS). Pide <b>charizard</b> y verás la respuesta llegar en varios pedazos.</p>
+              </article>
+              <article class="learn-card">
+                <h3>¿Quién cierra primero?</h3>
+                <p>Tu servidor llama a <code>Close()</code> apenas termina de escribir, así que él envía el primer <b>FIN</b>. Por eso es el servidor el que queda en <b>TIME_WAIT</b>: un detalle que importa cuando reinicias el servidor y el puerto parece ocupado.</p>
+              </article>
+            </div>
+          </div>
+
+          <div class="step-pane" data-step="build">
+            <div class="learn-grid">
+              <article class="learn-card wide">
+                <h3>Un servidor TCP mínimo en C++</h3>
+<pre class="code"><span class="k">#include</span> &lt;sys/socket.h&gt;
+<span class="k">#include</span> &lt;netinet/in.h&gt;
+<span class="k">#include</span> &lt;unistd.h&gt;
+<span class="k">#include</span> &lt;cstring&gt;
+
+<span class="k">int</span> main() {
+  <span class="k">int</span> server = socket(AF_INET, SOCK_STREAM, 0);
+  <span class="k">int</span> yes = 1;
+  setsockopt(server, SOL_SOCKET, SO_REUSEADDR, &amp;yes, <span class="k">sizeof</span> yes);
+
+  sockaddr_in addr{};
+  addr.sin_family = AF_INET;
+  addr.sin_port = htons(1234);          <span class="c">// ¡orden de red!</span>
+  addr.sin_addr.s_addr = INADDR_ANY;
+  bind(server, (sockaddr*)&amp;addr, <span class="k">sizeof</span> addr);
+  listen(server, 16);
+
+  <span class="k">while</span> (<span class="k">true</span>) {
+    <span class="k">int</span> client = accept(server, nullptr, nullptr);
+    <span class="k">char</span> buf[4096];
+    ssize_t n = recv(client, buf, <span class="k">sizeof</span> buf, 0);  <span class="c">// puede llegar incompleto</span>
+    <span class="k">const char</span>* res = <span class="s">"HTTP/1.1 200 OK\r\nContent-Length: 5\r\n\r\nhola\n"</span>;
+    send(client, res, strlen(res), 0);
+    close(client);                         <span class="c">// tu servidor: std::thread(task, client)</span>
+  }
+}</pre>
+              </article>
+              <article class="learn-card">
+                <h3>Consejos</h3>
+                <ul class="plain">
+                  <li><code>recv</code> puede devolver <strong>menos bytes</strong> de los que esperas. Lee en ciclo hasta tener el mensaje completo.</li>
+                  <li>Usa <code>htons</code>/<code>ntohs</code> para puertos: la red es big-endian.</li>
+                  <li><code>SO_REUSEADDR</code> evita el error «Address already in use» al reiniciar el servidor.</li>
+                  <li>Revisa el valor de retorno de cada llamada. Un <code>-1</code> ignorado es un bug escondido.</li>
+                </ul>
+              </article>
+              <article class="learn-card">
+                <h3>Para probar</h3>
+                <ul class="plain">
+                  <li><code>curl -v http://localhost:1234/GET/batman</code> muestra la petición y la respuesta completas.</li>
+                  <li><code>nc localhost 1234</code> te deja escribir HTTP a mano.</li>
+                  <li>Wireshark con el filtro <code>tcp.port == 1234</code> te enseña cada paquete real.</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ MODULE: INTERVIEW PATTERNS (tracer) ============ -->
+        <section id="tab-interview" class="tab-pane">
+          <div class="step-pane active" data-step="play"><div class="tracer" id="tracer-interview"></div></div>
+          <div class="step-pane" data-step="learn"><div id="tracer-interview-learn"></div></div>
+          <div class="step-pane" data-step="build"><div id="tracer-interview-build"></div></div>
+        </section>
+
+        <!-- ============ MODULE: DATA STRUCTURES (tracer) ============ -->
+        <section id="tab-datastructures" class="tab-pane">
+          <div class="step-pane active" data-step="play"><div class="tracer" id="tracer-datastructures"></div></div>
+          <div class="step-pane" data-step="learn"><div id="tracer-datastructures-learn"></div></div>
+          <div class="step-pane" data-step="build"><div id="tracer-datastructures-build"></div></div>
+        </section>
+
+        <!-- ============ MODULE: SQL (tracer) ============ -->
+        <section id="tab-sql" class="tab-pane">
+          <div class="step-pane active" data-step="play"><div class="tracer" id="tracer-sql"></div></div>
+          <div class="step-pane" data-step="learn"><div id="tracer-sql-learn"></div></div>
+          <div class="step-pane" data-step="build"><div id="tracer-sql-build"></div></div>
+        </section>
+
+        <!-- ============ MODULE: NOTEBOOK (resources) ============ -->
+        <section id="tab-cheatsheets" class="tab-pane">
+          <div class="learn-grid">
+            <article class="learn-card">
+              <h3>Ley de Amdahl</h3>
+              <p>¿Cuánto más rápido va tu programa si lo paralelizas? Depende de la parte que <strong>no</strong> se puede paralelizar.</p>
+              <div class="ctl" style="margin-top:1rem">
+                <div class="ctl-label"><label for="amdahlFraction">Parte paralela (f)</label><span id="amdahlFractionVal" class="ctl-value">85%</span></div>
+                <input type="range" id="amdahlFraction" min="10" max="99" value="85">
+              </div>
+              <div class="ctl">
+                <div class="ctl-label"><label for="amdahlProcessors">Núcleos (N)</label><span id="amdahlProcVal" class="ctl-value">8 núcleos</span></div>
+                <input type="range" id="amdahlProcessors" min="1" max="64" value="8">
+              </div>
+              <div class="metrics-grid">
+                <div class="metric-box"><div class="metric-label">Aceleración</div><div id="amdahlSpeedupVal" class="metric-value">3.90x</div></div>
+                <div class="metric-box"><div class="metric-label">Límite</div><div id="amdahlMaxSpeedupVal" class="metric-value">6.67x</div></div>
+                <div class="metric-box"><div class="metric-label">Eficiencia</div><div id="amdahlEfficiencyVal" class="metric-value">48.8%</div></div>
+              </div>
+              <div class="note"><strong>Fórmula</strong>S(N) = 1 / ((1 − f) + f / N)</div>
+            </article>
+
+            <article class="learn-card">
+              <h3>Chuleta de sincronización</h3>
+<pre class="code"><span class="c">// Mutex</span>
+pthread_mutex_lock(&amp;m);  <span class="c">/* ... */</span>  pthread_mutex_unlock(&amp;m);
+<span class="c">// Semáforo</span>
+sem_wait(&amp;s);  <span class="c">/* ... */</span>  sem_post(&amp;s);
+<span class="c">// Barrera</span>
+pthread_barrier_wait(&amp;b);
+<span class="c">// Atómico</span>
+atomic_fetch_add(&amp;contador, 1);</pre>
+              <h4>Sockets</h4>
+              <div class="flow"><span>socket</span><span>bind</span><span>listen</span><span>accept</span><span>recv/send</span><span>close</span></div>
+            </article>
+
+            <article class="learn-card wide">
+              <h3>Algoritmos de ordenamiento de un vistazo</h3>
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr><th>Algoritmo</th><th>Mejor</th><th>Promedio</th><th>Peor</th><th>Memoria</th><th>Estable</th><th>Úsalo cuando…</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td><strong>Quick Sort</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n)</td><td>No</td><td>Necesitas velocidad en memoria en el caso general.</td></tr>
+                    <tr><td><strong>Merge Sort</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>Sí</td><td>Necesitas estabilidad o garantía en el peor caso.</td></tr>
+                    <tr><td><strong>Heap Sort</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>No</td><td>La memoria es muy limitada.</td></tr>
+                    <tr><td><strong>Shell Sort</strong></td><td>O(n log n)</td><td>O(n^(4/3))</td><td>O(n²)</td><td>O(1)</td><td>No</td><td>Arreglos medianos, sin recursión.</td></tr>
+                    <tr><td><strong>Insertion Sort</strong></td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Sí</td><td>Datos casi ordenados o muy pocos (n ≤ 16).</td></tr>
+                    <tr><td><strong>Selection Sort</strong></td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>No</td><td>Escribir es muy caro (hace pocas escrituras).</td></tr>
+                    <tr><td><strong>Bubble Sort</strong></td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Sí</td><td>Para aprender; casi nunca en producción.</td></tr>
+                    <tr><td><strong>Radix Sort</strong></td><td>O(n·k)</td><td>O(n·k)</td><td>O(n·k)</td><td>O(n + k)</td><td>Sí</td><td>Enteros o claves de largo fijo.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          </div>
+        </section>
+
       </div>
     </section>
-
-    <!-- ========================================== -->
-    <!-- TAB 4: THEORY & CHEATSHEETS                -->
-    <!-- ========================================== -->
-    <section id="tab-cheatsheets" class="tab-pane">
-      <div class="theory-grid">
-        <!-- Card 1: Amdahl's Law Calculator -->
-        <div class="theory-card">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-            <h3 style="margin:0;">⚡ Ley de Amdahl</h3>
-            <span class="badge badge-amber">CI-0117 Paralela</span>
-          </div>
-          <p>Calcula el límite teórico de aceleración (Speedup) al paralelizar un programa según su fracción paralelizable (f):</p>
-          
-          <div class="control-group">
-            <div class="control-label">
-              <span>Fracción Paralela (f)</span>
-              <span id="amdahlFractionVal" class="control-value">85%</span>
-            </div>
-            <input type="range" id="amdahlFraction" min="10" max="99" value="85">
-          </div>
-
-          <div class="control-group">
-            <div class="control-label">
-              <span>Procesadores / Cores (N)</span>
-              <span id="amdahlProcVal" class="control-value">8 Cores</span>
-            </div>
-            <input type="range" id="amdahlProcessors" min="1" max="64" value="8">
-          </div>
-
-          <div class="metrics-grid" style="margin-top:1rem;">
-            <div class="metric-box">
-              <div class="metric-label">Aceleración S(N)</div>
-              <div id="amdahlSpeedupVal" class="metric-value" style="color:var(--cyan);">3.90x</div>
-            </div>
-            <div class="metric-box">
-              <div class="metric-label">Límite Teórico S(∞)</div>
-              <div id="amdahlMaxSpeedupVal" class="metric-value" style="color:var(--emerald);">6.67x</div>
-            </div>
-            <div class="metric-box">
-              <div class="metric-label">Eficiencia</div>
-              <div id="amdahlEfficiencyVal" class="metric-value" style="color:var(--amber);">48.8%</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 2: Coffman Deadlock Conditions -->
-        <div class="theory-card">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-            <h3 style="margin:0;">🔒 Condiciones de Coffman</h3>
-            <span class="badge badge-rose">CI-0117 Concurrente</span>
-          </div>
-          <p>Las 4 condiciones que deben cumplirse simultáneamente para que ocurra un interbloqueo (deadlock):</p>
-          <ul style="font-size:0.8rem; color:var(--text-dim); padding-left:1.2rem; display:flex; flex-direction:column; gap:0.4rem;">
-            <li><strong>1. Exclusión Mutua:</strong> Un recurso solo puede ser usado por un hilo a la vez.</li>
-            <li><strong>2. Retención y Espera (Hold & Wait):</strong> Hilos retienen recursos mientras solicitan nuevos.</li>
-            <li><strong>3. No Apropiación (No Preemption):</strong> Ningún recurso puede ser quitado por la fuerza.</li>
-            <li><strong>4. Espera Circular (Circular Wait):</strong> Cadena cerrada donde $H_1$ espera a $H_2$, y $H_2$ espera a $H_1$.</li>
-          </ul>
-          <div class="code-snippet" style="margin-top:0.75rem;">
-            // Prevención en C: Jerarquía de recursos de Dijkstra
-            sem_t entry_permit; // ¡Rompe matemáticamente la espera circular!
-          </div>
-        </div>
-
-        <!-- Card 3: BSD Socket Lifecycle -->
-        <div class="theory-card">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-            <h3 style="margin:0;">🌐 Ciclo de Vida Sockets BSD</h3>
-            <span class="badge badge-cyan">CI-0123 Redes</span>
-          </div>
-          <p>Máquina de estados estándar para servidores y clientes TCP en sistemas POSIX / Linux:</p>
-          <div class="code-snippet">
-Servidor: socket() -> bind() -> listen() -> accept() -> recv/send() -> close()
-Cliente:  socket() -> connect() -> send/recv() -> close()
-          </div>
-          <p style="font-size:0.75rem; color:var(--text-muted); margin-top:0.5rem;">
-            En servidores concurrentes con Thread Pool, <code>accept()</code> entrega el file descriptor resultante a una cola protegida por semáforos.
-          </p>
-        </div>
-
-        <!-- Card 4: POSIX Synchronization Primitives -->
-        <div class="theory-card">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
-            <h3 style="margin:0;">🧵 Primitivas POSIX & Atomics</h3>
-            <span class="badge badge-purple">Guía de Código en C</span>
-          </div>
-          <p>Sintaxis estándar para compilación con <code>gcc -std=c11 -pthread -O2</code>:</p>
-          <div class="code-snippet">
-// 1. Mutex (Exclusión con dueño):
-pthread_mutex_lock(&m); /* SC */ pthread_mutex_unlock(&m);
-
-// 2. Semáforo (Cupo / Notificación):
-sem_wait(&s);           /* Cupo */ sem_post(&s);
-
-// 3. Barrera (Fase grupal):
-pthread_barrier_wait(&b);
-
-// 4. Operación Atómica (Hardware lock-free):
-atomic_fetch_add(&contador, 1);
-          </div>
-        </div>
-      </div>
-
-      <!-- Complexity Table -->
-      <div class="glass-card" style="margin-top:1.5rem;">
-        <div class="card-title">
-          <span>Tabla Comparativa Big-O de Algoritmos de Ordenamiento (CI-0112)</span>
-          <span class="badge badge-cyan">Cheat Sheet Exámenes</span>
-        </div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Algoritmo</th>
-                <th>Mejor Caso</th>
-                <th>Caso Promedio</th>
-                <th>Peor Caso</th>
-                <th>Memoria Auxiliar</th>
-                <th>Estabilidad</th>
-                <th>¿Cuándo usarlo en proyectos?</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td><strong>Quick Sort</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n²)</td><td>O(log n)</td><td>No</td><td>Propósito general en memoria RAM (alta localidad de caché).</td></tr>
-              <tr><td><strong>Merge Sort</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(n)</td><td>Sí</td><td>Cuando se requiere estabilidad y garantía estricta O(n log n).</td></tr>
-              <tr><td><strong>Heap Sort</strong></td><td>O(n log n)</td><td>O(n log n)</td><td>O(n log n)</td><td>O(1)</td><td>No</td><td>Sistemas embebidos con memoria RAM sumamente restringida.</td></tr>
-              <tr><td><strong>Shell Sort</strong></td><td>O(n log n)</td><td>O(n^(4/3))</td><td>O(n²)</td><td>O(1)</td><td>No</td><td>Arreglos medianos donde se busca rapidez sin recursión.</td></tr>
-              <tr><td><strong>Insertion Sort</strong></td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Sí</td><td>Arreglos casi ordenados o muy pequeños (n ≤ 16).</td></tr>
-              <tr><td><strong>Selection Sort</strong></td><td>O(n²)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>No</td><td>Fines pedagógicos o cuando el costo de escritura es muy alto.</td></tr>
-              <tr><td><strong>Bubble Sort</strong></td><td>O(n)</td><td>O(n²)</td><td>O(n²)</td><td>O(1)</td><td>Sí</td><td>Comprender inversiones e invariantes en primer año.</td></tr>
-              <tr><td><strong>Radix Sort (LSD)</strong></td><td>O(n · k)</td><td>O(n · k)</td><td>O(n · k)</td><td>O(n + k)</td><td>Sí</td><td>Ordenar enteros o claves de longitud fija en tiempo lineal.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    </div> <!-- End of #view-lab -->
-
   </main>
 
-  <!-- Application Footer -->
-  <footer class="footer">
-    <div class="footer-content">
-      <div>
-        <strong>CS Interactive Lab</strong> • Designed & Engineered by <a href="https://github.com/josuetorres27" target="_blank">Josué Torres Sibaja</a>
-      </div>
-      <div>
-        Licensed under <a href="https://opensource.org/licenses/MIT" target="_blank">MIT</a> • Open-Source Educational Suite
+  <!-- Bit, the guide -->
+  <div class="guide" id="guide" hidden>
+    <div class="bit-slot" id="guideBit" title="Bit, tu guía" role="button" tabindex="0" aria-label="Mostrar consejo de Bit"></div>
+    <div class="bubble" id="guideBubble" hidden>
+      <div id="guideText"></div>
+      <div class="guide-actions">
+        <button id="guideTour" class="primary">Enséñame</button>
+        <button id="guideClose">Entendido</button>
       </div>
     </div>
+  </div>
+
+  <!-- Coach-mark tour -->
+  <div class="tour-spot" id="tourSpot" hidden></div>
+  <div class="tour-card" id="tourCard" hidden>
+    <div class="bubble">
+      <div class="tour-step" id="tourStep">Paso 1 de 4</div>
+      <h4 id="tourTitle"></h4>
+      <div id="tourText"></div>
+      <div class="guide-actions">
+        <button id="tourNext" class="primary">Siguiente</button>
+        <button id="tourSkip">Saltar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    CS Interactive Lab · hecho por <a href="https://github.com/josuetorres27" target="_blank" rel="noopener">Josué Torres Sibaja</a> · código abierto (MIT)
   </footer>
 
-  <!-- Toast Notification Container -->
-  <div id="toastContainer" class="toast-container"></div>
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
   <!-- Scripts -->
   <script src="js/audio.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/account.js"></script>
   <script src="js/modules/figuresData.js"></script>
   <script src="js/modules/algorithms.js"></script>
   <script src="js/modules/concurrency.js"></script>
+  <script src="js/modules/httpsim.js"></script>
   <script src="js/modules/networking.js"></script>
   <script src="js/modules/cheatsheets.js"></script>
+  <script src="js/tracer.js"></script>
+  <script src="js/modules/interview.js"></script>
+  <script src="js/modules/datastructures.js"></script>
+  <script src="js/modules/sql.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

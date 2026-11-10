@@ -20,7 +20,7 @@ class CheatsheetsLab {
       this.processorCount = n;
 
       document.getElementById('amdahlFractionVal').textContent = `${(f * 100).toFixed(0)}%`;
-      document.getElementById('amdahlProcVal').textContent = `${n} Cores`;
+      document.getElementById('amdahlProcVal').textContent = `${n} núcleos`;
 
       // Amdahl's formula: S(n) = 1 / ((1 - f) + f / n)
       const speedup = 1 / ((1 - f) + f / n);
@@ -35,6 +35,9 @@ class CheatsheetsLab {
     if (fractionSlider && procSlider) {
       fractionSlider.addEventListener('input', updateCalc);
       procSlider.addEventListener('input', updateCalc);
+      const mark = () => { if (window.account) window.account.record('cheatsheets', 'amdahl'); };
+      fractionSlider.addEventListener('change', mark);
+      procSlider.addEventListener('change', mark);
       updateCalc();
     }
   }
