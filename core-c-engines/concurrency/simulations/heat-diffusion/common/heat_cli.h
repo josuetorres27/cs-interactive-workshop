@@ -9,7 +9,7 @@
  * --sleep-barrier (heat_pthreads only) uses pthread_barrier_wait instead of
  * the spinning barrier, to compare both.
  *
- * Author: Josue Torres Sibaja. MIT License.
+ * Author: Josue Torres. MIT License.
  */
 #ifndef HEAT_CLI_H
 #define HEAT_CLI_H
