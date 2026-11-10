@@ -46,6 +46,10 @@ module.exports = (t, { read, WEB, createEnv }) => {
     jsFiles.forEach((f) => {
       t.test(`${f}: every getElementById target exists in the page`, () => {
         [...js[f].matchAll(/getElementById\('([^'$`]+)'\)/g)].forEach((m) => t.ok(ids.includes(m[1]), `#${m[1]}`));
+        // Stations that alias getElementById as this.$('id')
+        if (js[f].includes('$(id) { return document.getElementById(id); }')) {
+          [...js[f].matchAll(/this\.\$\('([\w-]+)'\)/g)].forEach((m) => t.ok(ids.includes(m[1]), `#${m[1]}`));
+        }
       });
     });
   });
