@@ -14,6 +14,7 @@ module.exports = (t, { read, WEB, createEnv }) => {
   t.suite('integrity · HTML structure', () => {
     t.test('the page is declared in Spanish and is mobile-ready', () => { t.includes(html, '<html lang="es">'); t.includes(html, 'name="viewport"'); });
     t.test('the title starts with the product name', () => t.includes(html, '<title>CS Interactive Lab'));
+    t.test('attributes are separated by spaces (no "a"b= glitches)', () => t.deepEq(html.match(/="[^"\n]*"[a-zA-Z-]+=/g) || [], []));
     t.test('element ids are unique', () => { const dup = ids.filter((id, i) => ids.indexOf(id) !== i); t.deepEq(dup, []); });
     t.test('every script tag points to an existing file', () => [...html.matchAll(/<script src="([^"]+)"/g)].forEach((m) => t.ok(fs.existsSync(path.join(WEB, m[1])), m[1])));
     t.test('the HTTP model loads before the networking station', () => t.ok(html.indexOf('httpsim.js') < html.indexOf('modules/networking.js')));
@@ -26,7 +27,7 @@ module.exports = (t, { read, WEB, createEnv }) => {
     t.test('every internal link goes to a real route', () => {
       const env = createEnv(); const { AREAS, MODULES } = env.load('js/app.js', ['AREAS', 'MODULES']);
       [...html.matchAll(/href="#\/([^"]*)"/g)].map((m) => m[1].split('/').filter(Boolean)).forEach((p) => {
-        const ok = p.length === 0 || p[0] === 'que-es' || (p[0] === 'lab' && (!p[1] || MODULES[p[1]])) || (p[0] === 'mesa' && AREAS[p[1]]);
+        const ok = p.length === 0 || p[0] === 'que-es' || p[0] === 'perfil' || (p[0] === 'lab' && (!p[1] || MODULES[p[1]])) || (p[0] === 'mesa' && AREAS[p[1]]);
         t.ok(ok, p.join('/'));
       });
     });
