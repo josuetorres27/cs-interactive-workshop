@@ -4,7 +4,7 @@
  *
  * usage: heat_serial [rows] [cols] [epsilon]
  *
- * Author: Josue Torres Sibaja
+ * Author: Josue Torres
  * Licensed under the MIT License.
  */
 #include "../../common/heat_cli.h"
