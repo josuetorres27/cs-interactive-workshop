@@ -93,9 +93,9 @@ int main() {
   printf("====================================================================\n");
   printf("   BOUNDED BUFFER PRODUCER-CONSUMER - POSIX SEMAPHORES & MUTEX     \n");
   printf("====================================================================\n");
-  printf(" [✓] Buffer Capacity: %d slots\n", BUFFER_CAPACITY);
-  printf(" [✓] Total Items:     %d items\n", TOTAL_ITEMS);
-  printf(" [✓] Workers:         2 Producers, 2 Consumers\n");
+  printf(" [OK] Buffer Capacity: %d slots\n", BUFFER_CAPACITY);
+  printf(" [OK] Total Items:     %d items\n", TOTAL_ITEMS);
+  printf(" [OK] Workers:         2 Producers, 2 Consumers\n");
   printf("====================================================================\n\n");
 
   g_bb.head = 0;
@@ -128,7 +128,7 @@ int main() {
   pthread_mutex_destroy(&g_bb.mutex);
 
   printf("\n====================================================================\n");
-  printf(" [✓] All items successfully produced and consumed without race conditions.\n");
+  printf(" [OK] All items successfully produced and consumed without race conditions.\n");
   printf("====================================================================\n");
   return EXIT_SUCCESS;
 }
