@@ -377,6 +377,9 @@
       this.$('.tr-count').textContent = `${this.idx + 1} / ${this.frames.length}`;
       this.$('.tr-first').disabled = this.$('.tr-prev').disabled = this.idx === 0;
       this.$('.tr-last').disabled = this.$('.tr-next').disabled = this.idx === this.frames.length - 1;
+
+      // Reaching the last line counts as walking the problem through
+      if (this.idx === this.frames.length - 1 && window.account) window.account.record(this.id, `solve:${p.id}`);
     }
 
     renderLearn() {
