@@ -60,6 +60,7 @@ class ConcurrencyLab {
         document.querySelectorAll('.conc-subtab-btn').forEach(b => b.classList.remove('active'));
         e.currentTarget.classList.add('active');
         this.activeSubtab = e.currentTarget.dataset.subtab;
+        if (this.activeSubtab === 'patterns' && window.account) window.account.record('concurrency', 'patterns');
         this.updateControlPanels();
       });
     });
@@ -137,6 +138,7 @@ class ConcurrencyLab {
     if (btnRunHeat) {
       btnRunHeat.addEventListener('click', () => {
         this.heatRunning = !this.heatRunning;
+        if (this.heatRunning && window.account) window.account.record('concurrency', 'heat');
         btnRunHeat.innerHTML = this.heatRunning ? '<svg class="ic"><use href="#i-pause"/></svg>Pausar' : '<svg class="ic"><use href="#i-play"/></svg>Iniciar';
         btnRunHeat.className = this.heatRunning ? 'btn btn-danger' : 'btn btn-primary';
       });
@@ -146,6 +148,7 @@ class ConcurrencyLab {
     if (btnStepHeat) {
       btnStepHeat.addEventListener('click', () => {
         this.stepHeatDiffusion();
+        if (window.account) window.account.record('concurrency', 'heat');
         window.soundController.playTone(500, 'sine', 0.02);
       });
     }
@@ -218,12 +221,14 @@ class ConcurrencyLab {
     }
 
     this.deadlockDetected = true;
+    if (window.account) window.account.record('concurrency', 'deadlock');
     window.soundController.playDeadlockAlert();
     const alertBanner = document.getElementById('deadlockAlertBanner');
     if (alertBanner) alertBanner.style.display = 'flex';
   }
 
   resolveCoffmanDeadlock() {
+    if (window.account) window.account.record('concurrency', 'resolve');
     this.semaphoresEnabled = true;
     const semToggle = document.getElementById('toggleSemaphores');
     if (semToggle) semToggle.checked = true;
