@@ -96,9 +96,9 @@ int main(int argc, char* argv[]) {
   printf("========================================================================\n");
   printf("      SYNCHRONIZATION PRIMITIVES BENCHMARK (HIGH CONTENTION)            \n");
   printf("========================================================================\n");
-  printf(" [✓] Worker Threads:   %d threads\n", num_threads);
-  printf(" [✓] Ops per Thread:   %d operations\n", OPS_PER_THREAD);
-  printf(" [✓] Total Operations: %lld operations\n", (long long)num_threads * OPS_PER_THREAD);
+  printf(" [OK] Worker Threads:   %d threads\n", num_threads);
+  printf(" [OK] Ops per Thread:   %d operations\n", OPS_PER_THREAD);
+  printf(" [OK] Total Operations: %lld operations\n", (long long)num_threads * OPS_PER_THREAD);
   printf("========================================================================\n\n");
 
   sem_init(&g_sem, 0, 1);
