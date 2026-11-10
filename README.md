@@ -115,9 +115,9 @@ make test
 
 ---
 
-## 🧪 Comprehensive Automated Test Suite (723 Tests)
+## 🧪 Comprehensive Automated Test Suite (782 Tests)
 
-The system includes a custom zero-dependency C/C++ assertion test harness (`tests/runner.h`) along with Python integration tests and a dependency-free JavaScript test runner for the web lab, totaling **723 automated test cases**:
+The system includes a custom zero-dependency C/C++ assertion test harness (`tests/runner.h`) along with Python integration tests and a dependency-free JavaScript test runner for the web lab, totaling **782 automated test cases**:
 
 | Module / Engine | Test File | Test Count | Scope & Verifications |
 | :--- | :--- | :---: | :--- |
@@ -127,8 +127,8 @@ The system includes a custom zero-dependency C/C++ assertion test harness (`test
 | **Concurrency: Patterns** | `tests/concurrency/test_patterns.c` | **50** | FIFO bounded buffer integrity, dining philosophers deadlock freedom, H2O stoichiometric ratio ($2:1$), C11 atomic fetch-and-add race freedom. |
 | **Distributed Networking** | `tests/networking/test_networking.cpp` | **50** | HTTP 1.1 request line parsing, header extraction, response framing, block filesystem chunking, asset integrity for all 12 ASCII art figures. |
 | **Web Assets & Config** | `tests/web/test_web_assets.py` | **23** | Single-Page Application DOM anchors, CSS design system variables, Vanilla JS syntax, Web Audio API integration, and Firebase Hosting configuration. |
-| **Web Lab (JavaScript)** | `tests/web/run.js` | **390** | HTTP-over-TCP model checked against `Server.cc` routing (200/404/400, LIST, segmentation, seq/ack numbers, handshake and teardown), tracer engine, interview/data-structure/SQL problems vs. reference solutions on presets and seeded random inputs, sorting/roundabout/heat/Amdahl simulations, router, and page/stylesheet integrity. |
-| **TOTAL** | **7 Test Suites** | **723** | **100% Automated & Passing (0 Failures, 0 Memory Leaks)** |
+| **Web Lab (JavaScript)** | `tests/web/run.js` | **449** | Optional accounts (progress model, guest storage, Google sign-in merge and sync against a fake Firebase backend, Firestore rules), HTTP-over-TCP model checked against `Server.cc` routing (200/404/400, LIST, segmentation, seq/ack numbers, handshake and teardown), tracer engine, interview/data-structure/SQL problems vs. reference solutions on presets and seeded random inputs, sorting/roundabout/heat/Amdahl simulations, router, and page/stylesheet integrity. |
+| **TOTAL** | **7 Test Suites** | **782** | **100% Automated & Passing (0 Failures, 0 Memory Leaks)** |
 
 ---
 
