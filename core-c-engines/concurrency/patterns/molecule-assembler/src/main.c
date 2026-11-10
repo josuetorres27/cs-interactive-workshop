@@ -6,8 +6,8 @@
  * Classic barrier synchronization problem where two Hydrogen threads
  * and one Oxygen thread must rendezvous to form a stable water molecule.
  *
- * Author: Josue Torres Sibaja
- * Copyright (c) 2024-2025 Josue Torres Sibaja
+ * Author: Josue Torres
+ * Copyright (c) 2024-2025 Josue Torres
  * Licensed under the MIT License.
  */
 
