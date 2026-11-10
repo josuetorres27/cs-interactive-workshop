@@ -4,8 +4,8 @@
  *
  * Interface for the custom block-based file system simulating a disk inside a binary file (disk.bin).
  *
- * Author: Josue Torres Sibaja
- * Copyright (c) 2025 Josue Torres Sibaja
+ * Author: Josue Torres
+ * Copyright (c) 2025 Josue Torres
  * Licensed under the MIT License.
  */
 
