@@ -6,8 +6,8 @@
  * Implements Dijkstra's resource hierarchy solution to the Dining Philosophers
  * problem, breaking the Circular Wait condition to guarantee deadlock-free execution.
  *
- * Author: Josue Torres Sibaja
- * Copyright (c) 2024-2025 Josue Torres Sibaja
+ * Author: Josue Torres
+ * Copyright (c) 2024-2025 Josue Torres
  * Licensed under the MIT License.
  */
 
