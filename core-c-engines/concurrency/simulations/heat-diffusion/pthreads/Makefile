@@ -1,19 +1,21 @@
-CC = gcc
-CFLAGS = -std=c11 -Wall -Wextra -O3 -pthread -lm
-BIN_DIR = bin
-BUILD_DIR = build
-TARGET = $(BIN_DIR)/heat_pthreads
+CC ?= gcc
+CFLAGS ?= -std=c11 -Wall -Wextra -O3
+TARGET = bin/heat_pthreads
+SRCS = src/main.c ../common/heat.c 
+HDRS = ../common/heat.h ../common/heat_cli.h
 
 all: $(TARGET)
 
-$(TARGET): src/main.c | $(BIN_DIR)
-	$(CC) $(CFLAGS) $< -o $@
+$(TARGET): $(SRCS) $(HDRS) | bin
+	$(CC) $(CFLAGS) -pthread $(SRCS) -o $@ -lm 
 
-$(BIN_DIR):
+bin:
 	mkdir -p $@
 
 run: $(TARGET)
-	./$(TARGET) 150 150 4 0.05
+	./$(TARGET) 200 200 4 0.01 --compare
 
 clean:
-	rm -rf $(BIN_DIR) $(BUILD_DIR)
+	rm -rf bin build
+
+.PHONY: all run clean
