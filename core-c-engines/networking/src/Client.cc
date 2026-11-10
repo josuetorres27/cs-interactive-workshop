@@ -4,8 +4,8 @@
  *
  * Client implementation that connects to the ASCII server over TCP/IP sockets to request and display figures.
  *
- * Author: Josue Torres Sibaja
- * Copyright (c) 2025 Josue Torres Sibaja
+ * Author: Josue Torres
+ * Copyright (c) 2025 Josue Torres
  * Licensed under the MIT License.
  */
 
