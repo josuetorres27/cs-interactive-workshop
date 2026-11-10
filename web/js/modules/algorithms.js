@@ -420,6 +420,7 @@ void heapSort(std::vector<int>& a) {
     } catch (e) {
       // Interrupted
     } finally {
+      this.isRunning = false;
       this.cleanupRun();
     }
   }
