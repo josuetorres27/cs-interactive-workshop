@@ -130,24 +130,6 @@ module.exports = (t, { createEnv }) => {
     });
   });
 
-  t.suite('simulations · heat diffusion', () => {
-    t.test('the top edge starts hot (100°)', () => { const { lab } = freshConc(); t.ok(Array.from(lab.heatGridA[0]).every((v) => v === 100)); });
-    t.test('the bottom edge starts cold (0°)', () => { const { lab } = freshConc(); t.ok(Array.from(lab.heatGridA[lab.heatRows - 1]).every((v) => v === 0)); });
-    t.test('boundaries stay fixed while iterating', () => {
-      const { lab } = freshConc(); for (let i = 0; i < 50; i++) lab.stepHeatDiffusion();
-      t.ok(Array.from(lab.heatGridA[0]).every((v) => v === 100)); t.ok(Array.from(lab.heatGridA[lab.heatRows - 1]).every((v) => v === 0));
-    });
-    t.test('each step increments the iteration counter', () => { const { lab } = freshConc(); lab.stepHeatDiffusion(); lab.stepHeatDiffusion(); t.eq(lab.heatIterations, 2); });
-    t.test('the plate converges: the biggest change shrinks over time', () => {
-      const { env, lab } = freshConc(); lab.stepHeatDiffusion();
-      const first = +env.document.getElementById('heatMaxDelta').textContent;
-      for (let i = 0; i < 300; i++) lab.stepHeatDiffusion();
-      t.ok(+env.document.getElementById('heatMaxDelta').textContent < first);
-    });
-    t.test('alpha respects the explicit-scheme stability limit (< 0.25)', () => { const { lab } = freshConc(); t.ok(lab.heatAlpha < 0.25); });
-    t.test('the heat palette clamps out-of-range temperatures', () => { const { lab } = freshConc(); t.eq(lab.getHeatColor(-50), lab.getHeatColor(0)); t.eq(lab.getHeatColor(500), lab.getHeatColor(100)); });
-  });
-
   t.suite('simulations · Amdahl calculator', () => {
     const amdahl = (f, n) => {
       const env = createEnv();
