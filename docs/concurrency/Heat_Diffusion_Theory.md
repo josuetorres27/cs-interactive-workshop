@@ -53,26 +53,43 @@ $$\text{start\_row}(p) = 1 + \left\lfloor \frac{p \cdot (R-2)}{P} \right\rfloor,
 +------------------------------------------------+  Row R-1 (Boundary: Constant Temp)
 ```
 
-### 2.2 POSIX Threads Implementation
-- **Double Buffering:** Alternating between `matrix_a` and `matrix_b` avoids memory allocation overhead per step.
-- **Barrier Synchronization (`pthread_barrier_t`):** Two barrier synchronizations per iteration:
-  1. *Computation Barrier:* Ensures all threads have finished computing new values from the read matrix before any thread swaps pointers.
-  2. *Convergence Reduction:* Aggregates maximum delta across thread-local variables.
+### 2.2 POSIX Threads Implementation (`common/heat.c`)
+All three programs share one library (`simulations/heat-diffusion/common`): `heat_step_rows` is the kernel, `heat_partition` splits the interior rows, and `heat_solve_serial`, `heat_solve_pthreads` and `heat_solve_openmp` are the solvers. Because every new value depends only on the previous grid, the three solvers produce **bit-for-bit identical** grids; the test suite checks this for 1 to 16 threads.
 
-### 2.3 OpenMP Multi-Core Scaling
-Using work-sharing directives with loop scheduling:
+- **Double buffering:** each thread keeps its *own* `cur`/`next` pointers and swaps them locally, so no shared pointer is written during the solve.
+- **One barrier per iteration.** Each thread writes its local maximum change into `deltas[parity][tid]` (`parity = iteration % 2`), waits at the barrier, then *every* thread reads all slots and computes the same global maximum, so all of them take the same continue/stop decision without a second barrier. The two parity slots matter: a fast thread may already write iteration $k+1$ while a slow one still reads iteration $k$.
+- **No false sharing:** each slot is padded to a 64-byte cache line.
+- **Two barriers to compare:**
+  - `HEAT_BARRIER_SPIN` (default): a sense-reversing barrier on C11 atomics. The last thread to arrive flips a shared `sense` flag; the others spin on it briefly and then `sched_yield()`.
+  - `HEAT_BARRIER_SLEEP` (`--sleep-barrier`): `pthread_barrier_wait`, which puts waiting threads to sleep in the kernel and wakes them every iteration.
+- **Safe start:** workers wait on a start gate (mutex + condition variable). If any `pthread_create` fails, the gate says "abort" instead of "go", so no thread is left blocked on a barrier that can never fill.
+
+### 2.3 OpenMP Multi-Core Scaling (`common/heat_omp.c`)
+Threads are created once for the whole solve, not once per iteration:
 ```c
-#pragma omp parallel for collapse(2) schedule(static) reduction(max:max_delta)
-for (size_t r = 1; r < rows - 1; ++r) {
-    for (size_t c = 1; c < cols - 1; ++c) {
-        double new_val = 0.25 * (current[r-1][c] + current[r+1][c] +
-                                 current[r][c-1] + current[r][c+1]);
-        double diff = fabs(new_val - current[r][c]);
-        if (diff > max_delta) max_delta = diff;
-        next[r][c] = new_val;
-    }
+#pragma omp parallel num_threads(threads)
+while (!done) {
+    #pragma omp for schedule(static) reduction(max:step_delta)
+    for (int i = 1; i < rows - 1; ++i)
+        step_delta = fmax(step_delta, heat_step_rows(cur, next, cols, r, i, i + 1));
+    #pragma omp single   /* implicit barriers before and after */
+    { swap(&cur, &next); done = step_delta <= eps || ++iterations >= max_iterations; step_delta = 0.0; }
 }
 ```
+
+### 2.4 Measured behaviour
+4 threads, $\varepsilon = 0.05$, 557 iterations; every run produced the same grid as the serial solver:
+
+| Plate | pthreads (spin barrier) | pthreads (sleep barrier) | OpenMP |
+|---|---|---|---|
+| 120 × 120 | 1.73x | 0.19x | 2.52x |
+| 400 × 400 | 3.36x | 1.40x | 3.50x |
+| 1000 × 1000 | 1.42x | 1.60x | 1.37x |
+
+- **Small plates:** one iteration takes microseconds, so the cost of the barrier dominates. A sleeping barrier makes 4 threads about 5x *slower* than one.
+- **Large plates:** two 8 MB grids no longer fit in cache and every engine is limited by memory bandwidth, not by the number of threads.
+
+Reproduce with `./pthreads/bin/heat_pthreads 400 400 4 0.05 --compare [--sleep-barrier]` and `./openmp/bin/heat_openmp 400 400 4 0.05 --compare`.
 
 ---
 
