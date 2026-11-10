@@ -89,8 +89,8 @@ int main() {
   printf("====================================================================\n");
   printf("    H2O MOLECULE ASSEMBLER - BARRIER & SEMAPHORE RENDEZVOUS        \n");
   printf("====================================================================\n");
-  printf(" [✓] Target Molecules: %d H2O molecules\n", TOTAL_MOLECULES);
-  printf(" [✓] Atoms Required:   %d Hydrogen, %d Oxygen\n", TOTAL_MOLECULES * 2, TOTAL_MOLECULES);
+  printf(" [OK] Target Molecules: %d H2O molecules\n", TOTAL_MOLECULES);
+  printf(" [OK] Atoms Required:   %d Hydrogen, %d Oxygen\n", TOTAL_MOLECULES * 2, TOTAL_MOLECULES);
   printf("====================================================================\n\n");
 
   pthread_mutex_init(&g_h2o.lock, NULL);
@@ -122,7 +122,7 @@ int main() {
   pthread_mutex_destroy(&g_h2o.lock);
 
   printf("\n====================================================================\n");
-  printf(" [✓] Successfully synthesized %d H2O molecules without race conditions.\n", TOTAL_MOLECULES);
+  printf(" [OK] Successfully synthesized %d H2O molecules without race conditions.\n", TOTAL_MOLECULES);
   printf("====================================================================\n");
   return EXIT_SUCCESS;
 }
