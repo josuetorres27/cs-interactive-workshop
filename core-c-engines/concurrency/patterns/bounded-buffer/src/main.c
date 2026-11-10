@@ -6,8 +6,8 @@
  * Classic producer-consumer pattern with bounded ring buffer using
  * POSIX counting semaphores (empty/full) and a mutex for critical section.
  *
- * Author: Josue Torres Sibaja
- * Copyright (c) 2024-2025 Josue Torres Sibaja
+ * Author: Josue Torres
+ * Copyright (c) 2024-2025 Josue Torres
  * Licensed under the MIT License.
  */
 
