@@ -3,7 +3,7 @@ class ConcurrencyLab {
   constructor() {
     this.canvas = null;
     this.ctx = null;
-    this.activeSubtab = 'roundabout'; // 'roundabout' | 'heat' | 'patterns'
+    this.activeSubtab = 'roundabout'; // 'roundabout' | 'patterns'
     this.animationId = null;
 
     // --- Roundabout State ---
@@ -22,16 +22,6 @@ class ConcurrencyLab {
     this.autoSpawn = true;
     this.lastSpawnTime = 0;
     this.spawnInterval = 1200; // ms
-
-    // --- Heat Diffusion State ---
-    this.heatRows = 40;
-    this.heatCols = 50;
-    this.heatGridA = [];
-    this.heatGridB = [];
-    this.heatThreads = 4;
-    this.heatRunning = false;
-    this.heatIterations = 0;
-    this.heatAlpha = 0.22; // CFL safe (< 0.25)
   }
 
   init() {
@@ -41,7 +31,6 @@ class ConcurrencyLab {
     this.resizeCanvas();
     window.addEventListener('resize', () => this.resizeCanvas());
 
-    this.initHeatGrid();
     this.setupEventListeners();
     this.startLoop();
   }
@@ -132,48 +121,12 @@ class ConcurrencyLab {
         this.resolveCoffmanDeadlock();
       });
     }
-
-    // Heat controls
-    const btnRunHeat = document.getElementById('btnRunHeat');
-    if (btnRunHeat) {
-      btnRunHeat.addEventListener('click', () => {
-        this.heatRunning = !this.heatRunning;
-        if (this.heatRunning && window.account) window.account.record('concurrency', 'heat');
-        btnRunHeat.innerHTML = this.heatRunning ? '<svg class="ic"><use href="#i-pause"/></svg>Pausar' : '<svg class="ic"><use href="#i-play"/></svg>Iniciar';
-        btnRunHeat.className = this.heatRunning ? 'btn btn-danger' : 'btn btn-primary';
-      });
-    }
-
-    const btnStepHeat = document.getElementById('btnStepHeat');
-    if (btnStepHeat) {
-      btnStepHeat.addEventListener('click', () => {
-        this.stepHeatDiffusion();
-        if (window.account) window.account.record('concurrency', 'heat');
-        window.soundController.playTone(500, 'sine', 0.02);
-      });
-    }
-
-    const btnResetHeat = document.getElementById('btnResetHeat');
-    if (btnResetHeat) {
-      btnResetHeat.addEventListener('click', () => {
-        this.initHeatGrid();
-      });
-    }
-
-    const heatThreadsSelect = document.getElementById('heatThreadsSelect');
-    if (heatThreadsSelect) {
-      heatThreadsSelect.addEventListener('change', (e) => {
-        this.heatThreads = parseInt(e.target.value);
-      });
-    }
   }
 
   updateControlPanels() {
     const roundPanel = document.getElementById('roundaboutControls');
-    const heatPanel = document.getElementById('heatControls');
     const patPanel = document.getElementById('patternsControls');
     if (roundPanel) roundPanel.style.display = this.activeSubtab === 'roundabout' ? 'block' : 'none';
-    if (heatPanel) heatPanel.style.display = this.activeSubtab === 'heat' ? 'block' : 'none';
     if (patPanel) patPanel.style.display = this.activeSubtab === 'patterns' ? 'block' : 'none';
 
     // Only show the scoreboard cells that belong to the active simulation
@@ -546,122 +499,6 @@ class ConcurrencyLab {
     this.ctx.fillText(label, lx2, ly);
   }
 
-  // --- Heat Diffusion Engine ---
-  initHeatGrid() {
-    this.heatIterations = 0;
-    this.heatGridA = [];
-    this.heatGridB = [];
-    for (let r = 0; r < this.heatRows; r++) {
-      this.heatGridA[r] = new Float32Array(this.heatCols);
-      this.heatGridB[r] = new Float32Array(this.heatCols);
-      for (let c = 0; c < this.heatCols; c++) {
-        // Boundary condition: top is hot (100C), bottom cold (0C)
-        if (r === 0) {
-          this.heatGridA[r][c] = 100.0;
-          this.heatGridB[r][c] = 100.0;
-        } else if (r === this.heatRows - 1) {
-          this.heatGridA[r][c] = 0.0;
-          this.heatGridB[r][c] = 0.0;
-        } else {
-          this.heatGridA[r][c] = 15.0;
-          this.heatGridB[r][c] = 15.0;
-        }
-      }
-    }
-    // Inject central hot source
-    for (let r = 16; r <= 24; r++) {
-      for (let c = 20; c <= 30; c++) {
-        this.heatGridA[r][c] = 95.0;
-        this.heatGridB[r][c] = 95.0;
-      }
-    }
-  }
-
-  stepHeatDiffusion() {
-    let maxDelta = 0;
-    const rLen = this.heatRows;
-    const cLen = this.heatCols;
-    const alpha = this.heatAlpha;
-
-    for (let r = 1; r < rLen - 1; r++) {
-      for (let c = 1; c < cLen - 1; c++) {
-        const u = this.heatGridA[r][c];
-        const laplacian = this.heatGridA[r - 1][c] + this.heatGridA[r + 1][c] +
-                          this.heatGridA[r][c - 1] + this.heatGridA[r][c + 1] - 4 * u;
-        const nextU = u + alpha * laplacian;
-        this.heatGridB[r][c] = nextU;
-        const diff = Math.abs(nextU - u);
-        if (diff > maxDelta) maxDelta = diff;
-      }
-    }
-
-    // Pointer swap
-    const temp = this.heatGridA;
-    this.heatGridA = this.heatGridB;
-    this.heatGridB = temp;
-
-    this.heatIterations++;
-    document.getElementById('heatIterCount').textContent = this.heatIterations;
-    document.getElementById('heatMaxDelta').textContent = maxDelta.toFixed(4);
-  }
-
-  drawHeatDiffusion() {
-    const w = this.canvas.width;
-    const h = this.canvas.height;
-    this.ctx.clearRect(0, 0, w, h);
-
-    const cellW = w / this.heatCols;
-    const cellH = h / this.heatRows;
-
-    for (let r = 0; r < this.heatRows; r++) {
-      for (let c = 0; c < this.heatCols; c++) {
-        const temp = this.heatGridA[r][c];
-        this.ctx.fillStyle = this.getHeatColor(temp);
-        this.ctx.fillRect(c * cellW, r * cellH, cellW + 0.5, cellH + 0.5);
-      }
-    }
-
-    // Draw thread domain decomposition partition lines
-    if (this.heatThreads > 1) {
-      const rowsPerThread = Math.floor(this.heatRows / this.heatThreads);
-      for (let t = 1; t < this.heatThreads; t++) {
-        const splitY = t * rowsPerThread * cellH;
-        this.ctx.beginPath();
-        this.ctx.moveTo(0, splitY);
-        this.ctx.lineTo(w, splitY);
-        this.ctx.strokeStyle = '#ffffff';
-        this.ctx.lineWidth = 1.5;
-        this.ctx.setLineDash([6, 6]);
-        this.ctx.stroke();
-        this.ctx.setLineDash([]);
-
-        this.ctx.fillStyle = '#ffffff';
-        this.ctx.textAlign = 'left';
-        this.ctx.textBaseline = 'alphabetic';
-        this.ctx.font = `800 11px ${getComputedStyle(document.body).fontFamily}`;
-        this.ctx.fillText(`hilo ${t - 1} ↑  ·  ↓ hilo ${t}`, 10, splitY - 5);
-      }
-    }
-  }
-
-  getHeatColor(temp) {
-    // Thermal gradient: 0 (Navy) -> 25 (Cyan) -> 50 (Emerald) -> 75 (Amber) -> 100 (Red/White)
-    const t = Math.max(0, Math.min(100, temp)) / 100;
-    if (t < 0.25) {
-      const f = t / 0.25;
-      return `rgb(0, ${Math.floor(f * 150)}, ${Math.floor(150 + f * 105)})`;
-    } else if (t < 0.5) {
-      const f = (t - 0.25) / 0.25;
-      return `rgb(0, ${Math.floor(150 + f * 105)}, ${Math.floor(255 - f * 200)})`;
-    } else if (t < 0.75) {
-      const f = (t - 0.5) / 0.25;
-      return `rgb(${Math.floor(f * 255)}, 255, 0)`;
-    } else {
-      const f = (t - 0.75) / 0.25;
-      return `rgb(255, ${Math.floor(255 - f * 200)}, ${Math.floor(f * 200)})`;
-    }
-  }
-
   // --- Animation Loop ---
   startLoop() {
     let lastTime = performance.now();
@@ -678,11 +515,6 @@ class ConcurrencyLab {
       if (this.activeSubtab === 'roundabout') {
         this.updateRoundabout(dt);
         this.drawRoundabout();
-      } else if (this.activeSubtab === 'heat') {
-        if (this.heatRunning) {
-          this.stepHeatDiffusion();
-        }
-        this.drawHeatDiffusion();
       } else if (this.activeSubtab === 'patterns') {
         this.drawPatternsMonitor();
       }
