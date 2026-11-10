@@ -28,8 +28,17 @@
       items: [
         { id: 'deadlock', label: 'Provocar un deadlock' },
         { id: 'resolve', label: 'Resolverlo con un semáforo' },
-        { id: 'heat', label: 'Correr la difusión de calor en paralelo' },
         { id: 'patterns', label: 'Ver los patrones clásicos' }
+      ]
+    },
+    heat: {
+      title: 'Difusión de calor',
+      items: [
+        { id: 'converge', label: 'Llevar la placa al equilibrio' },
+        { id: 'threads8', label: 'Repartir la placa entre 8 hilos' },
+        { id: 'imbalance', label: 'Ver a los hilos esperar en la barrera' },
+        { id: 'paint', label: 'Dibujar una fuente de calor' },
+        { id: 'unstable', label: 'Romper la estabilidad con r > 1/4' }
       ]
     },
     networking: {
