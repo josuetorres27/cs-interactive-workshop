@@ -4,8 +4,8 @@
  *
  * Stream-oriented IPv4/IPv6 socket wrapper interface.
  *
- * Author: Josue Torres Sibaja
- * Copyright (c) 2025 Josue Torres Sibaja
+ * Author: Josue Torres
+ * Copyright (c) 2025 Josue Torres
  * Licensed under the MIT License.
  */
 
