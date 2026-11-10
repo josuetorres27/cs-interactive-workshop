@@ -5,8 +5,8 @@
  * High-performance, clean C++ implementation of fundamental sorting algorithms:
  * Selection Sort, Insertion Sort, Merge Sort, Heap Sort, Quick Sort, and Radix Sort.
  *
- * Author: Josue Torres Sibaja
- * Copyright (c) 2024-2025 Josue Torres Sibaja
+ * Author: Josue Torres
+ * Copyright (c) 2024-2025 Josue Torres
  * Licensed under the MIT License.
  */
 
