@@ -25,7 +25,10 @@ function mulberry32(seed) {
 
 // Canvas 2D context where every method is a no-op and every property is settable.
 function fakeContext() {
-  const store = {};
+  const store = {
+    createImageData: (w, h) => ({ width: w, height: h, data: new Uint8ClampedArray(w * h * 4) }),
+    measureText: (text) => ({ width: String(text).length * 7 })
+  };
   return new Proxy(store, {
     get(target, prop) { return prop in target ? target[prop] : () => {}; },
     set(target, prop, value) { target[prop] = value; return true; }
