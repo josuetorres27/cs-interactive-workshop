@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   test:
-    name: Run 330+ Automated Tests
+    name: Run 720+ Automated Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -27,6 +27,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential gcc g++ libomp-dev python3
+
+      - name: Set up Node.js for the web lab tests
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
       - name: Build All Engines & Run Master Test Suite
         run: |
