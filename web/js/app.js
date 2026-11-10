@@ -124,6 +124,7 @@ class App {
     ['algorithmsLab', 'concurrencyLab', 'networkingLab', 'cheatsheetsLab', 'interviewLab', 'dsLab', 'sqlLab']
       .forEach(name => { if (window[name]) window[name].init(); });
 
+    this.setupAccount();
     this.setupSteps();
     this.setupGuide();
     this.setupTour();
@@ -141,6 +142,7 @@ class App {
     this.stopTracers();
 
     if (parts[0] === 'que-es') return this.showScreen('about');
+    if (parts[0] === 'perfil') return this.openProfile();
     if (parts[0] === 'mesa' && AREAS[parts[1]]) return this.openArea(parts[1]);
     if (parts[0] === 'lab' && MODULES[parts[1]]) {
       const step = STEP_IDS.includes(parts[2]) ? parts[2] : 'play';
@@ -234,6 +236,8 @@ class App {
     const pane = document.getElementById(`tab-${this.currentTab}`);
     if (pane) pane.querySelectorAll('.step-pane').forEach(p => p.classList.toggle('active', p.dataset.step === step));
 
+    if (window.account && this.route === 'module' && this.currentTab) window.account.visit(this.currentTab, step);
+
     // Canvases need a size once they become visible
     if (step === 'play') {
       requestAnimationFrame(() => {
@@ -242,6 +246,146 @@ class App {
       });
     }
     this.updateGuide();
+  }
+
+  // ── Account and progress ─────────────────────────────────
+  setupAccount() {
+    const acc = window.account;
+    if (!acc) return;
+    acc.onChange((ev) => {
+      this.renderAccountButton();
+      this.updateProgressBadges();
+      if (this.route === 'profile') this.renderProfile();
+      if (ev.type === 'record' && ev.isNew) this.showToast(`Logrado: ${ev.label}`);
+      if (ev.type === 'auth' && ev.user && this.signingIn) {
+        this.signingIn = false;
+        this.showToast(`Hola, ${ev.user.name.split(' ')[0]}. Tu progreso ahora se guarda en tu cuenta.`);
+      }
+      if (ev.type === 'error') this.showToast('No se pudo sincronizar tu cuenta. Tu progreso sigue en este dispositivo.');
+    });
+
+    const btnIn = document.getElementById('btnSignIn');
+    btnIn.addEventListener('click', async () => {
+      btnIn.disabled = true;
+      this.signingIn = true;
+      try { await acc.signIn(); } catch (e) {
+        this.signingIn = false;
+        if (!e || e.code !== 'auth/popup-closed-by-user') this.showToast(e && e.message ? e.message : 'No se pudo iniciar sesión.');
+      } finally { btnIn.disabled = !acc.cloudAvailable; }
+    });
+    document.getElementById('btnSignOut').addEventListener('click', async () => {
+      await acc.signOut();
+      this.showToast('Sesión cerrada. Este dispositivo vuelve a modo invitado.');
+    });
+    document.getElementById('btnResetProgress').addEventListener('click', () => {
+      const where = acc.signedIn ? 'de tu cuenta' : 'de este dispositivo';
+      if (window.confirm(`¿Borrar todo tu progreso ${where}? No se puede deshacer.`)) {
+        acc.reset();
+        this.showToast('Progreso borrado.');
+      }
+    });
+
+    acc.init();
+  }
+
+  openProfile() {
+    this.showScreen('profile');
+    this.renderProfile();
+  }
+
+  renderAccountButton() {
+    const acc = window.account;
+    const btn = document.getElementById('btnAccount');
+    if (!acc || !btn) return;
+    const u = acc.user;
+    btn.classList.toggle('signed-in', !!u);
+    btn.title = u ? `Mi espacio · ${u.name}` : 'Mi espacio';
+    btn.innerHTML = u && u.photoURL
+      ? `<img src="${encodeURI(u.photoURL)}" alt="" referrerpolicy="no-referrer">`
+      : '<svg class="ic"><use href="#i-user"/></svg>';
+  }
+
+  renderProfile() {
+    const acc = window.account;
+    if (!acc) return;
+    const P = window.Progress;
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const u = acc.user;
+    const $ = (id) => document.getElementById(id);
+
+    $('profileName').textContent = u ? u.name : 'Invitado';
+    $('profileSub').textContent = u
+      ? 'Tu progreso se guarda en tu cuenta y te sigue a cualquier dispositivo.'
+      : 'Tu progreso se guarda solo en este dispositivo.';
+    $('profileAvatar').innerHTML = u && u.photoURL
+      ? `<img src="${encodeURI(u.photoURL)}" alt="" referrerpolicy="no-referrer">`
+      : '<svg class="ic"><use href="#i-user"/></svg>';
+    $('btnSignIn').hidden = !!u;
+    $('btnSignIn').disabled = !acc.cloudAvailable;
+    $('btnSignOut').hidden = !u;
+    $('profileNote').textContent = !acc.cloudAvailable
+      ? 'Las cuentas todavía no están activadas en este sitio. Mientras tanto, tu progreso se guarda en este dispositivo.'
+      : u ? '' : 'Inicia sesión para guardar tu progreso en la nube. Lo que ya hiciste aquí se suma a tu cuenta.';
+    $('profileLead').textContent = u ? `Hola, ${u.name.split(' ')[0]}. Esto es lo que llevas.` : 'Tu progreso en el taller.';
+
+    const all = acc.overall();
+    $('overallPct').textContent = `${all.percent}%`;
+    $('overallArc').style.strokeDashoffset = String(314.16 * (1 - all.percent / 100));
+    $('statItems').textContent = `${all.done} / ${all.total}`;
+    $('statStations').textContent = `${all.stationsComplete} / ${all.stations}`;
+
+    const last = acc.progress.last;
+    const cont = $('btnContinue');
+    if (last && MODULES[last.station]) {
+      cont.href = `#/lab/${last.station}${last.step === 'play' ? '' : '/' + last.step}`;
+      cont.innerHTML = `<svg class="ic"><use href="#i-arrow-r"/></svg>Continuar en ${esc(MODULES[last.station].title)}`;
+    } else {
+      cont.href = '#/lab';
+      cont.innerHTML = '<svg class="ic"><use href="#i-arrow-r"/></svg>Empezar';
+    }
+
+    const stepNames = { play: 'Experimenta', learn: 'Entiende', build: 'Implementa' };
+    const groups = [...Object.keys(AREAS).map((a) => ({ title: AREAS[a].title, ids: MODULE_ORDER.filter((m) => MODULES[m].area === a) })),
+      { title: 'Repaso', ids: MODULE_ORDER.filter((m) => !MODULES[m].area) }];
+    $('progressList').innerHTML = groups.filter((g) => g.ids.length).map((g) => `
+      <section class="progress-area">
+        <h3>${esc(g.title)}</h3>
+        <div class="progress-stations">${g.ids.map((id) => {
+          const st = acc.stats(id);
+          const items = P.CHECKLISTS[id].items;
+          const done = (acc.progress.stations[id] || { items: {} }).items;
+          return `<article class="progress-station board">
+            <div class="progress-station-head"><a href="#/lab/${id}">${esc(MODULES[id].title)}</a><span>${st.done} / ${st.total}</span></div>
+            <div class="bar" role="progressbar" aria-valuenow="${st.percent}" aria-valuemin="0" aria-valuemax="100"><i style="width:${st.percent}%"></i></div>
+            ${MODULES[id].steps ? `<div class="step-chips">${['play', 'learn', 'build'].map((s) => `<span class="step-chip ${st.steps[s] ? 'seen' : ''}">${stepNames[s]}</span>`).join('')}</div>` : ''}
+            <ul class="checklist">${items.map((i) => `<li class="${done[i.id] ? 'done' : ''}"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>${esc(i.label)}</li>`).join('')}</ul>
+          </article>`;
+        }).join('')}</div>
+      </section>`).join('');
+  }
+
+  // Small "3 / 6" badges on bench and station cards.
+  updateProgressBadges() {
+    const acc = window.account;
+    if (!acc) return;
+    const badge = (el, done, total) => {
+      let b = el.querySelector('.card-progress');
+      if (!done) { if (b) b.remove(); return; }
+      if (!b) { b = document.createElement('span'); b.className = 'card-progress'; el.appendChild(b); }
+      const complete = done === total;
+      b.classList.toggle('complete', complete);
+      b.innerHTML = complete ? '<svg class="ic"><use href="#i-check"/></svg>completa' : `${done} / ${total}`;
+    };
+    document.querySelectorAll('.station-card[data-tab]').forEach((card) => {
+      const st = acc.stats(card.dataset.tab);
+      if (st.total) badge(card, st.done, st.total);
+    });
+    document.querySelectorAll('.bench').forEach((bench) => {
+      const m = /#\/mesa\/(\w+)/.exec(bench.getAttribute('href') || '');
+      const ids = m ? MODULE_ORDER.filter((id) => MODULES[id].area === m[1]) : [bench.dataset.tab].filter(Boolean);
+      const sum = ids.reduce((acc2, id) => { const s = acc.stats(id); return { done: acc2.done + s.done, total: acc2.total + s.total }; }, { done: 0, total: 0 });
+      if (sum.total) badge(bench, sum.done, sum.total);
+    });
   }
 
   // ── Bit, the guide ───────────────────────────────────────
