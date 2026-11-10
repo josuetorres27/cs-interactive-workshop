@@ -11,7 +11,7 @@
  * computed in any order and by any thread: serial, pthreads and OpenMP produce
  * bit-for-bit identical results. The tests in tests/concurrency rely on that.
  *
- * Author: Josue Torres Sibaja
+ * Author: Josue Torres
  * Licensed under the MIT License.
  */
 #ifndef HEAT_H
