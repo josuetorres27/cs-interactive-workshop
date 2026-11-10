@@ -14,7 +14,7 @@ const MODULES = {
   algorithms:     { title: 'Ordenamiento',            area: 'algoritmos',  steps: true },
   datastructures: { title: 'Estructuras de datos',    area: 'algoritmos',  steps: true, tracer: 'dsLab' },
   concurrency:    { title: 'La Rotonda',              area: 'paralela',    steps: true },
-  networking:     { title: 'Sockets TCP',             area: 'redes',       steps: true },
+  networking:     { title: 'Sockets TCP',             area: 'redes',       steps: true, tracer: 'networkingLab' },
   interview:      { title: 'Patrones de entrevista',  area: 'entrevistas', steps: true, tracer: 'interviewLab' },
   sql:            { title: 'SQL paso a paso',         area: 'datos',       steps: true, tracer: 'sqlLab' },
   cheatsheets:    { title: 'El Cuaderno',             area: null,          steps: false }
@@ -42,7 +42,7 @@ const GUIDE_LINES = {
     build: 'Una versión simplificada de la rotonda con semáforos POSIX, lista para estudiar.'
   },
   networking: {
-    play: 'Escoge una figura y envía la petición. Mira qué hilo del servidor la atiende y qué viaja por el cable.',
+    play: 'Envía una petición y mira cada paquete cruzar el cable. Usa ← y → para ir paso a paso.',
     learn: 'Cliente, servidor, socket y pool de hilos, explicados sin rodeos.',
     build: 'Un servidor TCP de verdad cabe en 30 líneas. Aquí lo tienes.'
   },
@@ -78,10 +78,10 @@ const TOURS = {
     { sel: '#modSteps', title: '¿Y por qué pasó?', text: 'La explicación está en «Entiende».' }
   ],
   networking: [
-    { sel: '#netFigurePicker', title: 'Escoge una figura', text: 'Son los archivos que el servidor tiene guardados.' },
-    { sel: '#btnSendSocketReq', title: 'Envía la petición', text: 'El cliente abre un socket TCP y manda un mensaje HTTP.' },
-    { sel: '#workerPoolContainer', title: 'El servidor trabaja', text: 'Un hilo libre del pool atiende tu petición.' },
-    { sel: '#packetInspector', title: 'El cable', text: 'Aquí ves el texto exacto que viaja de ida y de vuelta.' }
+    { sel: '#netRequestForm', title: 'Lo que pide el cliente', text: 'Escoge una figura (o LIST) y envía la petición. Prueba también una figura que no existe o el método POST.' },
+    { sel: '#netScene', title: 'Dos computadoras y un cable', text: 'A la izquierda el cliente, a la derecha el servidor con su disco, sus hilos y su registro. Los paquetes viajan por el cable.' },
+    { sel: '#netPlayer', title: 'Paso a paso', text: 'Avanza, retrocede o reproduce. Los puntos muestran las fases: conexión, petición, servidor, respuesta y cierre.' },
+    { sel: '#packetInspector', title: 'Abre el paquete', text: 'Cada paquete por capas: direcciones IPv6, el encabezado TCP y, si lleva datos, el mensaje HTTP parte por parte.' }
   ],
   interview: tracerTour('interview', 'un problema clásico de entrevista'),
   datastructures: tracerTour('datastructures', 'una estructura de datos con su operación típica'),
@@ -213,6 +213,7 @@ class App {
   }
   stopTracers() {
     Object.values(MODULES).forEach(m => { if (m.tracer && window[m.tracer]) window[m.tracer].stop(); });
+    if (window.networkingLab && window.networkingLab.exchange) window.networkingLab.stop();
   }
 
   setupSteps() {
