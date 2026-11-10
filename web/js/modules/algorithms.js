@@ -370,8 +370,8 @@ void heapSort(std::vector<int>& a) {
       this.ctx.roundRect(x, y, barWidth, barHeight, [r, r, 0, 0]);
       this.ctx.fill();
       if (barWidth >= 6) {
-        this.ctx.lineWidth = 2;
-        this.ctx.strokeStyle = '#4a2c14';
+        this.ctx.lineWidth = 3;
+        this.ctx.strokeStyle = '#3d2414';
         this.ctx.stroke();
       }
     }
