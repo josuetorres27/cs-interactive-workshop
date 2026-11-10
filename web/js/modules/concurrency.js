@@ -438,8 +438,8 @@ class ConcurrencyLab {
     this.ctx.arc(cx, cy, outerR, 0, 2 * Math.PI);
     this.ctx.fillStyle = '#5b4a3d';
     this.ctx.fill();
-    this.ctx.lineWidth = 3;
-    this.ctx.strokeStyle = '#4a2c14';
+    this.ctx.lineWidth = 4;
+    this.ctx.strokeStyle = '#3d2414';
     this.ctx.stroke();
 
     // Lane marking
@@ -456,11 +456,11 @@ class ConcurrencyLab {
     this.ctx.arc(cx, cy, innerR, 0, 2 * Math.PI);
     this.ctx.fillStyle = this.deadlockDetected ? '#f4a48a' : '#8fd3a5';
     this.ctx.fill();
-    this.ctx.lineWidth = 3;
-    this.ctx.strokeStyle = '#4a2c14';
+    this.ctx.lineWidth = 4;
+    this.ctx.strokeStyle = '#3d2414';
     this.ctx.stroke();
 
-    this.ctx.fillStyle = '#4a2c14';
+    this.ctx.fillStyle = '#3d2414';
     this.ctx.font = `800 ${Math.max(11, Math.round(innerR / 4.5))}px ${fontFamily}`;
     this.ctx.fillText(this.deadlockDetected ? 'TRABADA' : (this.semaphoresEnabled ? 'CON SEMÁFOROS' : 'SIN CONTROL'), cx, cy);
 
@@ -519,12 +519,12 @@ class ConcurrencyLab {
       this.ctx.arc(vx, vy, 9, 0, 2 * Math.PI);
       this.ctx.fillStyle = v.blockedTime > 1500 ? '#e8512a' : v.color;
       this.ctx.fill();
-      this.ctx.strokeStyle = '#4a2c14';
-      this.ctx.lineWidth = 2.5;
+      this.ctx.strokeStyle = '#3d2414';
+      this.ctx.lineWidth = 3.5;
       this.ctx.stroke();
 
       // Vehicle ID
-      this.ctx.fillStyle = '#4a2c14';
+      this.ctx.fillStyle = '#3d2414';
       this.ctx.font = 'bold 9px "JetBrains Mono", monospace';
       this.ctx.fillText(v.id, vx, vy + 0.5);
     });
@@ -533,8 +533,8 @@ class ConcurrencyLab {
   drawRoadArm(x, y, w, h, label) {
     this.ctx.fillStyle = '#5b4a3d';
     this.ctx.fillRect(x, y, w, h);
-    this.ctx.lineWidth = 3;
-    this.ctx.strokeStyle = '#4a2c14';
+    this.ctx.lineWidth = 4;
+    this.ctx.strokeStyle = '#3d2414';
     this.ctx.strokeRect(x, y, w, h);
 
     this.ctx.fillStyle = 'rgba(251, 244, 228, 0.55)';
@@ -713,12 +713,12 @@ class ConcurrencyLab {
     this.ctx.beginPath();
     this.ctx.roundRect(x, y, w, h, 14);
     this.ctx.fill();
-    this.ctx.lineWidth = 2.5;
-    this.ctx.strokeStyle = '#4a2c14';
+    this.ctx.lineWidth = 3.5;
+    this.ctx.strokeStyle = '#3d2414';
     this.ctx.stroke();
     this.ctx.textAlign = 'left';
     this.ctx.textBaseline = 'alphabetic';
-    this.ctx.fillStyle = '#4a2c14';
+    this.ctx.fillStyle = '#3d2414';
     this.ctx.font = `800 14px ${font}`;
     this.ctx.fillText(title, x + 16, y + 28);
     return font;
@@ -739,8 +739,8 @@ class ConcurrencyLab {
       this.ctx.roundRect(sx, startY, slotW - 5, slotH, 6);
       this.ctx.fillStyle = i < filled ? '#4fb477' : '#f3e7cc';
       this.ctx.fill();
-      this.ctx.lineWidth = 2;
-      this.ctx.strokeStyle = '#4a2c14';
+      this.ctx.lineWidth = 3;
+      this.ctx.strokeStyle = '#3d2414';
       this.ctx.stroke();
 
       this.ctx.fillStyle = i < filled ? '#ffffff' : '#a48663';
@@ -770,8 +770,8 @@ class ConcurrencyLab {
     this.ctx.arc(pcx, pcy, radius * 0.58, 0, 2 * Math.PI);
     this.ctx.fillStyle = '#c99560';
     this.ctx.fill();
-    this.ctx.lineWidth = 2.5;
-    this.ctx.strokeStyle = '#4a2c14';
+    this.ctx.lineWidth = 3.5;
+    this.ctx.strokeStyle = '#3d2414';
     this.ctx.stroke();
 
     // Two non-neighbours eat at a time (5 forks -> at most 2 eaters)
@@ -789,8 +789,8 @@ class ConcurrencyLab {
       this.ctx.arc(px, py, 16, 0, 2 * Math.PI);
       this.ctx.fillStyle = isEating ? '#4fb477' : '#3d8fd6';
       this.ctx.fill();
-      this.ctx.lineWidth = 2.5;
-      this.ctx.strokeStyle = '#4a2c14';
+      this.ctx.lineWidth = 3.5;
+      this.ctx.strokeStyle = '#3d2414';
       this.ctx.stroke();
 
       this.ctx.fillStyle = '#ffffff';
