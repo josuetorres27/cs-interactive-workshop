@@ -4,7 +4,7 @@
 [![Concurrency](https://img.shields.io/badge/Concurrency-POSIX%20Threads%20%7C%20OpenMP%20%7C%20Atomics-orange.svg)](https://computing.llnl.gov/tutorials/pthreads/)
 [![Networking](https://img.shields.io/badge/Networking-BSD%20Sockets%20%7C%20HTTP%201.1-purple.svg)](docs/networking/Protocol_Specification.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build & Tests](https://img.shields.io/badge/Tests-720%2B%20Passing-brightgreen.svg)](tests/)
+[![Build & Tests](https://img.shields.io/badge/Tests-870%2B%20Passing-brightgreen.svg)](tests/)
 [![Author](https://img.shields.io/badge/Author-Josu%C3%A9%20Torres%20Sibaja-0ea5e9.svg)](https://github.com/josuetorres27)
 [![Hosting: Firebase](https://img.shields.io/badge/Deploy-Firebase%20Hosting-ffca28.svg)](https://firebase.google.com/)
 
@@ -111,24 +111,24 @@ make all
 ```bash
 make test
 ```
-*Compiles and executes the master suite of **720+ automated tests** verifying correctness, safety, and performance across all three computational engines and the web lab. Run only the web lab tests (no compiler needed) with `make test-web` or `node tests/web/run.js`.*
+*Compiles and executes the master suite of **870+ automated tests** verifying correctness, safety, and performance across all three computational engines and the web lab. Run only the web lab tests (no compiler needed) with `make test-web` or `node tests/web/run.js`.*
 
 ---
 
-## 🧪 Comprehensive Automated Test Suite (791 Tests)
+## 🧪 Comprehensive Automated Test Suite (876 Tests)
 
-The system includes a custom zero-dependency C/C++ assertion test harness (`tests/runner.h`) along with Python integration tests and a dependency-free JavaScript test runner for the web lab, totaling **791 automated test cases**:
+The system includes a custom zero-dependency C/C++ assertion test harness (`tests/runner.h`) along with Python integration tests and a dependency-free JavaScript test runner for the web lab, totaling **876 automated test cases**:
 
 | Module / Engine | Test File | Test Count | Scope & Verifications |
 | :--- | :--- | :---: | :--- |
 | **Algorithms Engine** | `tests/algorithms/test_sorting.cpp` | **120** | Quick, Merge, Heap, Insertion, Selection, Radix sorts; idempotence, reverse sorted, all-equal, negative keys, power-of-two boundaries, high entropy arrays. |
 | **Concurrency: Traffic** | `tests/concurrency/test_roundabout.c` | **50** | Directional quadrant transitions, semaphore bounds $[0, 1]$, route validation, multi-threaded contention waves, collision freedom. |
-| **Concurrency: PDE Heat** | `tests/concurrency/test_heat_diffusion.c` | **40** | Dirichlet boundary preservation, maximum principle adherence, spatial symmetry, non-negativity, 1D domain decomposition equivalence. |
+| **Concurrency: PDE Heat** | `tests/concurrency/test_heat_diffusion.c` | **70** | Tests the real solver library: borders, maximum principle, symmetry, row partitioning, the stencil kernel, convergence and input validation, and pthreads (spin and sleep barriers) and OpenMP producing the exact same grid as serial, bit for bit. |
 | **Concurrency: Patterns** | `tests/concurrency/test_patterns.c` | **50** | FIFO bounded buffer integrity, dining philosophers deadlock freedom, H2O stoichiometric ratio ($2:1$), C11 atomic fetch-and-add race freedom. |
 | **Distributed Networking** | `tests/networking/test_networking.cpp` | **50** | HTTP 1.1 request line parsing, header extraction, response framing, block filesystem chunking, asset integrity for all 12 ASCII art figures. |
 | **Web Assets & Config** | `tests/web/test_web_assets.py` | **23** | Single-Page Application DOM anchors, CSS design system variables, Vanilla JS syntax, Web Audio API integration, and Firebase Hosting configuration. |
-| **Web Lab (JavaScript)** | `tests/web/run.js` | **458** | Art direction (one ink colour, hard shadows, outlined panels), optional accounts (progress model, guest storage, Google sign-in merge and sync against a fake Firebase backend, Firestore rules), HTTP-over-TCP model checked against `Server.cc` routing (200/404/400, LIST, segmentation, seq/ack numbers, handshake and teardown), tracer engine, interview/data-structure/SQL problems vs. reference solutions on presets and seeded random inputs, sorting/roundabout/heat/Amdahl simulations, router, and page/stylesheet integrity. |
-| **TOTAL** | **7 Test Suites** | **791** | **100% Automated & Passing (0 Failures, 0 Memory Leaks)** |
+| **Web Lab (JavaScript)** | `tests/web/run.js` | **513** | Heat diffusion station and model (same plate with any number of threads, cost model, instability), art direction (one ink colour, hard shadows, outlined panels), optional accounts (progress model, guest storage, Google sign-in merge and sync against a fake Firebase backend, Firestore rules), HTTP-over-TCP model checked against `Server.cc` routing (200/404/400, LIST, segmentation, seq/ack numbers, handshake and teardown), tracer engine, interview/data-structure/SQL problems vs. reference solutions on presets and seeded random inputs, sorting/roundabout/heat/Amdahl simulations, router, and page/stylesheet integrity. |
+| **TOTAL** | **7 Test Suites** | **876** | **100% Automated & Passing (0 Failures, 0 Memory Leaks)** |
 
 ---
 
