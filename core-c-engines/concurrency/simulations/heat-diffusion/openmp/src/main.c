@@ -7,7 +7,7 @@
  * One parallel region, `omp for schedule(static)` with a max reduction.
  * The solver lives in ../../common/heat_omp.c.
  *
- * Author: Josue Torres Sibaja
+ * Author: Josue Torres
  * Licensed under the MIT License.
  */
 #include "../../common/heat_cli.h"
