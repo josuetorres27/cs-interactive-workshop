@@ -28,7 +28,9 @@
     <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 5v14l-9-7z" fill="currentColor" stroke="none"/><rect x="5" y="5" width="3" height="14" rx="1" fill="currentColor" stroke="none"/></symbol>
     <symbol id="i-first" viewBox="0 0 24 24"><path d="M13 5v14l-7-7zM20 5v14l-7-7z" fill="currentColor" stroke="none"/></symbol>
     <symbol id="i-last" viewBox="0 0 24 24"><path d="M4 5v14l7-7zM11 5v14l7-7z" fill="currentColor" stroke="none"/></symbol>
-    <symbol id="i-copy"viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20c1.2-3.8 4.2-5.5 7.5-5.5s6.3 1.7 7.5 5.5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></symbol>
     <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14"/></symbol>
     <symbol id="i-send" viewBox="0 0 24 24"><path d="M4 12 20 4l-5 16-3.5-6.5z"/><path d="M11.5 13.5 20 4"/></symbol>
     <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/></symbol>
@@ -41,6 +43,7 @@
 
   <!-- Corner toy buttons -->
   <div class="corner-bar">
+    <a href="#/perfil" id="btnAccount" class="round-btn account-btn" title="Mi espacio" aria-label="Mi espacio"><svg class="ic"><use href="#i-user"/></svg></a>
     <button id="btnHelp" class="round-btn" title="Ayuda" aria-label="Ayuda"><svg class="ic"><use href="#i-help"/></svg></button>
     <button id="btnToggleSound" class="round-btn" title="Silenciar sonido" aria-label="Silenciar sonido"><svg class="ic"><use href="#i-sound"/></svg></button>
     <button id="btnToggleFullscreen" class="round-btn" title="Pantalla completa" aria-label="Pantalla completa"><svg class="ic"><use href="#i-expand"/></svg></button>
@@ -375,6 +378,58 @@
               <p class="station-line">Más estaciones en construcción.</p>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         SCREEN · MY SPACE  (#/perfil)
+         ====================================================== -->
+    <section id="screen-profile" class="screen" data-route="profile">
+      <a href="#/lab" class="round-btn back-link" title="Volver al taller" aria-label="Volver al taller"><svg class="ic"><use href="#i-arrow-l"/></svg></a>
+
+      <div class="wrap">
+        <header class="page-head">
+          <h2 class="page-title">Mi espacio</h2>
+          <p class="page-lead" id="profileLead">Tu progreso en el taller.</p>
+        </header>
+
+        <div class="profile-top">
+          <div class="profile-card board" id="profileCard">
+            <div class="profile-id">
+              <div class="avatar" id="profileAvatar" aria-hidden="true"><svg class="ic"><use href="#i-user"/></svg></div>
+              <div>
+                <div class="profile-name" id="profileName">Invitado</div>
+                <div class="profile-sub" id="profileSub">Tu progreso se guarda en este dispositivo.</div>
+              </div>
+            </div>
+            <div class="profile-actions">
+              <button class="btn-google" id="btnSignIn" type="button">
+                <svg class="g-logo" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.7 13.3l7.9 6.1C12.5 13.6 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.6 6.9l7.4 5.7c4.3-4 6.9-9.9 6.9-17.1z"/><path fill="#FBBC05" d="M10.6 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.9-6.1C1 16.6 0 20.2 0 24s1 7.4 2.7 10.7l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.4-5.7c-2.1 1.4-4.8 2.2-8.5 2.2-6.2 0-11.5-4.1-13.4-9.9l-7.9 6.1C6.6 42.6 14.6 48 24 48z"/></svg>
+                Continuar con Google
+              </button>
+              <button class="btn btn-sm" id="btnSignOut" type="button" hidden>Cerrar sesión</button>
+            </div>
+            <p class="profile-note" id="profileNote"></p>
+          </div>
+
+          <div class="profile-overview board">
+            <div class="ring" id="overallRing" role="img" aria-label="Progreso total">
+              <svg viewBox="0 0 120 120"><circle class="ring-bg" cx="60" cy="60" r="50"/><circle class="ring-fg" id="overallArc" cx="60" cy="60" r="50"/></svg>
+              <div class="ring-text"><b id="overallPct">0%</b><span>del taller</span></div>
+            </div>
+            <dl class="profile-stats">
+              <div><dt>Retos completados</dt><dd id="statItems">0 / 0</dd></div>
+              <div><dt>Estaciones terminadas</dt><dd id="statStations">0 / 0</dd></div>
+            </dl>
+            <a href="#/lab" class="btn btn-primary btn-sm" id="btnContinue"><svg class="ic"><use href="#i-arrow-r"/></svg>Empezar</a>
+          </div>
+        </div>
+
+        <div class="progress-list" id="progressList"></div>
+
+        <div class="profile-danger">
+          <button class="link-btn" id="btnResetProgress" type="button">Borrar mi progreso</button>
         </div>
       </div>
     </section>
@@ -1022,6 +1077,9 @@ atomic_fetch_add(&amp;contador, 1);</pre>
 
   <!-- Scripts -->
   <script src="js/audio.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/progress.js"></script>
+  <script src="js/account.js"></script>
   <script src="js/modules/figuresData.js"></script>
   <script src="js/modules/algorithms.js"></script>
   <script src="js/modules/concurrency.js"></script>
