@@ -37,7 +37,7 @@ clean:
 test: all
 	@echo "\n===================================================================="
 	@echo "            RUNNING CS INTERACTIVE LAB MASTER TEST SUITE             "
-	@echo "                     (720+ AUTOMATED TESTS)                         "
+	@echo "                     (870+ AUTOMATED TESTS)                         "
 	@echo "===================================================================="
 	@$(MAKE) -C tests run
 
