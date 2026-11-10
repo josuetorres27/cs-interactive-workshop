@@ -142,9 +142,9 @@ int main() {
   std::cout << "====================================================\n";
   std::cout << "   DISTRIBUTED ASCII ART SYSTEM - HTTP SERVER       \n";
   std::cout << "====================================================\n";
-  std::cout << " [✓] Server listening on port: " << PORT << "\n";
-  std::cout << " [✓] Web Terminal UI: http://localhost:" << PORT << "/\n";
-  std::cout << " [✓] Total ASCII figures indexed: " << figureCount << "\n";
+  std::cout << " [OK] Server listening on port: " << PORT << "\n";
+  std::cout << " [OK] Web Terminal UI: http://localhost:" << PORT << "/\n";
+  std::cout << " [OK] Total ASCII figures indexed: " << figureCount << "\n";
   std::cout << "====================================================\n\n";
 
   for (;;) {
