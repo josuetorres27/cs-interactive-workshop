@@ -156,6 +156,12 @@ class NetworkingLab {
     this.$('netFirst').disabled = this.$('netPrev').disabled = this.idx === 0;
     this.$('netLast').disabled = this.$('netNext').disabled = this.idx === steps.length - 1;
 
+    // Finishing an exchange counts toward the station checklist
+    if (this.idx === steps.length - 1 && window.account) {
+      const kind = { figure: 'figure', list: 'list', notfound: 'notfound', bad: 'bad' }[this.exchange.response.route];
+      if (kind) window.account.record('networking', `exchange:${kind}`);
+    }
+
     // Narration + inspector
     this.$('netNoteTitle').textContent = `Paso ${this.idx + 1} · ${s.title}`;
     this.$('netNote').innerHTML = s.note;
