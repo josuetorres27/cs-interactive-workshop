@@ -70,7 +70,7 @@ class NetworkingLab {
       btnCopy.addEventListener('click', () => {
         if (!this.rawAscii) return;
         navigator.clipboard.writeText(this.rawAscii).then(() => {
-          window.app.showToast(`Copied '${this.currentFigure}' to clipboard!`);
+          window.app.showToast(`«${this.currentFigure}» copiada al portapapeles`);
           window.soundController.playTone(900, 'sine', 0.05);
         });
       });
@@ -114,23 +114,10 @@ class NetworkingLab {
 
     listEl.innerHTML = '';
     filtered.forEach(name => {
-      const item = document.createElement('div');
+      const item = document.createElement('button');
       item.className = `figure-item ${name === this.currentFigure ? 'selected' : ''}`;
-      item.style.cssText = `
-        padding: 0.5rem 0.75rem;
-        border-radius: 4px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-family: var(--font-mono);
-        font-size: 0.8rem;
-        color: ${name === this.currentFigure ? 'var(--cyan)' : 'var(--text-dim)'};
-        background: ${name === this.currentFigure ? 'var(--bg-tertiary)' : 'transparent'};
-        border-left: 2px solid ${name === this.currentFigure ? 'var(--cyan)' : 'transparent'};
-        margin-bottom: 2px;
-      `;
-      item.innerHTML = `<span>${name}</span> <span style="font-size:0.7rem; color:var(--text-muted);">&gt;</span>`;
+      item.textContent = name.replace('_', ' ');
+      item.title = name;
       item.addEventListener('click', () => {
         this.loadFigure(name);
         window.soundController.playTone(600, 'sine', 0.02);
@@ -143,6 +130,8 @@ class NetworkingLab {
     this.currentFigure = name;
     this.renderFigureList();
     document.getElementById('currentFigTitle').textContent = name.toUpperCase();
+    const uriInput = document.getElementById('socketUriInput');
+    if (uriInput) uriInput.value = `/figures/${name}`;
 
     let text = null;
 
@@ -167,8 +156,8 @@ class NetworkingLab {
 
     this.rawAscii = text;
     const lines = text.split('\n');
-    document.getElementById('figLinesCount').textContent = `${lines.length} lines`;
-    document.getElementById('figCharsCount').textContent = `${text.length} chars`;
+    document.getElementById('figLinesCount').textContent = `${lines.length} líneas`;
+    document.getElementById('figCharsCount').textContent = `${text.length} caracteres`;
 
     const display = document.getElementById('asciiDisplay');
     if (display) {
@@ -250,32 +239,26 @@ ${this.rawAscii.substring(0, 300)}...
     if (!container) return;
     container.innerHTML = '';
 
+    const labels = { IDLE: 'libre', DISPATCHED: 'recibe', READING_DISK: 'lee disco', STREAMING: 'responde' };
+
     this.workers.forEach(w => {
       const card = document.createElement('div');
-      card.style.cssText = `
-        background: var(--bg-tertiary);
-        border: 1px solid ${w.state === 'IDLE' ? 'var(--border-subtle)' : 'var(--cyan)'};
-        border-radius: var(--radius-sm);
-        padding: 0.6rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-      `;
+      card.className = `worker ${w.state === 'IDLE' ? '' : 'busy'}`;
 
-      let badgeColor = 'var(--text-muted)';
-      if (w.state === 'DISPATCHED') badgeColor = 'var(--amber)';
-      if (w.state === 'READING_DISK') badgeColor = 'var(--purple)';
-      if (w.state === 'STREAMING') badgeColor = 'var(--emerald)';
+      const top = document.createElement('div');
+      top.className = 'worker-top';
+      const name = document.createElement('span');
+      name.textContent = `Hilo ${w.id}`;
+      const state = document.createElement('span');
+      state.className = `worker-state s-${w.state}`;
+      state.textContent = labels[w.state] || w.state;
+      top.append(name, state);
 
-      card.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.75rem; font-family:var(--font-mono);">
-          <span>Worker Thread #${w.id}</span>
-          <span style="color:${badgeColor}; font-weight:700;">${w.state}</span>
-        </div>
-        <div style="font-size:0.7rem; color:var(--text-dim); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-          ${w.currentTask || 'Idle (listening on sem_wait)'}
-        </div>
-      `;
+      const task = document.createElement('div');
+      task.className = 'worker-task';
+      task.textContent = w.currentTask || 'esperando en sem_wait()';
+
+      card.append(top, task);
       container.appendChild(card);
     });
   }
