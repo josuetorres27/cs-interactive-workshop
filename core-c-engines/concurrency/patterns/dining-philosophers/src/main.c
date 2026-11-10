@@ -70,9 +70,9 @@ int main() {
   printf("====================================================================\n");
   printf("    DINING PHILOSOPHERS - DIJKSTRA'S RESOURCE HIERARCHY SOLUTION    \n");
   printf("====================================================================\n");
-  printf(" [✓] Philosophers: %d\n", NUM_PHILOSOPHERS);
-  printf(" [✓] Strategy:     Always pick min(fork_L, fork_R) first (breaks Circular Wait)\n");
-  printf(" [✓] Rounds:       %d meals per philosopher\n", ROUNDS_PER_PHILOSOPHER);
+  printf(" [OK] Philosophers: %d\n", NUM_PHILOSOPHERS);
+  printf(" [OK] Strategy:     Always pick min(fork_L, fork_R) first (breaks Circular Wait)\n");
+  printf(" [OK] Rounds:       %d meals per philosopher\n", ROUNDS_PER_PHILOSOPHER);
   printf("====================================================================\n\n");
 
   srand((unsigned int) time(NULL));
@@ -98,7 +98,7 @@ int main() {
   pthread_mutex_destroy(&print_lock);
 
   printf("\n====================================================================\n");
-  printf(" [✓] All philosophers finished eating with 0 deadlocks and 0 starvation.\n");
+  printf(" [OK] All philosophers finished eating with 0 deadlocks and 0 starvation.\n");
   printf("====================================================================\n");
   return EXIT_SUCCESS;
 }
