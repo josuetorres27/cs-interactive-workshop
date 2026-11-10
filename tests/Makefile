@@ -28,8 +28,11 @@ $(BINDIR)/test_sorting: algorithms/test_sorting.cpp | $(BINDIR)
 $(BINDIR)/test_roundabout: concurrency/test_roundabout.c ../core-c-engines/concurrency/simulations/roundabout/src/roundabout.c | $(BINDIR)
 	$(CC) $(CFLAGS) $^ -o $@
 
-$(BINDIR)/test_heat_diffusion: concurrency/test_heat_diffusion.c | $(BINDIR)
-	$(CC) $(CFLAGS) $< -o $@ $(LDFLAGS)
+HEAT_DIR := ../core-c-engines/concurrency/simulations/heat-diffusion/common
+
+# Links the real solver library (serial, pthreads and OpenMP), not a copy of it
+$(BINDIR)/test_heat_diffusion: concurrency/test_heat_diffusion.c $(HEAT_DIR)/heat.c $(HEAT_DIR)/heat_omp.c $(HEAT_DIR)/heat.h | $(BINDIR)
+	$(CC) $(CFLAGS) -fopenmp -I$(HEAT_DIR) concurrency/test_heat_diffusion.c $(HEAT_DIR)/heat.c $(HEAT_DIR)/heat_omp.c -o $@ $(LDFLAGS)
 
 $(BINDIR)/test_patterns: concurrency/test_patterns.c | $(BINDIR)
 	$(CC) $(CFLAGS) $< -o $@
@@ -43,7 +46,7 @@ clean:
 run: all
 	@echo "\n===================================================================="
 	@echo "            RUNNING CS INTERACTIVE LAB MASTER TEST SUITE             "
-	@echo "                     (720+ AUTOMATED TESTS)                         "
+	@echo "                     (870+ AUTOMATED TESTS)                         "
 	@echo "===================================================================="
 	@./$(BINDIR)/test_sorting
 	@./$(BINDIR)/test_roundabout
@@ -53,5 +56,5 @@ run: all
 	@python3 web/test_web_assets.py
 	@node web/run.js
 	@echo "\n===================================================================="
-	@echo "                 ALL 791 TESTS PASSED SUCCESSFULLY!                 "
+	@echo "                 ALL 876 TESTS PASSED SUCCESSFULLY!                 "
 	@echo "===================================================================="
