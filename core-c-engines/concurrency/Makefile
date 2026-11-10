@@ -49,7 +49,7 @@ test: all
 	@echo "\n--- 8. Testing H2O Molecular Assembly ---"
 	@./patterns/molecule-assembler/bin/molecule_assembler
 	@echo "\n===================================================================="
-	@echo " [✓] ALL 8 MODULE TESTS COMPLETED SUCCESSFULLY WITH 0 FAILURES.     "
+	@echo " [OK] ALL 8 MODULE TESTS COMPLETED SUCCESSFULLY WITH 0 FAILURES.     "
 	@echo "===================================================================="
 
 clean:
