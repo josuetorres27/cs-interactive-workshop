@@ -69,6 +69,43 @@ module.exports = (t, { read, WEB, createEnv }) => {
     t.test('reduced-motion users get no animations', () => t.includes(css, 'prefers-reduced-motion'));
   });
 
+  t.suite('integrity · art direction (drawn like Bit)', () => {
+    // Flat CSS rules: innermost { } blocks, with their selector
+    const bare = css.replace(/\/\*[\s\S]*?\*\//g, '');
+    const rules = [...bare.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ sel: m[1].trim(), body: m[2] }));
+    const LIGHTING = ['.box-frame', '.tour-spot', '.lamp-glow']; // light and focus effects, not illustrations
+    const ruleFor = (name) => rules.filter((r) => r.sel.split(',').map((s) => s.trim()).includes(name)).map((r) => r.body).join(';');
+
+    t.test('one ink colour everywhere (the old cardboard ink is gone)', () => {
+      t.notIncludes(html + css + Object.values(js).join(''), '4a2c14');
+    });
+    t.test('shadows are hard offsets, never blurred (except lighting)', () => {
+      rules.filter((r) => /box-shadow\s*:/.test(r.body) && !LIGHTING.some((l) => r.sel.includes(l))).forEach((r) => {
+        const value = r.body.match(/box-shadow\s*:([^;]*)/)[1];
+        value.split(/,(?![^(]*\))/).forEach((layer) => {
+          const m = layer.trim().replace(/^inset\s+/, '').match(/^(-?[\d.]+)(?:px)?\s+(-?[\d.]+)(?:px)?\s+([\d.]+)px/);
+          t.ok(!m || parseFloat(m[3]) === 0, `${r.sel}: ${layer.trim()}`);
+        });
+      });
+    });
+    t.test('no glossy radial highlights or metallic gradients', () => t.ok(!/radial-gradient\(circle at/.test(css)));
+    t.test('no blurred drop-shadow filters on illustrations', () => t.notIncludes(css, 'drop-shadow('));
+    t.test('buttons are flat colours, not gradients', () => t.ok(!/gradient/.test(ruleFor('.btn'))));
+    t.test('screws are flat grey heads with an ink ring, like Bit', () => {
+      t.includes(css, '--screw-head: radial-gradient(circle, #c9ced6'); t.ok(!/\.screw::after/.test(css));
+    });
+    t.test('every panel, card and board has a thick ink outline', () => {
+      ['.bench', '.station-card', '.learn-card', '.stage', '.tr-brief', '.tr-stage', '.machine', '.faq', '.note', '.clipboard', '.pegboard', '.sign-board', '.tr-controls', '.net-cable']
+        .forEach((sel) => t.ok(/border\s*:\s*(var\(--outline\)|[34]px solid var\(--box-ink\))/.test(ruleFor(sel)), sel));
+    });
+    t.test('inline illustrations use thick ink strokes (3 or more)', () => {
+      [...html.matchAll(/stroke="#3d2414" stroke-width="([\d.]+)"/g)].forEach((m) => t.ok(parseFloat(m[1]) >= 3, m[0]));
+    });
+    t.test('the lamp is an outlined drawing, not a gradient', () => {
+      t.includes(html, '<div class="lamp"'); t.notIncludes(css, '.lamp-shade'); t.ok(/class="lamp"[\s\S]{0,400}<svg/.test(html));
+    });
+  });
+
   t.suite('integrity · ASCII figures', () => {
     const env = createEnv(); env.load('js/modules/figuresData.js');
     const embedded = env.window.EMBEDDED_ASSETS;
