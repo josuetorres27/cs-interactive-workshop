@@ -415,6 +415,7 @@ void heapSort(std::vector<int>& a) {
       if (!this.shouldStop) {
         await this.sweepComplete();
         document.getElementById('algoStatus').textContent = '¡Ordenado!';
+        if (window.account) window.account.record('algorithms', `run:${this.currentAlgo}`);
         window.soundController.playSuccess();
       }
     } catch (e) {
