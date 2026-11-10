@@ -72,6 +72,6 @@ int main() {
   runBenchmark("ALREADY SORTED ARRAY (Best Case for Insertion)", Distribution::SORTED, n);
   runBenchmark("REVERSED ARRAY (Worst Case for Quadratic Sorts)", Distribution::REVERSED, n);
 
-  std::cout << "\n[✓] All sorting benchmarks completed successfully.\n";
+  std::cout << "\n[OK] All sorting benchmarks completed successfully.\n";
   return 0;
 }
