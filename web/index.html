@@ -215,7 +215,7 @@
             <span class="station-code">CI-0117</span>
             <h3 class="bench-name">Programación Paralela y Concurrente</h3>
             <p class="bench-line">Hilos, semáforos, deadlocks y paralelismo</p>
-            <span class="bench-go">1 estación <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            <span class="bench-go">2 estaciones <svg class="ic"><use href="#i-arrow-r"/></svg></span>
           </a>
 
           <a href="#/mesa/redes" class="bench" style="--accent:#8b5fbf">
@@ -335,6 +335,27 @@
               <span class="station-code">SIMULACIÓN</span>
               <h3 class="station-name">La Rotonda</h3>
               <p class="station-line">Hilos que manejan juntos sin chocar (o no).</p>
+              <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            </a>
+          </div>
+
+          <div class="station" data-area="paralela">
+            <a href="#/lab/heat" class="station-card" data-tab="heat" style="--accent:#e8512a">
+              <div class="station-art">
+                <svg viewBox="0 0 160 100" aria-hidden="true">
+                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round">
+                    <rect x="16" y="10" width="128" height="80" rx="6" fill="#3d8fd6"/>
+                    <rect x="16" y="10" width="128" height="22" rx="6" fill="#e8512a"/>
+                  </g>
+                  <rect x="19" y="30" width="122" height="16" fill="#f6c33b"/>
+                  <rect x="19" y="46" width="122" height="14" fill="#8fd3a5"/>
+                  <path d="M16 32h128M16 60h128" stroke="#3d2414" stroke-width="4" stroke-dasharray="8 6"/>
+                  <g stroke="#3d2414" stroke-width="3"><rect x="22" y="36" width="20" height="12" rx="6" fill="#3d8fd6"/><rect x="22" y="66" width="20" height="12" rx="6" fill="#4fb477"/></g>
+                </svg>
+              </div>
+              <span class="station-code">SIMULACIÓN</span>
+              <h3 class="station-name">Difusión de calor</h3>
+              <p class="station-line">Hilos que se reparten una placa y se esperan en la barrera.</p>
               <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
             </a>
           </div>
@@ -621,7 +642,6 @@
           <div class="step-pane active" data-step="play">
             <div class="subtabs" id="concSubtabs">
               <button class="subtab conc-subtab-btn active" data-subtab="roundabout">Rotonda</button>
-              <button class="subtab conc-subtab-btn" data-subtab="heat">Calor en paralelo</button>
               <button class="subtab conc-subtab-btn" data-subtab="patterns">Patrones clásicos</button>
             </div>
 
@@ -665,26 +685,6 @@
                   <p class="ctl-hint">Apaga los semáforos y mira qué pasa cuando cuatro autos se esperan en círculo.</p>
                 </div>
 
-                <div id="heatControls" style="display:none;">
-                  <div class="ctl">
-                    <label class="ctl-label" for="heatThreadsSelect">Hilos trabajando</label>
-                    <select id="heatThreadsSelect">
-                      <option value="1">1 hilo</option>
-                      <option value="2">2 hilos</option>
-                      <option value="4" selected>4 hilos</option>
-                      <option value="8">8 hilos</option>
-                    </select>
-                    <p class="ctl-hint">Cada hilo calcula una franja de la placa. Las líneas punteadas son sus fronteras.</p>
-                  </div>
-                  <div class="btn-row">
-                    <button id="btnRunHeat" class="btn btn-primary"><svg class="ic"><use href="#i-play"/></svg>Iniciar</button>
-                  </div>
-                  <div class="btn-row" style="margin-top:.7rem">
-                    <button id="btnStepHeat" class="btn btn-sm"><svg class="ic"><use href="#i-step"/></svg>Un paso</button>
-                    <button id="btnResetHeat" class="btn btn-sm"><svg class="ic"><use href="#i-reset"/></svg>Reiniciar</button>
-                  </div>
-                </div>
-
                 <div id="patternsControls" style="display:none;">
                   <div class="ctl-label">Dos clásicos</div>
                   <p class="ctl-hint">Izquierda: un <strong>buffer acotado</strong> con productores y consumidores. Derecha: los <strong>filósofos comensales</strong> turnándose los tenedores.</p>
@@ -703,8 +703,6 @@
                   <div class="score" data-sim="roundabout"><div class="score-label">Autos (hilos)</div><div id="concActive" class="score-value">0</div></div>
                   <div class="score" data-sim="roundabout"><div class="score-label">En la rotonda</div><div id="concInRing" class="score-value">0</div></div>
                   <div class="score" data-sim="roundabout"><div class="score-label">Salieron</div><div id="concPassed" class="score-value">0</div></div>
-                  <div class="score" data-sim="heat" style="display:none"><div class="score-label">Iteraciones</div><div id="heatIterCount" class="score-value">0</div></div>
-                  <div class="score" data-sim="heat" style="display:none"><div class="score-label">Cambio máximo (ε)</div><div id="heatMaxDelta" class="score-value">0.0000</div></div>
                 </div>
               </div>
             </div>
@@ -804,6 +802,264 @@ sem_t cuadrante[QUADRANTS];          <span class="c">// capacidad de cada cuadra
                   <li>Compila con <code>-fsanitize=thread</code> para detectar condiciones de carrera.</li>
                   <li><code>valgrind --tool=helgrind ./prog</code> encuentra errores de sincronización.</li>
                   <li>Si sospechas de un deadlock, adjunta <code>gdb</code> y mira dónde está cada hilo con <code>thread apply all bt</code>.</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ MODULE: HEAT DIFFUSION ============ -->
+        <section id="tab-heat" class="tab-pane">
+
+          <div class="step-pane active" data-step="play">
+            <div class="lab-grid">
+              <div class="clipboard" id="heatControls">
+                <div class="ctl">
+                  <div class="ctl-label">La placa</div>
+                  <div class="chips" id="heatScenario">
+                    <button class="chip active" data-scenario="edge">Borde caliente</button>
+                    <button class="chip" data-scenario="center">Fuente central</button>
+                    <button class="chip" data-scenario="two">Dos fuentes</button>
+                    <button class="chip" data-scenario="cooling">Se enfría</button>
+                  </div>
+                </div>
+
+                <div class="ctl" id="heatThreadCtl">
+                  <div class="ctl-label">Hilos</div>
+                  <div class="chips" id="heatThreadChips">
+                    <button class="chip" data-threads="1">1</button>
+                    <button class="chip" data-threads="2">2</button>
+                    <button class="chip active" data-threads="4">4</button>
+                    <button class="chip" data-threads="8">8</button>
+                  </div>
+                </div>
+
+                <div class="ctl">
+                  <div class="ctl-label">Reparto de filas</div>
+                  <div class="chips" id="heatSplit">
+                    <button class="chip active" data-split="even">Parejo</button>
+                    <button class="chip" data-split="uneven">Desbalanceado</button>
+                  </div>
+                </div>
+
+                <div class="ctl">
+                  <label class="switch">
+                    <input type="checkbox" id="heatSlow">
+                    <span class="knob"></span>
+                    El hilo 0 va más lento
+                  </label>
+                </div>
+
+                <div class="ctl">
+                  <div class="ctl-label"><label for="heatSpeed">Velocidad</label><span id="heatSpeedVal" class="ctl-value">lento</span></div>
+                  <input type="range" id="heatSpeed" min="1" max="10" value="2">
+                  <p class="ctl-hint">1 a 3: mira cada fila. 4 en adelante: muchas iteraciones por cuadro.</p>
+                </div>
+
+                <div class="ctl">
+                  <div class="ctl-label"><label for="heatR">Paso de tiempo r</label><span id="heatRVal" class="ctl-value">0.24</span></div>
+                  <input type="range" id="heatR" min="5" max="30" value="24">
+                  <p class="ctl-hint heat-r-hint" id="heatRHint">Estable: r ≤ 1/4.</p>
+                </div>
+
+                <div class="ctl">
+                  <div class="ctl-label">Pincel</div>
+                  <div class="chips" id="heatBrush">
+                    <button class="chip active" data-brush="hot">Calor</button>
+                    <button class="chip" data-brush="cold">Frío</button>
+                  </div>
+                  <p class="ctl-hint">Haz clic o arrastra sobre la placa para dibujar una fuente fija.</p>
+                </div>
+
+                <div class="btn-row">
+                  <button id="heatPlay" class="btn btn-primary"><svg class="ic"><use href="#i-play"/></svg>Iniciar</button>
+                </div>
+                <div class="btn-row" style="margin-top:.7rem">
+                  <button id="heatStep" class="btn btn-sm"><svg class="ic"><use href="#i-step"/></svg>Una iteración</button>
+                  <button id="heatReset" class="btn btn-sm"><svg class="ic"><use href="#i-reset"/></svg>Reiniciar</button>
+                </div>
+              </div>
+
+              <div class="stage" id="heatStage">
+                <div id="heatAlert" class="alert">
+                  <svg class="ic"><use href="#i-bolt"/></svg>
+                  <span>La simulación explotó: con r mayor que 1/4 el método es inestable.</span>
+                </div>
+                <div class="canvas-container heat-canvas-wrap"><canvas id="heatCanvas" aria-label="Placa de metal: color según temperatura"></canvas></div>
+                <div class="heat-scale" aria-hidden="true">
+                  <span>0°</span><i></i><span>100°</span>
+                </div>
+                <div class="scoreboard">
+                  <div class="score"><div class="score-label">Iteración</div><div id="heatIter" class="score-value">0</div></div>
+                  <div class="score"><div class="score-label">Cambio máximo</div><div id="heatDelta" class="score-value">—</div></div>
+                  <div class="score"><div class="score-label">Aceleración</div><div id="heatSpeedup" class="score-value">1.00x</div></div>
+                  <div class="score"><div class="score-label">Eficiencia</div><div id="heatEff" class="score-value">100%</div></div>
+                  <div class="score"><div class="score-label">En la barrera</div><div id="heatWait" class="score-value">0%</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="note heat-note"><strong id="heatNoteTitle">Así trabajan los hilos</strong><span id="heatNote"></span></div>
+
+            <div class="heat-panels">
+              <section class="board heat-panel" id="heatLanesPanel">
+                <h3>Los hilos</h3>
+                <div id="heatLanes" class="lanes"></div>
+                <div class="heat-key"><span><i class="k-busy"></i>calculando</span><span><i class="k-wait"></i>esperando en la barrera</span></div>
+              </section>
+              <section class="board heat-panel" id="heatTimelinePanel">
+                <h3>Las últimas iteraciones</h3>
+                <div id="heatTimeline" class="heat-svg"></div>
+                <p class="ctl-hint">Cada columna es una iteración. Nadie cruza la línea punteada (la barrera) hasta que termina el último.</p>
+              </section>
+              <section class="board heat-panel wide" id="heatChartPanel">
+                <h3>¿Cuándo parar?</h3>
+                <div id="heatChart" class="heat-svg"></div>
+                <p class="ctl-hint">El cambio más grande de cada iteración, en escala logarítmica. Cuando baja de ε, la placa llegó al equilibrio.</p>
+              </section>
+            </div>
+          </div>
+
+          <div class="step-pane" data-step="learn">
+            <div class="learn-grid">
+              <article class="learn-card wide">
+                <h3>La idea: cada punto se parece a sus vecinos</h3>
+                <p>El calor fluye de lo caliente a lo frío. Si dividimos la placa en una cuadrícula, cada punto se acerca un poquito al promedio de sus cuatro vecinos en cada paso. Repetir eso muchas veces es resolver la ecuación del calor.</p>
+                <div class="stencil">
+                  <svg viewBox="0 0 220 220" aria-hidden="true">
+                    <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round">
+                      <rect x="80" y="10" width="60" height="60" rx="8" fill="#f6c33b"/>
+                      <rect x="10" y="80" width="60" height="60" rx="8" fill="#f6c33b"/>
+                      <rect x="80" y="80" width="60" height="60" rx="8" fill="#e8512a"/>
+                      <rect x="150" y="80" width="60" height="60" rx="8" fill="#f6c33b"/>
+                      <rect x="80" y="150" width="60" height="60" rx="8" fill="#f6c33b"/>
+                    </g>
+                    <g font-family="JetBrains Mono, monospace" font-size="15" font-weight="700" fill="#3d2414" text-anchor="middle">
+                      <text x="110" y="45">i-1,j</text><text x="40" y="115">i,j-1</text><text x="110" y="115" fill="#fff">i,j</text><text x="180" y="115">i,j+1</text><text x="110" y="185">i+1,j</text>
+                    </g>
+                  </svg>
+                  <pre class="code">nuevo[i][j] = viejo[i][j] + r * ( viejo[i-1][j] + viejo[i+1][j]
+                                + viejo[i][j-1] + viejo[i][j+1]
+                                - 4 * viejo[i][j] )</pre>
+                </div>
+              </article>
+              <article class="learn-card">
+                <h3>Dos placas, no una</h3>
+                <p class="analogy">Copiar la tarea del compañero mientras él la sigue corrigiendo sale mal.</p>
+                <p>Se lee siempre de la placa <b>vieja</b> y se escribe en la <b>nueva</b> (doble búfer). Así ningún hilo lee un valor a medio actualizar, y el resultado es <b>idéntico</b> con 1 o con 8 hilos, sin importar en qué orden terminen.</p>
+              </article>
+              <article class="learn-card">
+                <h3>Repartir la placa</h3>
+                <p>Cada hilo recibe una <b>franja</b> de filas contiguas. Para calcular el borde de su franja necesita leer una fila del vecino (las "filas fantasma"). No hay problema: esa fila está en la placa vieja, que nadie modifica durante la iteración.</p>
+              </article>
+              <article class="learn-card">
+                <h3>La barrera</h3>
+                <p class="analogy">El guía del tour: nadie avanza hasta que llegue todo el grupo.</p>
+                <p>Antes de intercambiar las placas, todos los hilos deben terminar. La barrera hace esperar a los rápidos, así que <b>el más lento marca el ritmo</b>. Activa "El hilo 0 va más lento" o el reparto desbalanceado y mira cuánto tiempo se pierde esperando.</p>
+              </article>
+              <article class="learn-card">
+                <h3>¿Cuándo parar?</h3>
+                <p>Cada hilo guarda el cambio más grande de su franja. Después de la barrera se toma el máximo de todos (una <b>reducción</b>) y, si es menor que ε, la placa llegó al equilibrio.</p>
+              </article>
+              <article class="learn-card">
+                <h3>Estabilidad: r ≤ 1/4</h3>
+                <p>r mide qué tan grande es cada paso en el tiempo. Si r pasa de 1/4, cada iteración amplifica el error en vez de suavizarlo y aparecen ondas que crecen sin control. Sube r a 0.30 y míralo explotar.</p>
+              </article>
+              <article class="learn-card wide">
+                <h3>Lo que pasa en una máquina de verdad</h3>
+                <p>Medimos los motores en C de este proyecto con 4 hilos (resultado idéntico al serial en todos los casos):</p>
+                <div class="table-container">
+                  <table>
+                    <thead><tr><th>Placa</th><th>pthreads, barrera que gira</th><th>pthreads, barrera que duerme</th><th>OpenMP</th></tr></thead>
+                    <tbody>
+                      <tr><td><strong>120 × 120</strong></td><td>1.73x</td><td>0.19x</td><td>2.52x</td></tr>
+                      <tr><td><strong>400 × 400</strong></td><td>3.36x</td><td>1.40x</td><td>3.50x</td></tr>
+                      <tr><td><strong>1000 × 1000</strong></td><td>1.42x</td><td>1.60x</td><td>1.37x</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p style="margin-top:.8rem">Dos lecciones. En placas chicas cada iteración dura microsegundos, y una barrera que <b>duerme</b> al hilo en el sistema operativo cuesta más que el trabajo: con ella, 4 hilos son 5 veces más lentos que 1. En placas enormes los datos ya no caben en la caché y todos quedan esperando a la memoria: más hilos casi no ayudan.</p>
+              </article>
+            </div>
+          </div>
+
+          <div class="step-pane" data-step="build">
+            <div class="learn-grid">
+              <article class="learn-card wide">
+                <h3>El corazón del motor con pthreads</h3>
+<pre class="code"><span class="c">// Cada hilo: su franja, sus propios punteros, una barrera por iteración</span>
+<span class="k">static void</span>* heat_worker(<span class="k">void</span>* arg) {
+  ...
+  heat_partition(s-&gt;rows, s-&gt;threads, tid, &amp;begin, &amp;end);
+  <span class="k">double</span>* cur = s-&gt;grid_a;            <span class="c">// copia local de los punteros</span>
+  <span class="k">double</span>* next = s-&gt;grid_b;
+
+  <span class="k">for</span> (<span class="k">long</span> it = 0; it &lt; s-&gt;max_iterations; ++it) {
+    <span class="k">int</span> parity = it &amp; 1;               <span class="c">// dos juegos de casillas</span>
+    s-&gt;deltas[parity * P + tid].value = heat_step_rows(cur, next, cols, r, begin, end);
+
+    spin_barrier_wait(&amp;s-&gt;barrier, &amp;sense);
+
+    <span class="k">double</span> global = 0.0;                  <span class="c">// todos calculan el mismo máximo</span>
+    <span class="k">for</span> (<span class="k">int</span> t = 0; t &lt; P; ++t) global = fmax(global, s-&gt;deltas[parity * P + t].value);
+    <span class="k">double</span>* tmp = cur; cur = next; next = tmp;
+    <span class="k">if</span> (global &lt;= s-&gt;epsilon) <span class="k">break</span>;   <span class="c">// misma decisión en todos los hilos</span>
+  }
+}</pre>
+              </article>
+              <article class="learn-card">
+                <h3>La barrera que gira</h3>
+<pre class="code"><span class="k">void</span> spin_barrier_wait(spin_barrier_t* b, <span class="k">int</span>* local) {
+  <span class="k">int</span> mine = !*local; *local = mine;
+  <span class="k">if</span> (atomic_fetch_sub(&amp;b-&gt;remaining, 1) == 1) {
+    atomic_store(&amp;b-&gt;remaining, b-&gt;total);
+    atomic_store(&amp;b-&gt;sense, mine);   <span class="c">// abre</span>
+  } <span class="k">else</span> {
+    <span class="k">while</span> (atomic_load(&amp;b-&gt;sense) != mine)
+      <span class="k">if</span> (++spins &gt; 2000) sched_yield();
+  }
+}</pre>
+              </article>
+              <article class="learn-card">
+                <h3>Lo mismo con OpenMP</h3>
+<pre class="code"><span class="k">#pragma omp parallel</span>
+<span class="k">while</span> (!done) {
+  <span class="k">#pragma omp for schedule(static) reduction(max:step)</span>
+  <span class="k">for</span> (<span class="k">int</span> i = 1; i &lt; rows - 1; ++i)
+    step = fmax(step, heat_step_rows(cur, next, cols, r, i, i + 1));
+  <span class="k">#pragma omp single</span>
+  { swap(&amp;cur, &amp;next); done = step &lt;= eps; step = 0; }
+}</pre>
+              </article>
+              <article class="learn-card">
+                <h3>Consejos</h3>
+                <ul class="plain">
+                  <li>Compara siempre contra la versión serial <strong>celda por celda</strong>: con doble búfer deben ser idénticas.</li>
+                  <li>Una barrera por iteración basta si la reducción usa dos juegos de casillas (par e impar).</li>
+                  <li>Separa las casillas de cada hilo en líneas de caché distintas para evitar el <strong>false sharing</strong>.</li>
+                  <li>Nunca imprimas dentro del ciclo de cálculo, y mide con <code>CLOCK_MONOTONIC</code>.</li>
+                  <li>Busca condiciones de carrera con <code>-fsanitize=thread</code>.</li>
+                </ul>
+              </article>
+              <article class="learn-card">
+                <h3>Pruébalo en tu máquina</h3>
+<pre class="code">cd core-c-engines/concurrency/simulations/heat-diffusion
+make -C pthreads &amp;&amp; make -C openmp
+./pthreads/bin/heat_pthreads 400 400 4 0.05 --compare
+./pthreads/bin/heat_pthreads 400 400 4 0.05 --compare --sleep-barrier
+./openmp/bin/heat_openmp 400 400 4 0.05 --compare</pre>
+                <p class="ctl-hint"><code>--compare</code> corre también la versión serial e imprime la aceleración y si las placas son idénticas.</p>
+              </article>
+              <article class="learn-card wide">
+                <h3>Qué mejoró respecto al motor original</h3>
+                <ul class="plain">
+                  <li>Las tres versiones comparten una sola biblioteca (<code>common/heat.c</code>), y las pruebas usan esa misma biblioteca en vez de una copia.</li>
+                  <li>Una barrera por iteración en lugar de dos, sin que el hilo 0 tenga que hacer la reducción solo.</li>
+                  <li>Barrera que gira con atómicos de C11: de 0.19x a 1.73x en una placa de 120 × 120.</li>
+                  <li>Cada hilo usa sus propios punteros y casillas alineadas a 64 bytes, sin <strong>false sharing</strong>.</li>
+                  <li>Una "puerta de salida" hace que un <code>pthread_create</code> fallido no deje hilos atrapados en la barrera.</li>
+                  <li>OpenMP crea los hilos una sola vez, no en cada iteración.</li>
+                  <li>Validación de entradas (r estable, tamaños, hilos) y verificación sin carreras con ThreadSanitizer.</li>
                 </ul>
               </article>
             </div>
@@ -1113,6 +1369,8 @@ atomic_fetch_add(&amp;contador, 1);</pre>
   <script src="js/modules/figuresData.js"></script>
   <script src="js/modules/algorithms.js"></script>
   <script src="js/modules/concurrency.js"></script>
+  <script src="js/modules/heatsim.js"></script>
+  <script src="js/modules/heat.js"></script>
   <script src="js/modules/httpsim.js"></script>
   <script src="js/modules/networking.js"></script>
   <script src="js/modules/cheatsheets.js"></script>
