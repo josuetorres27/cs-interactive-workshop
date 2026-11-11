@@ -728,12 +728,12 @@ tbody tr:hover td { background: #fff8ea; }
 /* ── Guide: floating Bit + coach-mark tour ─────────────────── */
 .guide {
   position: fixed; left: 16px; bottom: 12px; z-index: 60;
-  display: flex; align-items: flex-end; gap: .2rem;
+  display: flex; align-items: flex-end; gap: .8rem;
   pointer-events: none;
 }
 .guide .bit { width: 78px; pointer-events: auto; cursor: pointer; transition: transform .2s; }
 .guide .bit:hover { transform: translateY(-4px) rotate(-3deg); }
-.guide .bubble { max-width: 300px; margin-bottom: 2.6rem; pointer-events: auto; animation: pop .35s cubic-bezier(.2, 1.5, .4, 1); }
+.guide .bubble { max-width: 300px; margin-bottom: 2.2rem; pointer-events: auto; animation: pop .35s cubic-bezier(.2, 1.5, .4, 1); }
 .guide .bubble[hidden] { display: none; }
 .guide-actions { display: flex; gap: .5rem; margin-top: .55rem; }
 .guide-actions button { font-family: var(--font-sans); font-weight: 800; font-size: .8rem; padding: .25rem .7rem; border-radius: 999px; border: 2px solid var(--box-ink); background: #fff8ea; color: var(--box-ink); }
@@ -1287,7 +1287,7 @@ pre.code .t-k { color: #f6c33b; }
   .step-n { width: 20px; height: 20px; font-size: .72rem; }
   .workspace-grid > .stage, .workspace-grid > .net-stack { order: -1; }
   .guide .bit { width: 60px; }
-  .guide .bubble { max-width: calc(100vw - 100px); font-size: 1.05rem; }
+  .guide .bubble { max-width: calc(100vw - 110px); margin-bottom: 1.45rem; font-size: 1.05rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
