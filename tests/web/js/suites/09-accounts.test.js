@@ -114,7 +114,7 @@ module.exports = (t, { createEnv, read }) => {
     });
     t.test('guest progress is saved on the device', async () => {
       const { env, acc } = newAccount(); await acc.init(); acc.record('cheatsheets', 'amdahl');
-      t.includes(env.localStorage.getItem('cslab-progress'), 'amdahl');
+      t.includes(env.localStorage.getItem('csworkshop-progress'), 'amdahl');
     });
     t.test('guest progress is restored on the next visit', async () => {
       const first = newAccount(); await first.acc.init(); first.acc.record('sql', 'solve:join-where');
@@ -122,7 +122,7 @@ module.exports = (t, { createEnv, read }) => {
       t.eq(second.acc.stats('sql').done, 1);
     });
     t.test('corrupted saved progress starts fresh instead of crashing', async () => {
-      const { env, acc } = newAccount(); env.localStorage.setItem('cslab-progress', '{oops'); await acc.init(); t.eq(acc.overall().done, 0);
+      const { env, acc } = newAccount(); env.localStorage.setItem('csworkshop-progress', '{oops'); await acc.init(); t.eq(acc.overall().done, 0);
     });
     t.test('reset clears the saved progress', async () => {
       const { acc } = newAccount(); await acc.init(); acc.record('cheatsheets', 'amdahl'); acc.reset(); t.eq(acc.overall().done, 0);
@@ -154,7 +154,7 @@ module.exports = (t, { createEnv, read }) => {
     });
     t.test('the device forgets guest progress once it is in the account', async () => {
       const { env, acc, backend } = await signedIn(); acc.record('cheatsheets', 'amdahl'); await backend.signIn();
-      t.eq(env.localStorage.getItem('cslab-progress'), null);
+      t.eq(env.localStorage.getItem('csworkshop-progress'), null);
     });
     t.test('signed-in progress is saved after a short delay, not on every click', async () => {
       const { acc, backend, timers } = await signedIn(); await backend.signIn();

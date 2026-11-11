@@ -9,7 +9,7 @@
 // The cloud part is a pluggable "backend" so it can be faked in tests.
 (function (root) {
   const P = root.Progress;
-  const GUEST_KEY = 'cslab-progress';
+  const GUEST_KEY = 'csworkshop-progress';
   const SDK = 'https://www.gstatic.com/firebasejs/10.12.2';
 
   function loadScript(src, doc) {
