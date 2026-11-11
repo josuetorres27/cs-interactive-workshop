@@ -1,4 +1,4 @@
-// CS Interactive Lab - Heat diffusion station: a metal plate solved by threads.
+// CS Interactive Workshop - Heat diffusion station: a metal plate solved by threads.
 // The physics and the thread model live in heatsim.js; this file draws them.
 class HeatLab {
   constructor() {
