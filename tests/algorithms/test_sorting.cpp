@@ -1,5 +1,5 @@
 /**
- * CS Interactive Lab - Algorithms & Sorters Test Suite
+ * CS Interactive Workshop - Algorithms & Sorters Test Suite
  * Comprehensive automated tests (120 test cases)
  */
 
