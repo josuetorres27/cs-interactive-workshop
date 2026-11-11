@@ -1,5 +1,5 @@
 // CS Interactive Workshop - Theory & Cheatsheets Module
-class CheatsheetsLab {
+class CheatsheetsStation {
   constructor() {
     this.parallelFraction = 0.85;
     this.processorCount = 8;
@@ -43,4 +43,4 @@ class CheatsheetsLab {
   }
 }
 
-window.cheatsheetsLab = new CheatsheetsLab();
+window.cheatsheetsStation = new CheatsheetsStation();

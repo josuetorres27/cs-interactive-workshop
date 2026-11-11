@@ -136,7 +136,7 @@ module.exports = (t, { createEnv }) => {
       env.load('js/modules/cheatsheets.js');
       env.document.getElementById('amdahlFraction').value = String(f);
       env.document.getElementById('amdahlProcessors').value = String(n);
-      env.window.cheatsheetsLab.init();
+      env.window.cheatsheetsStation.init();
       const g = (id) => env.document.getElementById(id).textContent;
       return { speed: g('amdahlSpeedupVal'), max: g('amdahlMaxSpeedupVal'), eff: g('amdahlEfficiencyVal'), procs: g('amdahlProcVal') };
     };
