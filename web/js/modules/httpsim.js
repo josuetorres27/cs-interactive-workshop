@@ -1,4 +1,4 @@
-// CS Interactive Lab - HTTP over TCP exchange model (no DOM).
+// CS Interactive Workshop - HTTP over TCP exchange model (no DOM).
 //
 // Mirrors the project's C++ engine in core-c-engines/networking:
 //   * Server.cc listens on port 1234 (IPv6), accepts a connection and starts one
