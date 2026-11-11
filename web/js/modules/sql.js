@@ -1,6 +1,6 @@
 // CS Interactive Workshop - SQL step by step: queries walked in logical execution order.
 (function () {
-  const { TraceLab, Recorder, viz } = window.Tracer;
+  const { TraceStation, Recorder, viz } = window.Tracer;
 
   // Small sample database used by every query
   const ESTUDIANTES = {
@@ -206,5 +206,5 @@ WHERE id NOT IN (SELECT estudiante_id FROM matriculas);`,
     }
   };
 
-  window.sqlLab = new TraceLab('sql', [joinWhere, groupHaving, antiJoin]);
+  window.sqlLab = new TraceStation('sql', [joinWhere, groupHaving, antiJoin]);
 })();

@@ -81,7 +81,7 @@ module.exports = (t, { createEnv }) => {
       learn: { idea: '<p>i</p>', signals: ['s'], time: 'O(1)', space: 'O(1)', why: 'w' },
       build: { template: 'x = 1', tips: ['t'], similar: ['s'] }
     });
-    const lab = new T.TraceLab('demo', [problem('a'), problem('b')]);
+    const lab = new T.TraceStation('demo', [problem('a'), problem('b')]);
     lab.init();
     t.test('init selects the first problem', () => t.eq(lab.problem.id, 'a'));
     t.test('init runs the first preset', () => t.eq(lab.frames.length, 4));

@@ -182,7 +182,7 @@
   };
 
   // ── The station UI ─────────────────────────────────────────────────────
-  class TraceLab {
+  class TraceStation {
     constructor(id, problems) {
       this.id = id;
       this.problems = problems;
@@ -426,5 +426,5 @@
     }
   }
 
-  window.Tracer = { TraceLab, Recorder, viz, highlight, esc, fmt };
+  window.Tracer = { TraceStation, Recorder, viz, highlight, esc, fmt };
 })();

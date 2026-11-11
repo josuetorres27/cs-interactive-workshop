@@ -1,6 +1,6 @@
 // CS Interactive Workshop - Data structures, traced line by line.
 (function () {
-  const { TraceLab, Recorder, viz } = window.Tracer;
+  const { TraceStation, Recorder, viz } = window.Tracer;
 
   const parseArgs = (text) => {
     try { return JSON.parse(`[${text}]`); } catch (e) {
@@ -316,5 +316,5 @@ def inorder(root):        # devuelve las claves ordenadas
     }
   };
 
-  window.dsLab = new TraceLab('datastructures', [parens, reverseList, bst]);
+  window.dsLab = new TraceStation('datastructures', [parens, reverseList, bst]);
 })();

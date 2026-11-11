@@ -1,6 +1,6 @@
 // CS Interactive Workshop - Technical interview patterns, traced line by line.
 (function () {
-  const { TraceLab, Recorder, viz } = window.Tracer;
+  const { TraceStation, Recorder, viz } = window.Tracer;
 
   const parseArgs = (text) => {
     try { return JSON.parse(`[${text}]`); } catch (e) {
@@ -607,5 +607,5 @@ def max_window(nums, k):
     }
   };
 
-  window.interviewLab = new TraceLab('interview', [twoSum, container, mergeIntervals, longestUnique, trapRain, slidingMax]);
+  window.interviewLab = new TraceStation('interview', [twoSum, container, mergeIntervals, longestUnique, trapRain, slidingMax]);
 })();
