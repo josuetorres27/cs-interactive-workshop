@@ -116,14 +116,16 @@ module.exports = (t, { read, WEB, createEnv }) => {
       t.includes(css, '--screw-head: radial-gradient(circle, #c9ced6'); t.ok(!/\.screw::after/.test(css));
     });
     t.test('every panel, card and board has a thick ink outline', () => {
-      ['.bench', '.station-card', '.learn-card', '.stage', '.tr-brief', '.tr-stage', '.machine', '.faq', '.note', '.clipboard', '.sign-board', '.tr-controls', '.net-cable']
+      ['.bench', '.station-card', '.learn-card', '.stage', '.tr-brief', '.tr-stage', '.machine', '.faq', '.note', '.clipboard', '.pegboard', '.sign-board', '.tr-controls', '.net-cable']
         .forEach((sel) => t.ok(/border\s*:\s*(var\(--outline\)|[34]px solid var\(--box-ink\))/.test(ruleFor(sel)), sel));
     });
     t.test('inline illustrations use thick ink strokes (3 or more)', () => {
-      [...html.matchAll(/stroke="#1b2027" stroke-width="([\d.]+)"/g)].forEach((m) => t.ok(parseFloat(m[1]) >= 3, m[0]));
+      [...html.matchAll(/stroke="#(?:1b2027|3d2414)" stroke-width="([\d.]+)"/g)].forEach((m) => t.ok(parseFloat(m[1]) >= 3, m[0]));
     });
-    t.test('the lamp is an outlined drawing, not a gradient', () => {
-      t.includes(html, '<div class="lamp"'); t.notIncludes(css, '.lamp-shade'); t.ok(/class="lamp"[\s\S]{0,400}<svg/.test(html));
+    t.test('both lamps (lab and wood) are outlined drawings, not gradients', () => {
+      t.ok(/class="lamp theme-lab"[\s\S]{0,400}<svg/.test(html), 'lab lamp');
+      t.ok(/class="lamp theme-wood"[\s\S]{0,400}<svg/.test(html), 'wood lamp');
+      t.notIncludes(css, '.lamp-shade');
     });
   });
 

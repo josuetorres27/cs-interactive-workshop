@@ -24,6 +24,9 @@ class ConcurrencyStation {
     this.spawnInterval = 1200; // ms
   }
 
+  // Colour of a theme token (falls back to the lab colour without a stylesheet)
+  tc(name, fallback) { return typeof window !== 'undefined' && window.Theme ? window.Theme.color(name, fallback) : fallback; }
+
   init() {
     this.canvas = document.getElementById('concurrencyCanvas');
     if (!this.canvas) return;
@@ -168,7 +171,7 @@ class ConcurrencyStation {
           speed: 0.015,
           state: 'IN_QUADRANT',
           blockedTime: 2000,
-          color: '#f5c518'
+          color: '--sun-y'
         });
       }
     }
@@ -390,16 +393,16 @@ class ConcurrencyStation {
     // Road ring
     this.ctx.beginPath();
     this.ctx.arc(cx, cy, outerR, 0, 2 * Math.PI);
-    this.ctx.fillStyle = '#3d444d';
+    this.ctx.fillStyle = this.tc('--cv-road', '#3d444d');
     this.ctx.fill();
     this.ctx.lineWidth = 4;
-    this.ctx.strokeStyle = '#1b2027';
+    this.ctx.strokeStyle = this.tc('--box-ink', '#1b2027');
     this.ctx.stroke();
 
     // Lane marking
     this.ctx.beginPath();
     this.ctx.arc(cx, cy, trackR, 0, 2 * Math.PI);
-    this.ctx.strokeStyle = 'rgba(240, 246, 252, 0.35)';
+    this.ctx.strokeStyle = `rgba(${this.tc('--rgb-cream', '240, 246, 252')}, 0.35)`;
     this.ctx.lineWidth = 2;
     this.ctx.setLineDash([8, 10]);
     this.ctx.stroke();
@@ -411,10 +414,10 @@ class ConcurrencyStation {
     this.ctx.fillStyle = this.deadlockDetected ? '#f4a48a' : '#8fd3a5';
     this.ctx.fill();
     this.ctx.lineWidth = 4;
-    this.ctx.strokeStyle = '#1b2027';
+    this.ctx.strokeStyle = this.tc('--box-ink', '#1b2027');
     this.ctx.stroke();
 
-    this.ctx.fillStyle = '#1b2027';
+    this.ctx.fillStyle = this.tc('--box-ink', '#1b2027');
     this.ctx.font = `800 ${Math.max(11, Math.round(innerR / 4.5))}px ${fontFamily}`;
     this.ctx.fillText(this.deadlockDetected ? 'TRABADA' : (this.semaphoresEnabled ? 'CON SEMÁFOROS' : 'SIN CONTROL'), cx, cy);
 
@@ -425,7 +428,7 @@ class ConcurrencyStation {
       this.ctx.beginPath();
       this.ctx.moveTo(cx + innerR * Math.cos(angle), cy + innerR * Math.sin(angle));
       this.ctx.lineTo(cx + outerR * Math.cos(angle), cy + outerR * Math.sin(angle));
-      this.ctx.strokeStyle = 'rgba(240, 246, 252, 0.6)';
+      this.ctx.strokeStyle = `rgba(${this.tc('--rgb-cream', '240, 246, 252')}, 0.6)`;
       this.ctx.lineWidth = 2;
       this.ctx.setLineDash([4, 4]);
       this.ctx.stroke();
@@ -438,7 +441,7 @@ class ConcurrencyStation {
       const full = this.quadrants[i].count >= this.quadrants[i].max;
 
       this.ctx.font = `800 12px ${fontFamily}`;
-      this.ctx.fillStyle = full ? '#9c1e16' : '#1b7f5a';
+      this.ctx.fillStyle = full ? this.tc('--tomato-dark', '#9c1e16') : this.tc('--mint-dark', '#1b7f5a');
       this.ctx.fillText(`${quadNames[i]} ${this.quadrants[i].count}/${this.quadrants[i].max}`, lx, ly);
     }
 
@@ -513,14 +516,14 @@ class ConcurrencyStation {
       this.ctx.globalAlpha = alpha;
       this.ctx.beginPath();
       this.ctx.arc(px, py, 9, 0, 2 * Math.PI);
-      this.ctx.fillStyle = v.blockedTime > 1500 ? '#d8382e' : v.color;
+      this.ctx.fillStyle = v.blockedTime > 1500 ? this.tc('--tomato', '#d8382e') : this.tc(v.color, '#f5c518');
       this.ctx.fill();
-      this.ctx.strokeStyle = '#1b2027';
+      this.ctx.strokeStyle = this.tc('--box-ink', '#1b2027');
       this.ctx.lineWidth = 3.5;
       this.ctx.stroke();
 
       // Vehicle ID
-      this.ctx.fillStyle = '#1b2027';
+      this.ctx.fillStyle = this.tc('--box-ink', '#1b2027');
       this.ctx.font = 'bold 9px "JetBrains Mono", monospace';
       this.ctx.fillText(v.id, px, py + 0.5);
       this.ctx.globalAlpha = 1;
@@ -528,13 +531,13 @@ class ConcurrencyStation {
   }
 
   drawRoadArm(x, y, w, h, label) {
-    this.ctx.fillStyle = '#3d444d';
+    this.ctx.fillStyle = this.tc('--cv-road', '#3d444d');
     this.ctx.fillRect(x, y, w, h);
     this.ctx.lineWidth = 4;
-    this.ctx.strokeStyle = '#1b2027';
+    this.ctx.strokeStyle = this.tc('--box-ink', '#1b2027');
     this.ctx.strokeRect(x, y, w, h);
 
-    this.ctx.fillStyle = 'rgba(240, 246, 252, 0.55)';
+    this.ctx.fillStyle = `rgba(${this.tc('--rgb-cream', '240, 246, 252')}, 0.55)`;
     this.ctx.font = `800 11px ${getComputedStyle(document.body).fontFamily}`;
     const vertical = h > w;
     const lx = x + w / 2;
@@ -585,16 +588,16 @@ class ConcurrencyStation {
 
   drawPanel(x, y, w, h, title) {
     const font = getComputedStyle(document.body).fontFamily;
-    this.ctx.fillStyle = '#f6f9fc';
+    this.ctx.fillStyle = this.tc('--cv-panel', '#f6f9fc');
     this.ctx.beginPath();
     this.ctx.roundRect(x, y, w, h, 14);
     this.ctx.fill();
     this.ctx.lineWidth = 3.5;
-    this.ctx.strokeStyle = '#1b2027';
+    this.ctx.strokeStyle = this.tc('--box-ink', '#1b2027');
     this.ctx.stroke();
     this.ctx.textAlign = 'left';
     this.ctx.textBaseline = 'alphabetic';
-    this.ctx.fillStyle = '#1b2027';
+    this.ctx.fillStyle = this.tc('--box-ink', '#1b2027');
     this.ctx.font = `800 14px ${font}`;
     this.ctx.fillText(title, x + 16, y + 28);
     return font;
@@ -613,20 +616,20 @@ class ConcurrencyStation {
       const sx = x + 16 + i * slotW;
       this.ctx.beginPath();
       this.ctx.roundRect(sx, startY, slotW - 5, slotH, 6);
-      this.ctx.fillStyle = i < filled ? '#2db886' : '#e6edf3';
+      this.ctx.fillStyle = i < filled ? this.tc('--mint', '#2db886') : this.tc('--cv-slot', '#e6edf3');
       this.ctx.fill();
       this.ctx.lineWidth = 3;
-      this.ctx.strokeStyle = '#1b2027';
+      this.ctx.strokeStyle = this.tc('--box-ink', '#1b2027');
       this.ctx.stroke();
 
-      this.ctx.fillStyle = i < filled ? '#ffffff' : '#8a949e';
+      this.ctx.fillStyle = i < filled ? '#ffffff' : this.tc('--cv-slot-fg', '#8a949e');
       this.ctx.font = `600 10px "JetBrains Mono", monospace`;
       this.ctx.textAlign = 'center';
       this.ctx.fillText(`${i}`, sx + (slotW - 5) / 2, startY + slotH / 2 + 4);
     }
 
     this.ctx.textAlign = 'left';
-    this.ctx.fillStyle = '#5a636e';
+    this.ctx.fillStyle = this.tc('--cv-label', '#5a636e');
     this.ctx.font = `700 13px ${font}`;
     const ty = startY + slotH + 28;
     this.ctx.fillText(`vacíos  (sem_empty) = ${slots - filled}`, x + 16, ty);
@@ -644,10 +647,10 @@ class ConcurrencyStation {
     // Table
     this.ctx.beginPath();
     this.ctx.arc(pcx, pcy, radius * 0.58, 0, 2 * Math.PI);
-    this.ctx.fillStyle = '#8a9096';
+    this.ctx.fillStyle = this.tc('--cv-table', '#8a9096');
     this.ctx.fill();
     this.ctx.lineWidth = 3.5;
-    this.ctx.strokeStyle = '#1b2027';
+    this.ctx.strokeStyle = this.tc('--box-ink', '#1b2027');
     this.ctx.stroke();
 
     // Two non-neighbours eat at a time (5 forks -> at most 2 eaters)
@@ -663,10 +666,10 @@ class ConcurrencyStation {
 
       this.ctx.beginPath();
       this.ctx.arc(px, py, 16, 0, 2 * Math.PI);
-      this.ctx.fillStyle = isEating ? '#2db886' : '#2e6be6';
+      this.ctx.fillStyle = isEating ? this.tc('--mint', '#2db886') : this.tc('--sky-b', '#2e6be6');
       this.ctx.fill();
       this.ctx.lineWidth = 3.5;
-      this.ctx.strokeStyle = '#1b2027';
+      this.ctx.strokeStyle = this.tc('--box-ink', '#1b2027');
       this.ctx.stroke();
 
       this.ctx.fillStyle = '#ffffff';
@@ -679,9 +682,9 @@ class ConcurrencyStation {
 
     this.ctx.textAlign = 'left';
     this.ctx.font = `700 12px ${font}`;
-    this.ctx.fillStyle = '#1b7f5a';
+    this.ctx.fillStyle = this.tc('--mint-dark', '#1b7f5a');
     this.ctx.fillText('verde: come', x + 16, y + h - 14);
-    this.ctx.fillStyle = '#1c4cb0';
+    this.ctx.fillStyle = this.tc('--sky-b-dark', '#1c4cb0');
     this.ctx.fillText('azul: piensa', x + 110, y + h - 14);
   }
 }
