@@ -4,8 +4,8 @@
  *
  * Implementation of the custom block-based file system (block allocation, directory chaining, and data read/write).
  *
- * Author: Josue Torres
- * Copyright (c) 2025 Josue Torres
+ * Author: Josue Torres Sibaja
+ * Copyright (c) 2025 Josue Torres Sibaja
  * Licensed under the MIT License.
  */
 
