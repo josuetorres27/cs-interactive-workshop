@@ -81,25 +81,25 @@ module.exports = (t, { createEnv }) => {
       learn: { idea: '<p>i</p>', signals: ['s'], time: 'O(1)', space: 'O(1)', why: 'w' },
       build: { template: 'x = 1', tips: ['t'], similar: ['s'] }
     });
-    const lab = new T.TraceStation('demo', [problem('a'), problem('b')]);
-    lab.init();
-    t.test('init selects the first problem', () => t.eq(lab.problem.id, 'a'));
-    t.test('init runs the first preset', () => t.eq(lab.frames.length, 4));
-    t.test('the step counter shows position and total', () => t.eq(lab.$('.tr-count').textContent, '1 / 4'));
-    t.test('go() clamps past the end', () => { lab.go(99); t.eq(lab.idx, 3); });
-    t.test('go() clamps below zero', () => { lab.go(-5); t.eq(lab.idx, 0); });
-    t.test('next() advances one step', () => { lab.go(0); lab.next(); t.eq(lab.idx, 1); });
-    t.test('prev() goes back one step', () => { lab.go(2); lab.prev(); t.eq(lab.idx, 1); });
-    t.test('the narration shows the current note', () => { lab.go(2); t.eq(lab.$('.tr-note-text').innerHTML, 'paso 2'); });
+    const stn = new T.TraceStation('demo', [problem('a'), problem('b')]);
+    stn.init();
+    t.test('init selects the first problem', () => t.eq(stn.problem.id, 'a'));
+    t.test('init runs the first preset', () => t.eq(stn.frames.length, 4));
+    t.test('the step counter shows position and total', () => t.eq(stn.$('.tr-count').textContent, '1 / 4'));
+    t.test('go() clamps past the end', () => { stn.go(99); t.eq(stn.idx, 3); });
+    t.test('go() clamps below zero', () => { stn.go(-5); t.eq(stn.idx, 0); });
+    t.test('next() advances one step', () => { stn.go(0); stn.next(); t.eq(stn.idx, 1); });
+    t.test('prev() goes back one step', () => { stn.go(2); stn.prev(); t.eq(stn.idx, 1); });
+    t.test('the narration shows the current note', () => { stn.go(2); t.eq(stn.$('.tr-note-text').innerHTML, 'paso 2'); });
     t.test('invalid input shows the error and keeps the old trace', () => {
-      lab.run('abc');
-      t.eq(lab.$('.tr-error').textContent, 'solo números'); t.eq(lab.frames.length, 4);
+      stn.run('abc');
+      t.eq(stn.$('.tr-error').textContent, 'solo números'); t.eq(stn.frames.length, 4);
     });
-    t.test('valid custom input re-runs the trace', () => { lab.run('3'); t.eq(lab.frames.length, 6); t.eq(lab.$('.tr-error').textContent, ''); });
-    t.test('select() switches problem and resets to step 1', () => { lab.select('b'); t.eq(lab.problem.id, 'b'); t.eq(lab.idx, 0); });
-    t.test('stop() clears playback', () => { lab.play(); t.ok(lab.timer !== null); lab.stop(); t.eq(lab.timer, null); });
+    t.test('valid custom input re-runs the trace', () => { stn.run('3'); t.eq(stn.frames.length, 6); t.eq(stn.$('.tr-error').textContent, ''); });
+    t.test('select() switches problem and resets to step 1', () => { stn.select('b'); t.eq(stn.problem.id, 'b'); t.eq(stn.idx, 0); });
+    t.test('stop() clears playback', () => { stn.play(); t.ok(stn.timer !== null); stn.stop(); t.eq(stn.timer, null); });
     t.test('learn and build pages are rendered from the problem data', () => {
-      t.includes(lab.learnEl.innerHTML, 'O(1)'); t.includes(lab.buildEl.innerHTML, 'Plantilla del patrón');
+      t.includes(stn.learnEl.innerHTML, 'O(1)'); t.includes(stn.buildEl.innerHTML, 'Plantilla del patrón');
     });
   });
 };
