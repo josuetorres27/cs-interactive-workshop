@@ -138,18 +138,11 @@ code {
   box-shadow: inset 0 0 180px 40px rgba(12, 16, 22, .45);
 }
 
-/* Pegboards with tools (decor) */
-.pegboard {
-  position: absolute; pointer-events: none; z-index: 0;
-  border-radius: 6px;
-  background:
-    var(--screws),
-    radial-gradient(circle, var(--box-ink) 0 2.6px, transparent 3px) 11px 11px / 22px 22px,
-    #c4935e;
-  border: var(--outline);
-  box-shadow: var(--drop);
-}
-.peg-tool { position: absolute; height: auto; overflow: visible; }
+/* Lab decor on the intro: Bit's construction blueprint and a robot arm */
+.lab-deco { position: absolute; pointer-events: none; z-index: 0; }
+.lab-deco svg { display: block; width: 100%; height: auto; overflow: visible; }
+.lab-deco.blueprint { top: 11%; left: 4%; width: clamp(170px, 19vw, 250px); transform: rotate(-3deg); }
+.lab-deco.robot-arm { top: 36%; right: 3%; width: clamp(150px, 17vw, 230px); }
 
 /* Screw element (used where a real element is needed, e.g. the sign) */
 .screw {
