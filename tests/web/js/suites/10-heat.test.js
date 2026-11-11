@@ -169,90 +169,90 @@ module.exports = (t, { createEnv, read }) => {
     e.load('js/progress.js'); e.load('js/account.js');
     e.load('js/modules/heat.js');
     if (setup) setup(e);
-    const lab = e.window.heatStation;
-    lab.init();
-    return { e, lab, $: (id) => e.document.getElementById(id) };
+    const stn = e.window.heatStation;
+    stn.init();
+    return { e, stn, $: (id) => e.document.getElementById(id) };
   };
   const chip = ($, id, attr, value) => $(id).dispatch('click', { target: { closest: () => ({ dataset: { [attr]: value } }) } });
-  const run = (lab, max = 5000) => { let n = 0; while (lab.running && n++ < max) lab.frame(); return n; };
+  const run = (stn, max = 5000) => { let n = 0; while (stn.running && n++ < max) stn.frame(); return n; };
 
   t.suite('heat · station UI', () => {
     t.test('starts with the hot-edge plate split between 4 threads', () => {
-      const { lab, $ } = station();
-      t.eq(lab.bands.length, 4); t.eq(lab.plate.scenario, 'edge'); t.eq(($('heatLanes').innerHTML.match(/class="lane"/g) || []).length, 4);
+      const { stn, $ } = station();
+      t.eq(stn.bands.length, 4); t.eq(stn.plate.scenario, 'edge'); t.eq(($('heatLanes').innerHTML.match(/class="lane"/g) || []).length, 4);
     });
     t.test('choosing 8 threads re-splits the plate', () => {
-      const { lab, $ } = station(); chip($, 'heatThreadChips', 'threads', '8');
-      t.eq(lab.bands.length, 8); t.eq(($('heatLanes').innerHTML.match(/class="lane"/g) || []).length, 8);
+      const { stn, $ } = station(); chip($, 'heatThreadChips', 'threads', '8');
+      t.eq(stn.bands.length, 8); t.eq(($('heatLanes').innerHTML.match(/class="lane"/g) || []).length, 8);
     });
-    t.test('"Una iteración" advances exactly one iteration', () => { const { lab, $ } = station(); $('heatStep').click(); t.eq(lab.plate.iteration, 1); });
+    t.test('"Una iteración" advances exactly one iteration', () => { const { stn, $ } = station(); $('heatStep').click(); t.eq(stn.plate.iteration, 1); });
     t.test('slow speeds compute row by row and then pass the barrier', () => {
-      const { lab, $ } = station(); $('heatPlay').click();
-      lab.frame();
-      t.eq(lab.plate.iteration, 0); t.ok(lab.sweep.progress.every((p) => p > 0));
-      let guard = 0; while (lab.plate.iteration === 0 && guard++ < 500) lab.frame();
-      t.eq(lab.plate.iteration, 1); t.ok(lab.sweep.done.every((d) => d === 0));
+      const { stn, $ } = station(); $('heatPlay').click();
+      stn.frame();
+      t.eq(stn.plate.iteration, 0); t.ok(stn.sweep.progress.every((p) => p > 0));
+      let guard = 0; while (stn.plate.iteration === 0 && guard++ < 500) stn.frame();
+      t.eq(stn.plate.iteration, 1); t.ok(stn.sweep.done.every((d) => d === 0));
     });
     t.test('with a slow thread, the others reach the barrier first and wait', () => {
-      const { lab, $ } = station((e) => { e.document.getElementById('heatSlow').checked = true; });
+      const { stn, $ } = station((e) => { e.document.getElementById('heatSlow').checked = true; });
       $('heatSlow').dispatch('change', { target: { checked: true } }); $('heatPlay').click();
-      let guard = 0; while (lab.sweep.done[1] < lab.bands[1].end - lab.bands[1].begin && guard++ < 500) lab.frame();
-      t.ok(lab.sweep.done[0] < lab.bands[0].end - lab.bands[0].begin, 'thread 0 still computing');
-      lab.renderPanels(false);
+      let guard = 0; while (stn.sweep.done[1] < stn.bands[1].end - stn.bands[1].begin && guard++ < 500) stn.frame();
+      t.ok(stn.sweep.done[0] < stn.bands[0].end - stn.bands[0].begin, 'thread 0 still computing');
+      stn.renderPanels(false);
       t.eq($('heatLanes').querySelector('.lane-state').textContent !== undefined, true);
     });
     t.test('fast speeds run many iterations per frame until equilibrium', () => {
-      const { lab, $ } = station(); $('heatSpeed').dispatch('input', { target: { value: '10' } }); $('heatPlay').click();
-      const frames = run(lab);
-      t.eq(lab.status, 'converged'); t.ok(frames < 20); t.ok(lab.plate.lastDelta <= lab.eps);
+      const { stn, $ } = station(); $('heatSpeed').dispatch('input', { target: { value: '10' } }); $('heatPlay').click();
+      const frames = run(stn);
+      t.eq(stn.status, 'converged'); t.ok(frames < 20); t.ok(stn.plate.lastDelta <= stn.eps);
     });
     t.test('animated and fast runs reach the identical plate', () => {
       const a = station(); a.$('heatSpeed').dispatch('input', { target: { value: '3' } }); a.$('heatPlay').click();
-      let guard = 0; while (a.lab.plate.iteration < 30 && guard++ < 20000) a.lab.frame();
-      a.lab.pause();
-      const p = H.createPlate(42, 64, 'edge'); for (let i = 0; i < a.lab.plate.iteration; i++) H.iterate(p, 0.24, H.partition(42, 1));
-      t.ok(same(a.lab.plate, p));
+      let guard = 0; while (a.stn.plate.iteration < 30 && guard++ < 20000) a.stn.frame();
+      a.stn.pause();
+      const p = H.createPlate(42, 64, 'edge'); for (let i = 0; i < a.stn.plate.iteration; i++) H.iterate(p, 0.24, H.partition(42, 1));
+      t.ok(same(a.stn.plate, p));
     });
     t.test('changing threads mid-iteration finishes it first (nothing is lost)', () => {
-      const { lab, $ } = station(); $('heatPlay').click();
-      let guard = 0; while (lab.sweep.done.every((d) => d === 0) && guard++ < 100) lab.frame();
-      t.eq(lab.plate.iteration, 0); t.ok(lab.sweep.done.some((d) => d > 0), 'some rows already computed');
+      const { stn, $ } = station(); $('heatPlay').click();
+      let guard = 0; while (stn.sweep.done.every((d) => d === 0) && guard++ < 100) stn.frame();
+      t.eq(stn.plate.iteration, 0); t.ok(stn.sweep.done.some((d) => d > 0), 'some rows already computed');
       chip($, 'heatThreadChips', 'threads', '2');
-      t.eq(lab.plate.iteration, 1); t.eq(lab.bands.length, 2);
-      const p = H.createPlate(42, 64, 'edge'); H.iterate(p, 0.24, H.partition(42, 4)); t.ok(same(lab.plate, p));
+      t.eq(stn.plate.iteration, 1); t.eq(stn.bands.length, 2);
+      const p = H.createPlate(42, 64, 'edge'); H.iterate(p, 0.24, H.partition(42, 4)); t.ok(same(stn.plate, p));
     });
     t.test('r above 1/4 makes the plate blow up and stops with a warning', () => {
-      const { lab, $ } = station(); $('heatR').dispatch('input', { target: { value: '30' } });
-      $('heatSpeed').dispatch('input', { target: { value: '10' } }); $('heatPlay').click(); run(lab);
-      t.eq(lab.status, 'diverged'); t.eq($('heatAlert').style.display, 'flex'); t.includes($('heatRHint').textContent, 'Inestable');
+      const { stn, $ } = station(); $('heatR').dispatch('input', { target: { value: '30' } });
+      $('heatSpeed').dispatch('input', { target: { value: '10' } }); $('heatPlay').click(); run(stn);
+      t.eq(stn.status, 'diverged'); t.eq($('heatAlert').style.display, 'flex'); t.includes($('heatRHint').textContent, 'Inestable');
     });
     t.test('the timeline and the convergence chart are drawn', () => {
-      const { lab, $ } = station(); $('heatStep').click(); $('heatStep').click(); lab.frame();
+      const { stn, $ } = station(); $('heatStep').click(); $('heatStep').click(); stn.frame();
       t.includes($('heatTimeline').innerHTML, 'barrera'); t.includes($('heatChart').innerHTML, 'ε = 0.01');
     });
     t.test('an unbalanced split explains the load imbalance', () => {
-      const { lab, $ } = station(); chip($, 'heatSplit', 'split', 'uneven'); lab.frame();
+      const { stn, $ } = station(); chip($, 'heatSplit', 'split', 'uneven'); stn.frame();
       t.eq($('heatNoteTitle').textContent, 'Desbalance de carga');
     });
     t.test('painting on the plate adds a fixed source', () => {
-      const { lab, $ } = station();
+      const { stn, $ } = station();
       $('heatCanvas').dispatch('pointerdown', { clientX: 400, clientY: 200, pointerId: 1 });
-      t.ok(lab.plate.fixed.some((f, k) => f && Math.floor(k / 64) > 0 && Math.floor(k / 64) < 41 && k % 64 > 0 && k % 64 < 63));
+      t.ok(stn.plate.fixed.some((f, k) => f && Math.floor(k / 64) > 0 && Math.floor(k / 64) < 41 && k % 64 > 0 && k % 64 < 63));
     });
-    t.test('reset goes back to iteration 0', () => { const { lab, $ } = station(); $('heatStep').click(); $('heatReset').click(); t.eq(lab.plate.iteration, 0); t.eq(lab.status, 'idle'); });
+    t.test('reset goes back to iteration 0', () => { const { stn, $ } = station(); $('heatStep').click(); $('heatReset').click(); t.eq(stn.plate.iteration, 0); t.eq(stn.status, 'idle'); });
     t.test('progress: equilibrium, 8 threads, imbalance, painting and instability are recorded', () => {
-      const { e, lab, $ } = station();
+      const { e, stn, $ } = station();
       chip($, 'heatThreadChips', 'threads', '8'); chip($, 'heatSplit', 'split', 'uneven');
-      $('heatSpeed').dispatch('input', { target: { value: '10' } }); $('heatPlay').click(); run(lab);
+      $('heatSpeed').dispatch('input', { target: { value: '10' } }); $('heatPlay').click(); run(stn);
       $('heatCanvas').dispatch('pointerdown', { clientX: 100, clientY: 100, pointerId: 1 });
-      $('heatR').dispatch('input', { target: { value: '30' } }); $('heatPlay').click(); run(lab);
+      $('heatR').dispatch('input', { target: { value: '30' } }); $('heatPlay').click(); run(stn);
       const items = e.window.account.progress.stations.heat.items;
       ['converge', 'threads8', 'imbalance', 'paint', 'unstable'].forEach((k) => t.ok(items[k], k));
     });
     t.test('nothing runs while the station is hidden', () => {
-      const { lab, $ } = station(); $('heatPlay').click(); lab.canvas.offsetParent = null;
-      for (let i = 0; i < 50; i++) lab.frame();
-      t.eq(lab.plate.iteration, 0);
+      const { stn, $ } = station(); $('heatPlay').click(); stn.canvas.offsetParent = null;
+      for (let i = 0; i < 50; i++) stn.frame();
+      t.eq(stn.plate.iteration, 0);
     });
   });
 
