@@ -271,11 +271,13 @@ code {
 @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
 .bit .bulb { animation: bulb 2.2s ease-in-out infinite; }
 @keyframes bulb { 50% { fill: #ffe9a3; } }
-.intro-bit { position: absolute; left: max(16px, 6vw); bottom: -6px; z-index: 1; width: clamp(90px, 13vw, 150px); animation: peek 1s .4s both cubic-bezier(.2, 1.4, .4, 1); }
+#screen-intro { --bit-w: clamp(90px, 10vw, 120px); --bit-left: max(16px, 6vw); }
+.intro-bit { position: absolute; left: var(--bit-left); bottom: -6px; z-index: 1; width: var(--bit-w); animation: peek 1s .4s both cubic-bezier(.2, 1.4, .4, 1); }
+.intro-bit .bit { display: block; width: 100%; }
 @keyframes peek { from { transform: translateY(110%); } to { transform: none; } }
 #screen-intro .intro-bubble {
-  position: absolute; left: calc(max(16px, 6vw) + clamp(90px, 13vw, 150px) + 6px); bottom: clamp(70px, 10vw, 120px); z-index: 2;
-  max-width: 220px;
+  position: absolute; left: calc(var(--bit-left) + var(--bit-w) * .883 + 24px); bottom: calc(var(--bit-w) * .708 - 33px); z-index: 2;
+  max-width: min(220px, calc(50vw - var(--bit-left) - var(--bit-w) - 90px));
   animation: pop .4s 1.2s both cubic-bezier(.2, 1.5, .4, 1);
 }
 
@@ -979,6 +981,9 @@ pre.code .t-k { color: #f6c33b; }
   .tr-code { max-height: 300px; }
   .benches { grid-template-columns: 1fr; }
 }
+@media (max-width: 760px) {
+  #screen-intro .intro-bubble { display: none; }
+}
 @media (max-width: 600px) {
   .bench { grid-template-columns: 76px 1fr; padding: 1.4rem 1.1rem 1.1rem 1.3rem; }
   .bench-art { width: 76px; }
@@ -1275,7 +1280,7 @@ pre.code .t-k { color: #f6c33b; }
   .back-link { top: 10px; left: 10px; }
   #screen-intro .intro-bubble { display: none; }
   #screen-intro.is-active { padding-bottom: 120px; }
-  .intro-bit { left: 50%; width: 92px; margin-left: -46px; }
+  .intro-bit { left: 50%; width: 120px; margin-left: -60px; }
   .steps { width: 100%; }
   .step { flex: 1; justify-content: center; gap: .3rem; padding: .4rem .5rem; font-size: .88rem; }
   .step-n { width: 20px; height: 20px; font-size: .72rem; }
