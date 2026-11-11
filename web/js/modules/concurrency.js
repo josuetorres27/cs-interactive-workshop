@@ -442,29 +442,36 @@ class ConcurrencyStation {
     }
 
     // Draw vehicles
+    // Lanes: cars drive in on one side of each road and leave on the other
+    const entryLane = (dir, dist) => {
+      if (dir === 'N') return [cx - 12, cy - outerR - dist];
+      if (dir === 'E') return [cx + outerR + dist, cy - 12];
+      if (dir === 'S') return [cx + 12, cy + outerR + dist];
+      return [cx - outerR - dist, cy + 12];
+    };
+    const exitLane = (dir, dist) => {
+      if (dir === 'N') return [cx + 12, cy - outerR - dist];
+      if (dir === 'E') return [cx + outerR + dist, cy + 12];
+      if (dir === 'S') return [cx - 12, cy + outerR + dist];
+      return [cx - outerR - dist, cy - 12];
+    };
+    // Quadrant start angles: Q0 PI..1.5PI, Q1 1.5PI..2PI, Q2 0..0.5PI, Q3 0.5PI..PI
+    const qAngles = [Math.PI, 1.5 * Math.PI, 0, 0.5 * Math.PI];
+    const exitQuad = { N: 0, E: 1, S: 2, W: 3 };
+    const queued = { N: 0, E: 0, S: 0, W: 0 };
+
     this.vehicles.forEach(v => {
       let vx = cx, vy = cy;
 
       if (v.state === 'WAITING_ENTRY') {
-        const dist = 30 + v.id * 18 % 60;
-        if (v.entry === 'N') { vx = cx - 12; vy = cy - outerR - dist; }
-        else if (v.entry === 'E') { vx = cx + outerR + dist; vy = cy - 12; }
-        else if (v.entry === 'S') { vx = cx + 12; vy = cy + outerR + dist; }
-        else if (v.entry === 'W') { vx = cx - outerR - dist; vy = cy + 12; }
+        // Waiting cars line up on their approach road in arrival order
+        [vx, vy] = entryLane(v.entry, 26 + queued[v.entry]++ * 22);
       } else if (v.state === 'IN_QUADRANT') {
-        // Map quadrant progress to angle
-        // Q0: PI to 1.5*PI, Q1: 1.5*PI to 2*PI, Q2: 0 to 0.5*PI, Q3: 0.5*PI to PI
-        const qAngles = [Math.PI, 1.5 * Math.PI, 0, 0.5 * Math.PI];
-        const baseAngle = qAngles[v.currentQuad];
-        const curAngle = baseAngle + v.progress * (0.5 * Math.PI);
+        const curAngle = qAngles[v.currentQuad] + v.progress * (0.5 * Math.PI);
         vx = cx + trackR * Math.cos(curAngle);
         vy = cy + trackR * Math.sin(curAngle);
       } else if (v.state === 'EXITING') {
-        const dist = v.progress * 80;
-        if (v.exit === 'N') { vx = cx + 12; vy = cy - outerR - dist; }
-        else if (v.exit === 'E') { vx = cx + outerR + dist; vy = cy + 12; }
-        else if (v.exit === 'S') { vx = cx - 12; vy = cy + outerR + dist; }
-        else if (v.exit === 'W') { vx = cx - outerR - dist; vy = cy - 12; }
+        [vx, vy] = exitLane(v.exit, v.progress * 80);
       }
 
       // Render vehicle particle
