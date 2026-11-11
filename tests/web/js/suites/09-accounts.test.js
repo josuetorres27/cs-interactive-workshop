@@ -238,10 +238,10 @@ module.exports = (t, { createEnv, read }) => {
   t.suite('accounts · page, route and rules', () => {
     const html = read('web/index.html');
     const rules = read('firestore.rules');
-    t.test('#/perfil opens "Mi espacio"', () => {
+    t.test('#/profile opens "Mi espacio"', () => {
       const env = createEnv(); env.load('js/progress.js'); env.load('js/account.js');
       const { App } = env.load('js/app.js', ['App']); const app = new App(); app.init();
-      env.location.hash = '#/perfil'; app.handleRoute(); t.eq(app.route, 'profile');
+      env.location.hash = '#/profile'; app.handleRoute(); t.eq(app.route, 'profile');
     });
     t.test('the profile explains when accounts are not active yet', () => {
       const env = createEnv(); env.load('js/progress.js'); env.load('js/account.js');
@@ -255,7 +255,7 @@ module.exports = (t, { createEnv, read }) => {
       env.window.account.user = { uid: 'u1', name: 'Ana Pérez', photoURL: null }; app.renderProfile();
       t.eq(env.document.getElementById('profileName').textContent, 'Ana Pérez'); t.eq(env.document.getElementById('btnSignOut').hidden, false);
     });
-    t.test('every corner of the page links to "Mi espacio"', () => t.includes(html, 'href="#/perfil" id="btnAccount"'));
+    t.test('every corner of the page links to "Mi espacio"', () => t.includes(html, 'href="#/profile" id="btnAccount"'));
     t.test('account scripts load before the stations', () => ['firebase-config.js', 'progress.js', 'account.js'].forEach((f) => t.ok(html.indexOf(`js/${f}`) < html.indexOf('js/modules/algorithms.js'), f)));
     t.test('the Firebase SDK version is pinned', () => t.ok(/firebasejs\/\d+\.\d+\.\d+/.test(read('web/js/account.js'))));
     t.test('rules only open users/{uid} to its owner', () => { t.includes(rules, 'match /users/{uid}'); t.includes(rules, 'request.auth.uid == uid'); });

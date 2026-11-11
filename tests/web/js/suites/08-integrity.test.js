@@ -27,7 +27,7 @@ module.exports = (t, { read, WEB, createEnv }) => {
     t.test('every internal link goes to a real route', () => {
       const env = createEnv(); const { AREAS, MODULES } = env.load('js/app.js', ['AREAS', 'MODULES']);
       [...html.matchAll(/href="#\/([^"]*)"/g)].map((m) => m[1].split('/').filter(Boolean)).forEach((p) => {
-        const ok = p.length === 0 || p[0] === 'que-es' || p[0] === 'perfil' || (p[0] === 'taller' && (!p[1] || MODULES[p[1]])) || (p[0] === 'mesa' && AREAS[p[1]]);
+        const ok = p.length === 0 || p[0] === 'about' || p[0] === 'profile' || (p[0] === 'workshop' && (!p[1] || MODULES[p[1]])) || (p[0] === 'area' && AREAS[p[1]]);
         t.ok(ok, p.join('/'));
       });
     });

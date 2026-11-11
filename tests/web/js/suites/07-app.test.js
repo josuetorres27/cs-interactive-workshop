@@ -36,16 +36,31 @@ module.exports = (t, { createEnv, read }) => {
     const at = (hash) => { const ctx = fresh(); const app = new ctx.App(); app.init(); ctx.env.location.hash = hash; app.handleRoute(); return app; };
     t.test('#/ opens the intro', () => t.eq(at('#/').route, 'intro'));
     t.test('an empty hash opens the intro', () => t.eq(at('').route, 'intro'));
-    t.test('#/que-es opens the FAQ', () => t.eq(at('#/que-es').route, 'about'));
-    t.test('#/taller opens the work areas', () => t.eq(at('#/taller').route, 'taller'));
-    t.test('#/mesa/redes opens the networking bench', () => { const a = at('#/mesa/redes'); t.eq(a.route, 'area'); t.eq(a.currentArea, 'redes'); });
-    t.test('an unknown bench falls back to the intro', () => t.eq(at('#/mesa/cocina').route, 'intro'));
-    t.test('#/taller/sql/learn opens the SQL station on "Entiende"', () => { const a = at('#/taller/sql/learn'); t.eq(a.route, 'module'); t.eq(a.currentTab, 'sql'); t.eq(a.currentStep, 'learn'); });
-    t.test('an unknown step falls back to "Entiende", the first step', () => t.eq(at('#/taller/sql/oops').currentStep, 'learn'));
-    t.test('an unknown station falls back to the work areas', () => t.eq(at('#/taller/nada').route, 'taller'));
-    t.test('opening a station remembers its bench', () => t.eq(at('#/taller/interview').currentArea, 'entrevistas'));
-    t.test('the back button of a station leads to its bench', () => { const ctx = fresh(); const app = new ctx.App(); app.init(); app.switchTab('networking'); t.eq(ctx.env.document.getElementById('btnBackToWelcome').href, '#/mesa/redes'); });
-    t.test('the notebook goes back to the work areas', () => { const ctx = fresh(); const app = new ctx.App(); app.init(); app.switchTab('cheatsheets'); t.eq(ctx.env.document.getElementById('btnBackToWelcome').href, '#/taller'); });
+    t.test('#/about opens the FAQ', () => t.eq(at('#/about').route, 'about'));
+    t.test('#/workshop opens the work areas', () => t.eq(at('#/workshop').route, 'workshop'));
+    t.test('#/area/networking opens the networking bench', () => { const a = at('#/area/networking'); t.eq(a.route, 'area'); t.eq(a.currentArea, 'networking'); });
+    t.test('an unknown bench falls back to the intro', () => t.eq(at('#/area/kitchen').route, 'intro'));
+    t.test('#/workshop/sql/learn opens the SQL station on "Entiende"', () => { const a = at('#/workshop/sql/learn'); t.eq(a.route, 'module'); t.eq(a.currentTab, 'sql'); t.eq(a.currentStep, 'learn'); });
+    t.test('an unknown step falls back to "Entiende", the first step', () => t.eq(at('#/workshop/sql/oops').currentStep, 'learn'));
+    t.test('an unknown station falls back to the work areas', () => t.eq(at('#/workshop/nada').route, 'workshop'));
+    t.test('the old Spanish URLs still open the right screens and are rewritten to English', () => {
+      [['#/que-es', 'about', '#/about'], ['#/perfil', 'profile', '#/profile'], ['#/taller', 'workshop', '#/workshop'],
+        ['#/taller/sql/build', 'module', '#/workshop/sql/build'], ['#/mesa/redes', 'area', '#/area/networking']].forEach(([old, route, now]) => {
+        const ctx = fresh(); const app = new ctx.App(); app.init(); ctx.env.location.hash = old; app.handleRoute();
+        t.eq(app.route, route, old); t.eq(ctx.env.location.hash, now, old);
+      });
+    });
+    t.test('every old bench name maps to an existing bench', () => {
+      ['algoritmos', 'paralela', 'redes', 'entrevistas', 'datos'].forEach((old) => { const a = at('#/mesa/' + old); t.eq(a.route, 'area', old); t.ok(AREAS[a.currentArea], old); });
+    });
+    t.test('every URL the app builds is in English', () => {
+      const urls = [...html.matchAll(/href="#\/([\w-]+)/g)].map((m) => m[1]);
+      urls.forEach((u) => t.ok(['about', 'profile', 'workshop', 'area'].includes(u), u));
+      t.ok(!/#\/(taller|mesa|que-es|perfil)/.test(read('web/js/app.js').replace(/LEGACY_[A-Z]+ = [^\n]*/g, '')));
+    });
+    t.test('opening a station remembers its bench', () => t.eq(at('#/workshop/interview').currentArea, 'interviews'));
+    t.test('the back button of a station leads to its bench', () => { const ctx = fresh(); const app = new ctx.App(); app.init(); app.switchTab('networking'); t.eq(ctx.env.document.getElementById('btnBackToWelcome').href, '#/area/networking'); });
+    t.test('the notebook goes back to the work areas', () => { const ctx = fresh(); const app = new ctx.App(); app.init(); app.switchTab('cheatsheets'); t.eq(ctx.env.document.getElementById('btnBackToWelcome').href, '#/workshop'); });
     t.test('the breadcrumb names the bench', () => { const ctx = fresh(); const app = new ctx.App(); app.init(); app.switchTab('sql'); t.eq(ctx.env.document.getElementById('modCrumb').textContent, 'Bases de Datos /'); });
   });
 
