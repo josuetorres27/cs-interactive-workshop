@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// CS Interactive Lab - Firestore security rules.
+// CS Interactive Workshop - Firestore security rules.
 // Each student owns exactly one document, users/{uid}, holding their display
 // name, photo and progress. Nobody can read or write anyone else's data, and
 // every other collection is closed. Deploy with:
