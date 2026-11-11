@@ -21,10 +21,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install System Dependencies
+      - name: Install System Dependencies (only if missing)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential gcc g++ libomp-dev python3
+          # GitHub runners already ship gcc, g++, make and python3 (gcc brings OpenMP).
+          # Only touch apt when something is missing, so a mirror outage cannot block the deploy.
+          if command -v gcc >/dev/null && command -v g++ >/dev/null && command -v make >/dev/null && command -v python3 >/dev/null; then
+            echo "Build tools already installed:"; gcc --version | head -1; python3 --version
+          else
+            sudo apt-get update -o Acquire::Retries=5
+            sudo apt-get install -y -o Acquire::Retries=5 build-essential gcc g++ python3
+          fi
 
       - name: Set up Node.js for the web workshop tests
         uses: actions/setup-node@v4
