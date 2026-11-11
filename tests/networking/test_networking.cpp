@@ -1,5 +1,5 @@
 /**
- * CS Interactive Lab - Networking & Distributed Sockets Test Suite
+ * CS Interactive Workshop - Networking & Distributed Sockets Test Suite
  * 50 Comprehensive Automated Tests (HTTP, Sockets, FileSystem, Assets)
  */
 
