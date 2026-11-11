@@ -1,4 +1,4 @@
-// CS Interactive Lab - Concurrency & Parallel Systems Module
+// CS Interactive Workshop - Concurrency & Parallel Systems Module
 class ConcurrencyLab {
   constructor() {
     this.canvas = null;
