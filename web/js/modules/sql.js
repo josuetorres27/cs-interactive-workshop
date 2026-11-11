@@ -1,4 +1,4 @@
-// CS Interactive Lab - SQL step by step: queries walked in logical execution order.
+// CS Interactive Workshop - SQL step by step: queries walked in logical execution order.
 (function () {
   const { TraceLab, Recorder, viz } = window.Tracer;
 
