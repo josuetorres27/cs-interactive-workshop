@@ -514,10 +514,10 @@ class App {
   }
 
   hasSeen(key) {
-    try { return localStorage.getItem(`cslab-seen-${key}`) === '1'; } catch (e) { return false; }
+    try { return localStorage.getItem(`csworkshop-seen-${key}`) === '1'; } catch (e) { return false; }
   }
   markSeen(key) {
-    try { localStorage.setItem(`cslab-seen-${key}`, '1'); } catch (e) { /* storage unavailable */ }
+    try { localStorage.setItem(`csworkshop-seen-${key}`, '1'); } catch (e) { /* storage unavailable */ }
   }
 
   // ── Global controls ──────────────────────────────────────
