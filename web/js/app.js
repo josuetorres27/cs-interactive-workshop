@@ -125,7 +125,7 @@ class App {
   constructor() {
     this.currentTab = null;
     this.currentArea = null;
-    this.currentStep = 'play';
+    this.currentStep = 'learn';
     this.route = 'intro';
     this.tour = null;
   }
@@ -157,7 +157,7 @@ class App {
     if (parts[0] === 'perfil') return this.openProfile();
     if (parts[0] === 'mesa' && AREAS[parts[1]]) return this.openArea(parts[1]);
     if (parts[0] === 'taller' && MODULES[parts[1]]) {
-      const step = STEP_IDS.includes(parts[2]) ? parts[2] : 'play';
+      const step = STEP_IDS.includes(parts[2]) ? parts[2] : 'learn';
       return this.openModule(parts[1], step);
     }
     if (parts[0] === 'taller') return this.showScreen('taller');
@@ -197,15 +197,12 @@ class App {
     this.showScreen('area');
   }
 
-  openModule(tabId, step = 'play') {
+  openModule(tabId, step = 'learn') {
     const isNewModule = this.currentTab !== tabId || this.route !== 'module';
     this.switchTab(tabId);
     this.showScreen('module');
     this.setStep(MODULES[tabId].steps ? step : 'play');
     if (isNewModule) window.soundController.playTone(720, 'sine', 0.04, 0.4);
-    if (isNewModule && TOURS[tabId] && step === 'play' && !this.hasSeen(tabId)) {
-      setTimeout(() => this.startTour(tabId), 450);
-    }
   }
 
   switchTab(tabId) {
@@ -234,7 +231,7 @@ class App {
     document.querySelectorAll('#modSteps .step').forEach(btn => {
       btn.addEventListener('click', () => {
         const step = btn.dataset.step;
-        history.replaceState(null, '', `#/taller/${this.currentTab}${step === 'play' ? '' : '/' + step}`);
+        history.replaceState(null, '', `#/taller/${this.currentTab}${step === 'learn' ? '' : '/' + step}`);
         this.setStep(step);
         window.soundController.playTone(520, 'sine', 0.02, 0.3);
       });
@@ -258,6 +255,11 @@ class App {
       });
     }
     this.updateGuide();
+    // The walkthrough belongs to the experiment, so it starts the first time you get there
+    if (step === 'play' && this.route === 'module' && TOURS[this.currentTab] && !this.tour && !this.hasSeen(this.currentTab)) {
+      const id = this.currentTab;
+      setTimeout(() => { if (this.route === 'module' && this.currentTab === id && this.currentStep === 'play' && !this.tour) this.startTour(id); }, 450);
+    }
   }
 
   // ── Account and progress ─────────────────────────────────
@@ -349,7 +351,7 @@ class App {
     const last = acc.progress.last;
     const cont = $('btnContinue');
     if (last && MODULES[last.station]) {
-      cont.href = `#/taller/${last.station}${last.step === 'play' ? '' : '/' + last.step}`;
+      cont.href = `#/taller/${last.station}${last.step === 'learn' ? '' : '/' + last.step}`;
       cont.innerHTML = `<svg class="ic"><use href="#i-arrow-r"/></svg>Continuar en ${esc(MODULES[last.station].title)}`;
     } else {
       cont.href = '#/taller';
@@ -369,7 +371,7 @@ class App {
           return `<article class="progress-station board">
             <div class="progress-station-head"><a href="#/taller/${id}">${esc(MODULES[id].title)}</a><span>${st.done} / ${st.total}</span></div>
             <div class="bar" role="progressbar" aria-valuenow="${st.percent}" aria-valuemin="0" aria-valuemax="100"><i style="width:${st.percent}%"></i></div>
-            ${MODULES[id].steps ? `<div class="step-chips">${['play', 'learn', 'build'].map((s) => `<span class="step-chip ${st.steps[s] ? 'seen' : ''}">${stepNames[s]}</span>`).join('')}</div>` : ''}
+            ${MODULES[id].steps ? `<div class="step-chips">${['learn', 'play', 'build'].map((s) => `<span class="step-chip ${st.steps[s] ? 'seen' : ''}">${stepNames[s]}</span>`).join('')}</div>` : ''}
             <ul class="checklist">${items.map((i) => `<li class="${done[i.id] ? 'done' : ''}"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>${esc(i.label)}</li>`).join('')}</ul>
           </article>`;
         }).join('')}</div>

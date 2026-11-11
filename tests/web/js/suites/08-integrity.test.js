@@ -39,6 +39,23 @@ module.exports = (t, { read, WEB, createEnv }) => {
         ['play', 'learn', 'build'].forEach((s) => t.includes(pane, `data-step="${s}"`, `${id}.${s}`));
       });
     });
+    t.test('the step tabs run Entiende, Experimenta, Implementa in that order', () => {
+      const tabs = [...html.match(/<nav class="steps"[\s\S]*?<\/nav>/)[0].matchAll(/data-step="(\w+)"><span class="step-n">(\d)<\/span>([^<]+)</g)];
+      t.deepEq(tabs.map((m) => [m[1], m[2], m[3]]), [['learn', '1', 'Entiende'], ['play', '2', 'Experimenta'], ['build', '3', 'Implementa']]);
+      t.ok(/<button class="step active" data-step="learn"/.test(html));
+    });
+    t.test('the intro credits the author with a single LinkedIn link under the tagline', () => {
+      const foot = html.match(/<p class="intro-foot">[\s\S]*?<\/p>/)[0];
+      t.includes(foot, 'Hecho para estudiantes de computación');
+      t.includes(foot, 'Creado por <a href="https://www.linkedin.com/in/josue-torres-sibaja/"');
+      t.includes(foot, 'Josué Torres Sibaja');
+      t.eq((foot.match(/<a /g) || []).length, 1);
+    });
+    t.test('the FAQ links the author name to the portfolio and nothing else', () => {
+      const faq = html.match(/<h3>¿Quién lo hizo\?<\/h3>[\s\S]*?<\/article>/)[0];
+      t.includes(faq, '<a href="https://josuetorres.tech/" target="_blank" rel="noopener">Josué Torres Sibaja</a>');
+      t.eq((faq.match(/<a /g) || []).length, 1);
+    });
     t.test('the networking station no longer advertises port 8080', () => t.notIncludes(html, '8080'));
   });
 

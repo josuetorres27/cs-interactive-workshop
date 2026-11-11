@@ -41,7 +41,7 @@ module.exports = (t, { createEnv, read }) => {
     t.test('#/mesa/redes opens the networking bench', () => { const a = at('#/mesa/redes'); t.eq(a.route, 'area'); t.eq(a.currentArea, 'redes'); });
     t.test('an unknown bench falls back to the intro', () => t.eq(at('#/mesa/cocina').route, 'intro'));
     t.test('#/taller/sql/learn opens the SQL station on "Entiende"', () => { const a = at('#/taller/sql/learn'); t.eq(a.route, 'module'); t.eq(a.currentTab, 'sql'); t.eq(a.currentStep, 'learn'); });
-    t.test('an unknown step falls back to "Experimenta"', () => t.eq(at('#/taller/sql/oops').currentStep, 'play'));
+    t.test('an unknown step falls back to "Entiende", the first step', () => t.eq(at('#/taller/sql/oops').currentStep, 'learn'));
     t.test('an unknown station falls back to the work areas', () => t.eq(at('#/taller/nada').route, 'taller'));
     t.test('opening a station remembers its bench', () => t.eq(at('#/taller/interview').currentArea, 'entrevistas'));
     t.test('the back button of a station leads to its bench', () => { const ctx = fresh(); const app = new ctx.App(); app.init(); app.switchTab('networking'); t.eq(ctx.env.document.getElementById('btnBackToWelcome').href, '#/mesa/redes'); });
