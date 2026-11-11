@@ -1,4 +1,4 @@
-# CS Interactive Lab - Test Suite Makefile
+# CS Interactive Workshop - Test Suite Makefile
 # Compiles and runs all 720+ automated tests (C/C++, Python and JavaScript)
 
 CC ?= gcc
@@ -45,7 +45,7 @@ clean:
 
 run: all
 	@echo "\n===================================================================="
-	@echo "            RUNNING CS INTERACTIVE LAB MASTER TEST SUITE             "
+	@echo "          RUNNING CS INTERACTIVE WORKSHOP MASTER TEST SUITE          "
 	@echo "                     (870+ AUTOMATED TESTS)                         "
 	@echo "===================================================================="
 	@./$(BINDIR)/test_sorting
