@@ -101,14 +101,16 @@ body {
   font-size: 16px;
   line-height: 1.55;
   color: var(--text-main);
-  background-color: var(--box);
+  background-color: #8d9399;
   background-image:
-    radial-gradient(ellipse 65% 50% at 50% -6%, rgba(255, 244, 210, .8), rgba(255, 228, 175, .28) 55%, transparent 78%),
-    repeating-linear-gradient(180deg, rgba(255, 232, 195, .25) 0 1px, transparent 1px 118px, rgba(58, 30, 10, .5) 118px 120px),
-    repeating-linear-gradient(180deg, transparent 0 120px, rgba(90, 48, 18, .08) 120px 240px, transparent 240px 360px, rgba(255, 220, 170, .06) 360px 480px),
+    radial-gradient(ellipse 70% 45% at 50% -8%, rgba(238, 247, 255, .85), rgba(220, 235, 250, .22) 55%, transparent 78%),
+    radial-gradient(circle, rgba(27, 32, 39, .32) 0 3px, rgba(255, 255, 255, .14) 3.5px 4.5px, transparent 5px),
+    linear-gradient(90deg, rgba(27, 32, 39, .28) 0 2px, rgba(255, 255, 255, .12) 2px 3px, transparent 3px),
+    linear-gradient(180deg, rgba(27, 32, 39, .28) 0 2px, rgba(255, 255, 255, .12) 2px 3px, transparent 3px),
     var(--concrete),
-    linear-gradient(180deg, #d79d60, #b97c44);
-  background-size: auto, auto, auto, 900px 360px, auto;
+    linear-gradient(180deg, #aab0b6, #7d838a);
+  background-size: auto, 160px 100px, 320px 200px, 320px 200px, 700px 700px, auto;
+  background-position: 0 0, 40px 50px, 0 0, 0 0, 0 0, 0 0;
   background-attachment: fixed;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -130,10 +132,10 @@ code {
 .ic { width: 1.1em; height: 1.1em; flex: none; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -.18em; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-/* ── Workshop lighting (fixed vignette) ───────────────────── */
+/* ── Lab lighting (fixed vignette) ───────────────────── */
 .box-frame {
   position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  box-shadow: inset 0 0 180px 40px rgba(46, 22, 6, .42);
+  box-shadow: inset 0 0 180px 40px rgba(12, 16, 22, .45);
 }
 
 /* Pegboards with tools (decor) */
