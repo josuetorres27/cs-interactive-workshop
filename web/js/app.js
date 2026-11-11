@@ -1,4 +1,4 @@
-// CS Interactive Lab - App orchestrator
+// CS Interactive Workshop - App orchestrator
 // Screens: intro (#/) -> about (#/que-es) -> work areas (#/lab)
 //          -> one area's stations (#/mesa/<area>) -> station (#/lab/<module>[/<step>])
 
@@ -216,7 +216,7 @@ class App {
     document.getElementById('activeMissionLabel').textContent = mod.title;
     const back = document.getElementById('btnBackToWelcome');
     back.href = mod.area ? `#/mesa/${mod.area}` : '#/lab';
-    document.getElementById('modCrumb').textContent = mod.area ? `${AREAS[mod.area].title} /` : 'Laboratorio /';
+    document.getElementById('modCrumb').textContent = mod.area ? `${AREAS[mod.area].title} /` : 'Taller /';
     document.getElementById('modSteps').hidden = !mod.steps;
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === `tab-${tabId}`));
   }
