@@ -252,7 +252,7 @@ code {
   letter-spacing: .01em;
 }
 .logo .logo-small { display: block; font-size: .42em; color: var(--sun-y); letter-spacing: .12em; margin-bottom: .1em; }
-.logo .logo-lab { color: var(--tomato); }
+.logo .logo-name { color: var(--tomato); }
 .sign-sub { margin-top: .9rem; font-family: var(--font-hand); font-size: clamp(1.1rem, 2.6vw, 1.45rem); color: #f8e6c6; }
 
 .intro-actions { position: relative; z-index: 2; margin-top: 2.6rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
