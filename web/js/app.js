@@ -133,7 +133,7 @@ class App {
   init() {
     document.querySelectorAll('.bit-slot').forEach(el => { el.innerHTML = BIT_SVG; });
 
-    ['algorithmsStation', 'concurrencyLab', 'heatLab', 'networkingStation', 'cheatsheetsLab', 'interviewStation', 'dsStation', 'sqlStation']
+    ['algorithmsStation', 'concurrencyStation', 'heatLab', 'networkingStation', 'cheatsheetsLab', 'interviewStation', 'dsStation', 'sqlStation']
       .forEach(name => { if (window[name]) window[name].init(); });
 
     this.setupAccount();
@@ -254,7 +254,7 @@ class App {
     if (step === 'play') {
       requestAnimationFrame(() => {
         if (this.currentTab === 'algorithms' && window.algorithmsStation) window.algorithmsStation.resizeCanvas();
-        if (this.currentTab === 'concurrency' && window.concurrencyLab) window.concurrencyLab.resizeCanvas();
+        if (this.currentTab === 'concurrency' && window.concurrencyStation) window.concurrencyStation.resizeCanvas();
       });
     }
     this.updateGuide();

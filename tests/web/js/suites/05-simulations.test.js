@@ -66,7 +66,7 @@ module.exports = (t, { createEnv }) => {
   const freshConc = (seed = 3) => {
     const env = createEnv({ seed });
     env.load('js/modules/concurrency.js');
-    const lab = env.window.concurrencyLab;
+    const lab = env.window.concurrencyStation;
     lab.init();
     lab.autoSpawn = false;
     return { env, lab };

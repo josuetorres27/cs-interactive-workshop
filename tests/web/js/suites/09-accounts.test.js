@@ -223,7 +223,7 @@ module.exports = (t, { createEnv, read }) => {
     });
     t.test('provoking and resolving the deadlock records both', () => {
       const env = withAccount(); env.load('js/modules/concurrency.js');
-      const lab = env.window.concurrencyLab; lab.forceCoffmanDeadlock(); lab.resolveCoffmanDeadlock();
+      const lab = env.window.concurrencyStation; lab.forceCoffmanDeadlock(); lab.resolveCoffmanDeadlock();
       const items = env.window.account.progress.stations.concurrency.items; t.ok(items.deadlock && items.resolve);
     });
     t.test('finishing a 404 exchange records it', () => {

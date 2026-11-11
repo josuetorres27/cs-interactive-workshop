@@ -1,5 +1,5 @@
 // CS Interactive Workshop - Concurrency & Parallel Systems Module
-class ConcurrencyLab {
+class ConcurrencyStation {
   constructor() {
     this.canvas = null;
     this.ctx = null;
@@ -642,4 +642,4 @@ class ConcurrencyLab {
   }
 }
 
-window.concurrencyLab = new ConcurrencyLab();
+window.concurrencyStation = new ConcurrencyStation();
