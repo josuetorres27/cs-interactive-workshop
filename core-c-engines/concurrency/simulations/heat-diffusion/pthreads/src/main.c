@@ -7,7 +7,7 @@
  * Row bands per thread, one barrier per iteration (spinning by default), padded per-thread
  * reduction slots. The solver lives in ../../common/heat.c.
  *
- * Author: Josue Torres
+ * Author: Josue Torres Sibaja
  * Licensed under the MIT License.
  */
 #include "../../common/heat_cli.h"
