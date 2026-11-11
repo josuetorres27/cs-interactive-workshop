@@ -14,9 +14,16 @@ class HeatStation {
     this.brush = 'hot';
     this.running = false;
     this.status = 'idle';           // idle | running | converged | diverged
-    this.colors = ['#2e6be6', '#d8382e', '#2db886', '#7656d6', '#f5c518', '#1b7f5a', '#9c1e16', '#1c4cb0'];
+    // One colour per thread, as [theme token, lab colour]
+    this.colorTokens = [['--sky-b', '#2e6be6'], ['--tomato', '#d8382e'], ['--mint', '#2db886'], ['--plum', '#7656d6'], ['--sun-y', '#f5c518'], ['--mint-dark', '#1b7f5a'], ['--tomato-dark', '#9c1e16'], ['--sky-b-dark', '#1c4cb0']];
     this.SLOW_FACTOR = 2.5;
   }
+
+  // Thread colours for the active theme
+  get colors() { return this.colorTokens.map(([name, lab]) => this.tc(name, lab)); }
+
+  // Colour of a theme token (falls back to the lab colour without a stylesheet)
+  tc(name, fallback) { return typeof window !== 'undefined' && window.Theme ? window.Theme.color(name, fallback) : fallback; }
 
   $(id) { return document.getElementById(id); }
 
@@ -238,7 +245,7 @@ class HeatStation {
     ctx.drawImage(this.off, 0, 0, w, h);
 
     const cell = h / rows;
-    const ink = '#1b2027';
+    const ink = this.tc('--box-ink', '#1b2027');
     // Band borders, thread tabs and the row each thread is computing
     this.bands.forEach((b, t) => {
       const y0 = b.begin * cell, y1 = b.end * cell;
@@ -264,7 +271,7 @@ class HeatStation {
       if (animated && this.running && this.sweep.done[t] >= size) {
         const msg = 'en la barrera';
         const mw = ctx.measureText(msg).width + 14;
-        ctx.fillStyle = '#f8fafc';
+        ctx.fillStyle = this.tc('--paper', '#f8fafc');
         ctx.beginPath(); ctx.roundRect(w - mw - 6, ty, mw, th, 9); ctx.fill(); ctx.stroke();
         ctx.fillStyle = ink; ctx.fillText(msg, w - mw + 1, ty + th / 2 + 1);
       }
@@ -326,22 +333,23 @@ class HeatStation {
     const H = top + P * (laneH + gap) + 18;
     const total = iters.reduce((s, c) => s + c.span, 0);
     const scale = (W - left - 8) / total;
-    let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Tiempo ocupado y en espera por hilo"><defs><pattern id="heatHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#e3e9ef"/><line x1="0" y1="0" x2="0" y2="6" stroke="#98a2ad" stroke-width="3"/></pattern></defs>`;
+    const ink = this.tc('--box-ink', '#1b2027');
+    let s =`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Tiempo ocupado y en espera por hilo"><defs><pattern id="heatHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="${this.tc('--chip-wait', '#e3e9ef')}"/><line x1="0" y1="0" x2="0" y2="6" stroke="${this.tc('--ply-edge', '#98a2ad')}" stroke-width="3"/></pattern></defs>`;
     for (let t = 0; t < P; t++) {
       const y = top + t * (laneH + gap);
       s += `<text x="${left - 8}" y="${y + laneH - 4}" class="hl-label">H${t}</text>`;
       let x = left;
       iters.forEach((c) => {
         const bw = c.busy[t] * scale, ww = c.wait[t] * scale;
-        s += `<rect x="${x}" y="${y}" width="${Math.max(bw, 0.5)}" height="${laneH}" rx="3" fill="${this.colors[t % this.colors.length]}" stroke="#1b2027" stroke-width="2"/>`;
-        if (ww > 0.5) s += `<rect x="${x + bw}" y="${y}" width="${ww}" height="${laneH}" fill="url(#heatHatch)" stroke="#1b2027" stroke-width="2"/>`;
+        s += `<rect x="${x}" y="${y}" width="${Math.max(bw, 0.5)}" height="${laneH}" rx="3" fill="${this.colors[t % this.colors.length]}" stroke="${ink}" stroke-width="2"/>`;
+        if (ww > 0.5) s += `<rect x="${x + bw}" y="${y}" width="${ww}" height="${laneH}" fill="url(#heatHatch)" stroke="${ink}" stroke-width="2"/>`;
         x += c.span * scale;
       });
     }
     let x = left;
     iters.forEach((c, k) => {
       x += c.span * scale;
-      s += `<line x1="${x}" x2="${x}" y1="${top - 3}" y2="${top + P * (laneH + gap) - gap + 3}" stroke="#1b2027" stroke-width="3" stroke-dasharray="4 3"/>`;
+      s += `<line x1="${x}" x2="${x}" y1="${top - 3}" y2="${top + P * (laneH + gap) - gap + 3}" stroke="${ink}" stroke-width="3" stroke-dasharray="4 3"/>`;
       if (k === iters.length - 1) s += `<text x="${x}" y="${H - 3}" class="hl-axis" text-anchor="end">barrera</text>`;
     });
     s += '</svg>';

@@ -181,6 +181,9 @@ void heapSort(std::vector<int>& a) {
     };
   }
 
+  // Colour of a theme token (falls back to the lab colour without a stylesheet)
+  tc(name, fallback) { return typeof window !== 'undefined' && window.Theme ? window.Theme.color(name, fallback) : fallback; }
+
   init() {
     this.canvas = document.getElementById('algoCanvas');
     if (!this.canvas) return;
@@ -342,7 +345,7 @@ void heapSort(std::vector<int>& a) {
     const w = this.canvas.width;
     const h = this.canvas.height;
     this.ctx.clearRect(0, 0, w, h);
-    this.ctx.fillStyle = '#d4dce4'; // floor
+    this.ctx.fillStyle = this.tc('--cv-floor', '#d4dce4'); // floor
     this.ctx.fillRect(0, h - 10, w, 10);
 
     const n = this.array.length;
@@ -356,13 +359,13 @@ void heapSort(std::vector<int>& a) {
       const y = h - barHeight - 10;
 
       if (this.highlightIndices.sorted.includes(i)) {
-        this.ctx.fillStyle = '#2db886'; // in place
+        this.ctx.fillStyle = this.tc('--mint', '#2db886'); // in place
       } else if (this.highlightIndices.comparing.includes(i)) {
-        this.ctx.fillStyle = '#d8382e'; // swapping
+        this.ctx.fillStyle = this.tc('--tomato', '#d8382e'); // swapping
       } else if (this.highlightIndices.active.includes(i)) {
-        this.ctx.fillStyle = '#f5c518'; // comparing
+        this.ctx.fillStyle = this.tc('--sun-y', '#f5c518'); // comparing
       } else {
-        this.ctx.fillStyle = '#2e6be6'; // unsorted
+        this.ctx.fillStyle = this.tc('--sky-b', '#2e6be6'); // unsorted
       }
 
       const r = Math.min(4, barWidth / 2);
@@ -371,7 +374,7 @@ void heapSort(std::vector<int>& a) {
       this.ctx.fill();
       if (barWidth >= 6) {
         this.ctx.lineWidth = 3;
-        this.ctx.strokeStyle = '#1b2027';
+        this.ctx.strokeStyle = this.tc('--box-ink', '#1b2027');
         this.ctx.stroke();
       }
     }

@@ -550,6 +550,27 @@ class App {
       this.showToast(isMuted ? 'Sonido apagado' : 'Sonido encendido');
     });
 
+    // Visual theme: lab (default) or the original wooden workshop
+    const btnTheme = document.getElementById('btnTheme');
+    const syncTheme = () => {
+      if (!btnTheme || !window.Theme) return;
+      const wood = window.Theme.current() === 'madera';
+      const label = wood ? 'Cambiar al laboratorio' : 'Cambiar al taller de madera';
+      btnTheme.title = label;
+      btnTheme.setAttribute('aria-label', label);
+      btnTheme.setAttribute('aria-pressed', String(wood));
+    };
+    if (btnTheme && window.Theme) {
+      syncTheme();
+      btnTheme.addEventListener('click', () => {
+        const theme = window.Theme.toggle();
+        syncTheme();
+        this.showToast(`Tema: ${window.Theme.THEMES[theme].label}`);
+      });
+      // Canvas stations repaint on resize; reuse that to pick up the new colours
+      window.addEventListener('themechange', () => window.dispatchEvent(new Event('resize')));
+    }
+
     document.getElementById('btnToggleFullscreen').addEventListener('click', () => {
       if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
       else document.exitFullscreen().catch(() => {});
