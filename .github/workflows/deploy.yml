@@ -37,27 +37,18 @@ jobs:
         run: |
           make test
 
-  deploy-pages:
-    name: Deploy to GitHub Pages
+  deploy-firebase:
+    name: Deploy to Firebase Hosting
     needs: test
     if: github.ref == 'refs/heads/main'
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-        continue-on-error: true
-
-      - name: Upload Artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Deploy to the live channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          path: 'web'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CS_INTERACTIVE_WORKSHOP }}
+          channelId: live
+          projectId: cs-interactive-workshop
