@@ -1,4 +1,4 @@
-// CS Interactive Lab - Progress model (pure data, no DOM, no network).
+// CS Interactive Workshop - Progress model (pure data, no DOM, no network).
 //
 // A student's progress is a small JSON document:
 //   { version, stations: { <station>: { visited, steps: {play,learn,build}, items: { <item>: firstDoneAt } } },
