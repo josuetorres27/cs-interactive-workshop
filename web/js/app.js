@@ -17,7 +17,7 @@ const MODULES = {
   heat:           { title: 'Difusión de calor',       area: 'paralela',    steps: true },
   networking:     { title: 'Sockets TCP',             area: 'redes',       steps: true, tracer: 'networkingLab' },
   interview:      { title: 'Patrones de entrevista',  area: 'entrevistas', steps: true, tracer: 'interviewStation' },
-  sql:            { title: 'SQL paso a paso',         area: 'datos',       steps: true, tracer: 'sqlLab' },
+  sql:            { title: 'SQL paso a paso',         area: 'datos',       steps: true, tracer: 'sqlStation' },
   cheatsheets:    { title: 'El Cuaderno',             area: null,          steps: false }
 };
 const MODULE_ORDER = ['algorithms', 'datastructures', 'concurrency', 'heat', 'networking', 'interview', 'sql', 'cheatsheets'];
@@ -133,7 +133,7 @@ class App {
   init() {
     document.querySelectorAll('.bit-slot').forEach(el => { el.innerHTML = BIT_SVG; });
 
-    ['algorithmsLab', 'concurrencyLab', 'heatLab', 'networkingLab', 'cheatsheetsLab', 'interviewStation', 'dsStation', 'sqlLab']
+    ['algorithmsLab', 'concurrencyLab', 'heatLab', 'networkingLab', 'cheatsheetsLab', 'interviewStation', 'dsStation', 'sqlStation']
       .forEach(name => { if (window[name]) window[name].init(); });
 
     this.setupAccount();

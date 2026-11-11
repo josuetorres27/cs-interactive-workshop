@@ -206,5 +206,5 @@ WHERE id NOT IN (SELECT estudiante_id FROM matriculas);`,
     }
   };
 
-  window.sqlLab = new TraceStation('sql', [joinWhere, groupHaving, antiJoin]);
+  window.sqlStation = new TraceStation('sql', [joinWhere, groupHaving, antiJoin]);
 })();

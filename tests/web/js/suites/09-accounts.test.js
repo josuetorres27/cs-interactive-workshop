@@ -100,7 +100,7 @@ module.exports = (t, { createEnv, read }) => {
     t.test('every station in the workshop has a checklist and vice versa', () => t.deepEq(Object.keys(P.CHECKLISTS).sort(), Object.keys(MODULES).sort()));
     t.test('interview checklist lists every interview problem', () => t.deepEq(list('interview'), ids(env.window.interviewStation)));
     t.test('data structures checklist lists every problem', () => t.deepEq(list('datastructures'), ids(env.window.dsStation)));
-    t.test('SQL checklist lists every query', () => t.deepEq(list('sql'), ids(env.window.sqlLab)));
+    t.test('SQL checklist lists every query', () => t.deepEq(list('sql'), ids(env.window.sqlStation)));
     t.test('sorting checklist lists every algorithm', () => t.deepEq(list('algorithms'), Object.keys(env.window.algorithmsLab.complexities).map((a) => `run:${a}`).sort()));
     t.test('every checklist item has a readable label', () => Object.values(P.CHECKLISTS).forEach((c) => c.items.forEach((i) => t.ok(i.label.length > 8, i.id))));
   });
@@ -207,12 +207,12 @@ module.exports = (t, { createEnv, read }) => {
     };
     t.test('walking a trace to the last line records the problem', () => {
       const env = withAccount(); env.load('js/tracer.js'); env.load('js/modules/sql.js');
-      const lab = env.window.sqlLab; lab.init(); lab.go(lab.frames.length - 1);
+      const lab = env.window.sqlStation; lab.init(); lab.go(lab.frames.length - 1);
       t.eq(env.window.account.stats('sql').done, 1);
     });
     t.test('stopping halfway through a trace records nothing', () => {
       const env = withAccount(); env.load('js/tracer.js'); env.load('js/modules/sql.js');
-      const lab = env.window.sqlLab; lab.init(); lab.go(2);
+      const lab = env.window.sqlStation; lab.init(); lab.go(2);
       t.eq(env.window.account.stats('sql').done, 0);
     });
     t.test('finishing a sort records that algorithm', async () => {

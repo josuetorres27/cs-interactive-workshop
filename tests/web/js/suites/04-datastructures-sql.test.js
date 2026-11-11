@@ -7,7 +7,7 @@ module.exports = (t, { createEnv, mulberry32 }) => {
   env.load('js/modules/datastructures.js');
   env.load('js/modules/sql.js');
   const ds = Object.fromEntries(env.window.dsStation.problems.map((p) => [p.id, p]));
-  const sql = Object.fromEntries(env.window.sqlLab.problems.map((p) => [p.id, p]));
+  const sql = Object.fromEntries(env.window.sqlStation.problems.map((p) => [p.id, p]));
   const last = (frames) => frames[frames.length - 1];
   const rand = mulberry32(77);
   const ri = (lo, hi) => lo + Math.floor(rand() * (hi - lo + 1));
