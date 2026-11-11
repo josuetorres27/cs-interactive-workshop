@@ -1,4 +1,4 @@
-// CS Interactive Lab - Theory & Cheatsheets Module
+// CS Interactive Workshop - Theory & Cheatsheets Module
 class CheatsheetsLab {
   constructor() {
     this.parallelFraction = 0.85;
