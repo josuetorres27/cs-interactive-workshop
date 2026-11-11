@@ -983,7 +983,6 @@ pre.code .t-k { color: #f6c33b; }
 }
 @media (max-width: 760px) {
   #screen-intro .intro-bubble { display: none; }
-  #screen-intro .intro-foot { position: relative; right: auto; bottom: auto; margin-top: 2.2rem; max-width: none; text-align: center; }
 }
 @media (max-width: 600px) {
   .bench { grid-template-columns: 76px 1fr; padding: 1.4rem 1.1rem 1.1rem 1.3rem; }
@@ -1281,6 +1280,7 @@ pre.code .t-k { color: #f6c33b; }
   .back-link { top: 10px; left: 10px; }
   #screen-intro .intro-bubble { display: none; }
   #screen-intro.is-active { padding-bottom: 120px; }
+  #screen-intro .intro-foot { position: relative; right: auto; bottom: auto; margin-top: 2.2rem; max-width: none; text-align: center; }
   .intro-bit { left: 50%; width: 120px; margin-left: -60px; }
   .steps { width: 100%; }
   .step { flex: 1; justify-content: center; gap: .3rem; padding: .4rem .5rem; font-size: .88rem; }
