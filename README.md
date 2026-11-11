@@ -178,7 +178,7 @@ Without configuration the workshop runs in guest mode. To enable Google sign-in 
 1. Create a Firebase project, enable Google sign-in and Firestore.
 2. Put the web app settings in `web/js/firebase-config.js`.
 3. Deploy the rules: `firebase deploy --only firestore:rules`.
-4. Add your GitHub Pages domain to the authorized domains in Firebase Authentication.
+4. In Firebase Authentication, add any custom domain to the authorized domains (the *.web.app domain is already allowed).
 
 The included `firebase.json` can also host the site: `firebase deploy --only hosting`.
 
