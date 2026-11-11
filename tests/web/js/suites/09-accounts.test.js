@@ -172,7 +172,7 @@ module.exports = (t, { createEnv, read }) => {
       const { acc, backend } = await signedIn(); await backend.signIn(); acc.record('cheatsheets', 'amdahl'); await acc.signOut();
       t.eq(acc.signedIn, false); t.eq(acc.overall().done, 0);
     });
-    t.test('if Firebase cannot load, the lab keeps working as a guest', async () => {
+    t.test('if Firebase cannot load, the workshop keeps working as a guest', async () => {
       const { acc } = await signedIn(null, { failInit: true });
       t.eq(acc.cloudAvailable, false); t.ok(acc.error); acc.record('cheatsheets', 'amdahl'); t.eq(acc.overall().done, 1);
     });
