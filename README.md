@@ -27,7 +27,7 @@ cs-interactive-workshop/
 ├── LICENSE                             # MIT License
 ├── firebase.json                       # Firebase Hosting configuration (optional)
 ├── firestore.rules                     # Firestore rules for student progress (optional)
-├── .github/workflows/deploy.yml        # CI: runs every test, then deploys web/ to GitHub Pages
+├── .github/workflows/deploy.yml        # CI: runs every test, then deploys web/ to Firebase Hosting
 ├── docs/                               # Theory and specifications
 │   ├── algorithms/                     # Sorting guide, complexity analysis
 │   ├── concurrency/                    # Heat diffusion, roundabout, concurrency patterns
@@ -171,7 +171,7 @@ python3 -m http.server 8000 --directory web
 Then open `http://localhost:8000`.
 
 ### Deployment
-Every push to `main` runs the full test suite in GitHub Actions and, if it passes, deploys `web/` to GitHub Pages.
+Every push to `main` runs the full test suite in GitHub Actions and, if it passes, deploys `web/` to Firebase Hosting at https://cs-interactive-workshop.web.app.
 
 ### Optional: accounts with Firebase
 Without configuration the workshop runs in guest mode. To enable Google sign-in and cloud progress:
