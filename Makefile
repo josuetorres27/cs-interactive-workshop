@@ -1,4 +1,4 @@
-# CS Interactive Lab - Master Orchestrator Makefile
+# CS Interactive Workshop - Master Orchestrator Makefile
 # High-performance C and C++ computational engines
 
 CC ?= gcc
@@ -9,7 +9,7 @@ ENGINES := core-c-engines/algorithms core-c-engines/concurrency core-c-engines/n
 .PHONY: all clean test test-web algorithms concurrency networking $(ENGINES)
 
 all: $(ENGINES)
-	@echo "\n>>> All CS Interactive Lab engines built successfully."
+	@echo "\n>>> All CS Interactive Workshop engines built successfully."
 
 core-c-engines/algorithms:
 	@echo ">>> Building Algorithms & Data Structures Engine..."
@@ -36,11 +36,11 @@ clean:
 
 test: all
 	@echo "\n===================================================================="
-	@echo "            RUNNING CS INTERACTIVE LAB MASTER TEST SUITE             "
+	@echo "          RUNNING CS INTERACTIVE WORKSHOP MASTER TEST SUITE          "
 	@echo "                     (870+ AUTOMATED TESTS)                         "
 	@echo "===================================================================="
 	@$(MAKE) -C tests run
 
-# Web lab tests only (no compiler needed, just Node.js)
+# Web workshop tests only (no compiler needed, just Node.js)
 test-web:
 	@node tests/web/run.js
