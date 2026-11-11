@@ -4,8 +4,8 @@
  *
  * Base virtual socket implementation for address resolution, binding, and socket lifecycle.
  *
- * Author: Josue Torres
- * Copyright (c) 2025 Josue Torres
+ * Author: Josue Torres Sibaja
+ * Copyright (c) 2025 Josue Torres Sibaja
  * Licensed under the MIT License.
  */
 
