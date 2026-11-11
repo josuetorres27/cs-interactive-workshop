@@ -101,7 +101,7 @@ module.exports = (t, { createEnv, read }) => {
     t.test('interview checklist lists every interview problem', () => t.deepEq(list('interview'), ids(env.window.interviewStation)));
     t.test('data structures checklist lists every problem', () => t.deepEq(list('datastructures'), ids(env.window.dsStation)));
     t.test('SQL checklist lists every query', () => t.deepEq(list('sql'), ids(env.window.sqlStation)));
-    t.test('sorting checklist lists every algorithm', () => t.deepEq(list('algorithms'), Object.keys(env.window.algorithmsLab.complexities).map((a) => `run:${a}`).sort()));
+    t.test('sorting checklist lists every algorithm', () => t.deepEq(list('algorithms'), Object.keys(env.window.algorithmsStation.complexities).map((a) => `run:${a}`).sort()));
     t.test('every checklist item has a readable label', () => Object.values(P.CHECKLISTS).forEach((c) => c.items.forEach((i) => t.ok(i.label.length > 8, i.id))));
   });
 
@@ -217,7 +217,7 @@ module.exports = (t, { createEnv, read }) => {
     });
     t.test('finishing a sort records that algorithm', async () => {
       const env = withAccount(); env.load('js/modules/algorithms.js');
-      const lab = env.window.algorithmsLab; lab.init(); lab.delay = 0; lab.arraySize = 12; lab.generateArray('random'); lab.currentAlgo = 'heap';
+      const lab = env.window.algorithmsStation; lab.init(); lab.delay = 0; lab.arraySize = 12; lab.generateArray('random'); lab.currentAlgo = 'heap';
       await lab.start();
       t.ok(env.window.account.progress.stations.algorithms.items['run:heap']);
     });

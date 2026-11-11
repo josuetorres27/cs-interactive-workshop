@@ -10,7 +10,7 @@ module.exports = (t, { createEnv }) => {
   const freshAlgo = (seed = 5) => {
     const env = createEnv({ seed });
     env.load('js/modules/algorithms.js');
-    const lab = env.window.algorithmsLab;
+    const lab = env.window.algorithmsStation;
     lab.init();
     lab.delay = 0;
     return { env, lab };

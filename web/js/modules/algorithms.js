@@ -1,5 +1,5 @@
 // CS Interactive Workshop - Algorithms & Data Structures Module
-class AlgorithmsLab {
+class AlgorithmsStation {
   constructor() {
     this.canvas = null;
     this.ctx = null;
@@ -661,4 +661,4 @@ void heapSort(std::vector<int>& a) {
   }
 }
 
-window.algorithmsLab = new AlgorithmsLab();
+window.algorithmsStation = new AlgorithmsStation();

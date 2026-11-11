@@ -133,7 +133,7 @@ class App {
   init() {
     document.querySelectorAll('.bit-slot').forEach(el => { el.innerHTML = BIT_SVG; });
 
-    ['algorithmsLab', 'concurrencyLab', 'heatLab', 'networkingStation', 'cheatsheetsLab', 'interviewStation', 'dsStation', 'sqlStation']
+    ['algorithmsStation', 'concurrencyLab', 'heatLab', 'networkingStation', 'cheatsheetsLab', 'interviewStation', 'dsStation', 'sqlStation']
       .forEach(name => { if (window[name]) window[name].init(); });
 
     this.setupAccount();
@@ -253,7 +253,7 @@ class App {
     // Canvases need a size once they become visible
     if (step === 'play') {
       requestAnimationFrame(() => {
-        if (this.currentTab === 'algorithms' && window.algorithmsLab) window.algorithmsLab.resizeCanvas();
+        if (this.currentTab === 'algorithms' && window.algorithmsStation) window.algorithmsStation.resizeCanvas();
         if (this.currentTab === 'concurrency' && window.concurrencyLab) window.concurrencyLab.resizeCanvas();
       });
     }
