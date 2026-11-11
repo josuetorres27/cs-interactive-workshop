@@ -1,27 +1,31 @@
 // CS Interactive Workshop - App orchestrator
-// Screens: intro (#/) -> about (#/que-es) -> work areas (#/taller)
-//          -> one area's stations (#/mesa/<area>) -> station (#/taller/<module>[/<step>])
+// Screens: intro (#/) -> about (#/about) -> work areas (#/workshop)
+//          -> one area's stations (#/area/<area>) -> station (#/workshop/<module>[/<step>])
 
 const AREAS = {
-  algoritmos:  { title: 'Algoritmos y Estructuras de Datos', line: 'Cómo se ordenan, guardan y recorren los datos.' },
-  paralela:    { title: 'Programación Paralela y Concurrente', line: 'Hilos, sincronización y trabajo en paralelo.' },
-  redes:       { title: 'Redes', line: 'Cómo viajan los datos entre computadoras.' },
-  entrevistas: { title: 'Entrevistas Técnicas', line: 'Patrones para resolver problemas de entrevista, paso a paso.' },
-  datos:       { title: 'Bases de Datos', line: 'Consultas SQL, ejecutadas cláusula por cláusula.' }
+  algorithms:  { title: 'Algoritmos y Estructuras de Datos', line: 'Cómo se ordenan, guardan y recorren los datos.' },
+  parallel:    { title: 'Programación Paralela y Concurrente', line: 'Hilos, sincronización y trabajo en paralelo.' },
+  networking:  { title: 'Redes', line: 'Cómo viajan los datos entre computadoras.' },
+  interviews:  { title: 'Entrevistas Técnicas', line: 'Patrones para resolver problemas de entrevista, paso a paso.' },
+  databases:   { title: 'Bases de Datos', line: 'Consultas SQL, ejecutadas cláusula por cláusula.' }
 };
 
 const MODULES = {
-  algorithms:     { title: 'Ordenamiento',            area: 'algoritmos',  steps: true },
-  datastructures: { title: 'Estructuras de datos',    area: 'algoritmos',  steps: true, tracer: 'dsStation' },
-  concurrency:    { title: 'La Rotonda',              area: 'paralela',    steps: true },
-  heat:           { title: 'Difusión de calor',       area: 'paralela',    steps: true },
-  networking:     { title: 'Sockets TCP',             area: 'redes',       steps: true, tracer: 'networkingStation' },
-  interview:      { title: 'Patrones de entrevista',  area: 'entrevistas', steps: true, tracer: 'interviewStation' },
-  sql:            { title: 'SQL paso a paso',         area: 'datos',       steps: true, tracer: 'sqlStation' },
+  algorithms:     { title: 'Ordenamiento',            area: 'algorithms',   steps: true },
+  datastructures: { title: 'Estructuras de datos',    area: 'algorithms',   steps: true, tracer: 'dsStation' },
+  concurrency:    { title: 'La Rotonda',              area: 'parallel',      steps: true },
+  heat:           { title: 'Difusión de calor',       area: 'parallel',      steps: true },
+  networking:     { title: 'Sockets TCP',             area: 'networking',    steps: true, tracer: 'networkingStation' },
+  interview:      { title: 'Patrones de entrevista',  area: 'interviews',   steps: true, tracer: 'interviewStation' },
+  sql:            { title: 'SQL paso a paso',         area: 'databases',     steps: true, tracer: 'sqlStation' },
   cheatsheets:    { title: 'El Cuaderno',             area: null,          steps: false }
 };
 const MODULE_ORDER = ['algorithms', 'datastructures', 'concurrency', 'heat', 'networking', 'interview', 'sql', 'cheatsheets'];
 const STEP_IDS = ['play', 'learn', 'build'];
+
+// Spanish URLs from before the routes were renamed
+const LEGACY_ROUTES = { 'que-es': 'about', perfil: 'profile', taller: 'workshop', mesa: 'area' };
+const LEGACY_AREAS = { algoritmos: 'algorithms', paralela: 'parallel', redes: 'networking', entrevistas: 'interviews', datos: 'databases' };
 
 // What Bit says on each screen/step
 const TRACER_LINES = {
@@ -30,7 +34,7 @@ const TRACER_LINES = {
   build: 'Una plantilla para reusar el patrón y consejos para explicarlo en voz alta.'
 };
 const GUIDE_LINES = {
-  taller: 'Primero escoge una mesa de trabajo: cada una corresponde a un curso o tema. Si vas a una entrevista, prueba «Entrevistas Técnicas».',
+  workshop: 'Primero escoge una mesa de trabajo: cada una corresponde a un curso o tema. Si vas a una entrevista, prueba «Entrevistas Técnicas».',
   area: 'Estas son las estaciones de esta mesa. Toca una para entrar.',
   algorithms: {
     play: 'Escoge un algoritmo, dale a Iniciar y escucha: cada barra suena según su altura.',
@@ -47,7 +51,7 @@ const GUIDE_LINES = {
     learn: 'Doble búfer, franjas, barrera y reducción: las cuatro ideas que hacen correcto y rápido este cálculo.',
     build: 'El motor en C de este proyecto, con pthreads y OpenMP, y cómo correrlo para comparar.'
   },
-  networking: {
+  networking:  {
     play: 'Envía una petición y mira cada paquete cruzar el cable. Usa ← y → para ir paso a paso.',
     learn: 'Cliente, servidor, socket y pool de hilos, explicados sin rodeos.',
     build: 'Un servidor TCP de verdad cabe en 30 líneas. Aquí lo tienes.'
@@ -148,19 +152,33 @@ class App {
   }
 
   // ── Routing ───────────────────────────────────────────────
+  // Old Spanish URLs (shared links, bookmarks) still work: they are rewritten to the English ones
+  legacyParts(parts) {
+    const first = LEGACY_ROUTES[parts[0]];
+    if (!first) return parts;
+    const next = [first, ...parts.slice(1)];
+    if (parts[0] === 'mesa' && LEGACY_AREAS[parts[1]]) next[1] = LEGACY_AREAS[parts[1]];
+    return next;
+  }
+
   handleRoute() {
-    const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+    let parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+    const english = this.legacyParts(parts);
+    if (english !== parts) {
+      parts = english;
+      history.replaceState(null, '', `#/${parts.join('/')}`);
+    }
     this.endTour();
     this.stopTracers();
 
-    if (parts[0] === 'que-es') return this.showScreen('about');
-    if (parts[0] === 'perfil') return this.openProfile();
-    if (parts[0] === 'mesa' && AREAS[parts[1]]) return this.openArea(parts[1]);
-    if (parts[0] === 'taller' && MODULES[parts[1]]) {
+    if (parts[0] === 'about') return this.showScreen('about');
+    if (parts[0] === 'profile') return this.openProfile();
+    if (parts[0] === 'area' && AREAS[parts[1]]) return this.openArea(parts[1]);
+    if (parts[0] === 'workshop' && MODULES[parts[1]]) {
       const step = STEP_IDS.includes(parts[2]) ? parts[2] : 'learn';
       return this.openModule(parts[1], step);
     }
-    if (parts[0] === 'taller') return this.showScreen('taller');
+    if (parts[0] === 'workshop') return this.showScreen('workshop');
     return this.showScreen('intro');
   }
 
@@ -179,8 +197,8 @@ class App {
   }
 
   // Kept for compatibility: open a module by id
-  openStation(tabId = 'algorithms') { this.go(`#/taller/${tabId}`); }
-  showWelcome() { this.go('#/taller'); }
+  openStation(tabId = 'algorithms') { this.go(`#/workshop/${tabId}`); }
+  showWelcome() { this.go('#/workshop'); }
 
   openArea(areaId) {
     this.currentArea = areaId;
@@ -212,7 +230,7 @@ class App {
     if (mod.area) this.currentArea = mod.area;
     document.getElementById('activeMissionLabel').textContent = mod.title;
     const back = document.getElementById('btnBackToWelcome');
-    back.href = mod.area ? `#/mesa/${mod.area}` : '#/taller';
+    back.href = mod.area ? `#/area/${mod.area}` : '#/workshop';
     document.getElementById('modCrumb').textContent = mod.area ? `${AREAS[mod.area].title} /` : 'Taller /';
     document.getElementById('modSteps').hidden = !mod.steps;
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === `tab-${tabId}`));
@@ -231,7 +249,7 @@ class App {
     document.querySelectorAll('#modSteps .step').forEach(btn => {
       btn.addEventListener('click', () => {
         const step = btn.dataset.step;
-        history.replaceState(null, '', `#/taller/${this.currentTab}${step === 'learn' ? '' : '/' + step}`);
+        history.replaceState(null, '', `#/workshop/${this.currentTab}${step === 'learn' ? '' : '/' + step}`);
         this.setStep(step);
         window.soundController.playTone(520, 'sine', 0.02, 0.3);
       });
@@ -351,10 +369,10 @@ class App {
     const last = acc.progress.last;
     const cont = $('btnContinue');
     if (last && MODULES[last.station]) {
-      cont.href = `#/taller/${last.station}${last.step === 'learn' ? '' : '/' + last.step}`;
+      cont.href = `#/workshop/${last.station}${last.step === 'learn' ? '' : '/' + last.step}`;
       cont.innerHTML = `<svg class="ic"><use href="#i-arrow-r"/></svg>Continuar en ${esc(MODULES[last.station].title)}`;
     } else {
-      cont.href = '#/taller';
+      cont.href = '#/workshop';
       cont.innerHTML = '<svg class="ic"><use href="#i-arrow-r"/></svg>Empezar';
     }
 
@@ -369,7 +387,7 @@ class App {
           const items = P.CHECKLISTS[id].items;
           const done = (acc.progress.stations[id] || { items: {} }).items;
           return `<article class="progress-station board">
-            <div class="progress-station-head"><a href="#/taller/${id}">${esc(MODULES[id].title)}</a><span>${st.done} / ${st.total}</span></div>
+            <div class="progress-station-head"><a href="#/workshop/${id}">${esc(MODULES[id].title)}</a><span>${st.done} / ${st.total}</span></div>
             <div class="bar" role="progressbar" aria-valuenow="${st.percent}" aria-valuemin="0" aria-valuemax="100"><i style="width:${st.percent}%"></i></div>
             ${MODULES[id].steps ? `<div class="step-chips">${['learn', 'play', 'build'].map((s) => `<span class="step-chip ${st.steps[s] ? 'seen' : ''}">${stepNames[s]}</span>`).join('')}</div>` : ''}
             <ul class="checklist">${items.map((i) => `<li class="${done[i.id] ? 'done' : ''}"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>${esc(i.label)}</li>`).join('')}</ul>
@@ -395,7 +413,7 @@ class App {
       if (st.total) badge(card, st.done, st.total);
     });
     document.querySelectorAll('.bench').forEach((bench) => {
-      const m = /#\/mesa\/(\w+)/.exec(bench.getAttribute('href') || '');
+      const m = /#\/area\/(\w+)/.exec(bench.getAttribute('href') || '');
       const ids = m ? MODULE_ORDER.filter((id) => MODULES[id].area === m[1]) : [bench.dataset.tab].filter(Boolean);
       const sum = ids.reduce((acc2, id) => { const s = acc.stats(id); return { done: acc2.done + s.done, total: acc2.total + s.total }; }, { done: 0, total: 0 });
       if (sum.total) badge(bench, sum.done, sum.total);
@@ -431,7 +449,7 @@ class App {
     const guide = document.getElementById('guide');
     const bubble = document.getElementById('guideBubble');
     let text = null;
-    if (this.route === 'taller') text = GUIDE_LINES.taller;
+    if (this.route === 'workshop') text = GUIDE_LINES.workshop;
     if (this.route === 'area') text = GUIDE_LINES.area;
     if (this.route === 'module') {
       const lines = GUIDE_LINES[this.currentTab];
@@ -443,7 +461,7 @@ class App {
     document.getElementById('guideTour').hidden = !(this.route === 'module' && TOURS[this.currentTab] && this.currentStep === 'play');
     // Speak up on the areas screen the first time; elsewhere Bit waits to be clicked
     // (the walkthrough already covers a module's first visit and the bubble would cover controls)
-    bubble.hidden = this.route !== 'taller' || this.hasSeen(`guide-${this.guideKey()}`);
+    bubble.hidden = this.route !== 'workshop' || this.hasSeen(`guide-${this.guideKey()}`);
   }
 
   // ── Coach-mark tour ──────────────────────────────────────
@@ -539,8 +557,8 @@ class App {
 
     document.getElementById('btnHelp').addEventListener('click', () => {
       if (this.route === 'module' && TOURS[this.currentTab]) this.startTour(this.currentTab);
-      else if (['module', 'taller', 'area'].includes(this.route)) document.getElementById('guideBubble').hidden = false;
-      else this.go('#/que-es');
+      else if (['module', 'workshop', 'area'].includes(this.route)) document.getElementById('guideBubble').hidden = false;
+      else this.go('#/about');
     });
   }
 
