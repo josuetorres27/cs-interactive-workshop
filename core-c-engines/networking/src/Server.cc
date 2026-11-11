@@ -6,8 +6,8 @@
  * and serves ASCII art figures from a simulated block file system or an interactive
  * web interface.
  *
- * Author: Josue Torres
- * Copyright (c) 2025 Josue Torres
+ * Author: Josue Torres Sibaja
+ * Copyright (c) 2025 Josue Torres Sibaja
  * Licensed under the MIT License.
  */
 
