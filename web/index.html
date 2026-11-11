@@ -69,7 +69,7 @@
          SCREEN 1 · INTRO  (#/)
          ====================================================== -->
     <section id="screen-intro" class="screen is-active" data-route="intro">
-      <div class="lamp" aria-hidden="true">
+      <div class="lamp theme-lab" aria-hidden="true">
         <span class="lamp-glow"></span>
         <svg viewBox="0 0 120 120">
           <line x1="60" y1="0" x2="60" y2="40" stroke="#1b2027" stroke-width="4" stroke-linecap="round"/>
@@ -81,7 +81,7 @@
       </div>
 
       <!-- Construction blueprint of Bit -->
-      <div class="lab-deco blueprint" aria-hidden="true">
+      <div class="lab-deco blueprint theme-lab" aria-hidden="true">
         <svg viewBox="0 0 240 186">
           <defs>
             <pattern id="bp-grid" width="12" height="12" patternUnits="userSpaceOnUse">
@@ -130,7 +130,7 @@
       </div>
 
       <!-- Workshop robot arm holding a chip -->
-      <div class="lab-deco robot-arm" aria-hidden="true">
+      <div class="lab-deco robot-arm theme-lab" aria-hidden="true">
         <svg viewBox="0 0 200 240">
           <g stroke="#1b2027" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
             <path d="M126 150 C170 150 172 96 118 92" fill="none" stroke="#2a3038" stroke-width="7"/>
@@ -156,6 +156,48 @@
           <circle cx="116" cy="188" r="4" fill="#5fd8ff" stroke="#1b2027" stroke-width="3"/>
         </svg>
       </div>
+
+      <!-- Wooden theme decor: hanging lamp and pegboards with tools -->
+      <div class="lamp theme-wood" aria-hidden="true">
+        <span class="lamp-glow"></span>
+        <svg viewBox="0 0 120 120">
+          <line x1="60" y1="0" x2="60" y2="40" stroke="#3d2414" stroke-width="4" stroke-linecap="round"/>
+          <rect x="52" y="36" width="16" height="12" rx="3" fill="#8d939c" stroke="#3d2414" stroke-width="4"/>
+          <circle cx="60" cy="86" r="13" fill="#fff3c4" stroke="#3d2414" stroke-width="4"/>
+          <path d="M44 48h32l22 34H22z" fill="#56616c" stroke="#3d2414" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M34 72h52" stroke="#6f7b86" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <div class="pegboard theme-wood" style="top:12%; left:4%; width:210px; height:170px" aria-hidden="true">
+        <!-- Screwdriver -->
+        <svg class="peg-tool" viewBox="0 0 120 120" style="left:26px; top:20px; width:78px">
+          <g stroke="#3d2414" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+            <rect x="52" y="8" width="16" height="56" rx="4" fill="#c9ced6"/>
+            <path d="M52 8h16v-2" fill="none"/>
+            <rect x="42" y="62" width="36" height="50" rx="12" fill="#e8512a"/>
+          </g>
+          <path d="M54 76v22M66 76v22" stroke="#b13817" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+        <!-- Hammer -->
+        <svg class="peg-tool" viewBox="0 0 120 120" style="left:108px; top:16px; width:82px; transform:rotate(14deg)">
+          <g stroke="#3d2414" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+            <rect x="53" y="38" width="14" height="74" rx="5" fill="#c68a50"/>
+            <path d="M26 14h56l12 10v18H26z" fill="#8d939c"/>
+          </g>
+          <path d="M60 52v50" stroke="#a96f3c" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="pegboard theme-wood" style="top:46%; right:4%; width:180px; height:220px" aria-hidden="true">
+        <!-- Gear -->
+        <svg class="peg-tool" viewBox="0 0 120 120" style="left:34px; top:40px; width:110px">
+          <g stroke="#3d2414" stroke-width="6" stroke-linejoin="round">
+            <path d="M52 10h16l3 14 11 5 12-8 11 11-8 12 5 11 14 3v16l-14 3-5 11 8 12-11 11-12-8-11 5-3 14H52l-3-14-11-5-12 8-11-11 8-12-5-11-14-3V52l14-3 5-11-8-12 11-11 12 8 11-5z" fill="#f6c33b"/>
+            <circle cx="60" cy="60" r="16" fill="#c68a50"/>
+          </g>
+        </svg>
+      </div>
+
 
       <div class="sign">
         <div class="sign-board">

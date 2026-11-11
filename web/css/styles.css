@@ -133,6 +133,131 @@
   --nail: radial-gradient(circle, #8d939c 0 3.3px, var(--box-ink) 3.6px 5.6px, transparent 6px) center top 6px / 14px 14px no-repeat;
 }
 
+/* ================================================================
+   Alternate theme: "Taller de madera", the original wooden workshop.
+   Picked with the theme button; stored as html[data-theme="madera"].
+   ================================================================ */
+
+:root[data-theme="madera"] {
+  --box:          #c68a50;
+  --box-light:    #e2b47c;
+  --box-dark:     #8f5a2d;
+  --box-shadow:   #5e3717;
+  --box-ink:      #3d2414;
+  --ply:          #f2dfbb;
+  --ply-2:        #e8cd9d;
+  --ply-edge:     #c9a06a;
+  --paper:        #fbf3e2;
+  --paper-2:      #f2e3c6;
+  --paper-line:   #e0c9a0;
+  --metal:        #c9ced6;
+  --metal-dark:   #6b717a;
+  --tomato:       #e8512a;
+  --tomato-dark:  #b13817;
+  --sun-y:        #f6c33b;
+  --mint:         #4fb477;
+  --mint-dark:    #2f8653;
+  --sky-b:        #3d8fd6;
+  --sky-b-dark:   #2565a3;
+  --plum:         #8b5fbf;
+  --amber:        #d9951a;
+  --rose-dim:     rgba(232, 81, 42, 0.12);
+  --text-main:    #3b2414;
+  --text-dim:     #6f5038;
+  --text-muted:   #9c7c5a;
+  --surface-hi:      #fff8ea;
+  --code-bg:         #2b2119;
+  --code-bg-2:       #3a2a1d;
+  --code-head:       #4a3020;
+  --code-head-fg:    #f3e1c2;
+  --code-fg:         #f3e7cc;
+  --code-count:      #fbe9cb;
+  --code-gutter:     #7f6852;
+  --code-gutter-ran: #c8a77f;
+  --code-comment:    #b99a75;
+  --code-comment-2:  #a8906f;
+  --tr-bar:          #9c6a3e;
+  --track:           #d9c6a4;
+  --chip-wait:       #efe1c6;
+  --viz-bar:         #c9975c;
+  --viz-bar-dim:     #e2c9a3;
+  --viz-iv:          #e9d3ac;
+  --sign-sub:        #f8e6c6;
+  --btn-red-hi:      #f4734a;
+  --btn-red-edge:    #7e2610;
+  --btn-orange-hi:   #f08a4d;
+  --btn-orange:      #d9622a;
+  --btn-green-hi:    #6ccb8f;
+  --btn-green-edge:  #1f5e39;
+  --rgb-blue:        61, 143, 214;
+  --rgb-code-tint:   143, 90, 45;
+  --rgb-ink:         61, 36, 20;
+  --rgb-cream:       251, 244, 228;
+  --rgb-yellow:      246, 195, 59;
+  --rgb-red:         232, 81, 42;
+  --rgb-red-edge:    126, 38, 16;
+  --rgb-green-edge:  31, 94, 57;
+  --rgb-wall:        200, 140, 82;
+  --rgb-ply:         242, 223, 187;
+  --rgb-shade:       74, 44, 20;
+  --rgb-night:       43, 25, 10;
+  --rgb-lamp:        255, 232, 160;
+  --logo-small:      var(--sun-y);
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .18 0 0 0 0 .07 0 0 0 .4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --woodgrain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='360'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .11' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .28 0 0 0 0 .15 0 0 0 0 .05 0 0 0 .9 -.32'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3C/svg%3E");
+}
+
+:root[data-theme="madera"] body {
+  background-color: var(--box);
+  background-image:
+    radial-gradient(ellipse 65% 50% at 50% -6%, rgba(255, 244, 210, .8), rgba(255, 228, 175, .28) 55%, transparent 78%),
+    repeating-linear-gradient(180deg, rgba(255, 232, 195, .25) 0 1px, transparent 1px 118px, rgba(58, 30, 10, .5) 118px 120px),
+    repeating-linear-gradient(180deg, transparent 0 120px, rgba(90, 48, 18, .08) 120px 240px, transparent 240px 360px, rgba(255, 220, 170, .06) 360px 480px),
+    var(--woodgrain),
+    linear-gradient(180deg, #d79d60, #b97c44);
+  background-size: auto, auto, auto, 900px 360px, auto;
+  background-position: 0 0;
+}
+
+:root[data-theme="madera"] .box-frame { box-shadow: inset 0 0 180px 40px rgba(46, 22, 6, .42); }
+
+:root[data-theme="madera"] .sign-board {
+  background: repeating-linear-gradient(180deg, transparent 0 22px, rgba(61, 36, 20, .28) 22px 24px), #8e5a32;
+}
+:root[data-theme="madera"] .sign-board::before { display: none; }
+
+/* Each theme has its own intro decor */
+.theme-wood { display: none; }
+:root[data-theme="madera"] .theme-wood { display: block; }
+:root[data-theme="madera"] .theme-lab { display: none; }
+
+/* Pegboards with tools (wooden theme decor) */
+.pegboard {
+  position: absolute; pointer-events: none; z-index: 0;
+  border-radius: 6px;
+  background:
+    var(--screws),
+    radial-gradient(circle, var(--box-ink) 0 2.6px, transparent 3px) 11px 11px / 22px 22px,
+    #c4935e;
+  border: var(--outline);
+  box-shadow: var(--drop);
+}
+.peg-tool { position: absolute; height: auto; overflow: visible; }
+
+/* Bit in wood and mint (CSS beats the SVG presentation attributes) */
+:root[data-theme="madera"] .bit [stroke="#1b2027"] { stroke: #3d2414; }
+:root[data-theme="madera"] .bit .bulb { fill: #f6c33b; }
+:root[data-theme="madera"] .bit rect[fill="#f5c518"] { fill: #c68a50; }
+:root[data-theme="madera"] .bit [stroke="#d4a710"] { stroke: #a96f3c; }
+:root[data-theme="madera"] .bit [fill="#d8382e"] { fill: #e8512a; }
+:root[data-theme="madera"] .bit [fill="#f8fafc"] { fill: #f6c33b; }
+:root[data-theme="madera"] .bit [fill="#2e6be6"] { fill: #3d8fd6; }
+:root[data-theme="madera"] .bit [fill="#d5dce3"] { fill: #e6bd85; }
+:root[data-theme="madera"] .bit [stroke="#aeb8c3"] { stroke: #c9975c; }
+:root[data-theme="madera"] .bit [fill="#1d252e"] { fill: #2f3b3a; }
+:root[data-theme="madera"] .bit [fill="#7fe6ff"] { fill: #8ff0c0; }
+:root[data-theme="madera"] .bit [stroke="#7fe6ff"] { stroke: #8ff0c0; }
+
 /* ── Reset ─────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
