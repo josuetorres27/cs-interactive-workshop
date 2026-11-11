@@ -2,7 +2,7 @@
  * Concurrent Systems Laboratory
  * Module: 2D Heat Diffusion - shared solver library (serial + POSIX threads)
  *
- * Author: Josue Torres
+ * Author: Josue Torres Sibaja
  * Licensed under the MIT License.
  */
 #define _POSIX_C_SOURCE 200112L
