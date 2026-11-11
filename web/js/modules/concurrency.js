@@ -248,6 +248,7 @@ class ConcurrencyStation {
   }
 
   updateRoundabout(dt) {
+    this.frameDt = dt;
     // Auto-spawn logic
     if (this.autoSpawn && Date.now() - this.lastSpawnTime > this.spawnInterval) {
       if (this.vehicles.length < 16) {
@@ -459,6 +460,9 @@ class ConcurrencyStation {
     const qAngles = [Math.PI, 1.5 * Math.PI, 0, 0.5 * Math.PI];
     const exitQuad = { N: 0, E: 1, S: 2, W: 3 };
     const queued = { N: 0, E: 0, S: 0, W: 0 };
+    // Time-based easing so the glide feels the same at any frame rate
+    const frameDt = this.frameDt || 16;
+    const follow = 1 - Math.exp(-frameDt / 70);
 
     this.vehicles.forEach(v => {
       let vx = cx, vy = cy;
@@ -485,9 +489,25 @@ class ConcurrencyStation {
         }
       }
 
+      // Glide: the drawn position follows the logical one, so cars never jump
+      // between the queue, the ring and the exit road. New cars roll in from
+      // further up their road; cars fade in when they appear and out as they leave.
+      if (v.drawX === undefined) {
+        if (v.state === 'WAITING_ENTRY') [v.drawX, v.drawY] = entryLane(v.entry, 26 + (queued[v.entry] - 1) * 22 + 70);
+        else { v.drawX = vx; v.drawY = vy; }
+        v.fade = 0;
+      }
+      v.drawX += (vx - v.drawX) * follow;
+      v.drawY += (vy - v.drawY) * follow;
+      v.fade = Math.min(1, v.fade + frameDt / 300);
+      let alpha = v.fade;
+      if (v.state === 'EXITING' && v.progress > 0.75) alpha *= Math.max(0, 1 - (v.progress - 0.75) / 0.25);
+      const px = v.drawX, py = v.drawY;
+
       // Render vehicle particle
+      this.ctx.globalAlpha = alpha;
       this.ctx.beginPath();
-      this.ctx.arc(vx, vy, 9, 0, 2 * Math.PI);
+      this.ctx.arc(px, py, 9, 0, 2 * Math.PI);
       this.ctx.fillStyle = v.blockedTime > 1500 ? '#e8512a' : v.color;
       this.ctx.fill();
       this.ctx.strokeStyle = '#3d2414';
@@ -497,7 +517,8 @@ class ConcurrencyStation {
       // Vehicle ID
       this.ctx.fillStyle = '#3d2414';
       this.ctx.font = 'bold 9px "JetBrains Mono", monospace';
-      this.ctx.fillText(v.id, vx, vy + 0.5);
+      this.ctx.fillText(v.id, px, py + 0.5);
+      this.ctx.globalAlpha = 1;
     });
   }
 
