@@ -16,7 +16,7 @@ const MODULES = {
   concurrency:    { title: 'La Rotonda',              area: 'paralela',    steps: true },
   heat:           { title: 'Difusión de calor',       area: 'paralela',    steps: true },
   networking:     { title: 'Sockets TCP',             area: 'redes',       steps: true, tracer: 'networkingLab' },
-  interview:      { title: 'Patrones de entrevista',  area: 'entrevistas', steps: true, tracer: 'interviewLab' },
+  interview:      { title: 'Patrones de entrevista',  area: 'entrevistas', steps: true, tracer: 'interviewStation' },
   sql:            { title: 'SQL paso a paso',         area: 'datos',       steps: true, tracer: 'sqlLab' },
   cheatsheets:    { title: 'El Cuaderno',             area: null,          steps: false }
 };
@@ -133,7 +133,7 @@ class App {
   init() {
     document.querySelectorAll('.bit-slot').forEach(el => { el.innerHTML = BIT_SVG; });
 
-    ['algorithmsLab', 'concurrencyLab', 'heatLab', 'networkingLab', 'cheatsheetsLab', 'interviewLab', 'dsStation', 'sqlLab']
+    ['algorithmsLab', 'concurrencyLab', 'heatLab', 'networkingLab', 'cheatsheetsLab', 'interviewStation', 'dsStation', 'sqlLab']
       .forEach(name => { if (window[name]) window[name].init(); });
 
     this.setupAccount();

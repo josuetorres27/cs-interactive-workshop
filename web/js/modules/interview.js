@@ -607,5 +607,5 @@ def max_window(nums, k):
     }
   };
 
-  window.interviewLab = new TraceStation('interview', [twoSum, container, mergeIntervals, longestUnique, trapRain, slidingMax]);
+  window.interviewStation = new TraceStation('interview', [twoSum, container, mergeIntervals, longestUnique, trapRain, slidingMax]);
 })();

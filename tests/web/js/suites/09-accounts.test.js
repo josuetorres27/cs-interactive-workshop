@@ -98,7 +98,7 @@ module.exports = (t, { createEnv, read }) => {
     const ids = (lab) => lab.problems.map((p) => `solve:${p.id}`).sort();
     const list = (station) => P.CHECKLISTS[station].items.map((i) => i.id).sort();
     t.test('every station in the workshop has a checklist and vice versa', () => t.deepEq(Object.keys(P.CHECKLISTS).sort(), Object.keys(MODULES).sort()));
-    t.test('interview checklist lists every interview problem', () => t.deepEq(list('interview'), ids(env.window.interviewLab)));
+    t.test('interview checklist lists every interview problem', () => t.deepEq(list('interview'), ids(env.window.interviewStation)));
     t.test('data structures checklist lists every problem', () => t.deepEq(list('datastructures'), ids(env.window.dsStation)));
     t.test('SQL checklist lists every query', () => t.deepEq(list('sql'), ids(env.window.sqlLab)));
     t.test('sorting checklist lists every algorithm', () => t.deepEq(list('algorithms'), Object.keys(env.window.algorithmsLab.complexities).map((a) => `run:${a}`).sort()));
