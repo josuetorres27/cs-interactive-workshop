@@ -1,6 +1,6 @@
-// CS Interactive Lab - Firebase web configuration.
+// CS Interactive Workshop - Firebase web configuration.
 //
-// Accounts are optional: while this is null the lab works fully in guest mode
+// Accounts are optional: while this is null the workshop works fully in guest mode
 // and progress is saved only on the student's device.
 //
 // To turn on "Continuar con Google":
