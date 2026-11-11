@@ -1,4 +1,4 @@
-// CS Interactive Lab - Heat diffusion model (no DOM).
+// CS Interactive Workshop - Heat diffusion model (no DOM).
 //
 // Same method as the C engines in core-c-engines/concurrency/simulations/heat-diffusion:
 // explicit 5-point stencil with double buffering, interior rows split into one
@@ -7,7 +7,7 @@
 // previous grid, the result is identical whatever the number of threads or the
 // order in which rows are computed.
 //
-// Extra for the lab: interior "sources" (fixed cells) that the student paints,
+// Extra for the workshop: interior "sources" (fixed cells) that the student paints,
 // and a small cost model to show busy vs. waiting time at the barrier.
 (function (root) {
   const SCENARIOS = {
@@ -130,7 +130,7 @@
     return { busy, wait, span, serial, speedup: serial / span, efficiency: serial / span / bands.length };
   }
 
-  // ── Colour (flat palette shared with the rest of the lab) ─────────
+  // ── Colour (flat palette shared with the rest of the workshop) ─────────
   const STOPS = [
     [0, [43, 76, 126]],    // deep blue
     [25, [61, 143, 214]],  // sky
