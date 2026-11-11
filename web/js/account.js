@@ -1,4 +1,4 @@
-// CS Interactive Lab - Optional student accounts.
+// CS Interactive Workshop - Optional student accounts.
 //
 // Guests: progress lives in localStorage on this device.
 // Signed in (Google via Firebase Auth): progress lives in Firestore at
