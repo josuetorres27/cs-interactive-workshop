@@ -14,14 +14,11 @@
 //
 // These values are not secrets (every web app ships them to the browser);
 // what protects student data are the Firestore rules.
-window.FIREBASE_CONFIG = null;
-/* Example shape:
 window.FIREBASE_CONFIG = {
-  apiKey: '...',
+  apiKey: 'AIzaSyB9NioXlQzD1bVje5dGj_Z8yXp2ZNN7wwk',
   authDomain: 'cs-interactive-workshop.firebaseapp.com',
   projectId: 'cs-interactive-workshop',
   storageBucket: 'cs-interactive-workshop.firebasestorage.app',
-  messagingSenderId: '...',
-  appId: '...'
+  messagingSenderId: '104803519250',
+  appId: '1:104803519250:web:d4196e06169a44260b81cb'
 };
-*/
