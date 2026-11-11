@@ -1,4 +1,4 @@
-# CS Interactive Lab
+# CS Interactive Workshop
 
 [![Standard](https://img.shields.io/badge/Language-C99%20%2F%20C11%20%2F%20C%2B%2B17-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B17)
 [![Concurrency](https://img.shields.io/badge/Concurrency-POSIX%20Threads%20%7C%20OpenMP%20%7C%20Atomics-orange.svg)](https://computing.llnl.gov/tutorials/pthreads/)
@@ -7,9 +7,9 @@
 [![Build & Tests](https://img.shields.io/badge/Tests-870%2B%20Passing-brightgreen.svg)](tests/)
 [![Author](https://img.shields.io/badge/Author-Josue%20Torres%20Sibaja-0ea5e9.svg)](https://github.com/josuetorres27)
 
-An interactive lab for Computer Science students at the ECCI (Universidad de Costa Rica). It covers **algorithms and data structures**, **parallel and concurrent programming**, **networking**, **technical interview patterns** and **SQL**, through visual simulations in the browser backed by real C and C++ engines.
+An interactive workshop for Computer Science students at the ECCI (Universidad de Costa Rica). It covers **algorithms and data structures**, **parallel and concurrent programming**, **networking**, **technical interview patterns** and **SQL**, through visual simulations in the browser backed by real C and C++ engines.
 
-The web lab is a wooden workshop with workbenches (work areas) and stations. Every station has three steps:
+The web workshop is a wooden room with workbenches (work areas) and stations. Every station has three steps:
 
 - **Experimenta:** play with a live simulation.
 - **Entiende:** the theory behind it, with diagrams.
@@ -22,7 +22,7 @@ Accounts are optional. Guests keep their progress on their own device; students 
 ## Repository layout
 
 ```text
-cs-interactive-lab/
+cs-interactive-workshop/
 ├── Makefile                            # Builds every native engine and runs all tests
 ├── LICENSE                             # MIT License
 ├── firebase.json                       # Firebase Hosting configuration (optional)
@@ -41,8 +41,8 @@ cs-interactive-lab/
 │   └── networking/                     # Multi-threaded TCP server and client (C++17)
 │       ├── src/                        # Socket/VSocket wrappers, Server, Client, FileSystem
 │       └── ascii_figures/              # The 12 ASCII figures the server sends
-├── tests/                              # C/C++ suites, Python checks, and the web lab runner
-└── web/                                # The web lab (static, no build step)
+├── tests/                              # C/C++ suites, Python checks, and the web workshop runner
+└── web/                                # The web workshop (static, no build step)
     ├── index.html                      # Every screen and station
     ├── css/styles.css                  # Workshop theme, drawn like Bit the robot
     ├── js/
@@ -62,7 +62,7 @@ cs-interactive-lab/
     │       ├── sql.js                  # SQL paso a paso (tracer)
     │       ├── cheatsheets.js          # El Cuaderno
     │       └── figuresData.js          # Embedded copy of the ASCII figures
-    └── assets/ascii_figures/           # ASCII figures served to the web lab
+    └── assets/ascii_figures/           # ASCII figures served to the web workshop
 ```
 
 ---
@@ -116,12 +116,12 @@ A C++17 TCP server that starts one thread per client connection, on top of an ob
 - GCC / G++ with C11, C++17, POSIX threads (`-pthread`) and OpenMP (`-fopenmp`).
 - Make.
 - Linux, macOS or WSL.
-- Node.js 18+ and Python 3 for the web lab tests.
+- Node.js 18+ and Python 3 for the web workshop tests.
 
 ### Build every engine
 ```bash
-git clone https://github.com/josuetorres27/cs-interactive-lab.git
-cd cs-interactive-lab
+git clone https://github.com/josuetorres27/cs-interactive-workshop.git
+cd cs-interactive-workshop
 make all
 ```
 
@@ -130,7 +130,7 @@ make all
 make test
 ```
 
-Run only the web lab tests (no compiler needed):
+Run only the web workshop tests (no compiler needed):
 ```bash
 make test-web
 ```
@@ -157,14 +157,14 @@ A zero-dependency C/C++ assertion harness (`tests/runner.h`), Python checks and 
 | **Concurrency: patterns** | `tests/concurrency/test_patterns.c` | **50** | Bounded buffer FIFO order, no deadlock among philosophers, the 2:1 H2O ratio, atomic fetch-and-add without races. |
 | **Networking** | `tests/networking/test_networking.cpp` | **50** | Request line parsing, headers, response framing, file system chunking, all 12 figures. |
 | **Web assets** | `tests/web/test_web_assets.py` | **23** | Page anchors, CSS variables, JS syntax, audio and hosting configuration. |
-| **Web lab** | `tests/web/run.js` | **513** | Every station and model (sorting, roundabout, heat, HTTP over TCP, tracer problems against reference solutions), progress and accounts against a fake Firebase backend, Firestore rules, the router, art direction and page integrity. |
+| **Web workshop** | `tests/web/run.js` | **513** | Every station and model (sorting, roundabout, heat, HTTP over TCP, tracer problems against reference solutions), progress and accounts against a fake Firebase backend, Firestore rules, the router, art direction and page integrity. |
 | **Total** | **7 suites** | **876** | **All passing** |
 
 ---
 
-## Running the web lab
+## Running the web workshop
 
-The web lab is static. Serve the `web/` folder with any static server:
+The web workshop is static. Serve the `web/` folder with any static server:
 ```bash
 python3 -m http.server 8000 --directory web
 ```
@@ -174,7 +174,7 @@ Then open `http://localhost:8000`.
 Every push to `main` runs the full test suite in GitHub Actions and, if it passes, deploys `web/` to GitHub Pages.
 
 ### Optional: accounts with Firebase
-Without configuration the lab runs in guest mode. To enable Google sign-in and cloud progress:
+Without configuration the workshop runs in guest mode. To enable Google sign-in and cloud progress:
 1. Create a Firebase project, enable Google sign-in and Firestore.
 2. Put the web app settings in `web/js/firebase-config.js`.
 3. Deploy the rules: `firebase deploy --only firestore:rules`.
