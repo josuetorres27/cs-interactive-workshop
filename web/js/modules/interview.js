@@ -1,4 +1,4 @@
-// CS Interactive Lab - Technical interview patterns, traced line by line.
+// CS Interactive Workshop - Technical interview patterns, traced line by line.
 (function () {
   const { TraceLab, Recorder, viz } = window.Tracer;
 
