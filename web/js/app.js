@@ -179,7 +179,7 @@ class App {
   }
 
   // Kept for compatibility: open a module by id
-  openLab(tabId = 'algorithms') { this.go(`#/lab/${tabId}`); }
+  openStation(tabId = 'algorithms') { this.go(`#/lab/${tabId}`); }
   showWelcome() { this.go('#/lab'); }
 
   openArea(areaId) {
