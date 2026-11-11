@@ -95,7 +95,7 @@ module.exports = (t, { createEnv, read }) => {
     ['interview', 'datastructures', 'sql'].forEach((f) => env.load(`js/modules/${f}.js`));
     env.load('js/modules/algorithms.js');
     const { MODULES } = env.load('js/app.js', ['MODULES']);
-    const ids = (lab) => lab.problems.map((p) => `solve:${p.id}`).sort();
+    const ids = (stn) => stn.problems.map((p) => `solve:${p.id}`).sort();
     const list = (station) => P.CHECKLISTS[station].items.map((i) => i.id).sort();
     t.test('every station in the workshop has a checklist and vice versa', () => t.deepEq(Object.keys(P.CHECKLISTS).sort(), Object.keys(MODULES).sort()));
     t.test('interview checklist lists every interview problem', () => t.deepEq(list('interview'), ids(env.window.interviewStation)));
@@ -207,30 +207,30 @@ module.exports = (t, { createEnv, read }) => {
     };
     t.test('walking a trace to the last line records the problem', () => {
       const env = withAccount(); env.load('js/tracer.js'); env.load('js/modules/sql.js');
-      const lab = env.window.sqlStation; lab.init(); lab.go(lab.frames.length - 1);
+      const stn = env.window.sqlStation; stn.init(); stn.go(stn.frames.length - 1);
       t.eq(env.window.account.stats('sql').done, 1);
     });
     t.test('stopping halfway through a trace records nothing', () => {
       const env = withAccount(); env.load('js/tracer.js'); env.load('js/modules/sql.js');
-      const lab = env.window.sqlStation; lab.init(); lab.go(2);
+      const stn = env.window.sqlStation; stn.init(); stn.go(2);
       t.eq(env.window.account.stats('sql').done, 0);
     });
     t.test('finishing a sort records that algorithm', async () => {
       const env = withAccount(); env.load('js/modules/algorithms.js');
-      const lab = env.window.algorithmsStation; lab.init(); lab.delay = 0; lab.arraySize = 12; lab.generateArray('random'); lab.currentAlgo = 'heap';
-      await lab.start();
+      const stn = env.window.algorithmsStation; stn.init(); stn.delay = 0; stn.arraySize = 12; stn.generateArray('random'); stn.currentAlgo = 'heap';
+      await stn.start();
       t.ok(env.window.account.progress.stations.algorithms.items['run:heap']);
     });
     t.test('provoking and resolving the deadlock records both', () => {
       const env = withAccount(); env.load('js/modules/concurrency.js');
-      const lab = env.window.concurrencyStation; lab.forceCoffmanDeadlock(); lab.resolveCoffmanDeadlock();
+      const stn = env.window.concurrencyStation; stn.forceCoffmanDeadlock(); stn.resolveCoffmanDeadlock();
       const items = env.window.account.progress.stations.concurrency.items; t.ok(items.deadlock && items.resolve);
     });
     t.test('finishing a 404 exchange records it', () => {
       const env = withAccount(); env.load('js/modules/figuresData.js'); env.load('js/tracer.js'); env.load('js/modules/httpsim.js'); env.load('js/modules/networking.js');
       env.document.getElementById('netCommand').value = 'GET';
-      const lab = env.window.networkingStation; lab.init();
-      env.document.getElementById('netFigure').value = 'unicornio'; lab.prepare(); lab.go(lab.exchange.steps.length - 1);
+      const stn = env.window.networkingStation; stn.init();
+      env.document.getElementById('netFigure').value = 'unicornio'; stn.prepare(); stn.go(stn.exchange.steps.length - 1);
       t.ok(env.window.account.progress.stations.networking.items['exchange:notfound']);
     });
   });
