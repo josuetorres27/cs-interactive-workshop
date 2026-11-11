@@ -4,7 +4,7 @@
 // Signed in (Google via Firebase Auth): progress lives in Firestore at
 // users/{uid} and follows the student to any device. On sign-in the guest
 // progress is merged into the account (nothing is lost); on sign-out the
-// device starts again as a fresh guest, so shared lab computers stay private.
+// device starts again as a fresh guest, so shared classroom computers stay private.
 //
 // The cloud part is a pluggable "backend" so it can be faked in tests.
 (function (root) {
