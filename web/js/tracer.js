@@ -1,4 +1,4 @@
-// CS Interactive Lab - Tracer: a line-by-line code walkthrough ("debugger") engine.
+// CS Interactive Workshop - Tracer: a line-by-line code walkthrough ("debugger") engine.
 //
 // A station is a list of problems. Each problem provides:
 //   id, title, difficulty ('Fácil' | 'Media' | 'Difícil'), pattern, statement (html),
