@@ -1,5 +1,5 @@
 /**
- * CS Interactive Lab - Concurrency Patterns Test Suite
+ * CS Interactive Workshop - Concurrency Patterns Test Suite
  * 50 Comprehensive Automated Tests (Bounded Buffer, Philosophers, H2O, Atomics)
  */
 
