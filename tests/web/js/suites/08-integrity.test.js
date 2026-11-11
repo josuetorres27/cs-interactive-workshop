@@ -77,7 +77,7 @@ module.exports = (t, { read, WEB, createEnv }) => {
     // Flat CSS rules: innermost { } blocks, with their selector
     const bare = css.replace(/\/\*[\s\S]*?\*\//g, '');
     const rules = [...bare.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map((m) => ({ sel: m[1].trim(), body: m[2] }));
-    const LIGHTING = ['.box-frame', '.tour-spot', '.lamp-glow']; // light and focus effects, not illustrations
+    const LIGHTING = ['.box-frame', '.tour-spot', '.lamp-glow', '.sign-board::before']; // light and focus effects, not illustrations
     const ruleFor = (name) => rules.filter((r) => r.sel.split(',').map((s) => s.trim()).includes(name)).map((r) => r.body).join(';');
 
     t.test('one ink colour everywhere (the old cardboard ink is gone)', () => {
