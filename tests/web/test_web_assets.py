@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-CS Interactive Lab - Web Assets & Configuration Test Suite
+CS Interactive Workshop - Web Assets & Configuration Test Suite
 20 Automated Integrity Tests (HTML, CSS, JS, JSON, Configs)
 """
 
@@ -37,7 +37,7 @@ def main():
         html = f.read()
 
     test("Index HTML Has Valid DOCTYPE", "<!DOCTYPE html>" in html)
-    test("Index HTML Contains Title", "<title>CS Interactive Lab" in html)
+    test("Index HTML Contains Title", "<title>CS Interactive Workshop" in html)
     test("Index HTML Has Algorithms Tab", 'data-tab="algorithms"' in html)
     test("Index HTML Has Concurrency Tab", 'data-tab="concurrency"' in html)
     test("Index HTML Has Networking Tab", 'data-tab="networking"' in html)
