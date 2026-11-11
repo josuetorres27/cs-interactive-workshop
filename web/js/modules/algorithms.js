@@ -1,4 +1,4 @@
-// CS Interactive Lab - Algorithms & Data Structures Module
+// CS Interactive Workshop - Algorithms & Data Structures Module
 class AlgorithmsLab {
   constructor() {
     this.canvas = null;
