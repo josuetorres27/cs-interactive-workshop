@@ -4,8 +4,8 @@
  *
  * Stream-oriented socket wrapper implementation for connection and data transfer.
  *
- * Author: Josue Torres
- * Copyright (c) 2025 Josue Torres
+ * Author: Josue Torres Sibaja
+ * Copyright (c) 2025 Josue Torres Sibaja
  * Licensed under the MIT License.
  */
 
