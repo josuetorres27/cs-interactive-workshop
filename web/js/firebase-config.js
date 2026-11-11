@@ -18,9 +18,9 @@ window.FIREBASE_CONFIG = null;
 /* Example shape:
 window.FIREBASE_CONFIG = {
   apiKey: '...',
-  authDomain: 'cs-interactive-lab.firebaseapp.com',
-  projectId: 'cs-interactive-lab',
-  storageBucket: 'cs-interactive-lab.appspot.com',
+  authDomain: 'cs-interactive-workshop.firebaseapp.com',
+  projectId: 'cs-interactive-workshop',
+  storageBucket: 'cs-interactive-workshop.firebasestorage.app',
   messagingSenderId: '...',
   appId: '...'
 };
