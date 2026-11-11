@@ -508,7 +508,7 @@ code {
 .subtab.active { background: var(--sun-y); box-shadow: 0 3px 0 var(--box-ink); }
 
 /* Experiment layout: clipboard controls + stage */
-.lab-grid { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 1.4rem; align-items: start; }
+.workspace-grid { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 1.4rem; align-items: start; }
 .clipboard {
   position: relative;
   background-color: var(--paper); background-image: var(--grain);
@@ -1264,7 +1264,7 @@ pre.code .t-k { color: #f6c33b; }
 
 /* ── Responsive ────────────────────────────────────────────── */
 @media (max-width: 900px) {
-  .lab-grid { grid-template-columns: 1fr; }
+  .workspace-grid { grid-template-columns: 1fr; }
   .mod-bar .wrap { padding-right: 0; flex-wrap: wrap; }
   .mod-bar { padding-top: 70px; }
 }
@@ -1278,7 +1278,7 @@ pre.code .t-k { color: #f6c33b; }
   .steps { width: 100%; }
   .step { flex: 1; justify-content: center; gap: .3rem; padding: .4rem .5rem; font-size: .88rem; }
   .step-n { width: 20px; height: 20px; font-size: .72rem; }
-  .lab-grid > .stage, .lab-grid > .net-stack { order: -1; }
+  .workspace-grid > .stage, .workspace-grid > .net-stack { order: -1; }
   .guide .bit { width: 60px; }
   .guide .bubble { max-width: calc(100vw - 100px); font-size: 1.05rem; }
 }
