@@ -1,4 +1,4 @@
-// CS Interactive Lab - Networking station: a client and a server exchanging
+// CS Interactive Workshop - Networking station: a client and a server exchanging
 // HTTP over TCP, step by step. The protocol logic lives in httpsim.js.
 class NetworkingLab {
   constructor() {
