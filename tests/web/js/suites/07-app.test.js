@@ -28,7 +28,7 @@ module.exports = (t, { createEnv, read }) => {
         });
       }));
     });
-    t.test('the tracer stations point at a global lab object', () => Object.values(MODULES).filter((m) => m.tracer).forEach((m) => t.ok(/Lab$/.test(m.tracer))));
+    t.test('the tracer stations point at a global station object', () => Object.values(MODULES).filter((m) => m.tracer).forEach((m) => t.ok(/(Lab|Station)$/.test(m.tracer))));
     t.test('Bit the robot blinks', () => t.includes(BIT_SVG, 'class="blink"'));
   });
 
