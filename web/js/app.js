@@ -102,23 +102,23 @@ const TOURS = {
 
 const BIT_SVG = `
 <svg class="bit" viewBox="0 0 120 150" aria-hidden="true">
-  <line x1="60" y1="30" x2="60" y2="12" stroke="#3d2414" stroke-width="4" stroke-linecap="round"/>
-  <circle class="bulb" cx="60" cy="10" r="7" fill="#f6c33b" stroke="#3d2414" stroke-width="3.5"/>
+  <line x1="60" y1="30" x2="60" y2="12" stroke="#1b2027" stroke-width="4" stroke-linecap="round"/>
+  <circle class="bulb" cx="60" cy="10" r="7" fill="#f5c518" stroke="#1b2027" stroke-width="3.5"/>
   <path d="M30 108 14 126" stroke="#8d939c" stroke-width="7" stroke-linecap="round"/>
   <path d="M90 108 106 90" stroke="#8d939c" stroke-width="7" stroke-linecap="round"/>
-  <rect x="30" y="98" width="60" height="46" rx="6" fill="#c68a50" stroke="#3d2414" stroke-width="4"/>
-  <path d="M34 106h52M34 116h52M34 136h52" stroke="#a96f3c" stroke-width="1.6"/>
-  <circle cx="46" cy="126" r="5" fill="#e8512a" stroke="#3d2414" stroke-width="2.5"/>
-  <circle cx="60" cy="126" r="5" fill="#f6c33b" stroke="#3d2414" stroke-width="2.5"/>
-  <circle cx="74" cy="126" r="5" fill="#3d8fd6" stroke="#3d2414" stroke-width="2.5"/>
-  <rect x="50" y="92" width="20" height="8" fill="#8d939c" stroke="#3d2414" stroke-width="3"/>
-  <rect x="14" y="30" width="92" height="66" rx="9" fill="#e6bd85" stroke="#3d2414" stroke-width="4"/>
-  <path d="M18 40c20-3 60-3 84 0M18 88c22 2 60 2 84 0" stroke="#c9975c" stroke-width="1.6" fill="none"/>
-  <g stroke="#3d2414" stroke-width="1.6"><circle cx="21" cy="37" r="3.6" fill="#c9ced6"/><circle cx="99" cy="37" r="3.6" fill="#c9ced6"/><circle cx="21" cy="89" r="3.6" fill="#c9ced6"/><circle cx="99" cy="89" r="3.6" fill="#c9ced6"/></g>
-  <rect x="27" y="44" width="66" height="42" rx="9" fill="#2f3b3a" stroke="#3d2414" stroke-width="3.5"/>
-  <rect class="blink" x="40" y="55" width="11" height="15" rx="5" fill="#8ff0c0"/>
-  <rect class="blink" x="69" y="55" width="11" height="15" rx="5" fill="#8ff0c0"/>
-  <path d="M51 76q9 6 18 0" stroke="#8ff0c0" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <rect x="30" y="98" width="60" height="46" rx="6" fill="#f5c518" stroke="#1b2027" stroke-width="4"/>
+  <path d="M34 106h52M34 116h52M34 136h52" stroke="#d4a710" stroke-width="1.6"/>
+  <circle cx="46" cy="126" r="5" fill="#d8382e" stroke="#1b2027" stroke-width="2.5"/>
+  <circle cx="60" cy="126" r="5" fill="#f8fafc" stroke="#1b2027" stroke-width="2.5"/>
+  <circle cx="74" cy="126" r="5" fill="#2e6be6" stroke="#1b2027" stroke-width="2.5"/>
+  <rect x="50" y="92" width="20" height="8" fill="#8d939c" stroke="#1b2027" stroke-width="3"/>
+  <rect x="14" y="30" width="92" height="66" rx="9" fill="#d5dce3" stroke="#1b2027" stroke-width="4"/>
+  <path d="M18 40c20-3 60-3 84 0M18 88c22 2 60 2 84 0" stroke="#aeb8c3" stroke-width="1.6" fill="none"/>
+  <g stroke="#1b2027" stroke-width="1.6"><circle cx="21" cy="37" r="3.6" fill="#c9ced6"/><circle cx="99" cy="37" r="3.6" fill="#c9ced6"/><circle cx="21" cy="89" r="3.6" fill="#c9ced6"/><circle cx="99" cy="89" r="3.6" fill="#c9ced6"/></g>
+  <rect x="27" y="44" width="66" height="42" rx="9" fill="#1d252e" stroke="#1b2027" stroke-width="3.5"/>
+  <rect class="blink" x="40" y="55" width="11" height="15" rx="5" fill="#7fe6ff"/>
+  <rect class="blink" x="69" y="55" width="11" height="15" rx="5" fill="#7fe6ff"/>
+  <path d="M51 76q9 6 18 0" stroke="#7fe6ff" stroke-width="3" fill="none" stroke-linecap="round"/>
 </svg>`;
 
 class App {
