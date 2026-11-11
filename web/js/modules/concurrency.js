@@ -462,7 +462,8 @@ class ConcurrencyStation {
     const queued = { N: 0, E: 0, S: 0, W: 0 };
     // Time-based easing so the glide feels the same at any frame rate
     const frameDt = this.frameDt || 16;
-    const follow = 1 - Math.exp(-frameDt / 70);
+    const follow = 1 - Math.exp(-frameDt / 50);
+    const maxGlide = 0.375 * frameDt; // px per frame: a bit faster than ring traffic, so cars catch up smoothly
 
     this.vehicles.forEach(v => {
       let vx = cx, vy = cy;
@@ -497,8 +498,12 @@ class ConcurrencyStation {
         else { v.drawX = vx; v.drawY = vy; }
         v.fade = 0;
       }
-      v.drawX += (vx - v.drawX) * follow;
-      v.drawY += (vy - v.drawY) * follow;
+      let stepX = (vx - v.drawX) * follow;
+      let stepY = (vy - v.drawY) * follow;
+      const stepLen = Math.hypot(stepX, stepY);
+      if (stepLen > maxGlide) { stepX *= maxGlide / stepLen; stepY *= maxGlide / stepLen; }
+      v.drawX += stepX;
+      v.drawY += stepY;
       v.fade = Math.min(1, v.fade + frameDt / 300);
       let alpha = v.fade;
       if (v.state === 'EXITING' && v.progress > 0.75) alpha *= Math.max(0, 1 - (v.progress - 0.75) / 0.25);
