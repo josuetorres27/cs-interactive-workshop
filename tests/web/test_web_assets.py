@@ -66,6 +66,31 @@ def main():
     for fig in required_figs:
         test(f"figuresData.js Contains Figure '{fig}'", f'"{fig}":' in js_data)
 
+    # 5. Favicons, robots.txt and sitemap.xml
+    ico_path = os.path.join(repo_root, "web", "favicon.ico")
+    test("favicon.ico File Exists", os.path.isfile(ico_path))
+    with open(ico_path, "rb") as f:
+        ico = f.read()
+    ico_count = int.from_bytes(ico[4:6], "little") if len(ico) >= 6 else 0
+    ico_sizes = [(ico[6 + 16 * i] or 256) for i in range(ico_count)]
+    test("favicon.ico Is a Valid ICO File", ico[:4] == b"\x00\x00\x01\x00" and ico_count > 0)
+    test("favicon.ico Sizes Are Multiples of 48px", bool(ico_sizes) and all(s % 48 == 0 for s in ico_sizes), str(ico_sizes))
+    test("favicon.svg File Exists", os.path.isfile(os.path.join(repo_root, "web", "favicon.svg")))
+    apple_path = os.path.join(repo_root, "web", "apple-touch-icon.png")
+    with open(apple_path, "rb") as f:
+        test("apple-touch-icon.png Is a PNG File", f.read(8) == b"\x89PNG\r\n\x1a\n")
+    test("Index HTML Links favicon.ico", 'href="/favicon.ico"' in html)
+    test("Index HTML Links favicon.svg", 'href="/favicon.svg"' in html)
+    test("Index HTML Links apple-touch-icon", 'href="/apple-touch-icon.png"' in html)
+    test("Index HTML Has a Canonical Link", '<link rel="canonical" href="https://cs-interactive-workshop.web.app/">' in html)
+    test("Index HTML Is Not Blocked From Indexing", "noindex" not in html.lower())
+    with open(os.path.join(repo_root, "web", "robots.txt"), "r", encoding="utf-8") as f:
+        robots = f.read()
+    test("robots.txt Allows Crawling and Lists the Sitemap", "Allow: /" in robots and "Sitemap: https://cs-interactive-workshop.web.app/sitemap.xml" in robots)
+    with open(os.path.join(repo_root, "web", "sitemap.xml"), "r", encoding="utf-8") as f:
+        sitemap = f.read()
+    test("sitemap.xml Lists the Home Page", "<loc>https://cs-interactive-workshop.web.app/</loc>" in sitemap)
+
     # 4. firebase.json checks
     fb_path = os.path.join(repo_root, "firebase.json")
     test("firebase.json File Exists", os.path.isfile(fb_path))
