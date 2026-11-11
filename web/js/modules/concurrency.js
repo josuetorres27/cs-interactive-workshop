@@ -471,7 +471,18 @@ class ConcurrencyStation {
         vx = cx + trackR * Math.cos(curAngle);
         vy = cy + trackR * Math.sin(curAngle);
       } else if (v.state === 'EXITING') {
-        [vx, vy] = exitLane(v.exit, v.progress * 80);
+        // Leave the ring where the route ends, slide onto the exit lane, then drive away
+        const exitAngle = qAngles[exitQuad[v.exit]] + 0.5 * Math.PI;
+        const ringX = cx + trackR * Math.cos(exitAngle);
+        const ringY = cy + trackR * Math.sin(exitAngle);
+        if (v.progress < 0.3) {
+          const t = v.progress / 0.3;
+          const [lx, ly] = exitLane(v.exit, 0);
+          vx = ringX + (lx - ringX) * t;
+          vy = ringY + (ly - ringY) * t;
+        } else {
+          [vx, vy] = exitLane(v.exit, ((v.progress - 0.3) / 0.7) * 90);
+        }
       }
 
       // Render vehicle particle
