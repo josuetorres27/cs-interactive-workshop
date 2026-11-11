@@ -1,4 +1,4 @@
-// CS Interactive Lab - Data structures, traced line by line.
+// CS Interactive Workshop - Data structures, traced line by line.
 (function () {
   const { TraceLab, Recorder, viz } = window.Tracer;
 
