@@ -1,5 +1,5 @@
 /**
- * CS Interactive Lab - Heat Diffusion test suite
+ * CS Interactive Workshop - Heat Diffusion test suite
  *
  * Tests the real solver library used by the three engines
  * (core-c-engines/concurrency/simulations/heat-diffusion/common): kernel,
