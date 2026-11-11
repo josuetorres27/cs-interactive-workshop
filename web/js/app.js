@@ -1,6 +1,6 @@
 // CS Interactive Workshop - App orchestrator
-// Screens: intro (#/) -> about (#/que-es) -> work areas (#/lab)
-//          -> one area's stations (#/mesa/<area>) -> station (#/lab/<module>[/<step>])
+// Screens: intro (#/) -> about (#/que-es) -> work areas (#/taller)
+//          -> one area's stations (#/mesa/<area>) -> station (#/taller/<module>[/<step>])
 
 const AREAS = {
   algoritmos:  { title: 'Algoritmos y Estructuras de Datos', line: 'Cómo se ordenan, guardan y recorren los datos.' },
@@ -30,7 +30,7 @@ const TRACER_LINES = {
   build: 'Una plantilla para reusar el patrón y consejos para explicarlo en voz alta.'
 };
 const GUIDE_LINES = {
-  lab: 'Primero escoge una mesa de trabajo: cada una corresponde a un curso o tema. Si vas a una entrevista, prueba «Entrevistas Técnicas».',
+  taller: 'Primero escoge una mesa de trabajo: cada una corresponde a un curso o tema. Si vas a una entrevista, prueba «Entrevistas Técnicas».',
   area: 'Estas son las estaciones de esta mesa. Toca una para entrar.',
   algorithms: {
     play: 'Escoge un algoritmo, dale a Iniciar y escucha: cada barra suena según su altura.',
@@ -156,11 +156,11 @@ class App {
     if (parts[0] === 'que-es') return this.showScreen('about');
     if (parts[0] === 'perfil') return this.openProfile();
     if (parts[0] === 'mesa' && AREAS[parts[1]]) return this.openArea(parts[1]);
-    if (parts[0] === 'lab' && MODULES[parts[1]]) {
+    if (parts[0] === 'taller' && MODULES[parts[1]]) {
       const step = STEP_IDS.includes(parts[2]) ? parts[2] : 'play';
       return this.openModule(parts[1], step);
     }
-    if (parts[0] === 'lab') return this.showScreen('lab');
+    if (parts[0] === 'taller') return this.showScreen('taller');
     return this.showScreen('intro');
   }
 
@@ -179,8 +179,8 @@ class App {
   }
 
   // Kept for compatibility: open a module by id
-  openStation(tabId = 'algorithms') { this.go(`#/lab/${tabId}`); }
-  showWelcome() { this.go('#/lab'); }
+  openStation(tabId = 'algorithms') { this.go(`#/taller/${tabId}`); }
+  showWelcome() { this.go('#/taller'); }
 
   openArea(areaId) {
     this.currentArea = areaId;
@@ -215,7 +215,7 @@ class App {
     if (mod.area) this.currentArea = mod.area;
     document.getElementById('activeMissionLabel').textContent = mod.title;
     const back = document.getElementById('btnBackToWelcome');
-    back.href = mod.area ? `#/mesa/${mod.area}` : '#/lab';
+    back.href = mod.area ? `#/mesa/${mod.area}` : '#/taller';
     document.getElementById('modCrumb').textContent = mod.area ? `${AREAS[mod.area].title} /` : 'Taller /';
     document.getElementById('modSteps').hidden = !mod.steps;
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === `tab-${tabId}`));
@@ -234,7 +234,7 @@ class App {
     document.querySelectorAll('#modSteps .step').forEach(btn => {
       btn.addEventListener('click', () => {
         const step = btn.dataset.step;
-        history.replaceState(null, '', `#/lab/${this.currentTab}${step === 'play' ? '' : '/' + step}`);
+        history.replaceState(null, '', `#/taller/${this.currentTab}${step === 'play' ? '' : '/' + step}`);
         this.setStep(step);
         window.soundController.playTone(520, 'sine', 0.02, 0.3);
       });
@@ -349,10 +349,10 @@ class App {
     const last = acc.progress.last;
     const cont = $('btnContinue');
     if (last && MODULES[last.station]) {
-      cont.href = `#/lab/${last.station}${last.step === 'play' ? '' : '/' + last.step}`;
+      cont.href = `#/taller/${last.station}${last.step === 'play' ? '' : '/' + last.step}`;
       cont.innerHTML = `<svg class="ic"><use href="#i-arrow-r"/></svg>Continuar en ${esc(MODULES[last.station].title)}`;
     } else {
-      cont.href = '#/lab';
+      cont.href = '#/taller';
       cont.innerHTML = '<svg class="ic"><use href="#i-arrow-r"/></svg>Empezar';
     }
 
@@ -367,7 +367,7 @@ class App {
           const items = P.CHECKLISTS[id].items;
           const done = (acc.progress.stations[id] || { items: {} }).items;
           return `<article class="progress-station board">
-            <div class="progress-station-head"><a href="#/lab/${id}">${esc(MODULES[id].title)}</a><span>${st.done} / ${st.total}</span></div>
+            <div class="progress-station-head"><a href="#/taller/${id}">${esc(MODULES[id].title)}</a><span>${st.done} / ${st.total}</span></div>
             <div class="bar" role="progressbar" aria-valuenow="${st.percent}" aria-valuemin="0" aria-valuemax="100"><i style="width:${st.percent}%"></i></div>
             ${MODULES[id].steps ? `<div class="step-chips">${['play', 'learn', 'build'].map((s) => `<span class="step-chip ${st.steps[s] ? 'seen' : ''}">${stepNames[s]}</span>`).join('')}</div>` : ''}
             <ul class="checklist">${items.map((i) => `<li class="${done[i.id] ? 'done' : ''}"><span class="tick"><svg class="ic"><use href="#i-check"/></svg></span>${esc(i.label)}</li>`).join('')}</ul>
@@ -429,7 +429,7 @@ class App {
     const guide = document.getElementById('guide');
     const bubble = document.getElementById('guideBubble');
     let text = null;
-    if (this.route === 'lab') text = GUIDE_LINES.lab;
+    if (this.route === 'taller') text = GUIDE_LINES.taller;
     if (this.route === 'area') text = GUIDE_LINES.area;
     if (this.route === 'module') {
       const lines = GUIDE_LINES[this.currentTab];
@@ -441,7 +441,7 @@ class App {
     document.getElementById('guideTour').hidden = !(this.route === 'module' && TOURS[this.currentTab] && this.currentStep === 'play');
     // Speak up on the areas screen the first time; elsewhere Bit waits to be clicked
     // (the walkthrough already covers a module's first visit and the bubble would cover controls)
-    bubble.hidden = this.route !== 'lab' || this.hasSeen(`guide-${this.guideKey()}`);
+    bubble.hidden = this.route !== 'taller' || this.hasSeen(`guide-${this.guideKey()}`);
   }
 
   // ── Coach-mark tour ──────────────────────────────────────
@@ -537,7 +537,7 @@ class App {
 
     document.getElementById('btnHelp').addEventListener('click', () => {
       if (this.route === 'module' && TOURS[this.currentTab]) this.startTour(this.currentTab);
-      else if (['module', 'lab', 'area'].includes(this.route)) document.getElementById('guideBubble').hidden = false;
+      else if (['module', 'taller', 'area'].includes(this.route)) document.getElementById('guideBubble').hidden = false;
       else this.go('#/que-es');
     });
   }
