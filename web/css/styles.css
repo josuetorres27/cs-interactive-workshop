@@ -142,7 +142,7 @@ code {
 /* Lab decor on the intro: Bit's construction blueprint and a robot arm */
 .lab-deco { position: absolute; pointer-events: none; z-index: 0; }
 .lab-deco svg { display: block; width: 100%; height: auto; overflow: visible; }
-.lab-deco.blueprint { top: 11%; left: 4%; width: clamp(170px, 19vw, 250px); transform: rotate(-3deg); }
+.lab-deco.blueprint { top: 9%; left: 4%; width: clamp(150px, 16vw, 250px); transform: rotate(-3deg); }
 .lab-deco.robot-arm { top: 36%; right: 3%; width: clamp(150px, 17vw, 230px); }
 
 /* Screw element (used where a real element is needed, e.g. the sign) */
@@ -989,6 +989,9 @@ pre.code .t-k { color: #f5c518; }
   .tr-code { max-height: 300px; }
   .benches { grid-template-columns: 1fr; }
 }
+@media (max-width: 900px) {
+  .lab-deco.robot-arm { display: none; }
+}
 @media (max-width: 760px) {
   #screen-intro .intro-bubble { display: none; }
 }
@@ -1289,6 +1292,7 @@ pre.code .t-k { color: #f5c518; }
   #screen-intro .intro-bubble { display: none; }
   #screen-intro.is-active { padding-bottom: 120px; }
   #screen-intro .intro-foot { position: relative; right: auto; bottom: auto; margin-top: 2.2rem; max-width: none; text-align: center; }
+  .lab-deco.blueprint { top: 72px; left: 10px; width: 112px; }
   .intro-bit { left: 50%; width: 120px; margin-left: -60px; }
   .steps { width: 100%; }
   .step { flex: 1; justify-content: center; gap: .3rem; padding: .4rem .5rem; font-size: .88rem; }
