@@ -9,7 +9,7 @@
  * pointers and decides whether to continue, and its implicit barrier makes
  * every thread see the decision before the next iteration.
  *
- * Compile with -fopenmp. Author: Josue Torres. MIT License.
+ * Compile with -fopenmp. Author: Josue Torres Sibaja. MIT License.
  */
 #include "heat.h"
 
