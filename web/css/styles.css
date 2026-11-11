@@ -270,8 +270,8 @@ code {
   padding: .2rem .6rem;
 }
 .link-btn:hover { color: var(--tomato-dark); }
-.intro-foot { position: absolute; right: max(16px, 4vw); bottom: 16px; z-index: 2; margin: 0; max-width: 460px; text-align: right; font-size: .8rem; line-height: 1.6; color: rgba(27, 32, 39, .8); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-.intro-credit { text-transform: none; letter-spacing: .02em; font-size: .9rem; }
+.intro-foot { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 2; margin: 0; width: max-content; max-width: 92vw; text-align: center; font-size: .95rem; line-height: 1.6; color: rgba(27, 32, 39, .85); font-weight: 700; }
+.intro-credit { font-size: 1rem; }
 .intro-foot a { color: var(--box-ink); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 
 /* ── Mascot: "Bit", a workshop robot ──────────────────────── */
@@ -1292,7 +1292,7 @@ pre.code .t-k { color: #f5c518; }
   .back-link { top: 10px; left: 10px; }
   #screen-intro .intro-bubble { display: none; }
   #screen-intro.is-active { padding-bottom: 120px; }
-  #screen-intro .intro-foot { position: relative; right: auto; bottom: auto; margin-top: 2.2rem; max-width: none; text-align: center; }
+  #screen-intro .intro-foot { position: relative; right: auto; bottom: auto; left: auto; transform: none; width: auto; margin-top: 2.2rem; max-width: none; text-align: center; }
   .lab-deco.blueprint { top: 72px; left: 10px; width: 112px; }
   .intro-bit { left: 50%; width: 120px; margin-left: -60px; }
   .steps { width: 100%; }
