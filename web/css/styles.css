@@ -9,36 +9,39 @@
 
 /* ── Design tokens ─────────────────────────────────────────── */
 :root {
-  /* Wood (names kept from the first theme so every component keeps working) */
-  --box:          #c68a50;
-  --box-light:    #e2b47c;
-  --box-dark:     #8f5a2d;
-  --box-shadow:   #5e3717;
-  --box-ink:      #3d2414;
+  /* Lab materials: concrete walls, graphite ink (names kept from the first theme so every component keeps working) */
+  --box:          #8a9096;
+  --box-light:    #b3b9bf;
+  --box-dark:     #5c636a;
+  --box-shadow:   #343a41;
+  --box-ink:      #1b2027;
 
-  /* Plywood boards */
-  --ply:          #f2dfbb;
-  --ply-2:        #e8cd9d;
-  --ply-edge:     #c9a06a;
+  /* Steel panels */
+  --ply:          #e6eaee;
+  --ply-2:        #d4dae0;
+  --ply-edge:     #98a2ad;
 
-  /* Paper */
-  --paper:        #fbf3e2;
-  --paper-2:      #f2e3c6;
-  --paper-line:   #e0c9a0;
+  /* Spec sheets (white paper, blueprint-blue rules) */
+  --paper:        #f8fafc;
+  --paper-2:      #e8eef4;
+  --paper-line:   #c8d5e2;
 
   /* Metal hardware */
-  --metal:        #c9ced6;
-  --metal-dark:   #6b717a;
+  --metal:        #c9d0d8;
+  --metal-dark:   #5a636e;
 
-  /* Accents (toy palette) */
-  --tomato:       #e8512a;
-  --tomato-dark:  #b13817;
-  --sun-y:        #f6c33b;
-  --mint:         #4fb477;
-  --mint-dark:    #2f8653;
-  --sky-b:        #3d8fd6;
-  --sky-b-dark:   #2565a3;
-  --plum:         #8b5fbf;
+  /* Accents: Stark red, robot-arm yellow, blueprint blue */
+  --tomato:       #d8382e;
+  --tomato-dark:  #9c1e16;
+  --sun-y:        #f5c518;
+  --mint:         #2db886;
+  --mint-dark:    #1b7f5a;
+  --sky-b:        #2e6be6;
+  --sky-b-dark:   #1c4cb0;
+  --plum:         #7656d6;
+  --arc:          #5fd8ff;
+  --led:          #eef7ff;
+  --blueprint:    #1d4fb8;
 
   /* Legacy names still used by the JS modules */
   --bg-primary:   var(--box);
@@ -48,14 +51,14 @@
   --border-subtle: var(--paper-line);
   --cyan:         var(--sky-b);
   --emerald:      var(--mint);
-  --amber:        #d9951a;
+  --amber:        #e0a21b;
   --rose:         var(--tomato);
   --purple:       var(--plum);
-  --rose-dim:     rgba(232, 81, 42, 0.12);
+  --rose-dim:     rgba(216, 56, 46, 0.12);
 
-  --text-main:    #3b2414;
-  --text-dim:     #6f5038;
-  --text-muted:   #9c7c5a;
+  --text-main:    #1b2027;
+  --text-dim:     #48535f;
+  --text-muted:   #7a8693;
 
   --font-display: 'Lilita One', 'Fredoka', system-ui, sans-serif;
   --font-sans:    'Fredoka', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -73,11 +76,11 @@
   --drop:         0 6px 0 var(--box-ink);
   --drop-hi:      0 9px 0 var(--box-ink);
 
-  /* Fine paper grain */
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .18 0 0 0 0 .07 0 0 0 .4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* Fine grain (paper, steel) */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .16 0 0 0 0 .19 0 0 0 0 .22 0 0 0 .32 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 
-  /* Long, stretched noise = wood grain */
-  --woodgrain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='360'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .11' numOctaves='4' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .28 0 0 0 0 .15 0 0 0 0 .05 0 0 0 .9 -.32'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3C/svg%3E");
+  /* Soft blotchy noise = poured concrete */
+  --concrete: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='700'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.011' numOctaves='5' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .18 0 0 0 0 .2 0 0 0 0 .23 0 0 0 .75 -.28'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E");
 
   /* Hardware drawn as background layers, flat like Bit's screws: grey head, ink ring */
   --screw-head: radial-gradient(circle, #c9ced6 0 3.3px, var(--box-ink) 3.6px 5.6px, transparent 6px);
@@ -103,7 +106,7 @@ body {
     radial-gradient(ellipse 65% 50% at 50% -6%, rgba(255, 244, 210, .8), rgba(255, 228, 175, .28) 55%, transparent 78%),
     repeating-linear-gradient(180deg, rgba(255, 232, 195, .25) 0 1px, transparent 1px 118px, rgba(58, 30, 10, .5) 118px 120px),
     repeating-linear-gradient(180deg, transparent 0 120px, rgba(90, 48, 18, .08) 120px 240px, transparent 240px 360px, rgba(255, 220, 170, .06) 360px 480px),
-    var(--woodgrain),
+    var(--concrete),
     linear-gradient(180deg, #d79d60, #b97c44);
   background-size: auto, auto, auto, 900px 360px, auto;
   background-attachment: fixed;
