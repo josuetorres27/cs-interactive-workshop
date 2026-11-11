@@ -1,4 +1,4 @@
-// Tiny, dependency-free test harness for the web lab (Node).
+// Tiny, dependency-free test harness for the web workshop (Node).
 'use strict';
 
 class AssertionError extends Error {}
