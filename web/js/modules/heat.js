@@ -254,7 +254,7 @@ class HeatStation {
         ctx.strokeRect(1.5, ry + 1.5, w - 3, Math.max(cell - 3, 2));
       }
       const label = `H${t}`;
-      ctx.font = '800 12px Nunito, sans-serif';
+      ctx.font = '700 12px Fredoka, sans-serif';
       const tw = ctx.measureText(label).width + 14, th = 18;
       const ty = Math.min(Math.max(y0 + (y1 - y0) / 2 - th / 2, 2), h - th - 2);
       ctx.fillStyle = color; ctx.strokeStyle = ink; ctx.lineWidth = 2.5;
