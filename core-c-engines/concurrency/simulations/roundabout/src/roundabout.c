@@ -6,8 +6,8 @@
  * Implementation of vehicle threading, capacity constraint enforcement
  * via POSIX semaphores, and ordered trajectory logging.
  *
- * Author: Josue Torres
- * Copyright (c) 2024-2025 Josue Torres
+ * Author: Josue Torres Sibaja
+ * Copyright (c) 2024-2025 Josue Torres Sibaja
  * Licensed under the MIT License.
  */
 
