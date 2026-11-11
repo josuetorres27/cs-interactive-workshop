@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// CS Interactive Lab - Web test runner.
+// CS Interactive Workshop - Web test runner.
 // Usage: node tests/web/run.js [--verbose] [--filter <text>]
 'use strict';
 const fs = require('fs');
@@ -18,7 +18,7 @@ const files = fs.readdirSync(dir).filter((f) => f.endsWith('.test.js')).sort();
 files.forEach((f) => require(path.join(dir, f))(h, helpers));
 
 console.log('\n======================================================================');
-console.log('   TEST SUITE: Web Lab (JavaScript modules, HTML and CSS)');
+console.log('   TEST SUITE: Web Workshop (JavaScript modules, HTML and CSS)');
 console.log('======================================================================');
 
 h.run({ filter, verbose }).then(({ total, passed, failed }) => {
