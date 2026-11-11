@@ -7,8 +7,8 @@
  * Uses POSIX threads, semaphores, and mutexes to enforce segment capacities
  * and avoid race conditions and deadlocks.
  *
- * Author: Josue Torres
- * Copyright (c) 2024-2025 Josue Torres
+ * Author: Josue Torres Sibaja
+ * Copyright (c) 2024-2025 Josue Torres Sibaja
  * Licensed under the MIT License.
  */
 
