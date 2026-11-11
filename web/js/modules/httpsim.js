@@ -15,7 +15,7 @@
 // handshake, request segment, server work, response segments (split by MSS),
 // ACK and the connection teardown, each with TCP header values and states.
 (function (root) {
-  const SERVER = { name: 'servidor.lab', ip: '2001:db8::1', port: 1234 };
+  const SERVER = { name: 'servidor.local', ip: '2001:db8::1', port: 1234 };
   const CLIENT = { name: 'cliente', ip: '2001:db8::2', port: 52814 };
   const MSS = 1440;            // 1500 (Ethernet MTU) - 40 (IPv6) - 20 (TCP)
   const BLOCK_SIZE = 256;      // FileSystem.h
