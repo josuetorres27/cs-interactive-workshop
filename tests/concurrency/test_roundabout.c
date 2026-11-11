@@ -1,5 +1,5 @@
 /**
- * CS Interactive Lab - Roundabout Concurrency Simulator Test Suite
+ * CS Interactive Workshop - Roundabout Concurrency Simulator Test Suite
  * 50 Comprehensive Automated Tests (Semaphores, Invariants, Liveness)
  */
 
