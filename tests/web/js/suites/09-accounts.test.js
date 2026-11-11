@@ -229,7 +229,7 @@ module.exports = (t, { createEnv, read }) => {
     t.test('finishing a 404 exchange records it', () => {
       const env = withAccount(); env.load('js/modules/figuresData.js'); env.load('js/tracer.js'); env.load('js/modules/httpsim.js'); env.load('js/modules/networking.js');
       env.document.getElementById('netCommand').value = 'GET';
-      const lab = env.window.networkingLab; lab.init();
+      const lab = env.window.networkingStation; lab.init();
       env.document.getElementById('netFigure').value = 'unicornio'; lab.prepare(); lab.go(lab.exchange.steps.length - 1);
       t.ok(env.window.account.progress.stations.networking.items['exchange:notfound']);
     });

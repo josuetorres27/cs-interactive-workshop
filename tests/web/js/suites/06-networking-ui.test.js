@@ -11,7 +11,7 @@ module.exports = (t, { createEnv }) => {
     const $ = (id) => env.document.getElementById(id);
     $('netCommand').value = 'GET';
     if (setup) setup($);
-    const lab = env.window.networkingLab;
+    const lab = env.window.networkingStation;
     lab.init();
     return { env, lab, $ };
   };

@@ -15,7 +15,7 @@ const MODULES = {
   datastructures: { title: 'Estructuras de datos',    area: 'algoritmos',  steps: true, tracer: 'dsStation' },
   concurrency:    { title: 'La Rotonda',              area: 'paralela',    steps: true },
   heat:           { title: 'Difusión de calor',       area: 'paralela',    steps: true },
-  networking:     { title: 'Sockets TCP',             area: 'redes',       steps: true, tracer: 'networkingLab' },
+  networking:     { title: 'Sockets TCP',             area: 'redes',       steps: true, tracer: 'networkingStation' },
   interview:      { title: 'Patrones de entrevista',  area: 'entrevistas', steps: true, tracer: 'interviewStation' },
   sql:            { title: 'SQL paso a paso',         area: 'datos',       steps: true, tracer: 'sqlStation' },
   cheatsheets:    { title: 'El Cuaderno',             area: null,          steps: false }
@@ -133,7 +133,7 @@ class App {
   init() {
     document.querySelectorAll('.bit-slot').forEach(el => { el.innerHTML = BIT_SVG; });
 
-    ['algorithmsLab', 'concurrencyLab', 'heatLab', 'networkingLab', 'cheatsheetsLab', 'interviewStation', 'dsStation', 'sqlStation']
+    ['algorithmsLab', 'concurrencyLab', 'heatLab', 'networkingStation', 'cheatsheetsLab', 'interviewStation', 'dsStation', 'sqlStation']
       .forEach(name => { if (window[name]) window[name].init(); });
 
     this.setupAccount();
@@ -227,7 +227,7 @@ class App {
   }
   stopTracers() {
     Object.values(MODULES).forEach(m => { if (m.tracer && window[m.tracer]) window[m.tracer].stop(); });
-    if (window.networkingLab && window.networkingLab.exchange) window.networkingLab.stop();
+    if (window.networkingStation && window.networkingStation.exchange) window.networkingStation.stop();
   }
 
   setupSteps() {
