@@ -5,8 +5,8 @@ module.exports = (t, { createEnv, mulberry32 }) => {
   const env = createEnv();
   env.load('js/tracer.js');
   env.load('js/modules/interview.js');
-  const lab = env.window.interviewStation;
-  const P = Object.fromEntries(lab.problems.map((p) => [p.id, p]));
+  const stn = env.window.interviewStation;
+  const P = Object.fromEntries(stn.problems.map((p) => [p.id, p]));
   const last = (frames) => frames[frames.length - 1];
   const rand = mulberry32(2024);
   const ri = (lo, hi) => lo + Math.floor(rand() * (hi - lo + 1));
@@ -28,15 +28,15 @@ module.exports = (t, { createEnv, mulberry32 }) => {
   const runP = (id, text) => { const p = P[id]; const args = p.parse(text); return { args, frames: p.trace(args) }; };
 
   t.suite('interview · catalogue', () => {
-    t.test('six problems are offered', () => t.eq(lab.problems.length, 6));
-    t.test('the station is mostly medium and hard', () => t.ok(lab.problems.every((p) => ['Media', 'Difícil'].includes(p.difficulty))));
-    t.test('at least two problems are hard', () => t.ok(lab.problems.filter((p) => p.difficulty === 'Difícil').length >= 2));
-    t.test('every problem has three presets', () => lab.problems.forEach((p) => t.eq(p.presets.length, 3, p.id)));
-    t.test('every problem has learn and build content', () => lab.problems.forEach((p) => { t.ok(p.learn.idea && p.learn.signals.length); t.ok(p.build.template && p.build.tips.length && p.build.similar.length); }));
+    t.test('six problems are offered', () => t.eq(stn.problems.length, 6));
+    t.test('the station is mostly medium and hard', () => t.ok(stn.problems.every((p) => ['Media', 'Difícil'].includes(p.difficulty))));
+    t.test('at least two problems are hard', () => t.ok(stn.problems.filter((p) => p.difficulty === 'Difícil').length >= 2));
+    t.test('every problem has three presets', () => stn.problems.forEach((p) => t.eq(p.presets.length, 3, p.id)));
+    t.test('every problem has learn and build content', () => stn.problems.forEach((p) => { t.ok(p.learn.idea && p.learn.signals.length); t.ok(p.build.template && p.build.tips.length && p.build.similar.length); }));
   });
 
   t.suite('interview · every frame is well formed', () => {
-    lab.problems.forEach((p) => {
+    stn.problems.forEach((p) => {
       t.test(`${p.id}: frames point at real, non-blank code lines and render`, () => {
         p.presets.forEach((text) => {
           const args = p.parse(text);
