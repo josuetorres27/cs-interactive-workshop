@@ -4,7 +4,7 @@
 // and progress is saved only on the student's device.
 //
 // To turn on "Continuar con Google":
-//   1. Firebase console > project "cs-interactive-lab" > Project settings >
+//   1. Firebase console > project "cs-interactive-workshop" > Project settings >
 //      General > Your apps > Add app > Web. Copy the firebaseConfig object here.
 //   2. Authentication > Sign-in method > enable Google.
 //   3. Firestore Database > Create database, then deploy the rules in
