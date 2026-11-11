@@ -145,7 +145,7 @@ make -C pthreads && make -C openmp
 
 ---
 
-## Test suite (876 tests)
+## Test suite (888 tests)
 
 A zero-dependency C/C++ assertion harness (`tests/runner.h`), Python checks and a dependency-free JavaScript runner that loads the real web files inside a fake DOM:
 
@@ -156,9 +156,9 @@ A zero-dependency C/C++ assertion harness (`tests/runner.h`), Python checks and 
 | **Concurrency: heat** | `tests/concurrency/test_heat_diffusion.c` | **70** | The real library: borders, maximum principle, symmetry, row partitioning, the kernel, convergence, input validation, and pthreads (both barriers) and OpenMP matching serial bit for bit. |
 | **Concurrency: patterns** | `tests/concurrency/test_patterns.c` | **50** | Bounded buffer FIFO order, no deadlock among philosophers, the 2:1 H2O ratio, atomic fetch-and-add without races. |
 | **Networking** | `tests/networking/test_networking.cpp` | **50** | Request line parsing, headers, response framing, file system chunking, all 12 figures. |
-| **Web assets** | `tests/web/test_web_assets.py` | **23** | Page anchors, CSS variables, JS syntax, audio and hosting configuration. |
+| **Web assets** | `tests/web/test_web_assets.py` | **35** | Page anchors, CSS variables, JS syntax, audio and hosting configuration. |
 | **Web workshop** | `tests/web/run.js` | **513** | Every station and model (sorting, roundabout, heat, HTTP over TCP, tracer problems against reference solutions), progress and accounts against a fake Firebase backend, Firestore rules, the router, art direction and page integrity. |
-| **Total** | **7 suites** | **876** | **All passing** |
+| **Total** | **7 suites** | **888** | **All passing** |
 
 ---
 
