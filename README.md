@@ -5,7 +5,7 @@
 [![Networking](https://img.shields.io/badge/Networking-BSD%20Sockets%20%7C%20HTTP%201.1-purple.svg)](docs/networking/Protocol_Specification.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Build & Tests](https://img.shields.io/badge/Tests-870%2B%20Passing-brightgreen.svg)](tests/)
-[![Author](https://img.shields.io/badge/Author-Josue%20Torres-0ea5e9.svg)](https://github.com/josuetorres27)
+[![Author](https://img.shields.io/badge/Author-Josue%20Torres%20Sibaja-0ea5e9.svg)](https://github.com/josuetorres27)
 
 An interactive lab for Computer Science students at the ECCI (Universidad de Costa Rica). It covers **algorithms and data structures**, **parallel and concurrent programming**, **networking**, **technical interview patterns** and **SQL**, through visual simulations in the browser backed by real C and C++ engines.
 
@@ -187,4 +187,4 @@ The included `firebase.json` can also host the site: `firebase deploy --only hos
 ## License
 MIT. See [LICENSE](LICENSE).
 
-Created by **Josue Torres**.
+Created by **Josue Torres Sibaja**.
