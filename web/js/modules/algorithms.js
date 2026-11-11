@@ -342,7 +342,7 @@ void heapSort(std::vector<int>& a) {
     const w = this.canvas.width;
     const h = this.canvas.height;
     this.ctx.clearRect(0, 0, w, h);
-    this.ctx.fillStyle = '#e2cfa6'; // floor
+    this.ctx.fillStyle = '#d4dce4'; // floor
     this.ctx.fillRect(0, h - 10, w, 10);
 
     const n = this.array.length;
@@ -356,13 +356,13 @@ void heapSort(std::vector<int>& a) {
       const y = h - barHeight - 10;
 
       if (this.highlightIndices.sorted.includes(i)) {
-        this.ctx.fillStyle = '#4fb477'; // in place
+        this.ctx.fillStyle = '#2db886'; // in place
       } else if (this.highlightIndices.comparing.includes(i)) {
-        this.ctx.fillStyle = '#e8512a'; // swapping
+        this.ctx.fillStyle = '#d8382e'; // swapping
       } else if (this.highlightIndices.active.includes(i)) {
-        this.ctx.fillStyle = '#f6c33b'; // comparing
+        this.ctx.fillStyle = '#f5c518'; // comparing
       } else {
-        this.ctx.fillStyle = '#3d8fd6'; // unsorted
+        this.ctx.fillStyle = '#2e6be6'; // unsorted
       }
 
       const r = Math.min(4, barWidth / 2);
@@ -371,7 +371,7 @@ void heapSort(std::vector<int>& a) {
       this.ctx.fill();
       if (barWidth >= 6) {
         this.ctx.lineWidth = 3;
-        this.ctx.strokeStyle = '#3d2414';
+        this.ctx.strokeStyle = '#1b2027';
         this.ctx.stroke();
       }
     }
