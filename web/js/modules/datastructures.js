@@ -316,5 +316,5 @@ def inorder(root):        # devuelve las claves ordenadas
     }
   };
 
-  window.dsLab = new TraceStation('datastructures', [parens, reverseList, bst]);
+  window.dsStation = new TraceStation('datastructures', [parens, reverseList, bst]);
 })();

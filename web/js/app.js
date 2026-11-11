@@ -12,7 +12,7 @@ const AREAS = {
 
 const MODULES = {
   algorithms:     { title: 'Ordenamiento',            area: 'algoritmos',  steps: true },
-  datastructures: { title: 'Estructuras de datos',    area: 'algoritmos',  steps: true, tracer: 'dsLab' },
+  datastructures: { title: 'Estructuras de datos',    area: 'algoritmos',  steps: true, tracer: 'dsStation' },
   concurrency:    { title: 'La Rotonda',              area: 'paralela',    steps: true },
   heat:           { title: 'Difusión de calor',       area: 'paralela',    steps: true },
   networking:     { title: 'Sockets TCP',             area: 'redes',       steps: true, tracer: 'networkingLab' },
@@ -133,7 +133,7 @@ class App {
   init() {
     document.querySelectorAll('.bit-slot').forEach(el => { el.innerHTML = BIT_SVG; });
 
-    ['algorithmsLab', 'concurrencyLab', 'heatLab', 'networkingLab', 'cheatsheetsLab', 'interviewLab', 'dsLab', 'sqlLab']
+    ['algorithmsLab', 'concurrencyLab', 'heatLab', 'networkingLab', 'cheatsheetsLab', 'interviewLab', 'dsStation', 'sqlLab']
       .forEach(name => { if (window[name]) window[name].init(); });
 
     this.setupAccount();
