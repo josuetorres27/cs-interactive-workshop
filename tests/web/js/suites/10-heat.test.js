@@ -159,7 +159,7 @@ module.exports = (t, { createEnv, read }) => {
     t.test('0° is deep blue and 100° is tomato red', () => { t.deepEq(H.color(0), [43, 76, 126]); t.deepEq(H.color(100), [232, 81, 42]); });
     t.test('temperatures outside 0-100 are clamped', () => { t.deepEq(H.color(-20), H.color(0)); t.deepEq(H.color(500), H.color(100)); });
     t.test('a blown-up value is drawn white', () => t.deepEq(H.color(NaN), [255, 255, 255]));
-    t.test('the palette uses the lab colours at 25/50/75', () => { t.deepEq(H.color(25), [61, 143, 214]); t.deepEq(H.color(50), [143, 211, 165]); t.deepEq(H.color(75), [246, 195, 59]); });
+    t.test('the palette uses the workshop colours at 25/50/75', () => { t.deepEq(H.color(25), [61, 143, 214]); t.deepEq(H.color(50), [143, 211, 165]); t.deepEq(H.color(75), [246, 195, 59]); });
   });
 
   // ── The station on a fake DOM ──────────────────────────────────────
