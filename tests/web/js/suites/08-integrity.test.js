@@ -13,7 +13,7 @@ module.exports = (t, { read, WEB, createEnv }) => {
 
   t.suite('integrity · HTML structure', () => {
     t.test('the page is declared in Spanish and is mobile-ready', () => { t.includes(html, '<html lang="es">'); t.includes(html, 'name="viewport"'); });
-    t.test('the title starts with the product name', () => t.includes(html, '<title>CS Interactive Lab'));
+    t.test('the title starts with the product name', () => t.includes(html, '<title>CS Interactive Workshop'));
     t.test('attributes are separated by spaces (no "a"b= glitches)', () => t.deepEq(html.match(/="[^"\n]*"[a-zA-Z-]+=/g) || [], []));
     t.test('element ids are unique', () => { const dup = ids.filter((id, i) => ids.indexOf(id) !== i); t.deepEq(dup, []); });
     t.test('every script tag points to an existing file', () => [...html.matchAll(/<script src="([^"]+)"/g)].forEach((m) => t.ok(fs.existsSync(path.join(WEB, m[1])), m[1])));
