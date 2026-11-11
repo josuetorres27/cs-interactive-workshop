@@ -1,4 +1,4 @@
-// CS Interactive Lab - Web Audio API Sound Synthesizer
+// CS Interactive Workshop - Web Audio API Sound Synthesizer
 class SoundController {
   constructor() {
     this.ctx = null;
