@@ -271,6 +271,7 @@ code {
 }
 .link-btn:hover { color: var(--tomato-dark); }
 .intro-foot { position: absolute; right: max(16px, 4vw); bottom: 16px; z-index: 2; margin: 0; max-width: 360px; text-align: right; font-size: .8rem; line-height: 1.6; color: rgba(27, 32, 39, .8); font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.intro-credit { text-transform: none; letter-spacing: .02em; font-size: .9rem; }
 .intro-foot a { color: var(--box-ink); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 
 /* ── Mascot: "Bit", a workshop robot ──────────────────────── */
