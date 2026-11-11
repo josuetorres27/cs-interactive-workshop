@@ -167,7 +167,7 @@ function createEnv({ seed = 1 } = {}) {
     clearInterval: () => {},
     requestAnimationFrame: (fn) => { rafs.push(fn); return rafs.length; },
     cancelAnimationFrame: () => {},
-    getComputedStyle: () => ({ fontFamily: 'Nunito', flexDirection: 'row' }),
+    getComputedStyle: () => ({ fontFamily: 'Fredoka', flexDirection: 'row' }),
     innerWidth: 1280, innerHeight: 800,
     scrollTo: () => {}, scrollBy: () => {},
     Math: seededMath,
