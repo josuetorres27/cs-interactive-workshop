@@ -169,7 +169,7 @@ module.exports = (t, { createEnv, read }) => {
     e.load('js/progress.js'); e.load('js/account.js');
     e.load('js/modules/heat.js');
     if (setup) setup(e);
-    const lab = e.window.heatLab;
+    const lab = e.window.heatStation;
     lab.init();
     return { e, lab, $: (id) => e.document.getElementById(id) };
   };

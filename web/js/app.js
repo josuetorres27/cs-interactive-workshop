@@ -133,7 +133,7 @@ class App {
   init() {
     document.querySelectorAll('.bit-slot').forEach(el => { el.innerHTML = BIT_SVG; });
 
-    ['algorithmsStation', 'concurrencyStation', 'heatLab', 'networkingStation', 'cheatsheetsLab', 'interviewStation', 'dsStation', 'sqlStation']
+    ['algorithmsStation', 'concurrencyStation', 'heatStation', 'networkingStation', 'cheatsheetsLab', 'interviewStation', 'dsStation', 'sqlStation']
       .forEach(name => { if (window[name]) window[name].init(); });
 
     this.setupAccount();
