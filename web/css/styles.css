@@ -563,19 +563,12 @@ code {
 .faq-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.8rem 1.6rem; padding-bottom: 2rem; }
 .faq {
   position: relative;
-  background: var(--nail), var(--grain), var(--paper);
-  border-radius: 4px;
-  box-shadow: var(--lift);
-  padding: 1.7rem 1.3rem 1.2rem;
-  transform: rotate(var(--r, 0deg));
-  transform-origin: 50% 13px;
-  transition: transform .25s cubic-bezier(.2, 1.4, .4, 1), box-shadow .2s;
+  background: var(--screws), var(--grain), var(--ply);
+  border-radius: 12px;
+  border: var(--outline);
+  box-shadow: var(--drop);
+  padding: 1.7rem 1.5rem 1.4rem;
 }
-.faq:nth-child(3n+1) { --r: -.8deg; }
-.faq:nth-child(3n+2) { --r: .7deg; }
-.faq:nth-child(3n)   { --r: -.3deg; }
-.faq:hover { transform: rotate(0); box-shadow: var(--lift-hi); }
-.faq.lined { background: var(--nail), var(--grain), repeating-linear-gradient(180deg, transparent 0 27px, rgba(var(--rgb-blue), .16) 27px 28px), var(--paper); }
 .faq-q { display: flex; gap: .7rem; align-items: center; margin-bottom: .55rem; }
 .faq-q h3 { font-family: var(--font-display); font-weight: 400; font-size: 1.35rem; line-height: 1.15; color: var(--box-ink); }
 .faq-num {
@@ -634,8 +627,7 @@ code {
 .bench-name { font-family: var(--font-display); font-weight: 400; font-size: 1.4rem; line-height: 1.1; color: var(--box-ink); margin: .1rem 0 .3rem; }
 .bench-line { font-family: var(--font-hand); font-size: 1.12rem; line-height: 1.25; color: var(--text-dim); }
 .bench-go { align-self: end; margin-top: .7rem; display: inline-flex; align-items: center; gap: .35rem; font-family: var(--font-display); font-size: .98rem; color: var(--tomato-dark); }
-.bench.notebook { background: var(--nail), var(--grain), repeating-linear-gradient(180deg, transparent 0 27px, rgba(var(--rgb-blue), .14) 27px 28px), var(--paper); border-radius: 4px; box-shadow: var(--lift); }
-.bench.notebook::before { display: none; }
+
 /* Stations inside a bench: plywood plaques */
 .shelf {
   display: grid;
@@ -1517,9 +1509,8 @@ pre.code .t-k { color: var(--sun-y); }
 }
 
 /* ── Art direction: outlines for paper surfaces ───────────── */
-.faq, .note, .tr-vars, .net-inspector, .bench.notebook { border: var(--outline); }
-.faq, .note, .tr-vars, .net-inspector { box-shadow: var(--lift); }
-.faq:hover { box-shadow: var(--lift-hi); }
+.note, .tr-vars, .net-inspector { border: var(--outline); }
+.note, .tr-vars, .net-inspector { box-shadow: var(--lift); }
 
 /* ── Responsive ────────────────────────────────────────────── */
 @media (max-width: 900px) {
