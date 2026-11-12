@@ -11,7 +11,7 @@
 (function () {
   const KEY = 'csworkshop-theme';
   const THEMES = {
-    lab:    { label: 'Laboratorio',      meta: '#8a9096' },
+    lab:    { label: 'Laboratorio',      meta: '#a9b0b7' },
     madera: { label: 'Taller de madera', meta: '#c99560' },
   };
   const doc = typeof document !== 'undefined' ? document : null;

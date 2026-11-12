@@ -104,25 +104,68 @@ const TOURS = {
   sql: tracerTour('sql', 'una consulta sobre la misma base de ejemplo')
 };
 
+// Bit is drawn twice, once per theme; the stylesheet shows the one that matches.
+// Lab Bit: steel plating, yellow ear pods and a glowing core. Wooden Bit: pine boards and three buttons.
 const BIT_SVG = `
 <svg class="bit" viewBox="0 0 120 150" aria-hidden="true">
-  <line x1="60" y1="30" x2="60" y2="12" stroke="#1b2027" stroke-width="4" stroke-linecap="round"/>
-  <circle class="bulb" cx="60" cy="10" r="7" fill="#f5c518" stroke="#1b2027" stroke-width="3.5"/>
-  <path d="M30 108 14 126" stroke="#8d939c" stroke-width="7" stroke-linecap="round"/>
-  <path d="M90 108 106 90" stroke="#8d939c" stroke-width="7" stroke-linecap="round"/>
-  <rect x="30" y="98" width="60" height="46" rx="6" fill="#f5c518" stroke="#1b2027" stroke-width="4"/>
-  <path d="M34 106h52M34 116h52M34 136h52" stroke="#d4a710" stroke-width="1.6"/>
-  <circle cx="46" cy="126" r="5" fill="#d8382e" stroke="#1b2027" stroke-width="2.5"/>
-  <circle cx="60" cy="126" r="5" fill="#f8fafc" stroke="#1b2027" stroke-width="2.5"/>
-  <circle cx="74" cy="126" r="5" fill="#2e6be6" stroke="#1b2027" stroke-width="2.5"/>
-  <rect x="50" y="92" width="20" height="8" fill="#8d939c" stroke="#1b2027" stroke-width="3"/>
-  <rect x="14" y="30" width="92" height="66" rx="9" fill="#d5dce3" stroke="#1b2027" stroke-width="4"/>
-  <path d="M18 40c20-3 60-3 84 0M18 88c22 2 60 2 84 0" stroke="#aeb8c3" stroke-width="1.6" fill="none"/>
-  <g stroke="#1b2027" stroke-width="1.6"><circle cx="21" cy="37" r="3.6" fill="#c9ced6"/><circle cx="99" cy="37" r="3.6" fill="#c9ced6"/><circle cx="21" cy="89" r="3.6" fill="#c9ced6"/><circle cx="99" cy="89" r="3.6" fill="#c9ced6"/></g>
-  <rect x="27" y="44" width="66" height="42" rx="9" fill="#1d252e" stroke="#1b2027" stroke-width="3.5"/>
-  <rect class="blink" x="40" y="55" width="11" height="15" rx="5" fill="#7fe6ff"/>
-  <rect class="blink" x="69" y="55" width="11" height="15" rx="5" fill="#7fe6ff"/>
-  <path d="M51 76q9 6 18 0" stroke="#7fe6ff" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <g class="bit-lab">
+    <line x1="60" y1="30" x2="60" y2="12" stroke="#1b2027" stroke-width="4" stroke-linecap="round"/>
+    <circle class="bulb" cx="60" cy="10" r="7" fill="#5fd8ff" stroke="#1b2027" stroke-width="3.5"/>
+    <g class="arm arm-l">
+      <path d="M30 108 14 126" stroke="#1b2027" stroke-width="13" stroke-linecap="round"/>
+      <path d="M30 108 14 126" stroke="#aeb8c3" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="13" cy="127" r="6.5" fill="#f5c518" stroke="#1b2027" stroke-width="3.5"/>
+    </g>
+    <g class="arm arm-r">
+      <path d="M90 108 106 90" stroke="#1b2027" stroke-width="13" stroke-linecap="round"/>
+      <path d="M90 108 106 90" stroke="#aeb8c3" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="107" cy="89" r="6.5" fill="#f5c518" stroke="#1b2027" stroke-width="3.5"/>
+    </g>
+    <rect x="30" y="98" width="60" height="46" rx="8" fill="#c2cad3" stroke="#1b2027" stroke-width="4"/>
+    <path d="M34 140h52" stroke="#f5c518" stroke-width="3" stroke-linecap="round"/>
+    <rect x="38" y="105" width="44" height="30" rx="5" fill="#2a3038" stroke="#1b2027" stroke-width="3"/>
+    <circle cx="60" cy="120" r="9.5" fill="#0f1720" stroke="#1b2027" stroke-width="3"/>
+    <circle class="core" cx="60" cy="120" r="5.5" fill="#7fe6ff"/>
+    <circle cx="45" cy="120" r="2.4" fill="#f5c518"/><circle cx="75" cy="120" r="2.4" fill="#d8382e"/>
+    <rect x="50" y="92" width="20" height="8" fill="#5a636e" stroke="#1b2027" stroke-width="3"/>
+    <rect x="6" y="54" width="9" height="18" rx="3" fill="#f5c518" stroke="#1b2027" stroke-width="3"/>
+    <rect x="105" y="54" width="9" height="18" rx="3" fill="#f5c518" stroke="#1b2027" stroke-width="3"/>
+    <rect x="14" y="30" width="92" height="66" rx="12" fill="#e3e8ee" stroke="#1b2027" stroke-width="4"/>
+    <path d="M26 37h68" stroke="#c3ccd6" stroke-width="2" stroke-linecap="round"/>
+    <path d="M60 31v6M22 90h10M88 90h10" stroke="#c3ccd6" stroke-width="2" stroke-linecap="round"/>
+    <rect x="27" y="44" width="66" height="42" rx="10" fill="#131a22" stroke="#1b2027" stroke-width="3.5"/>
+    <path d="M33 53l9-5" stroke="rgba(255,255,255,.22)" stroke-width="3" stroke-linecap="round"/>
+    <rect class="blink" x="40" y="55" width="11" height="15" rx="5" fill="#7fe6ff"/>
+    <rect class="blink" x="69" y="55" width="11" height="15" rx="5" fill="#7fe6ff"/>
+    <path d="M51 76q9 6 18 0" stroke="#7fe6ff" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
+  <g class="bit-wood">
+    <line x1="60" y1="30" x2="60" y2="12" stroke="#3d2414" stroke-width="4" stroke-linecap="round"/>
+    <circle class="bulb" cx="60" cy="10" r="7" fill="#f6c33b" stroke="#3d2414" stroke-width="3.5"/>
+    <g class="arm arm-l">
+      <path d="M30 108 14 126" stroke="#3d2414" stroke-width="13" stroke-linecap="round"/>
+      <path d="M30 108 14 126" stroke="#8d939c" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="13" cy="127" r="6.5" fill="#c68a50" stroke="#3d2414" stroke-width="3.5"/>
+    </g>
+    <g class="arm arm-r">
+      <path d="M90 108 106 90" stroke="#3d2414" stroke-width="13" stroke-linecap="round"/>
+      <path d="M90 108 106 90" stroke="#8d939c" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="107" cy="89" r="6.5" fill="#c68a50" stroke="#3d2414" stroke-width="3.5"/>
+    </g>
+    <rect x="30" y="98" width="60" height="46" rx="6" fill="#c68a50" stroke="#3d2414" stroke-width="4"/>
+    <path d="M34 106h52M34 116h52M34 136h52" stroke="#a96f3c" stroke-width="1.6"/>
+    <circle cx="46" cy="126" r="5" fill="#e8512a" stroke="#3d2414" stroke-width="2.5"/>
+    <circle cx="60" cy="126" r="5" fill="#f6c33b" stroke="#3d2414" stroke-width="2.5"/>
+    <circle cx="74" cy="126" r="5" fill="#3d8fd6" stroke="#3d2414" stroke-width="2.5"/>
+    <rect x="50" y="92" width="20" height="8" fill="#8d939c" stroke="#3d2414" stroke-width="3"/>
+    <rect x="14" y="30" width="92" height="66" rx="9" fill="#e6bd85" stroke="#3d2414" stroke-width="4"/>
+    <path d="M18 40c20-3 60-3 84 0M18 88c22 2 60 2 84 0" stroke="#c9975c" stroke-width="1.6" fill="none"/>
+    <g stroke="#3d2414" stroke-width="1.6"><circle cx="21" cy="37" r="3.6" fill="#c9ced6"/><circle cx="99" cy="37" r="3.6" fill="#c9ced6"/><circle cx="21" cy="89" r="3.6" fill="#c9ced6"/><circle cx="99" cy="89" r="3.6" fill="#c9ced6"/></g>
+    <rect x="27" y="44" width="66" height="42" rx="9" fill="#2f3b3a" stroke="#3d2414" stroke-width="3.5"/>
+    <rect class="blink" x="40" y="55" width="11" height="15" rx="5" fill="#8ff0c0"/>
+    <rect class="blink" x="69" y="55" width="11" height="15" rx="5" fill="#8ff0c0"/>
+    <path d="M51 76q9 6 18 0" stroke="#8ff0c0" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>
 </svg>`;
 
 class App {
