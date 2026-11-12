@@ -6,7 +6,7 @@
    outlines and hard offset shadows.
    ================================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Fredoka:wght@300..700&family=Patrick+Hand&family=JetBrains+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Orbitron:wght@700;900&family=Fredoka:wght@300..700&family=Patrick+Hand&family=JetBrains+Mono:wght@400;600&display=swap');
 
 /* ── Design tokens ─────────────────────────────────────────── */
 :root {
@@ -31,7 +31,7 @@
   --metal:        #c9d0d8;
   --metal-dark:   #5a636e;
 
-  /* Accents: Stark red, robot-arm yellow, blueprint blue */
+  /* Accents: Stark red, hazard yellow, blueprint blue */
   --tomato:       #d8382e;
   --tomato-dark:  #9c1e16;
   --sun-y:        #f5c518;
@@ -77,12 +77,19 @@
   --rgb-red:         216, 56, 46;
   --rgb-red-edge:    110, 20, 14;
   --rgb-green-edge:  20, 92, 65;
-  --rgb-wall:        138, 144, 150;
+  --rgb-wall:        171, 178, 185;
   --rgb-ply:         228, 233, 238;
   --rgb-shade:       20, 26, 33;
   --rgb-night:       10, 14, 20;
   --rgb-lamp:        220, 240, 255;
   --logo-small:      var(--arc);
+  --logo-size:       clamp(1.75rem, 6.2vw, 4.1rem);
+  --logo-weight:     900;
+  --logo-track:      .05em;
+  --logo-lh:         1.08;
+  --sign-sub-font:   var(--font-mono);
+  --sign-sub-size:   clamp(.78rem, 1.7vw, .98rem);
+  --bulb-hi:         #e8fbff;
   /* Canvas stations (read through Theme.color) */
   --cv-floor:        #d4dce4;
   --cv-road:         #3d444d;
@@ -110,6 +117,7 @@
   --text-muted:   #7a8693;
 
   --font-display: 'Lilita One', 'Fredoka', system-ui, sans-serif;
+  --font-logo:    'Orbitron', 'Lilita One', system-ui, sans-serif;
   --font-sans:    'Fredoka', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-hand:    'Patrick Hand', 'Comic Sans MS', cursive;
   --font-mono:    'JetBrains Mono', ui-monospace, Consolas, monospace;
@@ -211,6 +219,14 @@
   --rgb-night:       43, 25, 10;
   --rgb-lamp:        255, 232, 160;
   --logo-small:      var(--sun-y);
+  --logo-size:       clamp(2.6rem, 9vw, 5.6rem);
+  --logo-weight:     400;
+  --logo-track:      .01em;
+  --logo-lh:         .92;
+  --sign-sub-font:   var(--font-hand);
+  --sign-sub-size:   clamp(1.1rem, 2.6vw, 1.45rem);
+  --bulb-hi:         #ffe9a3;
+  --font-logo:       'Lilita One', 'Fredoka', system-ui, sans-serif;
   --cv-floor:        #e2cfa6;
   --cv-road:         #5b4a3d;
   --cv-panel:        #fbf4e4;
@@ -239,6 +255,7 @@
 :root[data-theme="madera"] .sign-board {
   background: repeating-linear-gradient(180deg, transparent 0 22px, rgba(61, 36, 20, .28) 22px 24px), #8e5a32;
 }
+:root[data-theme="madera"] .sign-board { border-radius: 16px; outline: 0; }
 :root[data-theme="madera"] .sign-board::before { display: none; }
 
 /* Each theme has its own intro decor */
@@ -246,9 +263,10 @@
 :root[data-theme="madera"] .theme-wood { display: block; }
 :root[data-theme="madera"] .theme-lab { display: none; }
 
-/* Pegboards with tools (wooden theme decor) */
+/* Wooden theme decor: a pegboard full of tools, Bit's hand-drawn plan and a shelf */
 .pegboard {
   position: absolute; pointer-events: none; z-index: 0;
+  top: 11%; right: 3.5%; width: clamp(150px, 15vw, 215px); aspect-ratio: 230 / 330;
   border-radius: 6px;
   background:
     var(--screws),
@@ -257,21 +275,16 @@
   border: var(--outline);
   box-shadow: var(--drop);
 }
-.peg-tool { position: absolute; height: auto; overflow: visible; }
+.pegboard svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.wood-deco { position: absolute; pointer-events: none; z-index: 0; }
+.wood-deco svg { display: block; width: 100%; height: auto; overflow: visible; }
+.wood-deco.plan { top: 9%; left: 4%; width: clamp(150px, 16vw, 250px); transform: rotate(-2.5deg); }
+.wood-deco.shelf-deco { right: 4%; bottom: 7%; width: clamp(130px, 13vw, 190px); }
 
-/* Bit in wood and mint (CSS beats the SVG presentation attributes) */
-:root[data-theme="madera"] .bit [stroke="#1b2027"] { stroke: #3d2414; }
-:root[data-theme="madera"] .bit .bulb { fill: #f6c33b; }
-:root[data-theme="madera"] .bit rect[fill="#f5c518"] { fill: #c68a50; }
-:root[data-theme="madera"] .bit [stroke="#d4a710"] { stroke: #a96f3c; }
-:root[data-theme="madera"] .bit [fill="#d8382e"] { fill: #e8512a; }
-:root[data-theme="madera"] .bit [fill="#f8fafc"] { fill: #f6c33b; }
-:root[data-theme="madera"] .bit [fill="#2e6be6"] { fill: #3d8fd6; }
-:root[data-theme="madera"] .bit [fill="#d5dce3"] { fill: #e6bd85; }
-:root[data-theme="madera"] .bit [stroke="#aeb8c3"] { stroke: #c9975c; }
-:root[data-theme="madera"] .bit [fill="#1d252e"] { fill: #2f3b3a; }
-:root[data-theme="madera"] .bit [fill="#7fe6ff"] { fill: #8ff0c0; }
-:root[data-theme="madera"] .bit [stroke="#7fe6ff"] { stroke: #8ff0c0; }
+/* Bit has one drawing per theme */
+.bit .bit-wood { display: none; }
+:root[data-theme="madera"] .bit .bit-wood { display: inline; }
+:root[data-theme="madera"] .bit .bit-lab { display: none; }
 
 /* ── Reset ─────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -282,14 +295,14 @@ body {
   font-size: 16px;
   line-height: 1.55;
   color: var(--text-main);
-  background-color: #8d9399;
+  background-color: #a9b0b7;
   background-image:
-    radial-gradient(ellipse 70% 45% at 50% -8%, rgba(238, 247, 255, .85), rgba(220, 235, 250, .22) 55%, transparent 78%),
+    radial-gradient(ellipse 85% 60% at 50% -8%, rgba(244, 250, 255, .95), rgba(228, 240, 252, .34) 55%, transparent 80%),
     radial-gradient(circle, rgba(27, 32, 39, .32) 0 3px, rgba(255, 255, 255, .14) 3.5px 4.5px, transparent 5px),
     linear-gradient(90deg, rgba(27, 32, 39, .28) 0 2px, rgba(255, 255, 255, .12) 2px 3px, transparent 3px),
     linear-gradient(180deg, rgba(27, 32, 39, .28) 0 2px, rgba(255, 255, 255, .12) 2px 3px, transparent 3px),
     var(--concrete),
-    linear-gradient(180deg, #aab0b6, #7d838a);
+    linear-gradient(180deg, #c6ccd2, #9da4ab);
   background-size: auto, 160px 100px, 320px 200px, 320px 200px, 700px 700px, auto;
   background-position: 0 0, 40px 50px, 0 0, 0 0, 0 0, 0 0;
   background-attachment: fixed;
@@ -316,14 +329,23 @@ code {
 /* ── Lab lighting (fixed vignette) ───────────────────── */
 .box-frame {
   position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  box-shadow: inset 0 0 180px 40px rgba(12, 16, 22, .45);
+  box-shadow: inset 0 0 170px 30px rgba(12, 16, 22, .26);
 }
 
-/* Lab decor on the intro: Bit's construction blueprint and a robot arm */
+/* Lab decor on the intro: Bit's construction blueprint and a diagnostics monitor bolted to the wall */
 .lab-deco { position: absolute; pointer-events: none; z-index: 0; }
 .lab-deco svg { display: block; width: 100%; height: auto; overflow: visible; }
 .lab-deco.blueprint { top: 9%; left: 4%; width: clamp(150px, 16vw, 250px); transform: rotate(-3deg); }
-.lab-deco.robot-arm { top: 36%; right: 3%; width: clamp(150px, 17vw, 230px); }
+.lab-deco.wall-monitor { top: 30%; right: 3.5%; width: clamp(150px, 16vw, 230px); }
+.hud-spin { transform-origin: 64px 72px; animation: hud-spin 7s linear infinite; }
+.hud-spin.rev { animation-duration: 11s; animation-direction: reverse; }
+.hud-led { animation: hud-led 1.8s ease-in-out infinite; }
+.hud-bars rect { transform-box: fill-box; transform-origin: 50% 100%; animation: hud-bar 3.6s ease-in-out infinite; }
+.hud-bars rect:nth-child(2) { animation-delay: .15s; } .hud-bars rect:nth-child(3) { animation-delay: .3s; } .hud-bars rect:nth-child(4) { animation-delay: .45s; }
+.hud-bars rect:nth-child(5) { animation-delay: .6s; } .hud-bars rect:nth-child(6) { animation-delay: .75s; } .hud-bars rect:nth-child(7) { animation-delay: .9s; }
+@keyframes hud-spin { to { transform: rotate(360deg); } }
+@keyframes hud-led { 50% { fill: #a8f0d0; } }
+@keyframes hud-bar { 0%, 70%, 100% { transform: scaleY(1); } 82% { transform: scaleY(.72); } }
 
 /* Screw element (used where a real element is needed, e.g. the sign) */
 .screw {
@@ -331,10 +353,20 @@ code {
   background: #c9ced6; border: 3px solid var(--box-ink);
 }
 
-/* Hanging workshop lamp (intro), drawn like Bit */
-.lamp { position: absolute; top: 0; left: 50%; width: 120px; height: 120px; margin-left: -60px; z-index: 2; pointer-events: none; }
-.lamp svg { width: 100%; height: 100%; overflow: visible; }
-.lamp-glow { position: absolute; left: 50%; top: 92px; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 120px 70px rgba(var(--rgb-lamp), .38); }
+/* Hanging workshop lamps (intro), drawn like Bit. The lab has three: the side ones hang lower. */
+.lamp { position: absolute; top: 0; left: 50%; width: 120px; height: 120px; margin-left: -60px; z-index: 0; pointer-events: none; }
+.lamp svg { position: relative; width: 100%; height: 100%; overflow: visible; }
+.lamp-side { top: 52px; width: 104px; height: 104px; margin-left: -52px; }
+.lamp-l { left: calc(50% - clamp(140px, 15.5vw, 290px)); }
+.lamp-r { left: calc(50% + clamp(140px, 15.5vw, 290px)); }
+.lamp-glow { position: absolute; left: 50%; top: 77%; width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 110px 62px rgba(var(--rgb-lamp), .34); }
+.lamp-side .lamp-glow { box-shadow: 0 0 90px 48px rgba(var(--rgb-lamp), .28); }
+.lamp-cone {
+  position: absolute; left: 50%; top: 68%; width: 340px; height: 52vh; margin-left: -170px;
+  background: linear-gradient(180deg, rgba(var(--rgb-lamp), .30), rgba(var(--rgb-lamp), .10) 45%, rgba(var(--rgb-lamp), 0) 92%);
+  clip-path: polygon(41% 0, 59% 0, 100% 100%, 0 100%);
+}
+.lamp-side .lamp-cone { width: 280px; margin-left: -140px; height: 44vh; }
 
 /* ── App shell / screens ───────────────────────────────────── */
 .screen { position: relative; z-index: 1; min-height: 100vh; display: none; }
@@ -415,12 +447,15 @@ code {
 .sign-board {
   position: relative;
   padding: 2rem clamp(1.8rem, 5.5vw, 3.6rem) 1.8rem;
+  /* Dark instrument panel: fine dot matrix, a light band on top and a thin cyan frame held by the screws */
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, .08), transparent 45%),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, .025) 0 2px, transparent 2px 5px),
-    #262d36;
+    linear-gradient(180deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, 0) 34%),
+    radial-gradient(circle, rgba(127, 230, 255, .13) 0 1.1px, transparent 1.6px) 7px 7px / 14px 14px,
+    #171d25;
   border: 4px solid var(--box-ink);
-  border-radius: 16px;
+  border-radius: 10px;
+  outline: 2px solid rgba(95, 216, 255, .30);
+  outline-offset: -11px;
   box-shadow: 0 8px 0 var(--box-ink);
 }
 /* LED strip along the bottom of the sign */
@@ -430,18 +465,19 @@ code {
   box-shadow: 0 0 10px 2px rgba(95, 216, 255, .9), 0 0 28px 6px rgba(95, 216, 255, .45);
 }
 .logo {
-  font-family: var(--font-display);
-  font-size: clamp(2.6rem, 9vw, 5.6rem);
-  line-height: .92;
+  font-family: var(--font-logo);
+  font-weight: var(--logo-weight);
+  font-size: var(--logo-size);
+  line-height: var(--logo-lh);
   color: var(--paper);
   -webkit-text-stroke: 3px var(--box-ink);
   paint-order: stroke fill;
   text-shadow: 0 6px 0 var(--box-ink);
-  letter-spacing: .01em;
+  letter-spacing: var(--logo-track);
 }
 .logo .logo-small { display: block; font-size: .42em; color: var(--logo-small); letter-spacing: .12em; margin-bottom: .1em; }
 .logo .logo-name { color: var(--tomato); }
-.sign-sub { margin-top: .9rem; font-family: var(--font-hand); font-size: clamp(1.1rem, 2.6vw, 1.45rem); color: var(--sign-sub); }
+.sign-sub { margin-top: .9rem; font-family: var(--sign-sub-font); font-size: var(--sign-sub-size); color: var(--sign-sub); }
 
 .intro-actions { position: relative; z-index: 2; margin-top: 2.6rem; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
 .link-btn {
@@ -450,6 +486,8 @@ code {
   padding: .2rem .6rem;
 }
 .link-btn:hover { color: var(--tomato-dark); }
+.bubble-link { display: inline-block; margin-top: .15rem; font-weight: 700; color: var(--sky-b-dark); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; white-space: nowrap; }
+.bubble-link:hover { color: var(--tomato-dark); }
 .intro-foot { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 2; margin: 0; width: max-content; max-width: 92vw; text-align: center; font-size: .95rem; line-height: 1.6; color: rgba(var(--rgb-ink), .85); font-weight: 700; }
 .intro-credit { font-size: 1rem; }
 .intro-foot a { color: var(--box-ink); text-decoration-thickness: 2px; text-underline-offset: 3px; }
@@ -459,7 +497,23 @@ code {
 .bit .blink { animation: blink 4.5s infinite; transform-origin: center; transform-box: fill-box; }
 @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
 .bit .bulb { animation: bulb 2.2s ease-in-out infinite; }
-@keyframes bulb { 50% { fill: #ffe9a3; } }
+@keyframes bulb { 50% { fill: var(--bulb-hi); } }
+.bit .core { animation: core 2.4s ease-in-out infinite; }
+@keyframes core { 50% { fill: #e8fbff; } }
+.bit .arm-l { transform-origin: 30px 108px; }
+.bit .arm-r { transform-origin: 90px 108px; }
+/* Bit reacts when you point at him: a little hop and a wave */
+.bit-slot { cursor: pointer; }
+.bit-slot:hover .bit, .bit-slot:focus-visible .bit { animation: bit-hop .55s cubic-bezier(.3, 1.6, .5, 1); }
+.bit-slot:hover .arm-r, .bit-slot:focus-visible .arm-r { animation: bit-wave .45s ease-in-out 3; }
+.bit-slot:hover .arm-l, .bit-slot:focus-visible .arm-l { animation: bit-swing .9s ease-in-out; }
+.bit-slot:hover .blink, .bit-slot:focus-visible .blink { animation: none; transform: scaleY(.62); }
+@keyframes bit-hop { 0%, 100% { transform: none; } 35% { transform: translateY(-9px) rotate(-3deg); } 70% { transform: translateY(0) rotate(2deg); } }
+@keyframes bit-wave { 0%, 100% { transform: none; } 50% { transform: rotate(-30deg); } }
+@keyframes bit-swing { 0%, 100% { transform: none; } 50% { transform: rotate(14deg); } }
+/* On the title screen he also breathes a little while waiting */
+.intro-bit .bit { animation: bit-idle 3.4s ease-in-out 1.6s infinite; transform-origin: 50% 100%; }
+@keyframes bit-idle { 0%, 100% { transform: none; } 50% { transform: translateY(-3px) rotate(1.2deg); } }
 #screen-intro { --bit-w: clamp(90px, 10vw, 120px); --bit-left: max(16px, 6vw); }
 .intro-bit { position: absolute; left: var(--bit-left); bottom: -6px; z-index: 1; width: var(--bit-w); animation: peek 1s .4s both cubic-bezier(.2, 1.4, .4, 1); }
 .intro-bit .bit { display: block; width: 100%; }
@@ -582,7 +636,6 @@ code {
 .bench-go { align-self: end; margin-top: .7rem; display: inline-flex; align-items: center; gap: .35rem; font-family: var(--font-display); font-size: .98rem; color: var(--tomato-dark); }
 .bench.notebook { background: var(--nail), var(--grain), repeating-linear-gradient(180deg, transparent 0 27px, rgba(var(--rgb-blue), .14) 27px 28px), var(--paper); border-radius: 4px; box-shadow: var(--lift); }
 .bench.notebook::before { display: none; }
-
 /* Stations inside a bench: plywood plaques */
 .shelf {
   display: grid;
@@ -1170,11 +1223,19 @@ pre.code .t-k { color: var(--sun-y); }
   .tr-code { max-height: 300px; }
   .benches { grid-template-columns: 1fr; }
 }
+@media (max-width: 1000px) {
+  .lamp-side { display: none; }
+}
 @media (max-width: 900px) {
-  .lab-deco.robot-arm { display: none; }
+  .lab-deco.wall-monitor, .pegboard, .wood-deco.shelf-deco { display: none; }
 }
 @media (max-width: 760px) {
-  #screen-intro .intro-bubble { display: none; }
+  /* Bit moves to the middle; his bubble (with the "¿Qué es esto?" link) sits above him */
+  #screen-intro .intro-bubble { left: 50%; right: auto; bottom: calc(var(--bit-w) * 1.25 + 4px); width: 230px; max-width: none; margin-left: -115px; text-align: center; }
+  #screen-intro .intro-bubble::after { left: 50%; bottom: -19px; margin-left: -8px; border: 8px solid transparent; border-top: 12px solid var(--box-ink); border-bottom: 0; }
+  #screen-intro .intro-bit { left: 50%; margin-left: calc(var(--bit-w) / -2); }
+  #screen-intro.is-active { padding-bottom: calc(var(--bit-w) * 1.25 + 110px); }
+  #screen-intro .intro-foot { position: relative; left: auto; bottom: auto; transform: none; width: auto; margin-top: 2rem; max-width: none; }
 }
 @media (max-width: 600px) {
   .bench { grid-template-columns: 76px 1fr; padding: 1.4rem 1.1rem 1.1rem 1.3rem; }
@@ -1470,11 +1531,8 @@ pre.code .t-k { color: var(--sun-y); }
   .corner-bar { top: 10px; right: 10px; gap: 6px; }
   .round-btn { width: 40px; height: 40px; }
   .back-link { top: 10px; left: 10px; }
-  #screen-intro .intro-bubble { display: none; }
-  #screen-intro.is-active { padding-bottom: 120px; }
-  #screen-intro .intro-foot { position: relative; right: auto; bottom: auto; left: auto; transform: none; width: auto; margin-top: 2.2rem; max-width: none; text-align: center; }
-  .lab-deco.blueprint { top: 72px; left: 10px; width: 112px; }
-  .intro-bit { left: 50%; width: 120px; margin-left: -60px; }
+  #screen-intro { --bit-w: 104px; }
+  .lab-deco.blueprint, .wood-deco.plan { top: 72px; left: 10px; width: 112px; }
   .steps { width: 100%; }
   .step { flex: 1; justify-content: center; gap: .3rem; padding: .4rem .5rem; font-size: .88rem; }
   .step-n { width: 20px; height: 20px; font-size: .72rem; }
