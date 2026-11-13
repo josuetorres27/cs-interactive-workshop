@@ -189,8 +189,7 @@ module.exports = (t, { createEnv, read }) => {
     ['interview', 'datastructures', 'sql'].forEach((mod) => {
       t.test(`${mod}: catalogue, statements and every step of every preset`, () => {
         const env = english(); env.load('js/tracer.js'); env.load(`js/modules/${mod}.js`);
-        const station = env.window[{ interview: 'interviewStation', datastructures: 'dsStation', sql: 'sqlStation' }[mod]];
-        const problems = station.problems || station.items || [];
+        const problems = { interview: () => env.window.problemStations.all, datastructures: () => env.window.dsStations.all, sql: () => env.window.sqlStation.problems }[mod]();
         t.ok(problems.length > 0, 'problems');
         problems.forEach((p) => {
           noSpanish(strings(p), `${mod}/${p.id}`);
@@ -204,8 +203,7 @@ module.exports = (t, { createEnv, read }) => {
     });
     t.test('the tracer controls (picker, input, player, step counter) are in English', () => {
       const env = english(); env.load('js/tracer.js'); env.load('js/modules/interview.js');
-      const st = env.window.interviewStation;
-      const html = env.window.Tracer.TraceStation.prototype.skeleton.call({ problems: st.problems });
+      const html = env.window.Tracer.TraceStation.prototype.skeleton.call({ problems: env.window.problemStations.all });
       const visible = html.replace(/<[^>]*\b(title|aria-label)="([^"]*)"[^>]*>/g, ' $2 ').replace(/<[^>]+>/g, ' ');
       noSpanish([visible], 'tracer skeleton');
       ['Reproducir', 'Entrada', 'Probar', 'Paso'].forEach((w) => t.ok(!new RegExp(`\\b${w}\\b`).test(visible), w));

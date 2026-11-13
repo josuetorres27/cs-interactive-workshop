@@ -2,11 +2,12 @@
 // original six, the difficulty ordering, the grouped picker and the matrix visual.
 'use strict';
 
-module.exports = (t, { createEnv, mulberry32 }) => {
+module.exports = (t, { createEnv, mulberry32, read }) => {
   const env = createEnv();
   env.load('js/tracer.js');
   env.load('js/modules/interview.js');
-  const stn = env.window.interviewStation;
+  const stn = { problems: env.window.problemStations.all }; // the whole catalogue, all levels
+  const levels = env.window.problemStations;
   const { viz } = env.window.Tracer;
   const P = Object.fromEntries(stn.problems.map((p) => [p.id, p]));
   const last = (frames) => frames[frames.length - 1];
@@ -70,22 +71,51 @@ module.exports = (t, { createEnv, mulberry32 }) => {
     t.test('the progress checklist lists the same problems in the same order', () => {
       const e = createEnv(); e.load('js/progress.js');
       const lists = e.window.Progress.CHECKLISTS;
-      t.deepEq(lists.interview.items.map((i) => i.id), CATALOGUE.map(([id]) => `solve:${id}`));
+      const all = ['problems-easy', 'problems-medium', 'problems-hard'].flatMap((s) => lists[s].items.map((i) => i.id));
+      t.deepEq(all, CATALOGUE.map(([id]) => `solve:${id}`));
     });
   });
 
-  t.suite('problems · picker grouped by difficulty', () => {
-    const html = stn.skeleton();
-    t.test('a long catalogue gets one row per difficulty', () => t.eq((html.match(/class="tr-group"/g) || []).length, 3));
-    t.test('rows come in order: Fácil, Media, Difícil', () => { t.ok(html.indexOf('>Fácil<') < html.indexOf('>Media<')); t.ok(html.indexOf('>Media<') < html.indexOf('>Difícil<')); t.ok(html.indexOf('>Fácil<') > 0); });
-    t.test('every problem has exactly one button', () => CATALOGUE.forEach(([id]) => t.eq(html.split(`data-id="${id}"`).length - 1, 1, id)));
-    t.test('each button sits in the row of its difficulty', () => {
-      const rows = html.split('class="tr-group"').slice(1);
-      ['Fácil', 'Media', 'Difícil'].forEach((d, k) => CATALOGUE.forEach(([id, diff]) => t.eq(rows[k].includes(`data-id="${id}"`), diff === d, `${id} in ${d}`)));
+  t.suite('problems · station cards, one per level', () => {
+    const html = read('web/index.html');
+    const cards = (area) => [...html.matchAll(new RegExp(`<div class="station" data-area="${area}">[\\s\\S]*?</a>`, 'g'))].map((m) => m[0]);
+    const tag = (c) => (c.match(/<span class="diff (\w+)">([^<]+)<\/span>/) || []).slice(1).join(' ');
+    t.test('Problemas de Código has an easy, a medium and a hard station, in that order', () => {
+      t.deepEq(cards('problems').map((c) => c.match(/data-tab="([\w-]+)"/)[1]), ['problems-easy', 'problems-medium', 'problems-hard']);
+      t.deepEq(cards('problems').map(tag), ['easy Fácil', 'mid Media', 'hard Difícil']);
     });
-    t.test('a short catalogue keeps the flat picker with a badge per button', () => {
-      const small = new env.window.Tracer.TraceStation('demo', stn.problems.slice(0, 3)).skeleton();
-      t.notIncludes(small, 'tr-group'); t.eq((small.match(/class="diff easy"/g) || []).length, 3);
+    t.test('data structures are split the same way (easy and medium)', () => {
+      const ds = cards('algorithms').filter((c) => c.includes('datastructures'));
+      t.deepEq(ds.map((c) => c.match(/data-tab="([\w-]+)"/)[1]), ['datastructures-easy', 'datastructures-medium']);
+      t.deepEq(ds.map(tag), ['easy Fácil', 'mid Media']);
+    });
+    t.test('the old combined stations are gone', () => { t.notIncludes(html, 'data-tab="interview"'); t.notIncludes(html, 'data-tab="datastructures"'); t.notIncludes(html, 'id="tab-interview"'); });
+  });
+
+  t.suite('problems · one station per difficulty', () => {
+    const LEVEL = { 'Fácil': 'easy', 'Media': 'medium', 'Difícil': 'hard' };
+    t.test('there are three stations: easy, medium and hard', () => ['easy', 'medium', 'hard'].forEach((l) => t.eq(levels[l].id, `problems-${l}`, l)));
+    t.test('each station holds only its own level, in catalogue order', () => ['easy', 'medium', 'hard'].forEach((l) => {
+      t.deepEq(levels[l].problems.map((p) => p.id), CATALOGUE.filter(([, d]) => LEVEL[d] === l).map(([id]) => id), l);
+    }));
+    t.test('together they hold every problem exactly once', () => {
+      const ids = ['easy', 'medium', 'hard'].flatMap((l) => levels[l].problems.map((p) => p.id));
+      t.eq(ids.length, 13); t.eq(new Set(ids).size, 13);
+    });
+    t.test('a single-level station has a flat picker with no difficulty badges', () => ['easy', 'medium', 'hard'].forEach((l) => {
+      const html = levels[l].skeleton();
+      t.notIncludes(html, 'tr-group', l); t.notIncludes(html, 'class="diff ', l);
+      levels[l].problems.forEach((p) => t.includes(html, `data-id="${p.id}"`, p.id));
+    }));
+    t.test('a mixed catalogue still gets badges (short) or rows (long)', () => {
+      const { TraceStation } = env.window.Tracer;
+      const mixed = [levels.easy.problems[0], levels.medium.problems[0], levels.hard.problems[0]];
+      t.eq((new TraceStation('demo', mixed).skeleton().match(/class="diff /g) || []).length, 3);
+      t.eq((new TraceStation('demo', stn.problems).skeleton().match(/class="tr-group"/g) || []).length, 3);
+    });
+    t.test('byLevel skips levels with no problems', () => {
+      const only = env.window.Tracer.byLevel('x', levels.easy.problems);
+      t.ok(only.easy); t.eq(only.medium, undefined); t.eq(only.hard, undefined); t.eq(only.all.length, 4);
     });
   });
 

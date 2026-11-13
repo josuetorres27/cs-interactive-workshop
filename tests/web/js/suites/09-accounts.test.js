@@ -41,8 +41,8 @@ module.exports = (t, { createEnv, read }) => {
   t.suite('accounts · progress model', () => {
     t.test('a new progress document is empty', () => { const p = P.empty(); t.eq(p.version, 1); t.deepEq(p.stations, {}); t.eq(p.last, null); });
     t.test('recording a checklist item marks it done with its label', () => {
-      const r = P.record(P.empty(), 'interview', 'solve:trap-rain', T0);
-      t.eq(r.isNew, true); t.eq(r.progress.stations.interview.items['solve:trap-rain'], T0); t.includes(r.label, 'Atrapar agua');
+      const r = P.record(P.empty(), 'problems-hard', 'solve:trap-rain', T0);
+      t.eq(r.isNew, true); t.eq(r.progress.stations['problems-hard'].items['solve:trap-rain'], T0); t.includes(r.label, 'Atrapar agua');
     });
     t.test('recording the same item again keeps the first time', () => {
       const a = P.record(P.empty(), 'sql', 'solve:join-where', T0).progress;
@@ -62,16 +62,16 @@ module.exports = (t, { createEnv, read }) => {
       const s = P.stationStats(p, 'sql'); t.eq(s.done, 2); t.eq(s.total, 3); t.eq(s.percent, 67); t.eq(s.complete, false);
     });
     t.test('completing every item completes the station', () => {
-      let p = P.empty(); P.CHECKLISTS.datastructures.items.forEach((i) => { p = P.record(p, 'datastructures', i.id, T0).progress; });
-      t.eq(P.stationStats(p, 'datastructures').complete, true); t.eq(P.overall(p).stationsComplete, 1);
+      let p = P.empty(); P.CHECKLISTS['datastructures-easy'].items.forEach((i) => { p = P.record(p, 'datastructures-easy', i.id, T0).progress; });
+      t.eq(P.stationStats(p, 'datastructures-easy').complete, true); t.eq(P.overall(p).stationsComplete, 1);
     });
-    t.test('the whole workshop has 41 checklist items across 8 stations', () => { const o = P.overall(P.empty()); t.eq(o.total, 41); t.eq(o.stations, 8); });
+    t.test('the whole workshop has 41 checklist items across 11 stations', () => { const o = P.overall(P.empty()); t.eq(o.total, 41); t.eq(o.stations, 11); });
     t.test('merging keeps items from both sides with the earliest time', () => {
       const a = P.record(P.empty(), 'sql', 'solve:join-where', T0 + 50).progress;
       let b = P.record(P.empty(), 'sql', 'solve:join-where', T0).progress;
-      b = P.record(b, 'interview', 'solve:max-water', T0).progress;
+      b = P.record(b, 'problems-medium', 'solve:max-water', T0).progress;
       const m = P.merge(a, b);
-      t.eq(m.stations.sql.items['solve:join-where'], T0); t.eq(m.stations.interview.items['solve:max-water'], T0);
+      t.eq(m.stations.sql.items['solve:join-where'], T0); t.eq(m.stations['problems-medium'].items['solve:max-water'], T0);
     });
     t.test('merging combines visited steps', () => {
       const m = P.merge(P.visit(P.empty(), 'sql', 'learn', T0), P.visit(P.empty(), 'sql', 'build', T0));
@@ -89,6 +89,35 @@ module.exports = (t, { createEnv, read }) => {
     t.test('sanitize turns non-objects into an empty document', () => { t.deepEq(P.sanitize([]), P.empty()); t.deepEq(P.sanitize('x'), P.empty()); });
   });
 
+  t.suite('accounts · stations split by difficulty keep old progress', () => {
+    const old = {
+      stations: {
+        interview: { visited: true, steps: { learn: true }, items: { 'solve:valid-palindrome': T0, 'solve:max-water': T0 + 1, 'solve:trap-rain': T0 + 2 } },
+        datastructures: { visited: true, steps: {}, items: { 'solve:reverse-list': T0, 'solve:bst-insert': T0 + 3 } }
+      },
+      last: { station: 'interview', step: 'build', at: T0 + 9 }
+    };
+    const s = P.sanitize(old);
+    t.test('the old stations are gone', () => { t.eq(s.stations.interview, undefined); t.eq(s.stations.datastructures, undefined); });
+    t.test('each solved problem lands in the station of its level', () => {
+      t.deepEq(s.stations['problems-easy'].items, { 'solve:valid-palindrome': T0 });
+      t.deepEq(s.stations['problems-medium'].items, { 'solve:max-water': T0 + 1 });
+      t.deepEq(s.stations['problems-hard'].items, { 'solve:trap-rain': T0 + 2 });
+      t.deepEq(s.stations['datastructures-easy'].items, { 'solve:reverse-list': T0 });
+      t.deepEq(s.stations['datastructures-medium'].items, { 'solve:bst-insert': T0 + 3 });
+    });
+    t.test('visits and seen steps carry over to every level', () => ['problems-easy', 'problems-medium', 'problems-hard'].forEach((id) => {
+      t.eq(s.stations[id].visited, true, id); t.deepEq(s.stations[id].steps, { learn: true }, id);
+    }));
+    t.test('"continue where you left off" opens the easiest level', () => t.deepEq(s.last, { station: 'problems-easy', step: 'build', at: T0 + 9 }));
+    t.test('old and new progress merge with the earliest time', () => {
+      const m = P.merge(old, P.record(P.empty(), 'problems-medium', 'solve:max-water', T0 - 5).progress);
+      t.eq(m.stations['problems-medium'].items['solve:max-water'], T0 - 5);
+      t.eq(m.stations['problems-hard'].items['solve:trap-rain'], T0 + 2);
+    });
+    t.test('the overall score counts the migrated items', () => t.eq(P.overall(s).done, 5));
+  });
+
   t.suite('accounts · checklists match the real stations', () => {
     const env = createEnv();
     env.load('js/tracer.js');
@@ -98,8 +127,8 @@ module.exports = (t, { createEnv, read }) => {
     const ids = (stn) => stn.problems.map((p) => `solve:${p.id}`).sort();
     const list = (station) => P.CHECKLISTS[station].items.map((i) => i.id).sort();
     t.test('every station in the workshop has a checklist and vice versa', () => t.deepEq(Object.keys(P.CHECKLISTS).sort(), Object.keys(MODULES).sort()));
-    t.test('interview checklist lists every interview problem', () => t.deepEq(list('interview'), ids(env.window.interviewStation)));
-    t.test('data structures checklist lists every problem', () => t.deepEq(list('datastructures'), ids(env.window.dsStation)));
+    ['easy', 'medium', 'hard'].forEach((l) => t.test(`problems-${l} checklist lists every problem of that level`, () => t.deepEq(list(`problems-${l}`), ids(env.window.problemStations[l]))));
+    ['easy', 'medium'].forEach((l) => t.test(`datastructures-${l} checklist lists every problem of that level`, () => t.deepEq(list(`datastructures-${l}`), ids(env.window.dsStations[l]))));
     t.test('SQL checklist lists every query', () => t.deepEq(list('sql'), ids(env.window.sqlStation)));
     t.test('sorting checklist lists every algorithm', () => t.deepEq(list('algorithms'), Object.keys(env.window.algorithmsStation.complexities).map((a) => `run:${a}`).sort()));
     t.test('every checklist item has a readable label', () => Object.values(P.CHECKLISTS).forEach((c) => c.items.forEach((i) => t.ok(i.label.length > 8, i.id))));
@@ -138,9 +167,9 @@ module.exports = (t, { createEnv, read }) => {
     };
     t.test('guest progress is merged into the account on sign-in', async () => {
       const { acc, backend } = await signedIn({ progress: P.record(P.empty(), 'sql', 'solve:join-where', T0).progress });
-      acc.record('interview', 'solve:max-water');
+      acc.record('problems-medium', 'solve:max-water');
       await backend.signIn();
-      t.eq(acc.signedIn, true); t.eq(acc.stats('sql').done, 1); t.eq(acc.stats('interview').done, 1);
+      t.eq(acc.signedIn, true); t.eq(acc.stats('sql').done, 1); t.eq(acc.stats('problems-medium').done, 1);
     });
     t.test('the merged progress is saved to the account right away', async () => {
       const { acc, backend } = await signedIn(); acc.record('cheatsheets', 'amdahl'); await backend.signIn();

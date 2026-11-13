@@ -33,7 +33,7 @@ module.exports = (t, { read, WEB, createEnv }) => {
     });
     t.test('every station card has a matching station pane', () => [...html.matchAll(/data-tab="([^"]+)"/g)].forEach((m) => t.includes(html, `id="tab-${m[1]}"`, m[1])));
     t.test('stations with steps have Experimenta, Entiende and Implementa panes', () => {
-      ['algorithms', 'concurrency', 'networking', 'interview', 'datastructures', 'sql'].forEach((id) => {
+      ['algorithms', 'concurrency', 'networking', 'problems-easy', 'problems-medium', 'problems-hard', 'datastructures-easy', 'datastructures-medium', 'sql'].forEach((id) => {
         const start = html.indexOf(`id="tab-${id}"`); const end = html.indexOf('<section id="tab-', start + 10);
         const pane = html.slice(start, end === -1 ? undefined : end);
         ['play', 'learn', 'build'].forEach((s) => t.includes(pane, `data-step="${s}"`, `${id}.${s}`));

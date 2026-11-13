@@ -12,21 +12,29 @@ const AREAS = {
 
 const MODULES = {
   algorithms:     { title: T('Ordenamiento', 'Sorting'),                 area: 'algorithms',   steps: true },
-  datastructures: { title: T('Estructuras de datos', 'Data structures'), area: 'algorithms',   steps: true, tracer: 'dsStation' },
+  'datastructures-easy':   { title: T('Estructuras de datos · Fácil', 'Data structures · Easy'),   area: 'algorithms', steps: true, tracer: 'dsStations.easy' },
+  'datastructures-medium': { title: T('Estructuras de datos · Media', 'Data structures · Medium'), area: 'algorithms', steps: true, tracer: 'dsStations.medium' },
   concurrency:    { title: T('La Rotonda', 'The Roundabout'),            area: 'parallel',      steps: true },
   heat:           { title: T('Difusión de calor', 'Heat diffusion'),     area: 'parallel',      steps: true },
   networking:     { title: T('Sockets TCP', 'TCP sockets'),              area: 'networking',    steps: true, tracer: 'networkingStation' },
-  interview:      { title: T('Problemas clásicos', 'Classic problems'),  area: 'problems',     steps: true, tracer: 'interviewStation' },
+  'problems-easy':   { title: T('Problemas clásicos · Fácil', 'Classic problems · Easy'),       area: 'problems', steps: true, tracer: 'problemStations.easy' },
+  'problems-medium': { title: T('Problemas clásicos · Media', 'Classic problems · Medium'),     area: 'problems', steps: true, tracer: 'problemStations.medium' },
+  'problems-hard':   { title: T('Problemas clásicos · Difícil', 'Classic problems · Hard'),     area: 'problems', steps: true, tracer: 'problemStations.hard' },
   sql:            { title: T('SQL paso a paso', 'SQL step by step'),     area: 'databases',     steps: true, tracer: 'sqlStation' },
   cheatsheets:    { title: T('El Cuaderno', 'The Notebook'),             area: null,          steps: false }
 };
-const MODULE_ORDER = ['algorithms', 'datastructures', 'concurrency', 'heat', 'networking', 'interview', 'sql', 'cheatsheets'];
+const MODULE_ORDER = ['algorithms', 'datastructures-easy', 'datastructures-medium', 'concurrency', 'heat', 'networking',
+  'problems-easy', 'problems-medium', 'problems-hard', 'sql', 'cheatsheets'];
 const STEP_IDS = ['play', 'learn', 'build'];
 const MAX_TOASTS = 3;
 
 // Spanish URLs from before the routes were renamed
 const LEGACY_ROUTES = { 'que-es': 'about', perfil: 'profile', taller: 'workshop', mesa: 'area' };
 const LEGACY_AREAS = { algoritmos: 'algorithms', paralela: 'parallel', redes: 'networking', entrevistas: 'problems', interviews: 'problems', datos: 'databases' };
+// Stations that were split by difficulty: old links open the easiest level
+const LEGACY_MODULES = { interview: 'problems-easy', datastructures: 'datastructures-easy' };
+// A tracer station lives at a dotted path on window (e.g. 'problemStations.easy')
+const stationAt = (path) => path.split('.').reduce((o, k) => (o ? o[k] : undefined), window);
 
 // What Bit says on each screen/step
 const TRACER_LINES = {
@@ -57,8 +65,11 @@ const GUIDE_LINES = {
     learn: T('Cliente, servidor, socket y pool de hilos, explicados sin rodeos.', 'Client, server, socket and thread pool, explained plainly.'),
     build: T('Un servidor TCP de verdad cabe en 30 líneas. Aquí lo tienes.', 'A real TCP server fits in 30 lines. Here it is.')
   },
-  interview: TRACER_LINES,
-  datastructures: TRACER_LINES,
+  'problems-easy': TRACER_LINES,
+  'problems-medium': TRACER_LINES,
+  'problems-hard': TRACER_LINES,
+  'datastructures-easy': TRACER_LINES,
+  'datastructures-medium': TRACER_LINES,
   sql: {
     play: T('Mira el orden de las líneas resaltadas: SQL no se ejecuta en el orden en que se escribe.', 'Watch the order of the highlighted lines: SQL does not run in the order it is written.'),
     learn: TRACER_LINES.learn,
@@ -69,7 +80,7 @@ const GUIDE_LINES = {
 
 // First-visit walkthroughs (coach marks)
 const tracerTour = (id, what) => [
-  { sel: `#tracer-${id} .tr-picker`, title: T('Escoge un problema', 'Pick a problem'), text: T(`Cada tarjeta es ${what}. La etiqueta dice qué tan difícil es.`, `Each card is ${what}. The tag tells you how hard it is.`) },
+  { sel: `#tracer-${id} .tr-picker`, title: T('Escoge un problema', 'Pick a problem'), text: T(`Cada tarjeta es ${what}. Todos son del mismo nivel; los demás niveles son otras estaciones.`, `Each card is ${what}. They are all the same level; the other levels are separate stations.`) },
   { sel: `#tracer-${id} .tr-code-wrap`, title: T('El código', 'The code'), text: T('La línea resaltada es la que se está ejecutando. Las más claras ya se ejecutaron.', 'The highlighted line is the one running now. The lighter ones have already run.') },
   { sel: `#tracer-${id} .tr-controls`, title: T('Los controles', 'The controls'), text: T('Avanza o retrocede paso a paso, o dale Reproducir. Con el teclado: ← y →.', 'Go forward or back step by step, or press Play. With the keyboard: ← and →.') },
   { sel: `#tracer-${id} .tr-stage`, title: T('Lo que pasa en memoria', 'What happens in memory'), text: T('Aquí ves los datos en cada paso. Debajo, la explicación y las variables (las que cambian se iluminan).', 'Here you see the data at each step. Below, the explanation and the variables (the ones that change light up).') }
@@ -100,8 +111,8 @@ const TOURS = {
     { sel: '#netPlayer', title: T('Paso a paso', 'Step by step'), text: T('Avanza, retrocede o reproduce. Los puntos muestran las fases: conexión, petición, servidor, respuesta y cierre.', 'Go forward, go back or play. The dots show the phases: connection, request, server, response and close.') },
     { sel: '#packetInspector', title: T('Abre el paquete', 'Open the packet'), text: T('Cada paquete por capas: direcciones IPv6, el encabezado TCP y, si lleva datos, el mensaje HTTP parte por parte.', 'Each packet layer by layer: IPv6 addresses, the TCP header and, if it carries data, the HTTP message part by part.') }
   ],
-  interview: tracerTour('interview', T('un problema clásico de programación', 'a classic programming problem')),
-  datastructures: tracerTour('datastructures', T('una estructura de datos con su operación típica', 'a data structure with its typical operation')),
+  ...Object.fromEntries(['easy', 'medium', 'hard'].map((l) => [`problems-${l}`, tracerTour(`problems-${l}`, T('un problema clásico de programación', 'a classic programming problem'))])),
+  ...Object.fromEntries(['easy', 'medium'].map((l) => [`datastructures-${l}`, tracerTour(`datastructures-${l}`, T('una estructura de datos con su operación típica', 'a data structure with its typical operation'))])),
   sql: tracerTour('sql', T('una consulta sobre la misma base de ejemplo', 'a query on the same sample database'))
 };
 
@@ -181,8 +192,9 @@ class App {
   init() {
     document.querySelectorAll('.bit-slot').forEach(el => { el.innerHTML = BIT_SVG; });
 
-    ['algorithmsStation', 'concurrencyStation', 'heatStation', 'networkingStation', 'cheatsheetsStation', 'notebookStation', 'interviewStation', 'dsStation', 'sqlStation']
+    ['algorithmsStation', 'concurrencyStation', 'heatStation', 'networkingStation', 'cheatsheetsStation', 'notebookStation', 'sqlStation']
       .forEach(name => { if (window[name]) window[name].init(); });
+    Object.values(MODULES).forEach(m => { const st = m.tracer && m.tracer.includes('.') && stationAt(m.tracer); if (st) st.init(); });
 
     this.setupAccount();
     this.setupSteps();
@@ -200,9 +212,11 @@ class App {
   legacyParts(parts) {
     const first = LEGACY_ROUTES[parts[0]] || parts[0];
     const renamedArea = first === 'area' && LEGACY_AREAS[parts[1]];
-    if (first === parts[0] && !renamedArea) return parts;
+    const splitModule = first === 'workshop' && LEGACY_MODULES[parts[1]];
+    if (first === parts[0] && !renamedArea && !splitModule) return parts;
     const next = [first, ...parts.slice(1)];
     if (renamedArea) next[1] = renamedArea;
+    if (splitModule) next[1] = splitModule;
     return next;
   }
 
@@ -283,10 +297,10 @@ class App {
 
   tracer() {
     const mod = MODULES[this.currentTab];
-    return mod && mod.tracer ? window[mod.tracer] : null;
+    return mod && mod.tracer ? stationAt(mod.tracer) || null : null;
   }
   stopTracers() {
-    Object.values(MODULES).forEach(m => { if (m.tracer && window[m.tracer]) window[m.tracer].stop(); });
+    Object.values(MODULES).forEach(m => { const st = m.tracer && stationAt(m.tracer); if (st) st.stop(); });
     if (window.networkingStation && window.networkingStation.exchange) window.networkingStation.stop();
   }
 

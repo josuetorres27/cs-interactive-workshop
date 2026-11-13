@@ -1460,8 +1460,9 @@ def max_window(nums, k):
     }
   };
 
-  // Ordered by difficulty: Fácil, Media, Difícil (the picker groups them that way).
-  window.interviewStation = new TraceStation('interview', [
+  // Ordered by difficulty: Fácil, Media, Difícil. Each level is its own station:
+  // problems-easy, problems-medium and problems-hard.
+  window.problemStations = window.Tracer.byLevel('problems', [
     palindrome, parentheses, binarySearch, stock,
     twoSum, container, mergeIntervals, longestUnique, islands, coinChange,
     trapRain, slidingMax, largestRectangle
