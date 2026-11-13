@@ -3,105 +3,106 @@
 //          -> one area's stations (#/area/<area>) -> station (#/workshop/<module>[/<step>])
 
 const AREAS = {
-  algorithms:  { title: 'Algoritmos y Estructuras de Datos', line: 'Cómo se ordenan, guardan y recorren los datos.' },
-  parallel:    { title: 'Programación Paralela y Concurrente', line: 'Hilos, sincronización y trabajo en paralelo.' },
-  networking:  { title: 'Redes', line: 'Cómo viajan los datos entre computadoras.' },
-  interviews:  { title: 'Entrevistas Técnicas', line: 'Patrones para resolver problemas de entrevista, paso a paso.' },
-  databases:   { title: 'Bases de Datos', line: 'Consultas SQL, ejecutadas cláusula por cláusula.' }
+  algorithms:  { title: T('Algoritmos y Estructuras de Datos', 'Algorithms and Data Structures'), line: T('Cómo se ordenan, guardan y recorren los datos.', 'How data is sorted, stored and traversed.') },
+  parallel:    { title: T('Programación Paralela y Concurrente', 'Parallel and Concurrent Programming'), line: T('Hilos, sincronización y trabajo en paralelo.', 'Threads, synchronization and parallel work.') },
+  networking:  { title: T('Redes', 'Networking'), line: T('Cómo viajan los datos entre computadoras.', 'How data travels between computers.') },
+  problems:    { title: T('Problemas de Código', 'Coding Problems'), line: T('Problemas clásicos de programación, de fáciles a difíciles, paso a paso.', 'Classic programming problems, from easy to hard, step by step.') },
+  databases:   { title: T('Bases de Datos', 'Databases'), line: T('Consultas SQL, ejecutadas cláusula por cláusula.', 'SQL queries, executed clause by clause.') }
 };
 
 const MODULES = {
-  algorithms:     { title: 'Ordenamiento',            area: 'algorithms',   steps: true },
-  datastructures: { title: 'Estructuras de datos',    area: 'algorithms',   steps: true, tracer: 'dsStation' },
-  concurrency:    { title: 'La Rotonda',              area: 'parallel',      steps: true },
-  heat:           { title: 'Difusión de calor',       area: 'parallel',      steps: true },
-  networking:     { title: 'Sockets TCP',             area: 'networking',    steps: true, tracer: 'networkingStation' },
-  interview:      { title: 'Patrones de entrevista',  area: 'interviews',   steps: true, tracer: 'interviewStation' },
-  sql:            { title: 'SQL paso a paso',         area: 'databases',     steps: true, tracer: 'sqlStation' },
-  cheatsheets:    { title: 'El Cuaderno',             area: null,          steps: false }
+  algorithms:     { title: T('Ordenamiento', 'Sorting'),                 area: 'algorithms',   steps: true },
+  datastructures: { title: T('Estructuras de datos', 'Data structures'), area: 'algorithms',   steps: true, tracer: 'dsStation' },
+  concurrency:    { title: T('La Rotonda', 'The Roundabout'),            area: 'parallel',      steps: true },
+  heat:           { title: T('Difusión de calor', 'Heat diffusion'),     area: 'parallel',      steps: true },
+  networking:     { title: T('Sockets TCP', 'TCP sockets'),              area: 'networking',    steps: true, tracer: 'networkingStation' },
+  interview:      { title: T('Problemas clásicos', 'Classic problems'),  area: 'problems',     steps: true, tracer: 'interviewStation' },
+  sql:            { title: T('SQL paso a paso', 'SQL step by step'),     area: 'databases',     steps: true, tracer: 'sqlStation' },
+  cheatsheets:    { title: T('El Cuaderno', 'The Notebook'),             area: null,          steps: false }
 };
 const MODULE_ORDER = ['algorithms', 'datastructures', 'concurrency', 'heat', 'networking', 'interview', 'sql', 'cheatsheets'];
 const STEP_IDS = ['play', 'learn', 'build'];
+const MAX_TOASTS = 3;
 
 // Spanish URLs from before the routes were renamed
 const LEGACY_ROUTES = { 'que-es': 'about', perfil: 'profile', taller: 'workshop', mesa: 'area' };
-const LEGACY_AREAS = { algoritmos: 'algorithms', paralela: 'parallel', redes: 'networking', entrevistas: 'interviews', datos: 'databases' };
+const LEGACY_AREAS = { algoritmos: 'algorithms', paralela: 'parallel', redes: 'networking', entrevistas: 'problems', interviews: 'problems', datos: 'databases' };
 
 // What Bit says on each screen/step
 const TRACER_LINES = {
-  play: 'Usa las flechas del teclado (← →) para avanzar línea por línea. Cambia la entrada para ver otro recorrido.',
-  learn: 'Aquí está la idea detrás del problema que elegiste y cómo reconocer cuándo usarla.',
-  build: 'Una plantilla para reusar el patrón y consejos para explicarlo en voz alta.'
+  play: T('Usa las flechas del teclado (← →) para avanzar línea por línea. Cambia la entrada para ver otro recorrido.', 'Use the arrow keys (← →) to move line by line. Change the input to see a different run.'),
+  learn: T('Aquí está la idea detrás del problema que elegiste y cómo reconocer cuándo usarla.', 'Here is the idea behind the problem you picked and how to recognize when to use it.'),
+  build: T('Una plantilla para reusar el patrón y consejos para explicarlo en voz alta.', 'A template for reusing the pattern and tips for explaining it out loud.')
 };
 const GUIDE_LINES = {
-  workshop: 'Primero escoge una mesa de trabajo: cada una corresponde a un curso o tema. Si vas a una entrevista, prueba «Entrevistas Técnicas».',
-  area: 'Estas son las estaciones de esta mesa. Toca una para entrar.',
+  workshop: T('Primero escoge una mesa de trabajo: cada una corresponde a un curso o tema. Si quieres practicar para entrevistas, prueba «Problemas de Código».', 'First pick a workbench: each one matches a course or topic. If you want to practice for interviews, try "Coding Problems".'),
+  area: T('Estas son las estaciones de esta mesa. Toca una para entrar.', 'These are the stations at this workbench. Tap one to go in.'),
   algorithms: {
-    play: 'Escoge un algoritmo, dale a Iniciar y escucha: cada barra suena según su altura.',
-    learn: 'Aquí está la idea del algoritmo que elegiste y cuánto cuesta. Cambia de algoritmo en Experimenta y vuelve.',
-    build: 'Este código cambia según el algoritmo que tengas seleccionado.'
+    play: T('Escoge un algoritmo, dale a Iniciar y escucha: cada barra suena según su altura.', 'Pick an algorithm, press Start and listen: each bar sounds according to its height.'),
+    learn: T('Aquí está la idea del algoritmo que elegiste y cuánto cuesta. Cambia de algoritmo en Experimenta y vuelve.', 'Here is the idea behind the algorithm you picked and how much it costs. Switch algorithms in Experiment and come back.'),
+    build: T('Este código cambia según el algoritmo que tengas seleccionado.', 'This code changes with the algorithm you have selected.')
   },
   concurrency: {
-    play: 'Los autos son hilos. Apaga los semáforos o pulsa «Provocar deadlock» para ver la rotonda trabarse.',
-    learn: 'Un deadlock necesita cuatro condiciones a la vez. Rompe una y desaparece.',
-    build: 'Una versión simplificada de la rotonda con semáforos POSIX, lista para estudiar.'
+    play: T('Los autos son hilos. Apaga los semáforos o pulsa «Provocar deadlock» para ver la rotonda trabarse.', 'The cars are threads. Turn off the semaphores or press "Cause deadlock" to watch the roundabout lock up.'),
+    learn: T('Un deadlock necesita cuatro condiciones a la vez. Rompe una y desaparece.', 'A deadlock needs four conditions at once. Break one and it goes away.'),
+    build: T('Una versión simplificada de la rotonda con semáforos POSIX, lista para estudiar.', 'A simplified version of the roundabout with POSIX semaphores, ready to study.')
   },
   heat: {
-    play: 'Pon la velocidad en 1 y mira a cada hilo calcular su franja. Luego activa el hilo lento: verás a los demás esperando en la barrera.',
-    learn: 'Doble búfer, franjas, barrera y reducción: las cuatro ideas que hacen correcto y rápido este cálculo.',
-    build: 'El motor en C de este proyecto, con pthreads y OpenMP, y cómo correrlo para comparar.'
+    play: T('Pon la velocidad en 1 y mira a cada hilo calcular su franja. Luego activa el hilo lento: verás a los demás esperando en la barrera.', 'Set the speed to 1 and watch each thread compute its strip. Then turn on the slow thread: you will see the others waiting at the barrier.'),
+    learn: T('Doble búfer, franjas, barrera y reducción: las cuatro ideas que hacen correcto y rápido este cálculo.', 'Double buffering, strips, barrier and reduction: the four ideas that make this computation correct and fast.'),
+    build: T('El motor en C de este proyecto, con pthreads y OpenMP, y cómo correrlo para comparar.', 'The C engine of this project, with pthreads and OpenMP, and how to run it to compare.')
   },
   networking:  {
-    play: 'Envía una petición y mira cada paquete cruzar el cable. Usa ← y → para ir paso a paso.',
-    learn: 'Cliente, servidor, socket y pool de hilos, explicados sin rodeos.',
-    build: 'Un servidor TCP de verdad cabe en 30 líneas. Aquí lo tienes.'
+    play: T('Envía una petición y mira cada paquete cruzar el cable. Usa ← y → para ir paso a paso.', 'Send a request and watch each packet cross the wire. Use ← and → to go step by step.'),
+    learn: T('Cliente, servidor, socket y pool de hilos, explicados sin rodeos.', 'Client, server, socket and thread pool, explained plainly.'),
+    build: T('Un servidor TCP de verdad cabe en 30 líneas. Aquí lo tienes.', 'A real TCP server fits in 30 lines. Here it is.')
   },
   interview: TRACER_LINES,
   datastructures: TRACER_LINES,
   sql: {
-    play: 'Mira el orden de las líneas resaltadas: SQL no se ejecuta en el orden en que se escribe.',
+    play: T('Mira el orden de las líneas resaltadas: SQL no se ejecuta en el orden en que se escribe.', 'Watch the order of the highlighted lines: SQL does not run in the order it is written.'),
     learn: TRACER_LINES.learn,
-    build: 'Plantillas y trampas comunes de SQL, sobre todo con NULL.'
+    build: T('Plantillas y trampas comunes de SQL, sobre todo con NULL.', 'SQL templates and common pitfalls, especially with NULL.')
   },
-  cheatsheets: 'Mueve los controles de Amdahl: verás por qué más núcleos no siempre es más rápido.'
+  cheatsheets: T('Mueve los controles de Amdahl: verás por qué más núcleos no siempre es más rápido.', 'Move the Amdahl controls: you will see why more cores is not always faster.')
 };
 
 // First-visit walkthroughs (coach marks)
 const tracerTour = (id, what) => [
-  { sel: `#tracer-${id} .tr-picker`, title: 'Escoge un problema', text: `Cada tarjeta es ${what}. La etiqueta dice qué tan difícil es.` },
-  { sel: `#tracer-${id} .tr-code-wrap`, title: 'El código', text: 'La línea resaltada es la que se está ejecutando. Las más claras ya se ejecutaron.' },
-  { sel: `#tracer-${id} .tr-controls`, title: 'Los controles', text: 'Avanza o retrocede paso a paso, o dale Reproducir. Con el teclado: ← y →.' },
-  { sel: `#tracer-${id} .tr-stage`, title: 'Lo que pasa en memoria', text: 'Aquí ves los datos en cada paso. Debajo, la explicación y las variables (las que cambian se iluminan).' }
+  { sel: `#tracer-${id} .tr-picker`, title: T('Escoge un problema', 'Pick a problem'), text: T(`Cada tarjeta es ${what}. La etiqueta dice qué tan difícil es.`, `Each card is ${what}. The tag tells you how hard it is.`) },
+  { sel: `#tracer-${id} .tr-code-wrap`, title: T('El código', 'The code'), text: T('La línea resaltada es la que se está ejecutando. Las más claras ya se ejecutaron.', 'The highlighted line is the one running now. The lighter ones have already run.') },
+  { sel: `#tracer-${id} .tr-controls`, title: T('Los controles', 'The controls'), text: T('Avanza o retrocede paso a paso, o dale Reproducir. Con el teclado: ← y →.', 'Go forward or back step by step, or press Play. With the keyboard: ← and →.') },
+  { sel: `#tracer-${id} .tr-stage`, title: T('Lo que pasa en memoria', 'What happens in memory'), text: T('Aquí ves los datos en cada paso. Debajo, la explicación y las variables (las que cambian se iluminan).', 'Here you see the data at each step. Below, the explanation and the variables (the ones that change light up).') }
 ];
 const TOURS = {
   algorithms: [
-    { sel: '#algoSelect', title: 'Escoge un algoritmo', text: 'Hay ocho. Cada uno ordena de forma distinta. Empieza con Quick Sort.' },
-    { sel: '#algoPresets', title: '¿Cómo empieza el arreglo?', text: 'Un arreglo invertido es el peor caso de varios algoritmos. Vale la pena probarlo.' },
-    { sel: '#btnRunAlgo', title: '¡Dale play!', text: 'Mira y escucha. Puedes pausar cuando quieras.' },
-    { sel: '#algoStage', title: 'El escenario', text: 'Amarillo compara, rojo intercambia y verde ya está en su lugar. Abajo ves el marcador.' },
-    { sel: '#modSteps', title: 'Después, entiende', text: 'En «Entiende» está la idea y su costo. En «Implementa», el código.' }
+    { sel: '#algoSelect', title: T('Escoge un algoritmo', 'Pick an algorithm'), text: T('Hay ocho. Cada uno ordena de forma distinta. Empieza con Quick Sort.', 'There are eight. Each one sorts in a different way. Start with Quick Sort.') },
+    { sel: '#algoPresets', title: T('¿Cómo empieza el arreglo?', 'How does the array start?'), text: T('Un arreglo invertido es el peor caso de varios algoritmos. Vale la pena probarlo.', 'A reversed array is the worst case for several algorithms. It is worth trying.') },
+    { sel: '#btnRunAlgo', title: T('¡Dale play!', 'Press play!'), text: T('Mira y escucha. Puedes pausar cuando quieras.', 'Watch and listen. You can pause whenever you like.') },
+    { sel: '#algoStage', title: T('El escenario', 'The stage'), text: T('Amarillo compara, rojo intercambia y verde ya está en su lugar. Abajo ves el marcador.', 'Yellow compares, red swaps and green is already in place. The scoreboard is below.') },
+    { sel: '#modSteps', title: T('Después, entiende', 'Then, understand'), text: T('En «Entiende» está la idea y su costo. En «Implementa», el código.', 'The idea and its cost are in "Understand". The code is in "Implement".') }
   ],
   concurrency: [
-    { sel: '#concSubtabs', title: 'Dos simulaciones', text: 'La rotonda y dos patrones clásicos: el buffer acotado y los filósofos comensales.' },
-    { sel: '#concurrencyViewport', title: 'La rotonda', text: 'Cada auto es un hilo; cada cuadrante, un recurso con capacidad limitada.' },
-    { sel: '#deadlockButtons', title: 'Rómpela', text: 'Provoca un deadlock y luego resuélvelo con un semáforo.' },
-    { sel: '#modSteps', title: '¿Y por qué pasó?', text: 'La explicación está en «Entiende».' }
+    { sel: '#concSubtabs', title: T('Dos simulaciones', 'Two simulations'), text: T('La rotonda y dos patrones clásicos: el buffer acotado y los filósofos comensales.', 'The roundabout and two classic patterns: the bounded buffer and the dining philosophers.') },
+    { sel: '#concurrencyViewport', title: T('La rotonda', 'The roundabout'), text: T('Cada auto es un hilo; cada cuadrante, un recurso con capacidad limitada.', 'Each car is a thread; each quadrant, a resource with limited capacity.') },
+    { sel: '#deadlockButtons', title: T('Rómpela', 'Break it'), text: T('Provoca un deadlock y luego resuélvelo con un semáforo.', 'Cause a deadlock and then resolve it with a semaphore.') },
+    { sel: '#modSteps', title: T('¿Y por qué pasó?', 'So why did it happen?'), text: T('La explicación está en «Entiende».', 'The explanation is in "Understand".') }
   ],
   heat: [
-    { sel: '#heatCanvas', title: 'Una placa de metal', text: 'El color es la temperatura. Las líneas punteadas dividen la placa en franjas: una por hilo.' },
-    { sel: '#heatThreadCtl', title: '¿Cuántos hilos?', text: 'Cambia entre 1 y 8. El resultado final es idéntico; lo que cambia es cuánto tarda.' },
-    { sel: '#heatLanesPanel', title: 'Los hilos trabajando', text: 'Cada barra es un hilo. La parte rayada es tiempo perdido esperando en la barrera al más lento.' },
-    { sel: '#heatChartPanel', title: '¿Cuándo parar?', text: 'Cuando el cambio más grande baja de ε, la placa llegó al equilibrio.' }
+    { sel: '#heatCanvas', title: T('Una placa de metal', 'A metal plate'), text: T('El color es la temperatura. Las líneas punteadas dividen la placa en franjas: una por hilo.', 'The color is the temperature. The dotted lines split the plate into strips: one per thread.') },
+    { sel: '#heatThreadCtl', title: T('¿Cuántos hilos?', 'How many threads?'), text: T('Cambia entre 1 y 8. El resultado final es idéntico; lo que cambia es cuánto tarda.', 'Switch between 1 and 8. The final result is identical; what changes is how long it takes.') },
+    { sel: '#heatLanesPanel', title: T('Los hilos trabajando', 'The threads at work'), text: T('Cada barra es un hilo. La parte rayada es tiempo perdido esperando en la barrera al más lento.', 'Each bar is a thread. The striped part is time lost waiting at the barrier for the slowest one.') },
+    { sel: '#heatChartPanel', title: T('¿Cuándo parar?', 'When to stop?'), text: T('Cuando el cambio más grande baja de ε, la placa llegó al equilibrio.', 'When the largest change drops below ε, the plate has reached equilibrium.') }
   ],
   networking: [
-    { sel: '#netRequestForm', title: 'Lo que pide el cliente', text: 'Escoge una figura (o LIST) y envía la petición. Prueba también una figura que no existe o el método POST.' },
-    { sel: '#netScene', title: 'Dos computadoras y un cable', text: 'A la izquierda el cliente, a la derecha el servidor con su disco, sus hilos y su registro. Los paquetes viajan por el cable.' },
-    { sel: '#netPlayer', title: 'Paso a paso', text: 'Avanza, retrocede o reproduce. Los puntos muestran las fases: conexión, petición, servidor, respuesta y cierre.' },
-    { sel: '#packetInspector', title: 'Abre el paquete', text: 'Cada paquete por capas: direcciones IPv6, el encabezado TCP y, si lleva datos, el mensaje HTTP parte por parte.' }
+    { sel: '#netRequestForm', title: T('Lo que pide el cliente', 'What the client asks for'), text: T('Escoge una figura (o LIST) y envía la petición. Prueba también una figura que no existe o el método POST.', 'Pick a figure (or LIST) and send the request. Also try a figure that does not exist or the POST method.') },
+    { sel: '#netScene', title: T('Dos computadoras y un cable', 'Two computers and a wire'), text: T('A la izquierda el cliente, a la derecha el servidor con su disco, sus hilos y su registro. Los paquetes viajan por el cable.', 'On the left the client, on the right the server with its disk, its threads and its log. The packets travel along the wire.') },
+    { sel: '#netPlayer', title: T('Paso a paso', 'Step by step'), text: T('Avanza, retrocede o reproduce. Los puntos muestran las fases: conexión, petición, servidor, respuesta y cierre.', 'Go forward, go back or play. The dots show the phases: connection, request, server, response and close.') },
+    { sel: '#packetInspector', title: T('Abre el paquete', 'Open the packet'), text: T('Cada paquete por capas: direcciones IPv6, el encabezado TCP y, si lleva datos, el mensaje HTTP parte por parte.', 'Each packet layer by layer: IPv6 addresses, the TCP header and, if it carries data, the HTTP message part by part.') }
   ],
-  interview: tracerTour('interview', 'un problema clásico de entrevista'),
-  datastructures: tracerTour('datastructures', 'una estructura de datos con su operación típica'),
-  sql: tracerTour('sql', 'una consulta sobre la misma base de ejemplo')
+  interview: tracerTour('interview', T('un problema clásico de programación', 'a classic programming problem')),
+  datastructures: tracerTour('datastructures', T('una estructura de datos con su operación típica', 'a data structure with its typical operation')),
+  sql: tracerTour('sql', T('una consulta sobre la misma base de ejemplo', 'a query on the same sample database'))
 };
 
 // Bit is drawn twice, once per theme; the stylesheet shows the one that matches.
@@ -197,10 +198,11 @@ class App {
   // ── Routing ───────────────────────────────────────────────
   // Old Spanish URLs (shared links, bookmarks) still work: they are rewritten to the English ones
   legacyParts(parts) {
-    const first = LEGACY_ROUTES[parts[0]];
-    if (!first) return parts;
+    const first = LEGACY_ROUTES[parts[0]] || parts[0];
+    const renamedArea = first === 'area' && LEGACY_AREAS[parts[1]];
+    if (first === parts[0] && !renamedArea) return parts;
     const next = [first, ...parts.slice(1)];
-    if (parts[0] === 'mesa' && LEGACY_AREAS[parts[1]]) next[1] = LEGACY_AREAS[parts[1]];
+    if (renamedArea) next[1] = renamedArea;
     return next;
   }
 
@@ -274,7 +276,7 @@ class App {
     document.getElementById('activeMissionLabel').textContent = mod.title;
     const back = document.getElementById('btnBackToWelcome');
     back.href = mod.area ? `#/area/${mod.area}` : '#/workshop';
-    document.getElementById('modCrumb').textContent = mod.area ? `${AREAS[mod.area].title} /` : 'Taller /';
+    document.getElementById('modCrumb').textContent = mod.area ? `${AREAS[mod.area].title} /` : T('Taller /', 'Workshop /');
     document.getElementById('modSteps').hidden = !mod.steps;
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.id === `tab-${tabId}`));
   }
@@ -331,12 +333,12 @@ class App {
       this.renderAccountButton();
       this.updateProgressBadges();
       if (this.route === 'profile') this.renderProfile();
-      if (ev.type === 'record' && ev.isNew) this.showToast(`Logrado: ${ev.label}`);
+      if (ev.type === 'record' && ev.isNew) this.showToast(T(`Logrado: ${ev.label}`, `Done: ${ev.label}`));
       if (ev.type === 'auth' && ev.user && this.signingIn) {
         this.signingIn = false;
-        this.showToast(`Hola, ${ev.user.name.split(' ')[0]}. Tu progreso ahora se guarda en tu cuenta.`);
+        this.showToast(T(`Hola, ${ev.user.name.split(' ')[0]}. Tu progreso ahora se guarda en tu cuenta.`, `Hi, ${ev.user.name.split(' ')[0]}. Your progress is now saved to your account.`));
       }
-      if (ev.type === 'error') this.showToast('No se pudo sincronizar tu cuenta. Tu progreso sigue en este dispositivo.');
+      if (ev.type === 'error') this.showToast(T('No se pudo sincronizar tu cuenta. Tu progreso sigue en este dispositivo.', 'Your account could not be synced. Your progress is still on this device.'));
     });
 
     const btnIn = document.getElementById('btnSignIn');
@@ -345,18 +347,18 @@ class App {
       this.signingIn = true;
       try { await acc.signIn(); } catch (e) {
         this.signingIn = false;
-        if (!e || e.code !== 'auth/popup-closed-by-user') this.showToast(e && e.message ? e.message : 'No se pudo iniciar sesión.');
+        if (!e || e.code !== 'auth/popup-closed-by-user') this.showToast(e && e.message ? e.message : T('No se pudo iniciar sesión.', 'Could not sign in.'));
       } finally { btnIn.disabled = !acc.cloudAvailable; }
     });
     document.getElementById('btnSignOut').addEventListener('click', async () => {
       await acc.signOut();
-      this.showToast('Sesión cerrada. Este dispositivo vuelve a modo invitado.');
+      this.showToast(T('Sesión cerrada. Este dispositivo vuelve a modo invitado.', 'Signed out. This device is back in guest mode.'));
     });
     document.getElementById('btnResetProgress').addEventListener('click', () => {
-      const where = acc.signedIn ? 'de tu cuenta' : 'de este dispositivo';
-      if (window.confirm(`¿Borrar todo tu progreso ${where}? No se puede deshacer.`)) {
+      const where = acc.signedIn ? T('de tu cuenta', 'from your account') : T('de este dispositivo', 'from this device');
+      if (window.confirm(T(`¿Borrar todo tu progreso ${where}? No se puede deshacer.`, `Delete all your progress ${where}? This cannot be undone.`))) {
         acc.reset();
-        this.showToast('Progreso borrado.');
+        this.showToast(T('Progreso borrado.', 'Progress deleted.'));
       }
     });
 
@@ -374,7 +376,7 @@ class App {
     if (!acc || !btn) return;
     const u = acc.user;
     btn.classList.toggle('signed-in', !!u);
-    btn.title = u ? `Mi espacio · ${u.name}` : 'Mi espacio';
+    btn.title = u ? T(`Mi espacio · ${u.name}`, `My space · ${u.name}`) : T('Mi espacio', 'My space');
     btn.innerHTML = u && u.photoURL
       ? `<img src="${encodeURI(u.photoURL)}" alt="" referrerpolicy="no-referrer">`
       : '<svg class="ic"><use href="#i-user"/></svg>';
@@ -388,10 +390,10 @@ class App {
     const u = acc.user;
     const $ = (id) => document.getElementById(id);
 
-    $('profileName').textContent = u ? u.name : 'Invitado';
+    $('profileName').textContent = u ? u.name : T('Invitado', 'Guest');
     $('profileSub').textContent = u
-      ? 'Tu progreso se guarda en tu cuenta y te sigue a cualquier dispositivo.'
-      : 'Tu progreso se guarda solo en este dispositivo.';
+      ? T('Tu progreso se guarda en tu cuenta y te sigue a cualquier dispositivo.', 'Your progress is saved to your account and follows you to any device.')
+      : T('Tu progreso se guarda solo en este dispositivo.', 'Your progress is saved only on this device.');
     $('profileAvatar').innerHTML = u && u.photoURL
       ? `<img src="${encodeURI(u.photoURL)}" alt="" referrerpolicy="no-referrer">`
       : '<svg class="ic"><use href="#i-user"/></svg>';
@@ -399,9 +401,9 @@ class App {
     $('btnSignIn').disabled = !acc.cloudAvailable;
     $('btnSignOut').hidden = !u;
     $('profileNote').textContent = !acc.cloudAvailable
-      ? 'Las cuentas todavía no están activadas en este sitio. Mientras tanto, tu progreso se guarda en este dispositivo.'
-      : u ? '' : 'Inicia sesión para guardar tu progreso en la nube. Lo que ya hiciste aquí se suma a tu cuenta.';
-    $('profileLead').textContent = u ? `Hola, ${u.name.split(' ')[0]}. Esto es lo que llevas.` : 'Tu progreso en el taller.';
+      ? T('Las cuentas todavía no están activadas en este sitio. Mientras tanto, tu progreso se guarda en este dispositivo.', 'Accounts are not enabled on this site yet. In the meantime, your progress is saved on this device.')
+      : u ? '' : T('Inicia sesión para guardar tu progreso en la nube. Lo que ya hiciste aquí se suma a tu cuenta.', 'Sign in to save your progress in the cloud. What you have already done here is added to your account.');
+    $('profileLead').textContent = u ? T(`Hola, ${u.name.split(' ')[0]}. Esto es lo que llevas.`, `Hi, ${u.name.split(' ')[0]}. Here is what you have done so far.`) : T('Tu progreso en el taller.', 'Your progress in the workshop.');
 
     const all = acc.overall();
     $('overallPct').textContent = `${all.percent}%`;
@@ -413,15 +415,15 @@ class App {
     const cont = $('btnContinue');
     if (last && MODULES[last.station]) {
       cont.href = `#/workshop/${last.station}${last.step === 'learn' ? '' : '/' + last.step}`;
-      cont.innerHTML = `<svg class="ic"><use href="#i-arrow-r"/></svg>Continuar en ${esc(MODULES[last.station].title)}`;
+      cont.innerHTML = `<svg class="ic"><use href="#i-arrow-r"/></svg>${T('Continuar en', 'Continue in')} ${esc(MODULES[last.station].title)}`;
     } else {
       cont.href = '#/workshop';
-      cont.innerHTML = '<svg class="ic"><use href="#i-arrow-r"/></svg>Empezar';
+      cont.innerHTML = `<svg class="ic"><use href="#i-arrow-r"/></svg>${T('Empezar', 'Start')}`;
     }
 
-    const stepNames = { play: 'Experimenta', learn: 'Entiende', build: 'Implementa' };
+    const stepNames = { play: T('Experimenta', 'Experiment'), learn: T('Entiende', 'Understand'), build: T('Implementa', 'Implement') };
     const groups = [...Object.keys(AREAS).map((a) => ({ title: AREAS[a].title, ids: MODULE_ORDER.filter((m) => MODULES[m].area === a) })),
-      { title: 'Repaso', ids: MODULE_ORDER.filter((m) => !MODULES[m].area) }];
+      { title: T('Repaso', 'Review'), ids: MODULE_ORDER.filter((m) => !MODULES[m].area) }];
     $('progressList').innerHTML = groups.filter((g) => g.ids.length).map((g) => `
       <section class="progress-area">
         <h3>${esc(g.title)}</h3>
@@ -449,7 +451,7 @@ class App {
       if (!b) { b = document.createElement('span'); b.className = 'card-progress'; el.appendChild(b); }
       const complete = done === total;
       b.classList.toggle('complete', complete);
-      b.innerHTML = complete ? '<svg class="ic"><use href="#i-check"/></svg>completa' : `${done} / ${total}`;
+      b.innerHTML = complete ? `<svg class="ic"><use href="#i-check"/></svg>${T('completa', 'complete')}` : `${done} / ${total}`;
     };
     document.querySelectorAll('.station-card[data-tab]').forEach((card) => {
       const st = acc.stats(card.dataset.tab);
@@ -528,10 +530,10 @@ class App {
   renderTourStep() {
     const steps = TOURS[this.tour.id];
     const s = steps[this.tour.i];
-    document.getElementById('tourStep').textContent = `Paso ${this.tour.i + 1} de ${steps.length}`;
+    document.getElementById('tourStep').textContent = T(`Paso ${this.tour.i + 1} de ${steps.length}`, `Step ${this.tour.i + 1} of ${steps.length}`);
     document.getElementById('tourTitle').textContent = s.title;
     document.getElementById('tourText').textContent = s.text;
-    document.getElementById('tourNext').textContent = this.tour.i === steps.length - 1 ? '¡Listo!' : 'Siguiente';
+    document.getElementById('tourNext').textContent = this.tour.i === steps.length - 1 ? T('¡Listo!', 'Done!') : T('Siguiente', 'Next');
     const target = document.querySelector(s.sel);
     if (target) {
       const r = target.getBoundingClientRect();
@@ -589,16 +591,27 @@ class App {
     btnMute.addEventListener('click', () => {
       const isMuted = window.soundController.toggleMute();
       btnMute.innerHTML = `<svg class="ic"><use href="#i-${isMuted ? 'mute' : 'sound'}"/></svg>`;
-      btnMute.title = isMuted ? 'Activar sonido' : 'Silenciar sonido';
-      this.showToast(isMuted ? 'Sonido apagado' : 'Sonido encendido');
+      btnMute.title = isMuted ? T('Activar sonido', 'Turn sound on') : T('Silenciar sonido', 'Mute sound');
+      this.showToast(isMuted ? T('Sonido apagado', 'Sound off') : T('Sonido encendido', 'Sound on'));
     });
+
+    // Language: the button names the language you would switch to
+    const btnLang = document.getElementById('btnLang');
+    if (btnLang && window.I18n) {
+      const next = window.I18n.other();
+      const label = next === 'en' ? 'Switch to English' : 'Cambiar a español';
+      btnLang.textContent = window.I18n.LANGS[next].short;
+      btnLang.title = label;
+      btnLang.setAttribute('aria-label', label);
+      btnLang.addEventListener('click', () => window.I18n.toggle());
+    }
 
     // Visual theme: lab (default) or the original wooden workshop
     const btnTheme = document.getElementById('btnTheme');
     const syncTheme = () => {
       if (!btnTheme || !window.Theme) return;
       const wood = window.Theme.current() === 'madera';
-      const label = wood ? 'Cambiar al laboratorio' : 'Cambiar al taller de madera';
+      const label = wood ? T('Cambiar al laboratorio', 'Switch to the lab') : T('Cambiar al taller de madera', 'Switch to the wooden workshop');
       btnTheme.title = label;
       btnTheme.setAttribute('aria-label', label);
       btnTheme.setAttribute('aria-pressed', String(wood));
@@ -608,7 +621,8 @@ class App {
       btnTheme.addEventListener('click', () => {
         const theme = window.Theme.toggle();
         syncTheme();
-        this.showToast(`Tema: ${window.Theme.THEMES[theme].label}`);
+        const themeEn = { lab: 'Lab', madera: 'Wooden workshop' };
+        this.showToast(T(`Tema: ${window.Theme.THEMES[theme].label}`, `Theme: ${themeEn[theme] || window.Theme.THEMES[theme].label}`));
       });
       // Canvas stations repaint on resize; reuse that to pick up the new colours
       window.addEventListener('themechange', () => window.dispatchEvent(new Event('resize')));
@@ -645,17 +659,25 @@ class App {
     });
   }
 
+  // At most MAX_TOASTS are visible: a new one pushes the oldest out
   showToast(message, duration = 2600) {
     const container = document.getElementById('toastContainer');
     if (!container) return;
+    this.toasts = (this.toasts || []).filter((el) => el.isConnected !== false && !el.dataset.gone);
+    while (this.toasts.length >= MAX_TOASTS) {
+      const oldest = this.toasts.shift();
+      oldest.dataset.gone = '1';
+      oldest.remove();
+    }
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.textContent = message;
     container.appendChild(toast);
+    this.toasts.push(toast);
     setTimeout(() => {
       toast.style.transition = 'opacity .3s ease';
       toast.style.opacity = '0';
-      setTimeout(() => toast.remove(), 300);
+      setTimeout(() => { toast.dataset.gone = '1'; toast.remove(); }, 300);
     }, duration);
   }
 }

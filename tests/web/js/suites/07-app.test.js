@@ -58,7 +58,7 @@ module.exports = (t, { createEnv, read }) => {
       urls.forEach((u) => t.ok(['about', 'profile', 'workshop', 'area'].includes(u), u));
       t.ok(!/#\/(taller|mesa|que-es|perfil)/.test(read('web/js/app.js').replace(/LEGACY_[A-Z]+ = [^\n]*/g, '')));
     });
-    t.test('opening a station remembers its bench', () => t.eq(at('#/workshop/interview').currentArea, 'interviews'));
+    t.test('opening a station remembers its bench', () => t.eq(at('#/workshop/interview').currentArea, 'problems'));
     t.test('the back button of a station leads to its bench', () => { const ctx = fresh(); const app = new ctx.App(); app.init(); app.switchTab('networking'); t.eq(ctx.env.document.getElementById('btnBackToWelcome').href, '#/area/networking'); });
     t.test('the notebook goes back to the work areas', () => { const ctx = fresh(); const app = new ctx.App(); app.init(); app.switchTab('cheatsheets'); t.eq(ctx.env.document.getElementById('btnBackToWelcome').href, '#/workshop'); });
     t.test('the breadcrumb names the bench', () => { const ctx = fresh(); const app = new ctx.App(); app.init(); app.switchTab('sql'); t.eq(ctx.env.document.getElementById('modCrumb').textContent, 'Bases de Datos /'); });
