@@ -5,7 +5,7 @@ module.exports = (t, { createEnv, mulberry32 }) => {
   const env = createEnv();
   env.load('js/tracer.js');
   env.load('js/modules/interview.js');
-  const stn = env.window.interviewStation;
+  const stn = { problems: env.window.problemStations.all }; // the whole catalogue, all levels
   const P = Object.fromEntries(stn.problems.map((p) => [p.id, p]));
   const last = (frames) => frames[frames.length - 1];
   const rand = mulberry32(2024);

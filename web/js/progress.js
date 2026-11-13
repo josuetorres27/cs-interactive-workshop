@@ -19,9 +19,13 @@
       items: [run('quick', 'Quick Sort'), run('merge', 'Merge Sort'), run('heap', 'Heap Sort'), run('shell', 'Shell Sort'),
         run('insertion', 'Insertion Sort'), run('selection', 'Selection Sort'), run('bubble', 'Bubble Sort'), run('radix', 'Radix Sort')]
     },
-    datastructures: {
-      title: T('Estructuras de datos', 'Data structures'),
-      items: [walk('valid-parens', T('Paréntesis balanceados', 'Balanced parentheses')), walk('reverse-list', T('Invertir una lista enlazada', 'Reverse a linked list')), walk('bst-insert', T('Insertar en un BST', 'Insert into a BST'))]
+    'datastructures-easy': {
+      title: T('Estructuras de datos · Fácil', 'Data structures · Easy'),
+      items: [walk('valid-parens', T('Paréntesis balanceados', 'Balanced parentheses')), walk('reverse-list', T('Invertir una lista enlazada', 'Reverse a linked list'))]
+    },
+    'datastructures-medium': {
+      title: T('Estructuras de datos · Media', 'Data structures · Medium'),
+      items: [walk('bst-insert', T('Insertar en un BST', 'Insert into a BST'))]
     },
     concurrency: {
       title: T('La Rotonda', 'The Roundabout'),
@@ -50,16 +54,23 @@
         { id: 'exchange:bad', label: T('Provocar un 400 Bad Request', 'Trigger a 400 Bad Request') }
       ]
     },
-    interview: {
-      title: T('Problemas clásicos', 'Classic problems'),
+    'problems-easy': {
+      title: T('Problemas clásicos · Fácil', 'Classic problems · Easy'),
       items: [
-        // Fácil
         walk('valid-palindrome', T('¿Es palíndromo?', 'Is it a palindrome?')), walk('valid-parentheses', T('Paréntesis balanceados', 'Balanced parentheses')), walk('binary-search', T('Búsqueda binaria', 'Binary search')),
-        walk('best-time-stock', T('Mejor día para comprar y vender', 'Best day to buy and sell')),
-        // Media
+        walk('best-time-stock', T('Mejor día para comprar y vender', 'Best day to buy and sell'))
+      ]
+    },
+    'problems-medium': {
+      title: T('Problemas clásicos · Media', 'Classic problems · Medium'),
+      items: [
         walk('two-sum-sorted', T('Par con suma objetivo', 'Pair with a target sum')), walk('max-water', T('El contenedor con más agua', 'Container with the most water')), walk('merge-intervals', T('Fusionar intervalos', 'Merge intervals')),
-        walk('longest-unique', T('Subcadena más larga sin repetir', 'Longest substring without repeats')), walk('number-of-islands', T('Contar islas', 'Number of islands')), walk('coin-change', T('Cambio con menos monedas', 'Coin change with the fewest coins')),
-        // Difícil
+        walk('longest-unique', T('Subcadena más larga sin repetir', 'Longest substring without repeats')), walk('number-of-islands', T('Contar islas', 'Number of islands')), walk('coin-change', T('Cambio con menos monedas', 'Coin change with the fewest coins'))
+      ]
+    },
+    'problems-hard': {
+      title: T('Problemas clásicos · Difícil', 'Classic problems · Hard'),
+      items: [
         walk('trap-rain', T('Atrapar agua de lluvia', 'Trapping rain water')), walk('sliding-max', T('Máximo en ventana deslizante', 'Sliding window maximum')), walk('largest-rectangle', T('Rectángulo más grande del histograma', 'Largest rectangle in a histogram'))
       ]
     },
@@ -73,6 +84,13 @@
     }
   };
 
+  // Stations that were later split by difficulty. Their saved progress is handed to the new
+  // stations: each item goes to the level that now owns it, and visits and steps go to all of them.
+  const LEGACY = {
+    interview: ['problems-easy', 'problems-medium', 'problems-hard'],
+    datastructures: ['datastructures-easy', 'datastructures-medium']
+  };
+
   function empty() { return { version: VERSION, stations: {}, last: null }; }
 
   const isObj = (o) => o !== null && typeof o === 'object' && !Array.isArray(o);
@@ -81,19 +99,25 @@
   function sanitize(raw) {
     const out = empty();
     if (!isObj(raw) || !isObj(raw.stations)) return out;
+    const sources = (id) => [raw.stations[id], ...Object.keys(LEGACY).filter((old) => LEGACY[old].includes(id)).map((old) => raw.stations[old])].filter(isObj);
+    const valid = (v) => typeof v === 'number' && Number.isFinite(v) && v > 0;
     Object.keys(CHECKLISTS).forEach((id) => {
-      const s = raw.stations[id];
-      if (!isObj(s)) return;
-      const clean = { visited: !!s.visited, steps: {}, items: {} };
-      if (isObj(s.steps)) STEPS.forEach((st) => { if (s.steps[st]) clean.steps[st] = true; });
-      if (isObj(s.items)) CHECKLISTS[id].items.forEach(({ id: item }) => {
-        const v = s.items[item];
-        if (typeof v === 'number' && Number.isFinite(v) && v > 0) clean.items[item] = v;
+      const found = sources(id);
+      if (!found.length) return;
+      const clean = { visited: false, steps: {}, items: {} };
+      found.forEach((s) => {
+        if (s.visited) clean.visited = true;
+        if (isObj(s.steps)) STEPS.forEach((st) => { if (s.steps[st]) clean.steps[st] = true; });
+        if (isObj(s.items)) CHECKLISTS[id].items.forEach(({ id: item }) => {
+          const v = s.items[item];
+          if (valid(v)) clean.items[item] = clean.items[item] ? Math.min(clean.items[item], v) : v;
+        });
       });
       out.stations[id] = clean;
     });
-    if (isObj(raw.last) && CHECKLISTS[raw.last.station] && STEPS.includes(raw.last.step) && typeof raw.last.at === 'number') {
-      out.last = { station: raw.last.station, step: raw.last.step, at: raw.last.at };
+    const lastStation = isObj(raw.last) && (LEGACY[raw.last.station] ? LEGACY[raw.last.station][0] : raw.last.station);
+    if (lastStation && CHECKLISTS[lastStation] && STEPS.includes(raw.last.step) && typeof raw.last.at === 'number') {
+      out.last = { station: lastStation, step: raw.last.step, at: raw.last.at };
     }
     return out;
   }
@@ -163,7 +187,7 @@
     return { done, total, percent: total ? Math.round((done / total) * 100) : 0, stationsComplete: complete, stations: Object.keys(CHECKLISTS).length };
   }
 
-  const api = { VERSION, STEPS, CHECKLISTS, empty, sanitize, record, visit, merge, stationStats, overall };
+  const api = { VERSION, STEPS, CHECKLISTS, LEGACY, empty, sanitize, record, visit, merge, stationStats, overall };
   root.Progress = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);

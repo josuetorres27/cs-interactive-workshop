@@ -226,11 +226,13 @@
 
     skeleton() {
       const diffCls = { 'Fácil': 'easy', 'Media': 'mid', 'Difícil': 'hard', Easy: 'easy', Medium: 'mid', Hard: 'hard' };
-      // Long catalogues get one row per difficulty; short ones keep a badge on every button.
+      // Long mixed catalogues get one row per difficulty; short mixed ones keep a badge on every button.
+      // A station with a single level (the usual case) needs no badges: its name already says the level.
       const levels = [...new Set(this.problems.map((p) => p.difficulty))];
       const grouped = this.problems.length > 6 && levels.length > 1;
+      const badges = !grouped && levels.length > 1;
       const badge = (d, extra = '') => `<span class="diff ${diffCls[d] || 'mid'}${extra}">${esc(d)}</span>`;
-      const pick = (p) => `<button class="tr-pick" data-id="${p.id}" role="tab" title="${esc(p.difficulty)} · ${esc(p.pattern)}">${grouped ? '' : badge(p.difficulty)}${esc(p.title)}</button>`;
+      const pick = (p) => `<button class="tr-pick" data-id="${p.id}" role="tab" title="${esc(p.difficulty)} · ${esc(p.pattern)}">${badges ? badge(p.difficulty) : ''}${esc(p.title)}</button>`;
       const picker = grouped
         ? `<div class="tr-picker grouped">${levels.map((d) => `
           <div class="tr-group" role="tablist" aria-label="${T('Dificultad', 'Difficulty')}: ${esc(d)}">${badge(d, ' tr-group-label')}${this.problems.filter((p) => p.difficulty === d).map(pick).join('')}</div>`).join('')}
@@ -455,5 +457,19 @@
     }
   }
 
-  window.Tracer = { TraceStation, Recorder, viz, highlight, esc, fmt };
+  // A catalogue that mixes difficulties becomes one station per level, in this order:
+  // stations '<prefix>-easy', '<prefix>-medium' and '<prefix>-hard' (levels with no problems are left out).
+  const LEVELS = ['easy', 'medium', 'hard'];
+  const LEVEL_OF = { 'Fácil': 'easy', 'Media': 'medium', 'Difícil': 'hard', Easy: 'easy', Medium: 'medium', Hard: 'hard' };
+  const levelOf = (p) => LEVEL_OF[p.difficulty] || 'medium';
+  function byLevel(prefix, problems) {
+    const out = { all: problems };
+    LEVELS.forEach((l) => {
+      const list = problems.filter((p) => levelOf(p) === l);
+      if (list.length) out[l] = new TraceStation(`${prefix}-${l}`, list);
+    });
+    return out;
+  }
+
+  window.Tracer = { TraceStation, Recorder, viz, highlight, esc, fmt, LEVELS, levelOf, byLevel };
 })();

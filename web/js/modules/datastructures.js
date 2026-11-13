@@ -322,5 +322,6 @@ def inorder(root):        # devuelve las claves ordenadas
     }
   };
 
-  window.dsStation = new TraceStation('datastructures', [parens, reverseList, bst]);
+  // One station per difficulty: datastructures-easy and datastructures-medium.
+  window.dsStations = window.Tracer.byLevel('datastructures', [parens, reverseList, bst]);
 })();

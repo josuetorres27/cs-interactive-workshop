@@ -28,7 +28,7 @@ module.exports = (t, { createEnv, read }) => {
         });
       }));
     });
-    t.test('the tracer stations point at a global station object', () => Object.values(MODULES).filter((m) => m.tracer).forEach((m) => t.ok(/Station$/.test(m.tracer))));
+    t.test('the tracer stations point at a global station object (or one level of a split station)', () => Object.values(MODULES).filter((m) => m.tracer).forEach((m) => t.ok(/^\w+Station$|^\w+Stations\.(easy|medium|hard)$/.test(m.tracer), m.tracer)));
     t.test('Bit the robot blinks', () => t.includes(BIT_SVG, 'class="blink"'));
   });
 
@@ -58,7 +58,19 @@ module.exports = (t, { createEnv, read }) => {
       urls.forEach((u) => t.ok(['about', 'profile', 'workshop', 'area'].includes(u), u));
       t.ok(!/#\/(taller|mesa|que-es|perfil)/.test(read('web/js/app.js').replace(/LEGACY_[A-Z]+ = [^\n]*/g, '')));
     });
-    t.test('opening a station remembers its bench', () => t.eq(at('#/workshop/interview').currentArea, 'problems'));
+    t.test('opening a station remembers its bench', () => t.eq(at('#/workshop/problems-hard').currentArea, 'problems'));
+    t.test('links to the stations that were split by difficulty open the easiest level', () => {
+      [['#/workshop/interview', 'problems-easy'], ['#/workshop/datastructures', 'datastructures-easy'], ['#/taller/interview/build', 'problems-easy']].forEach(([old, tab]) => {
+        const a = at(old); t.eq(a.route, 'module', old); t.eq(a.currentTab, tab, old);
+      });
+    });
+    t.test('each split station opens its own tracer', () => {
+      const env = createEnv(); env.load('js/tracer.js'); env.load('js/modules/interview.js'); env.load('js/modules/datastructures.js');
+      const app = new (env.load('js/app.js', ['App']).App)(); app.init();
+      ['problems-easy', 'problems-medium', 'problems-hard', 'datastructures-easy', 'datastructures-medium'].forEach((id) => {
+        app.switchTab(id); const tr = app.tracer(); t.ok(tr, id); t.eq(tr && tr.id, id);
+      });
+    });
     t.test('the back button of a station leads to its bench', () => { const ctx = fresh(); const app = new ctx.App(); app.init(); app.switchTab('networking'); t.eq(ctx.env.document.getElementById('btnBackToWelcome').href, '#/area/networking'); });
     t.test('the notebook goes back to the work areas', () => { const ctx = fresh(); const app = new ctx.App(); app.init(); app.switchTab('cheatsheets'); t.eq(ctx.env.document.getElementById('btnBackToWelcome').href, '#/workshop'); });
     t.test('the breadcrumb names the bench', () => { const ctx = fresh(); const app = new ctx.App(); app.init(); app.switchTab('sql'); t.eq(ctx.env.document.getElementById('modCrumb').textContent, 'Bases de Datos /'); });
