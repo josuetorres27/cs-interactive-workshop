@@ -174,7 +174,9 @@ function createEnv({ seed = 1 } = {}) {
     TextEncoder, TextDecoder,
     Blob: class { constructor(parts) { this.parts = parts; } },
     URL: { createObjectURL: () => 'blob:x', revokeObjectURL: () => {} },
-    module: undefined
+    module: undefined,
+    // Inline translations: Spanish unless a test loaded js/i18n.js in English
+    T: (es, en) => (window.I18n ? window.I18n.t(es, en) : es)
   };
   window.document = document;
   window.localStorage = localStorage;
