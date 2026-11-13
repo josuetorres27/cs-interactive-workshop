@@ -118,7 +118,7 @@ class HeatStation {
   }
   renderPlayButton() {
     const b = this.$('heatPlay');
-    if (b) b.innerHTML = this.running ? '<svg class="ic"><use href="#i-pause"/></svg>Pausar' : '<svg class="ic"><use href="#i-play"/></svg>Iniciar';
+    if (b) b.innerHTML = this.running ? `<svg class="ic"><use href="#i-pause"/></svg>${T('Pausar', 'Pause')}` : `<svg class="ic"><use href="#i-play"/></svg>${T('Iniciar', 'Start')}`;
   }
 
   // ── Simulation steps ────────────────────────────────────
@@ -269,7 +269,7 @@ class HeatStation {
       ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
       ctx.fillText(label, 13, ty + th / 2 + 1);
       if (animated && this.running && this.sweep.done[t] >= size) {
-        const msg = 'en la barrera';
+        const msg = T('en la barrera', 'at the barrier');
         const mw = ctx.measureText(msg).width + 14;
         ctx.fillStyle = this.tc('--paper', '#f8fafc');
         ctx.beginPath(); ctx.roundRect(w - mw - 6, ty, mw, th, 9); ctx.fill(); ctx.stroke();
@@ -283,10 +283,10 @@ class HeatStation {
     const esc = (s) => String(s);
     this.$('heatLanes').innerHTML = this.bands.map((b, t) => `
       <div class="lane" style="--c:${this.colors[t % this.colors.length]}">
-        <span class="lane-name">Hilo ${t}</span>
-        <span class="lane-rows">filas ${b.begin}–${b.end - 1} (${b.end - b.begin})${this.slowFactors[t] ? ' · lento' : ''}</span>
+        <span class="lane-name">${T(`Hilo ${t}`, `Thread ${t}`)}</span>
+        <span class="lane-rows">${T('filas', 'rows')} ${b.begin}–${b.end - 1} (${b.end - b.begin})${this.slowFactors[t] ? T(' · lento', ' · slow') : ''}</span>
         <div class="lane-bar"><i class="lane-busy"></i><i class="lane-wait"></i></div>
-        <span class="lane-state" id="heatLaneState${esc(t)}">listo</span>
+        <span class="lane-state" id="heatLaneState${esc(t)}">${T('listo', 'ready')}</span>
       </div>`).join('');
   }
 
@@ -306,14 +306,16 @@ class HeatStation {
       const state = this.status === 'converged' ? 'terminó' : this.status === 'diverged' ? 'se detuvo'
         : !this.running ? 'en pausa' : !animated ? 'calculando' : waiting ? 'en la barrera' : 'calculando';
       const el = lane.querySelector('.lane-state');
-      if (el.textContent !== state) { el.textContent = state; el.dataset.state = state; }
+      // `state` stays in Spanish as the data-state key the stylesheet matches; only the visible text is translated
+      const stateText = { 'terminó': T('terminó', 'done'), 'se detuvo': T('se detuvo', 'stopped'), 'en pausa': T('en pausa', 'paused'), 'calculando': T('calculando', 'computing'), 'en la barrera': T('en la barrera', 'at the barrier') }[state];
+      if (el.textContent !== stateText) { el.textContent = stateText; el.dataset.state = state; }
     });
 
     if (!full) return;
     const it = this.plate.iteration;
     const last = this.history[this.history.length - 1];
     this.$('heatIter').textContent = it;
-    this.$('heatDelta').textContent = last === undefined ? '—' : !Number.isFinite(last) || last > 1e6 ? 'explotó' : last >= 0.01 ? last.toFixed(3) : last.toExponential(1);
+    this.$('heatDelta').textContent = last === undefined ? '—' : !Number.isFinite(last) || last > 1e6 ? T('explotó', 'blew up') : last >= 0.01 ? last.toFixed(3) : last.toExponential(1);
     this.$('heatSpeedup').textContent = `${this.cost.speedup.toFixed(2)}x`;
     this.$('heatEff').textContent = `${Math.round(this.cost.efficiency * 100)}%`;
     const waitShare = this.cost.wait.reduce((a, b) => a + b, 0) / (span * this.bands.length);
@@ -334,7 +336,7 @@ class HeatStation {
     const total = iters.reduce((s, c) => s + c.span, 0);
     const scale = (W - left - 8) / total;
     const ink = this.tc('--box-ink', '#1b2027');
-    let s =`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Tiempo ocupado y en espera por hilo"><defs><pattern id="heatHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="${this.tc('--chip-wait', '#e3e9ef')}"/><line x1="0" y1="0" x2="0" y2="6" stroke="${this.tc('--ply-edge', '#98a2ad')}" stroke-width="3"/></pattern></defs>`;
+    let s =`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${T('Tiempo ocupado y en espera por hilo', 'Busy and waiting time per thread')}"><defs><pattern id="heatHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="${this.tc('--chip-wait', '#e3e9ef')}"/><line x1="0" y1="0" x2="0" y2="6" stroke="${this.tc('--ply-edge', '#98a2ad')}" stroke-width="3"/></pattern></defs>`;
     for (let t = 0; t < P; t++) {
       const y = top + t * (laneH + gap);
       s += `<text x="${left - 8}" y="${y + laneH - 4}" class="hl-label">H${t}</text>`;
@@ -350,7 +352,7 @@ class HeatStation {
     iters.forEach((c, k) => {
       x += c.span * scale;
       s += `<line x1="${x}" x2="${x}" y1="${top - 3}" y2="${top + P * (laneH + gap) - gap + 3}" stroke="${ink}" stroke-width="3" stroke-dasharray="4 3"/>`;
-      if (k === iters.length - 1) s += `<text x="${x}" y="${H - 3}" class="hl-axis" text-anchor="end">barrera</text>`;
+      if (k === iters.length - 1) s += `<text x="${x}" y="${H - 3}" class="hl-axis" text-anchor="end">${T('barrera', 'barrier')}</text>`;
     });
     s += '</svg>';
     svg.innerHTML = s;
@@ -366,7 +368,7 @@ class HeatStation {
     const n = Math.max(this.history.length, 50);
     const X = (i) => l + (i / n) * (W - l - r);
     const Y = (d) => t + (1 - (Math.min(Math.max(Math.log10(d), minLog), maxLog) - minLog) / (maxLog - minLog)) * (H - t - b);
-    let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Cambio máximo por iteración">`;
+    let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${T('Cambio máximo por iteración', 'Maximum change per iteration')}">`;
     for (let e = Math.ceil(minLog); e <= Math.floor(maxLog); e++) {
       s += `<line x1="${l}" x2="${W - r}" y1="${Y(10 ** e)}" y2="${Y(10 ** e)}" class="hc-grid"/><text x="${l - 6}" y="${Y(10 ** e) + 4}" class="hc-axis" text-anchor="end">${e >= 0 ? 10 ** e : `1e${e}`}</text>`;
     }
@@ -382,36 +384,36 @@ class HeatStation {
       if (Number.isFinite(lastD) && lastD > 0) pts.push(`${X(lastI).toFixed(1)},${Y(lastD).toFixed(1)}`);
       s += `<polyline points="${pts.join(' ')}" class="hc-line ${this.status === 'diverged' ? 'bad' : ''}"/>`;
     }
-    s += `<line x1="${l}" x2="${W - r}" y1="${H - b}" y2="${H - b}" class="hc-base"/><text x="${W - r}" y="${H - 6}" class="hc-axis" text-anchor="end">iteración ${this.plate.iteration}</text>`;
+    s += `<line x1="${l}" x2="${W - r}" y1="${H - b}" y2="${H - b}" class="hc-base"/><text x="${W - r}" y="${H - 6}" class="hc-axis" text-anchor="end">${T('iteración', 'iteration')} ${this.plate.iteration}</text>`;
     el.innerHTML = s + '</svg>';
   }
 
   renderNote(waitShare) {
     const it = this.plate.iteration;
-    let title = 'Así trabajan los hilos', text;
+    let title = T('Así trabajan los hilos', 'How the threads work'), text;
     if (this.status === 'converged') {
-      title = 'Equilibrio';
-      text = `La placa dejó de cambiar en <b>${it} iteraciones</b>: ningún punto cambió más de ε = ${this.eps}. Prueba otro número de hilos: el resultado es exactamente el mismo.`;
+      title = T('Equilibrio', 'Equilibrium');
+      text = T(`La placa dejó de cambiar en <b>${it} iteraciones</b>: ningún punto cambió más de ε = ${this.eps}. Prueba otro número de hilos: el resultado es exactamente el mismo.`, `The plate stopped changing after <b>${it} iterations</b>: no point changed by more than ε = ${this.eps}. Try a different number of threads: the result is exactly the same.`);
     } else if (this.status === 'diverged') {
-      title = 'Se volvió inestable';
-      text = `Con r = ${this.r.toFixed(2)} (mayor que 1/4) cada paso amplifica el error en vez de suavizarlo. Baja r a 0.25 o menos y reinicia.`;
+      title = T('Se volvió inestable', 'It became unstable');
+      text = T(`Con r = ${this.r.toFixed(2)} (mayor que 1/4) cada paso amplifica el error en vez de suavizarlo. Baja r a 0.25 o menos y reinicia.`, `With r = ${this.r.toFixed(2)} (greater than 1/4) each step amplifies the error instead of smoothing it out. Lower r to 0.25 or less and reset.`);
     } else if (this.bands.length > 1 && waitShare > 0.2) {
-      title = 'Desbalance de carga';
-      text = `Los hilos pasan en promedio el <b>${Math.round(waitShare * 100)}%</b> de cada iteración esperando en la barrera, porque nadie puede seguir hasta que termine el más lento. Por eso la aceleración baja a ${this.cost.speedup.toFixed(2)}x.`;
+      title = T('Desbalance de carga', 'Load imbalance');
+      text = T(`Los hilos pasan en promedio el <b>${Math.round(waitShare * 100)}%</b> de cada iteración esperando en la barrera, porque nadie puede seguir hasta que termine el más lento. Por eso la aceleración baja a ${this.cost.speedup.toFixed(2)}x.`, `On average the threads spend <b>${Math.round(waitShare * 100)}%</b> of each iteration waiting at the barrier, because nobody can continue until the slowest one finishes. That is why the speedup drops to ${this.cost.speedup.toFixed(2)}x.`);
     } else if (this.running && this.speed <= 3) {
-      text = 'Cada hilo calcula las filas de su franja al mismo tiempo que los demás. Las filas ya calculadas muestran la placa nueva; las demás todavía la vieja. Cuando todos llegan a la barrera, se intercambian las placas.';
+      text = T('Cada hilo calcula las filas de su franja al mismo tiempo que los demás. Las filas ya calculadas muestran la placa nueva; las demás todavía la vieja. Cuando todos llegan a la barrera, se intercambian las placas.', 'Each thread computes the rows of its band at the same time as the others. The rows already computed show the new plate; the rest still show the old one. When every thread reaches the barrier, the plates are swapped.');
     } else if (this.running) {
-      text = `Iteración ${it}. Al final de cada una, los hilos se esperan en la barrera y comparan su cambio máximo para decidir si siguen.`;
+      text = T(`Iteración ${it}. Al final de cada una, los hilos se esperan en la barrera y comparan su cambio máximo para decidir si siguen.`, `Iteration ${it}. At the end of each one, the threads wait for each other at the barrier and compare their maximum change to decide whether to continue.`);
     } else {
-      text = `${this.bands.length === 1 ? 'Un solo hilo calcula toda la placa.' : `${this.bands.length} hilos se reparten las ${this.rows - 2} filas interiores.`} Dale Iniciar, o dibuja calor sobre la placa.`;
+      text = T(`${this.bands.length === 1 ? 'Un solo hilo calcula toda la placa.' : `${this.bands.length} hilos se reparten las ${this.rows - 2} filas interiores.`} Dale Iniciar, o dibuja calor sobre la placa.`, `${this.bands.length === 1 ? 'A single thread computes the whole plate.' : `${this.bands.length} threads share the ${this.rows - 2} interior rows.`} Press Start, or draw heat on the plate.`);
     }
     this.$('heatNoteTitle').textContent = title;
     this.$('heatNote').innerHTML = text;
   }
 
   renderSpeed() {
-    const labels = ['', 'fila por fila', 'lento', 'normal'];
-    this.$('heatSpeedVal').textContent = this.speed <= 3 ? labels[this.speed] : `${this.itersPerFrame()} it./cuadro`;
+    const labels = ['', T('fila por fila', 'row by row'), T('lento', 'slow'), 'normal'];
+    this.$('heatSpeedVal').textContent = this.speed <= 3 ? labels[this.speed] : T(`${this.itersPerFrame()} it./cuadro`, `${this.itersPerFrame()} it./frame`);
     if (this.speed > 3 && this.sweep && this.sweep.done.some((d) => d > 0)) this.finishSweep();
     this.dirty = true;
   }
@@ -420,7 +422,7 @@ class HeatStation {
     const stable = window.HeatSim.isStable(this.r);
     this.$('heatRVal').textContent = this.r.toFixed(2);
     const hint = this.$('heatRHint');
-    hint.textContent = stable ? 'Estable: r ≤ 1/4.' : 'Inestable: r > 1/4, el error crece en cada paso.';
+    hint.textContent = stable ? T('Estable: r ≤ 1/4.', 'Stable: r ≤ 1/4.') : T('Inestable: r > 1/4, el error crece en cada paso.', 'Unstable: r > 1/4, the error grows with every step.');
     hint.classList.toggle('bad', !stable);
   }
 }

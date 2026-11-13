@@ -7,11 +7,11 @@ class NetworkingStation {
     this.timer = null;
     this.method = 'GET';
     this.phases = [
-      { id: 'open', label: 'Conexión TCP' },
-      { id: 'request', label: 'Petición HTTP' },
-      { id: 'server', label: 'Servidor' },
-      { id: 'response', label: 'Respuesta HTTP' },
-      { id: 'close', label: 'Cierre' }
+      { id: 'open', label: T('Conexión TCP', 'TCP connection') },
+      { id: 'request', label: T('Petición HTTP', 'HTTP request') },
+      { id: 'server', label: T('Servidor', 'Server') },
+      { id: 'response', label: T('Respuesta HTTP', 'HTTP response') },
+      { id: 'close', label: T('Cierre', 'Close') }
     ];
   }
 
@@ -23,7 +23,7 @@ class NetworkingStation {
     this.figures = figs;
     const figSel = this.$('netFigure');
     figSel.innerHTML = figs.map((f) => `<option value="${f}">${f}</option>`).join('') +
-      '<option value="unicornio">unicornio (no existe)</option>';
+      `<option value="unicornio">${T('unicornio (no existe)', 'unicornio (does not exist)')}</option>`;
     figSel.value = figs.includes('batman') ? 'batman' : figs[0];
 
     this.$('netFiles').innerHTML = figs.map((f) => `<span class="net-file" data-file="${f}">${f}</span>`).join('');
@@ -106,7 +106,7 @@ class NetworkingStation {
   }
   setPlay(on) {
     const b = this.$('netPlay');
-    if (b) b.innerHTML = on ? '<svg class="ic"><use href="#i-pause"/></svg>Pausar' : '<svg class="ic"><use href="#i-play"/></svg>Reproducir';
+    if (b) b.innerHTML = on ? `<svg class="ic"><use href="#i-pause"/></svg>${T('Pausar', 'Pause')}` : `<svg class="ic"><use href="#i-play"/></svg>${T('Reproducir', 'Play')}`;
   }
 
   // ── Rendering ─────────────────────────────────────────────
@@ -131,9 +131,9 @@ class NetworkingStation {
     screen.scrollTop = 0;
     this.$('netServerLog').textContent = s.log.join('\n');
     this.$('netServerLog').scrollTop = 1e6;
-    this.$('netThreads').innerHTML = s.threads.map((t) => `<span class="net-thread ${t.state === 'terminado' ? 'done' : ''}">${esc(t.name)}<i>${esc(t.state)}</i></span>`).join('');
+    this.$('netThreads').innerHTML = s.threads.map((t) => `<span class="net-thread ${t.state === 'terminado' ? 'done' : ''}">${esc(t.name)}<i>${esc(t.state === 'terminado' ? T('terminado', 'finished') : t.state)}</i></span>`).join('');
     const route = this.exchange.response.route;
-    const lookedUp = ['server', 'response'].includes(s.phase) && s.title !== 'Lee la petición';
+    const lookedUp = ['server', 'response'].includes(s.phase) && s.title !== T('Lee la petición', 'Reads the request');
     this.$('netFiles').querySelectorAll('.net-file').forEach((f) => {
       f.classList.toggle('hit', lookedUp && route === 'figure' && f.dataset.file === this.exchange.response.figure);
       f.classList.toggle('scan', lookedUp && route === 'list');
@@ -163,7 +163,7 @@ class NetworkingStation {
     }
 
     // Narration + inspector
-    this.$('netNoteTitle').textContent = `Paso ${this.idx + 1} · ${s.title}`;
+    this.$('netNoteTitle').textContent = T(`Paso ${this.idx + 1} · ${s.title}`, `Step ${this.idx + 1} · ${s.title}`);
     this.$('netNote').innerHTML = s.note;
     this.renderInspector(s);
   }
@@ -205,27 +205,27 @@ class NetworkingStation {
     const sim = window.HttpSim;
 
     if (p) {
-      this.$('netInspTitle').textContent = `Paquete en el cable · ${p.label}`;
-      this.$('netInspMeta').textContent = [p.dir === 'c2s' ? 'cliente → servidor' : 'servidor → cliente', p.part].filter(Boolean).join(' · ');
+      this.$('netInspTitle').textContent = T(`Paquete en el cable · ${p.label}`, `Packet on the wire · ${p.label}`);
+      this.$('netInspMeta').textContent = [p.dir === 'c2s' ? T('cliente → servidor', 'client → server') : T('servidor → cliente', 'server → client'), p.part].filter(Boolean).join(' · ');
       show('netLayerIp', true); show('netLayerTcp', true); show('netLayerEmpty', false);
       this.$('netIp').innerHTML = `${esc(p.tcp.src.split(']')[0].slice(1))} <span class="net-arrow">→</span> ${esc(p.tcp.dst.split(']')[0].slice(1))}`;
       const t = p.tcp;
       this.$('netTcp').innerHTML = `
-        <div><dt>puerto origen</dt><dd>${esc(t.src.split(']:')[1])}</dd></div>
-        <div><dt>puerto destino</dt><dd>${esc(t.dst.split(']:')[1])}</dd></div>
+        <div><dt>${T('puerto origen', 'source port')}</dt><dd>${esc(t.src.split(']:')[1])}</dd></div>
+        <div><dt>${T('puerto destino', 'destination port')}</dt><dd>${esc(t.dst.split(']:')[1])}</dd></div>
         <div><dt>seq</dt><dd>${t.seq}</dd></div>
         <div><dt>ack</dt><dd>${t.ack === null ? '—' : t.ack}</dd></div>
         <div><dt>flags</dt><dd>${t.flags.map((f) => `<span class="flag f-${f}">${f}</span>`).join('')}</dd></div>
-        <div><dt>datos</dt><dd>${t.len} bytes</dd></div>`;
+        <div><dt>${T('datos', 'data')}</dt><dd>${t.len} bytes</dd></div>`;
       show('netLayerHttp', !!p.payload);
-      if (p.payload) this.$('netHttp').innerHTML = this.anatomy(p.payload, p.part && !p.part.startsWith('segmento 1 '));
+      if (p.payload) this.$('netHttp').innerHTML = this.anatomy(p.payload, p.part && !p.part.startsWith(T('segmento 1 ', 'segment 1 ')));
     } else if (s.preview) {
-      this.$('netInspTitle').textContent = s.preview.kind === 'request' ? 'Mensaje que arma el cliente' : 'Mensaje que arma el servidor';
-      this.$('netInspMeta').textContent = `${sim.byteLength(s.preview.raw)} bytes, todavía no sale`;
+      this.$('netInspTitle').textContent = s.preview.kind === 'request' ? T('Mensaje que arma el cliente', 'Message the client is building') : T('Mensaje que arma el servidor', 'Message the server is building');
+      this.$('netInspMeta').textContent = T(`${sim.byteLength(s.preview.raw)} bytes, todavía no sale`, `${sim.byteLength(s.preview.raw)} bytes, not sent yet`);
       show('netLayerIp', false); show('netLayerTcp', false); show('netLayerEmpty', false); show('netLayerHttp', true);
       this.$('netHttp').innerHTML = this.anatomy(s.preview.raw, false);
     } else {
-      this.$('netInspTitle').textContent = 'Paquete en el cable';
+      this.$('netInspTitle').textContent = T('Paquete en el cable', 'Packet on the wire');
       this.$('netInspMeta').textContent = '';
       show('netLayerIp', false); show('netLayerTcp', false); show('netLayerHttp', false); show('netLayerEmpty', true);
     }
@@ -236,8 +236,8 @@ class NetworkingStation {
     const esc = window.Tracer ? window.Tracer.esc : (x) => String(x);
     const crlf = '<span class="h-crlf">\\r\\n</span>';
     const body = (txt) => {
-      const extra = txt.length > maxBody ? `<span class="h-more">… (+${txt.length - maxBody} caracteres más)</span>` : '';
-      return txt.length ? `<span class="h-body">${esc(txt.slice(0, maxBody))}</span>${extra}` : '<span class="h-more">(sin cuerpo)</span>';
+      const extra = txt.length > maxBody ? `<span class="h-more">${T(`… (+${txt.length - maxBody} caracteres más)`, `… (+${txt.length - maxBody} more characters)`)}</span>` : '';
+      return txt.length ? `<span class="h-body">${esc(txt.slice(0, maxBody))}</span>${extra}` : `<span class="h-more">${T('(sin cuerpo)', '(no body)')}</span>`;
     };
     if (continuation) return body(raw);
     const sep = raw.indexOf('\r\n\r\n');
@@ -248,7 +248,7 @@ class NetworkingStation {
       const i = l.indexOf(':');
       html += `<span class="h-head"><b>${esc(l.slice(0, i))}</b>${esc(l.slice(i))}</span>${crlf}\n`;
     });
-    html += `${crlf}<span class="h-more"> ← línea vacía: terminan los encabezados</span>\n`;
+    html += `${crlf}<span class="h-more">${T(' ← línea vacía: terminan los encabezados', ' ← empty line: the headers end here')}</span>\n`;
     if (sep !== -1) html += body(raw.slice(sep + 4));
     return html;
   }
