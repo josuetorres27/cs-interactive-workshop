@@ -344,6 +344,11 @@ class App {
     const acc = window.account;
     if (!acc) return;
     acc.onChange((ev) => {
+    // Running simulations end when you leave them (another screen, station or step)
+    const sorting = window.algorithmsStation;
+    if (sorting && sorting.isRunning) sorting.pause();
+    const heat = window.heatStation;
+    if (heat && heat.running) heat.pause();
       this.renderAccountButton();
       this.updateProgressBadges();
       if (this.route === 'profile') this.renderProfile();
