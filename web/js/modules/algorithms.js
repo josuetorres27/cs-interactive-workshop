@@ -32,43 +32,43 @@ class AlgorithmsStation {
     this.intuitions = {
       quick: {
         title: "Quick Sort",
-        concept: "Elige un elemento pivote y reparte el arreglo: los menores a la izquierda, los mayores a la derecha. Después repite lo mismo en cada lado. Es el más usado en la práctica porque aprovecha muy bien la memoria caché.",
-        tip: "Si el pivote siempre cae en un extremo (por ejemplo, un arreglo ya ordenado y pivote al final), se degrada a O(n²)."
+        concept: T("Elige un elemento pivote y reparte el arreglo: los menores a la izquierda, los mayores a la derecha. Después repite lo mismo en cada lado. Es el más usado en la práctica porque aprovecha muy bien la memoria caché.", "Pick a pivot element and split the array: smaller values to the left, larger ones to the right. Then do the same on each side. It is the most used in practice because it makes very good use of the cache."),
+        tip: T("Si el pivote siempre cae en un extremo (por ejemplo, un arreglo ya ordenado y pivote al final), se degrada a O(n²).", "If the pivot always lands at one end (for example, an already sorted array with the pivot at the end), it degrades to O(n²).")
       },
       merge: {
         title: "Merge Sort",
-        concept: "Parte el arreglo a la mitad una y otra vez hasta tener pedazos de un elemento, y luego los va mezclando en orden.",
-        tip: "Siempre es O(n log n), incluso en el peor caso, y es estable. El precio: necesita O(n) de memoria extra."
+        concept: T("Parte el arreglo a la mitad una y otra vez hasta tener pedazos de un elemento, y luego los va mezclando en orden.", "Split the array in half again and again until the pieces have one element, then merge them back in order."),
+        tip: T("Siempre es O(n log n), incluso en el peor caso, y es estable. El precio: necesita O(n) de memoria extra.", "It is always O(n log n), even in the worst case, and it is stable. The price: it needs O(n) extra memory.")
       },
       heap: {
         title: "Heap Sort",
-        concept: "Convierte el arreglo en un montículo (heap) donde el mayor está en la raíz. Lo manda al final, rearma el montículo y repite.",
-        tip: "O(n log n) garantizado sin memoria extra, pero no es estable y salta mucho por la memoria."
+        concept: T("Convierte el arreglo en un montículo (heap) donde el mayor está en la raíz. Lo manda al final, rearma el montículo y repite.", "Turn the array into a heap where the largest value sits at the root. Send it to the end, rebuild the heap and repeat."),
+        tip: T("O(n log n) garantizado sin memoria extra, pero no es estable y salta mucho por la memoria.", "Guaranteed O(n log n) with no extra memory, but it is not stable and it jumps around memory a lot.")
       },
       shell: {
         title: "Shell Sort",
-        concept: "Es Insertion Sort con saltos: primero compara elementos lejanos y va reduciendo la distancia hasta comparar vecinos.",
-        tip: "Los saltos grandes mueven rápido los elementos que están muy fuera de lugar, sin usar memoria extra."
+        concept: T("Es Insertion Sort con saltos: primero compara elementos lejanos y va reduciendo la distancia hasta comparar vecinos.", "It is Insertion Sort with gaps: first it compares elements that are far apart, then it shrinks the distance until it compares neighbors."),
+        tip: T("Los saltos grandes mueven rápido los elementos que están muy fuera de lugar, sin usar memoria extra.", "The large gaps quickly move elements that are far out of place, without using extra memory.")
       },
       insertion: {
         title: "Insertion Sort",
-        concept: "Como ordenar cartas en la mano: toma cada elemento y córrelo a la izquierda hasta que quede en su lugar.",
-        tip: "En arreglos casi ordenados o muy pequeños es el más rápido de todos: llega a O(n)."
+        concept: T("Como ordenar cartas en la mano: toma cada elemento y córrelo a la izquierda hasta que quede en su lugar.", "Like sorting cards in your hand: take each element and slide it to the left until it is in its place."),
+        tip: T("En arreglos casi ordenados o muy pequeños es el más rápido de todos: llega a O(n).", "On nearly sorted or very small arrays it is the fastest of all: it gets down to O(n).")
       },
       selection: {
         title: "Selection Sort",
-        concept: "Busca el menor de lo que falta por ordenar y lo pone al inicio. Repite hasta terminar.",
-        tip: "Hace muy pocos intercambios (a lo sumo n), pero siempre O(n²) comparaciones, sin importar cómo empiece el arreglo."
+        concept: T("Busca el menor de lo que falta por ordenar y lo pone al inicio. Repite hasta terminar.", "Find the smallest value in the unsorted part and put it at the front. Repeat until done."),
+        tip: T("Hace muy pocos intercambios (a lo sumo n), pero siempre O(n²) comparaciones, sin importar cómo empiece el arreglo.", "It makes very few swaps (at most n), but always O(n²) comparisons, no matter how the array starts.")
       },
       bubble: {
         title: "Bubble Sort",
-        concept: "Compara vecinos y los intercambia si están al revés. Los valores grandes van flotando hacia el final.",
-        tip: "Es ideal para aprender qué es una inversión y qué significa ser estable, pero casi nunca se usa en producción."
+        concept: T("Compara vecinos y los intercambia si están al revés. Los valores grandes van flotando hacia el final.", "Compare neighbors and swap them if they are in the wrong order. The large values float toward the end."),
+        tip: T("Es ideal para aprender qué es una inversión y qué significa ser estable, pero casi nunca se usa en producción.", "It is ideal for learning what an inversion is and what being stable means, but it is almost never used in production.")
       },
       radix: {
         title: "Radix Sort (LSD)",
-        concept: "No compara nunca. Ordena los números dígito por dígito, empezando por las unidades, usando conteo.",
-        tip: "Rompe el límite de Ω(n log n) de los algoritmos que comparan: corre en O(n·k), con k = cantidad de dígitos."
+        concept: T("No compara nunca. Ordena los números dígito por dígito, empezando por las unidades, usando conteo.", "It never compares. It sorts the numbers digit by digit, starting with the ones, using counting."),
+        tip: T("Rompe el límite de Ω(n log n) de los algoritmos que comparan: corre en O(n·k), con k = cantidad de dígitos.", "It breaks the Ω(n log n) limit of comparison-based algorithms: it runs in O(n·k), with k = number of digits.")
       }
     };
 
@@ -311,7 +311,7 @@ void heapSort(std::vector<int>& a) {
     document.getElementById('algoComparisons').textContent = '0';
     document.getElementById('algoSwaps').textContent = '0';
     document.getElementById('algoTime').textContent = '0.00s';
-    document.getElementById('algoStatus').textContent = 'Listo';
+    document.getElementById('algoStatus').textContent = T('Listo', 'Ready');
   }
 
   updateComplexityBadges() {
@@ -321,11 +321,11 @@ void heapSort(std::vector<int>& a) {
     document.getElementById('badgeAvg').textContent = data.timeAvg;
     document.getElementById('badgeWorst').textContent = data.timeWorst;
     document.getElementById('badgeSpace').textContent = data.space;
-    document.getElementById('badgeStable').textContent = data.stable ? 'Sí' : 'No';
+    document.getElementById('badgeStable').textContent = data.stable ? T('Sí', 'Yes') : 'No';
 
     const codeTitle = document.getElementById('algoCodeTitle');
     const codeEl = document.getElementById('algoCode');
-    if (codeTitle) codeTitle.textContent = `${data.name} en C++`;
+    if (codeTitle) codeTitle.textContent = T(`${data.name} en C++`, `${data.name} in C++`);
     if (codeEl && this.snippets[this.currentAlgo]) codeEl.textContent = this.snippets[this.currentAlgo];
 
     // Update Student Intuition Card
@@ -391,12 +391,12 @@ void heapSort(std::vector<int>& a) {
 
     const btnRun = document.getElementById('btnRunAlgo');
     if (btnRun) {
-      btnRun.innerHTML = '<svg class="ic"><use href="#i-pause"/></svg>Detener';
+      btnRun.innerHTML = `<svg class="ic"><use href="#i-pause"/></svg>${T('Detener', 'Stop')}`;
       btnRun.classList.remove('btn-primary');
       btnRun.classList.add('btn-danger');
     }
 
-    document.getElementById('algoStatus').textContent = 'Ordenando';
+    document.getElementById('algoStatus').textContent = T('Ordenando', 'Sorting');
     this.startTime = performance.now();
     this.timerInterval = setInterval(() => {
       const elapsed = (performance.now() - this.startTime) / 1000;
@@ -417,7 +417,7 @@ void heapSort(std::vector<int>& a) {
 
       if (!this.shouldStop) {
         await this.sweepComplete();
-        document.getElementById('algoStatus').textContent = '¡Ordenado!';
+        document.getElementById('algoStatus').textContent = T('¡Ordenado!', 'Sorted!');
         if (window.account) window.account.record('algorithms', `run:${this.currentAlgo}`);
         window.soundController.playSuccess();
       }
@@ -434,7 +434,7 @@ void heapSort(std::vector<int>& a) {
     this.isPaused = true;
     this.shouldStop = true;
     this.cleanupRun();
-    document.getElementById('algoStatus').textContent = 'Detenido';
+    document.getElementById('algoStatus').textContent = T('Detenido', 'Stopped');
   }
 
   stop() {
@@ -448,7 +448,7 @@ void heapSort(std::vector<int>& a) {
     if (this.timerInterval) clearInterval(this.timerInterval);
     const btnRun = document.getElementById('btnRunAlgo');
     if (btnRun) {
-      btnRun.innerHTML = '<svg class="ic"><use href="#i-play"/></svg>Iniciar';
+      btnRun.innerHTML = `<svg class="ic"><use href="#i-play"/></svg>${T('Iniciar', 'Start')}`;
       btnRun.classList.remove('btn-danger');
       btnRun.classList.add('btn-primary');
     }

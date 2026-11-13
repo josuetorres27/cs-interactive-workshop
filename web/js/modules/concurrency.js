@@ -64,7 +64,7 @@ class ConcurrencyStation {
         this.semaphoresEnabled = e.target.checked;
         const statusEl = document.getElementById('semStatusText');
         if (statusEl) {
-          statusEl.textContent = this.semaphoresEnabled ? 'Sin riesgo de deadlock' : 'Sin control: puede trabarse';
+          statusEl.textContent = this.semaphoresEnabled ? T('Sin riesgo de deadlock', 'No risk of deadlock') : T('Sin control: puede trabarse', 'No control: it can lock up');
           statusEl.style.color = this.semaphoresEnabled ? 'var(--mint-dark)' : 'var(--tomato-dark)';
         }
       });
@@ -148,7 +148,7 @@ class ConcurrencyStation {
     if (semToggle) semToggle.checked = false;
     const statusEl = document.getElementById('semStatusText');
     if (statusEl) {
-      statusEl.textContent = 'Sin control: puede trabarse';
+      statusEl.textContent = T('Sin control: puede trabarse', 'No control: it can lock up');
       statusEl.style.color = 'var(--tomato-dark)';
     }
 
@@ -190,7 +190,7 @@ class ConcurrencyStation {
     if (semToggle) semToggle.checked = true;
     const statusEl = document.getElementById('semStatusText');
     if (statusEl) {
-      statusEl.textContent = 'Sin riesgo de deadlock';
+      statusEl.textContent = T('Sin riesgo de deadlock', 'No risk of deadlock');
       statusEl.style.color = 'var(--mint-dark)';
     }
     this.deadlockDetected = false;
@@ -361,7 +361,7 @@ class ConcurrencyStation {
     // Telemetry updates
     document.getElementById('concActive').textContent = this.vehicles.length;
     document.getElementById('concInRing').textContent = vehiclesInRing;
-    document.getElementById('concDeadlockState').textContent = this.deadlockDetected ? 'Trabada' : (this.semaphoresEnabled ? 'Fluye' : 'En riesgo');
+    document.getElementById('concDeadlockState').textContent = this.deadlockDetected ? T('Trabada', 'Locked up') : (this.semaphoresEnabled ? T('Fluye', 'Flowing') : T('En riesgo', 'At risk'));
     document.getElementById('concDeadlockState').style.color = this.deadlockDetected ? 'var(--tomato-dark)' : (this.semaphoresEnabled ? 'var(--mint-dark)' : 'var(--amber)');
   }
 
@@ -418,11 +418,20 @@ class ConcurrencyStation {
     this.ctx.stroke();
 
     this.ctx.fillStyle = this.tc('--box-ink', '#1b2027');
-    this.ctx.font = `800 ${Math.max(11, Math.round(innerR / 4.5))}px ${fontFamily}`;
-    this.ctx.fillText(this.deadlockDetected ? 'TRABADA' : (this.semaphoresEnabled ? 'CON SEMÁFOROS' : 'SIN CONTROL'), cx, cy);
+    const caption = this.deadlockDetected ? T('TRABADA', 'LOCKED UP') : (this.semaphoresEnabled ? T('CON SEMÁFOROS', 'WITH SEMAPHORES') : T('SIN CONTROL', 'NO CONTROL'));
+    // Shrink the caption until it fits inside the island (English labels run longer)
+    let captionPx = Math.max(11, Math.round(innerR / 4.5));
+    this.ctx.font = `800 ${captionPx}px ${fontFamily}`;
+    const room = innerR * 1.7;
+    const measured = this.ctx.measureText ? this.ctx.measureText(caption).width : 0;
+    if (measured > room) {
+      captionPx = Math.max(8, Math.floor(captionPx * room / measured));
+      this.ctx.font = `800 ${captionPx}px ${fontFamily}`;
+    }
+    this.ctx.fillText(caption, cx, cy);
 
     // Quadrant dividers & capacity labels
-    const quadNames = ['NO', 'NE', 'SE', 'SO'];
+    const quadNames = [T('NO', 'NW'), 'NE', 'SE', T('SO', 'SW')];
     for (let i = 0; i < 4; i++) {
       const angle = (i * 0.5) * Math.PI;
       this.ctx.beginPath();
@@ -543,7 +552,7 @@ class ConcurrencyStation {
     const lx = x + w / 2;
     const ly = vertical ? (label === 'N' ? y + 16 : y + h - 16) : y + h / 2;
     const lx2 = vertical ? lx : (label === 'O' ? x + 16 : x + w - 16);
-    this.ctx.fillText(label, lx2, ly);
+    this.ctx.fillText(label === 'O' ? T('O', 'W') : label, lx2, ly);
   }
 
   // --- Animation Loop ---
@@ -604,7 +613,7 @@ class ConcurrencyStation {
   }
 
   drawBoundedBufferWidget(x, y, w, h) {
-    const font = this.drawPanel(x, y, w, h, 'Buffer acotado (capacidad 8)');
+    const font = this.drawPanel(x, y, w, h, T('Buffer acotado (capacidad 8)', 'Bounded buffer (capacity 8)'));
 
     const slots = 8;
     const filled = 3 + Math.floor(Math.sin(Date.now() / 800) * 2.5);
@@ -632,13 +641,13 @@ class ConcurrencyStation {
     this.ctx.fillStyle = this.tc('--cv-label', '#5a636e');
     this.ctx.font = `700 13px ${font}`;
     const ty = startY + slotH + 28;
-    this.ctx.fillText(`vacíos  (sem_empty) = ${slots - filled}`, x + 16, ty);
-    this.ctx.fillText(`llenos  (sem_full)  = ${filled}`, x + 16, ty + 22);
-    if (ty + 44 < y + h - 8) this.ctx.fillText('El mutex protege el índice de la cola.', x + 16, ty + 44);
+    this.ctx.fillText(T(`vacíos  (sem_empty) = ${slots - filled}`, `empty  (sem_empty) = ${slots - filled}`), x + 16, ty);
+    this.ctx.fillText(T(`llenos  (sem_full)  = ${filled}`, `full   (sem_full)  = ${filled}`), x + 16, ty + 22);
+    if (ty + 44 < y + h - 8) this.ctx.fillText(T('El mutex protege el índice de la cola.', 'The mutex protects the queue index.'), x + 16, ty + 44);
   }
 
   drawPhilosophersWidget(x, y, w, h) {
-    const font = this.drawPanel(x, y, w, h, 'Filósofos comensales');
+    const font = this.drawPanel(x, y, w, h, T('Filósofos comensales', 'Dining philosophers'));
 
     const pcx = x + w / 2;
     const pcy = y + 20 + (h - 20) / 2;
@@ -683,9 +692,9 @@ class ConcurrencyStation {
     this.ctx.textAlign = 'left';
     this.ctx.font = `700 12px ${font}`;
     this.ctx.fillStyle = this.tc('--mint-dark', '#1b7f5a');
-    this.ctx.fillText('verde: come', x + 16, y + h - 14);
+    this.ctx.fillText(T('verde: come', 'green: eats'), x + 16, y + h - 14);
     this.ctx.fillStyle = this.tc('--sky-b-dark', '#1c4cb0');
-    this.ctx.fillText('azul: piensa', x + 110, y + h - 14);
+    this.ctx.fillText(T('azul: piensa', 'blue: thinks'), x + 110, y + h - 14);
   }
 }
 
