@@ -181,7 +181,7 @@ class App {
   init() {
     document.querySelectorAll('.bit-slot').forEach(el => { el.innerHTML = BIT_SVG; });
 
-    ['algorithmsStation', 'concurrencyStation', 'heatStation', 'networkingStation', 'cheatsheetsStation', 'interviewStation', 'dsStation', 'sqlStation']
+    ['algorithmsStation', 'concurrencyStation', 'heatStation', 'networkingStation', 'cheatsheetsStation', 'notebookStation', 'interviewStation', 'dsStation', 'sqlStation']
       .forEach(name => { if (window[name]) window[name].init(); });
 
     this.setupAccount();
@@ -587,22 +587,56 @@ class App {
 
   // ── Global controls ──────────────────────────────────────
   setupGlobalControls() {
+    // The gear opens a small menu with the language, the theme and the sound
+    const btnSettings = document.getElementById('btnSettings');
+    const menu = document.getElementById('settingsMenu');
+    const row = (btn, label, value) => {
+      if (!btn) return;
+      const l = btn.querySelector && btn.querySelector('.settings-label');
+      const v = btn.querySelector && btn.querySelector('.settings-value');
+      if (l) l.textContent = label;
+      if (v) v.textContent = value;
+    };
+    this.closeSettings = () => {
+      if (!menu || menu.hidden) return;
+      menu.hidden = true;
+      if (btnSettings) btnSettings.setAttribute('aria-expanded', 'false');
+    };
+    if (btnSettings && menu) {
+      btnSettings.addEventListener('click', (e) => {
+        if (e && e.stopPropagation) e.stopPropagation();
+        menu.hidden = !menu.hidden;
+        btnSettings.setAttribute('aria-expanded', String(!menu.hidden));
+      });
+      document.addEventListener('click', (e) => { if (!menu.hidden && e && e.target && !(menu.contains && menu.contains(e.target))) this.closeSettings(); });
+      btnSettings.title = T('Ajustes', 'Settings');
+      btnSettings.setAttribute('aria-label', T('Ajustes', 'Settings'));
+    }
+
     const btnMute = document.getElementById('btnToggleSound');
+    const syncSound = () => {
+      const muted = !!(window.soundController && window.soundController.muted);
+      row(btnMute, T('Sonido', 'Sound'), muted ? T('Apagado', 'Off') : T('Encendido', 'On'));
+      const icon = btnMute.querySelector && btnMute.querySelector('use');
+      if (icon) icon.setAttribute('href', `#i-${muted ? 'mute' : 'sound'}`);
+      btnMute.setAttribute('aria-pressed', String(!muted));
+      btnMute.title = muted ? T('Activar sonido', 'Turn sound on') : T('Silenciar sonido', 'Mute sound');
+    };
+    syncSound();
     btnMute.addEventListener('click', () => {
       const isMuted = window.soundController.toggleMute();
-      btnMute.innerHTML = `<svg class="ic"><use href="#i-${isMuted ? 'mute' : 'sound'}"/></svg>`;
-      btnMute.title = isMuted ? T('Activar sonido', 'Turn sound on') : T('Silenciar sonido', 'Mute sound');
+      syncSound();
       this.showToast(isMuted ? T('Sonido apagado', 'Sound off') : T('Sonido encendido', 'Sound on'));
     });
 
-    // Language: the button names the language you would switch to
+    // Language: the row shows the current language; a click switches to the other one
     const btnLang = document.getElementById('btnLang');
     if (btnLang && window.I18n) {
       const next = window.I18n.other();
       const label = next === 'en' ? 'Switch to English' : 'Cambiar a español';
-      btnLang.textContent = window.I18n.LANGS[next].short;
+      row(btnLang, T('Idioma', 'Language'), window.I18n.LANGS[window.I18n.lang].label);
       btnLang.title = label;
-      btnLang.setAttribute('aria-label', label);
+      btnLang.setAttribute('aria-label', `${T('Idioma', 'Language')}: ${window.I18n.LANGS[window.I18n.lang].label}. ${label}`);
       btnLang.addEventListener('click', () => window.I18n.toggle());
     }
 
@@ -615,6 +649,7 @@ class App {
       btnTheme.title = label;
       btnTheme.setAttribute('aria-label', label);
       btnTheme.setAttribute('aria-pressed', String(wood));
+      row(btnTheme, T('Tema', 'Theme'), wood ? T('Madera', 'Wood') : T('Laboratorio', 'Lab'));
     };
     if (btnTheme && window.Theme) {
       syncTheme();
@@ -642,7 +677,7 @@ class App {
 
   setupKeyboardShortcuts() {
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') return this.endTour(true);
+      if (e.key === 'Escape') { if (this.closeSettings) this.closeSettings(); return this.endTour(true); }
       if (['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName) && e.target.type !== 'range') return;
       if (this.tour && (e.key === 'Enter' || e.key === 'ArrowRight')) { e.preventDefault(); return this.nextTourStep(); }
 

@@ -69,7 +69,7 @@
     },
     cheatsheets: {
       title: T('El Cuaderno', 'The Notebook'),
-      items: [{ id: 'amdahl', label: T('Jugar con la Ley de Amdahl', 'Play with Amdahl\'s Law') }]
+      items: [{ id: 'amdahl', label: T('Jugar con la Ley de Amdahl', 'Play with Amdahl\'s Law') }, { id: 'note', label: T('Escribir tu primera nota', 'Write your first note') }]
     }
   };
 

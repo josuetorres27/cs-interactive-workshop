@@ -65,7 +65,7 @@ module.exports = (t, { createEnv, read }) => {
       let p = P.empty(); P.CHECKLISTS.datastructures.items.forEach((i) => { p = P.record(p, 'datastructures', i.id, T0).progress; });
       t.eq(P.stationStats(p, 'datastructures').complete, true); t.eq(P.overall(p).stationsComplete, 1);
     });
-    t.test('the whole workshop has 40 checklist items across 8 stations', () => { const o = P.overall(P.empty()); t.eq(o.total, 40); t.eq(o.stations, 8); });
+    t.test('the whole workshop has 41 checklist items across 8 stations', () => { const o = P.overall(P.empty()); t.eq(o.total, 41); t.eq(o.stations, 8); });
     t.test('merging keeps items from both sides with the earliest time', () => {
       const a = P.record(P.empty(), 'sql', 'solve:join-where', T0 + 50).progress;
       let b = P.record(P.empty(), 'sql', 'solve:join-where', T0).progress;

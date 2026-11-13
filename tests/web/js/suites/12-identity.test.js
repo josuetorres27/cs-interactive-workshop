@@ -9,12 +9,20 @@ module.exports = (t, { createEnv, read }) => {
   const block = (selector) => { const i = css.indexOf(selector + ' {'); return css.slice(i, css.indexOf('\n}', i)); };
 
   t.suite('identity · title screen (lab)', () => {
-    t.test('three lamps hang from the ceiling, each with its cone of light', () => {
-      const lamps = [...intro.matchAll(/<div class="lamp[^"]* theme-lab"[\s\S]*?<\/div>/g)].map((m) => m[0]);
+    const labLamps = () => [...intro.matchAll(/<div class="lamp[^"]* theme-lab"[\s\S]*?<\/div>/g)].map((m) => m[0]);
+    t.test('three identical lamps hang at the same height, each with its cone of light', () => {
+      const lamps = labLamps();
       t.eq(lamps.length, 3);
       lamps.forEach((l) => { t.includes(l, 'class="lamp-cone"'); t.includes(l, 'class="lamp-glow"'); });
-      t.eq(lamps.filter((l) => l.includes('lamp-side')).length, 2);
+      const svgs = lamps.map((l) => l.slice(l.indexOf('<svg')));
+      svgs.forEach((s) => t.eq(s, svgs[0]));
+      t.notIncludes(css, '.lamp-side');
+      ['.lamp-l', '.lamp-r'].forEach((c) => {
+        const rule = css.match(new RegExp(`\\n\\${c} \\{([^}]*)\\}`))[1];
+        t.ok(/left:/.test(rule) && !/top:|width:|height:/.test(rule), `${c} only moves sideways`);
+      });
     });
+    t.test('the lamps carry no blue stripe', () => labLamps().forEach((l) => t.notIncludes(l, '#5fd8ff')));
     t.test('the lamp shades are black', () => t.eq((intro.match(/fill="#20262e"/g) || []).length, 3));
     t.test('the floating robot arm is gone; a monitor is bolted to the wall instead', () => {
       t.notIncludes(html, 'robot-arm'); t.notIncludes(css, 'robot-arm');
@@ -25,7 +33,7 @@ module.exports = (t, { createEnv, read }) => {
     t.test('Bit\'s blueprint is still taped to the wall', () => t.includes(intro, 'class="lab-deco blueprint theme-lab"'));
     t.test('side decor steps aside on narrow screens', () => {
       t.ok(/@media \(max-width: 900px\) \{\s*\.lab-deco\.wall-monitor, \.pegboard, \.wood-deco\.shelf-deco \{ display: none; \}/.test(css));
-      t.ok(/@media \(max-width: 1000px\) \{\s*\.lamp-side \{ display: none; \}/.test(css));
+      t.ok(/@media \(max-width: 1000px\) \{\s*\.lamp-l, \.lamp-r \{ display: none; \}/.test(css));
     });
   });
 
