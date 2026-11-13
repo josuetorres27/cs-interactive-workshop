@@ -35,6 +35,9 @@
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
     <symbol id="i-arrow-r" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
     <symbol id="i-arrow-l" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/><circle cx="12" cy="12" r="6.6"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.8 5.6 3.8 9s-1.2 6.4-3.8 9c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></symbol>
     <symbol id="i-theme" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></symbol>
     <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></symbol>
     <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></symbol>
@@ -61,11 +64,15 @@
   <div class="corner-bar">
     <a href="#/profile" id="btnAccount" class="round-btn account-btn" title="Mi espacio" aria-label="Mi espacio"><svg class="ic"><use href="#i-user"/></svg></a>
     <button id="btnHelp" class="round-btn" title="Ayuda" aria-label="Ayuda"><svg class="ic"><use href="#i-help"/></svg></button>
-    <button id="btnLang" class="round-btn lang-btn" title="Switch to English" aria-label="Switch to English" data-i18n="off">EN</button>
-    <button id="btnTheme" class="round-btn" title="Cambiar al taller de madera" aria-label="Cambiar al taller de madera" aria-pressed="false"><svg class="ic"><use href="#i-theme"/></svg></button>
-    <button id="btnToggleSound" class="round-btn" title="Silenciar sonido" aria-label="Silenciar sonido"><svg class="ic"><use href="#i-sound"/></svg></button>
     <button id="btnToggleFullscreen" class="round-btn" title="Pantalla completa" aria-label="Pantalla completa"><svg class="ic"><use href="#i-expand"/></svg></button>
-    <a href="https://github.com/josuetorres27/cs-interactive-workshop" target="_blank" rel="noopener" class="round-btn" title="Código en GitHub" aria-label="Código en GitHub"><svg class="ic"><use href="#i-github"/></svg></a>
+    <div class="settings">
+      <button id="btnSettings" class="round-btn" title="Ajustes" aria-label="Ajustes" aria-haspopup="true" aria-expanded="false" aria-controls="settingsMenu"><svg class="ic"><use href="#i-gear"/></svg></button>
+      <div id="settingsMenu" class="settings-menu" role="menu" hidden data-i18n="off">
+        <button id="btnLang" class="settings-row" role="menuitem"><svg class="ic"><use href="#i-globe"/></svg><span class="settings-label"></span><span class="settings-value"></span></button>
+        <button id="btnTheme" class="settings-row" role="menuitemcheckbox" aria-pressed="false"><svg class="ic"><use href="#i-theme"/></svg><span class="settings-label"></span><span class="settings-value"></span></button>
+        <button id="btnToggleSound" class="settings-row" role="menuitemcheckbox"><svg class="ic"><use href="#i-sound"/></svg><span class="settings-label"></span><span class="settings-value"></span></button>
+      </div>
+    </div>
   </div>
 
   <main>
@@ -83,29 +90,26 @@
           <circle cx="60" cy="86" r="13" fill="#f2f8ff" stroke="#1b2027" stroke-width="4"/>
           <path d="M44 48h32l22 34H22z" fill="#20262e" stroke="#1b2027" stroke-width="5" stroke-linejoin="round"/>
           <path d="M33 73h54" stroke="#3a434e" stroke-width="3" stroke-linecap="round"/>
-          <path d="M52 57h16" stroke="#5fd8ff" stroke-width="3" stroke-linecap="round"/>
         </svg>
       </div>
-      <div class="lamp lamp-side lamp-l theme-lab" aria-hidden="true">
+      <div class="lamp lamp-l theme-lab" aria-hidden="true">
         <span class="lamp-cone"></span><span class="lamp-glow"></span>
         <svg viewBox="0 0 120 120">
-          <line x1="60" y1="-60" x2="60" y2="40" stroke="#1b2027" stroke-width="4" stroke-linecap="round"/>
+          <line x1="60" y1="0" x2="60" y2="40" stroke="#1b2027" stroke-width="4" stroke-linecap="round"/>
           <rect x="52" y="36" width="16" height="12" rx="3" fill="#5a636e" stroke="#1b2027" stroke-width="4"/>
           <circle cx="60" cy="86" r="13" fill="#f2f8ff" stroke="#1b2027" stroke-width="4"/>
           <path d="M44 48h32l22 34H22z" fill="#20262e" stroke="#1b2027" stroke-width="5" stroke-linejoin="round"/>
           <path d="M33 73h54" stroke="#3a434e" stroke-width="3" stroke-linecap="round"/>
-          <path d="M52 57h16" stroke="#5fd8ff" stroke-width="3" stroke-linecap="round"/>
         </svg>
       </div>
-      <div class="lamp lamp-side lamp-r theme-lab" aria-hidden="true">
+      <div class="lamp lamp-r theme-lab" aria-hidden="true">
         <span class="lamp-cone"></span><span class="lamp-glow"></span>
         <svg viewBox="0 0 120 120">
-          <line x1="60" y1="-60" x2="60" y2="40" stroke="#1b2027" stroke-width="4" stroke-linecap="round"/>
+          <line x1="60" y1="0" x2="60" y2="40" stroke="#1b2027" stroke-width="4" stroke-linecap="round"/>
           <rect x="52" y="36" width="16" height="12" rx="3" fill="#5a636e" stroke="#1b2027" stroke-width="4"/>
           <circle cx="60" cy="86" r="13" fill="#f2f8ff" stroke="#1b2027" stroke-width="4"/>
           <path d="M44 48h32l22 34H22z" fill="#20262e" stroke="#1b2027" stroke-width="5" stroke-linejoin="round"/>
           <path d="M33 73h54" stroke="#3a434e" stroke-width="3" stroke-linecap="round"/>
-          <path d="M52 57h16" stroke="#5fd8ff" stroke-width="3" stroke-linecap="round"/>
         </svg>
       </div>
 
@@ -397,11 +401,11 @@
           <article class="faq">
             <div class="faq-q"><span class="faq-num">6</span><h3>¿Quién lo hizo?</h3></div>
             <p>Lo creó <a href="https://josuetorres.tech/" target="_blank" rel="noopener">Josué Torres Sibaja</a>, estudiante de la ECCI, a partir de proyectos reales de sus cursos. Es código abierto (MIT): puedes usarlo, mejorarlo y proponer estaciones nuevas.</p>
+            <a href="https://github.com/josuetorres27/cs-interactive-workshop" target="_blank" rel="noopener" class="btn btn-ghost btn-sm faq-link"><svg class="ic"><use href="#i-github"/></svg>Ver el código en GitHub</a>
           </article>
         </div>
 
         <div class="faq-cta">
-          <span class="hand">¿Listo?</span>
           <a href="#/workshop" class="btn btn-hero">Entrar al taller <svg class="ic"><use href="#i-arrow-r"/></svg></a>
         </div>
       </div>
@@ -1493,27 +1497,42 @@ make -C pthreads &amp;&amp; make -C openmp
         <!-- ============ MODULE: NOTEBOOK (resources) ============ -->
         <section id="tab-cheatsheets" class="tab-pane">
           <div class="learn-grid">
-            <article class="learn-card">
-              <h3>Ley de Amdahl</h3>
-              <p>¿Cuánto más rápido va tu programa si lo paralelizas? Depende de la parte que <strong>no</strong> se puede paralelizar.</p>
-              <div class="ctl" style="margin-top:1rem">
-                <div class="ctl-label"><label for="amdahlFraction">Parte paralela (f)</label><span id="amdahlFractionVal" class="ctl-value">85%</span></div>
-                <input type="range" id="amdahlFraction" min="10" max="99" value="85">
-              </div>
-              <div class="ctl">
-                <div class="ctl-label"><label for="amdahlProcessors">Núcleos (N)</label><span id="amdahlProcVal" class="ctl-value">8 núcleos</span></div>
-                <input type="range" id="amdahlProcessors" min="1" max="64" value="8">
-              </div>
-              <div class="metrics-grid">
-                <div class="metric-box"><div class="metric-label">Aceleración</div><div id="amdahlSpeedupVal" class="metric-value">3.90x</div></div>
-                <div class="metric-box"><div class="metric-label">Límite</div><div id="amdahlMaxSpeedupVal" class="metric-value">6.67x</div></div>
-                <div class="metric-box"><div class="metric-label">Eficiencia</div><div id="amdahlEfficiencyVal" class="metric-value">48.8%</div></div>
-              </div>
-              <div class="note"><strong>Fórmula</strong>S(N) = 1 / ((1 − f) + f / N)</div>
+            <article class="learn-card wide notebook-card">
+              <h3>Mis apuntes</h3>
+              <p>Anota lo que quieras recordar de cada tema. Tus notas se guardan solas en este dispositivo.</p>
+              <div id="notebook"></div>
             </article>
 
-            <article class="learn-card">
-              <h3>Chuleta de sincronización</h3>
+            <article class="learn-card wide amdahl-card">
+              <h3>Ley de Amdahl</h3>
+              <p>¿Cuánto más rápido va tu programa si lo paralelizas? Depende de la parte que <strong>no</strong> se puede paralelizar.</p>
+              <div class="amdahl-grid">
+                <div class="amdahl-ctls">
+                <div class="ctl" style="margin-top:1rem">
+                  <div class="ctl-label"><label for="amdahlFraction">Parte paralela (f)</label><span id="amdahlFractionVal" class="ctl-value">85%</span></div>
+                  <input type="range" id="amdahlFraction" min="10" max="99" value="85">
+                </div>
+                <div class="ctl">
+                  <div class="ctl-label"><label for="amdahlProcessors">Núcleos (N)</label><span id="amdahlProcVal" class="ctl-value">8 núcleos</span></div>
+                  <input type="range" id="amdahlProcessors" min="1" max="64" value="8">
+                </div>
+                  </div>
+                <div class="amdahl-out">
+                <div class="metrics-grid">
+                  <div class="metric-box"><div class="metric-label">Aceleración</div><div id="amdahlSpeedupVal" class="metric-value">3.90x</div></div>
+                  <div class="metric-box"><div class="metric-label">Límite</div><div id="amdahlMaxSpeedupVal" class="metric-value">6.67x</div></div>
+                  <div class="metric-box"><div class="metric-label">Eficiencia</div><div id="amdahlEfficiencyVal" class="metric-value">48.8%</div></div>
+                </div>
+                  <div class="note"><strong>Fórmula</strong>S(N) = 1 / ((1 − f) + f / N)</div>
+                  </div>
+              </div>
+            </article>
+
+            <article class="learn-card wide sync-card">
+              <h3>Sincronización y sockets de un vistazo</h3>
+              <div class="sync-grid">
+                <div>
+                  <h4>Hilos</h4>
 <pre class="code"><span class="c">// Mutex</span>
 pthread_mutex_lock(&amp;m);  <span class="c">/* ... */</span>  pthread_mutex_unlock(&amp;m);
 <span class="c">// Semáforo</span>
@@ -1522,8 +1541,13 @@ sem_wait(&amp;s);  <span class="c">/* ... */</span>  sem_post(&amp;s);
 pthread_barrier_wait(&amp;b);
 <span class="c">// Atómico</span>
 atomic_fetch_add(&amp;contador, 1);</pre>
-              <h4>Sockets</h4>
-              <div class="flow"><span>socket</span><span>bind</span><span>listen</span><span>accept</span><span>recv/send</span><span>close</span></div>
+                </div>
+                <div>
+                  <h4>Sockets</h4>
+                  <div class="flow"><span>socket</span><span>bind</span><span>listen</span><span>accept</span><span>recv/send</span><span>close</span></div>
+                  <p>El servidor hace las seis llamadas en ese orden; el cliente solo necesita <code>socket</code>, <code>connect</code>, <code>send/recv</code> y <code>close</code>.</p>
+                </div>
+              </div>
             </article>
 
             <article class="learn-card wide">
@@ -1580,7 +1604,7 @@ atomic_fetch_add(&amp;contador, 1);</pre>
   </div>
 
   <footer class="footer">
-    CS Interactive Workshop · hecho por <a href="https://www.linkedin.com/in/josue-torres-sibaja/" target="_blank" rel="noopener">Josué Torres Sibaja</a> · código abierto (MIT)
+    CS Interactive Workshop · Creado por <a href="https://www.linkedin.com/in/josue-torres-sibaja/" target="_blank" rel="noopener">Josué Torres Sibaja</a>
   </footer>
 
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
@@ -1601,6 +1625,7 @@ atomic_fetch_add(&amp;contador, 1);</pre>
   <script src="js/modules/httpsim.js"></script>
   <script src="js/modules/networking.js"></script>
   <script src="js/modules/cheatsheets.js"></script>
+  <script src="js/modules/notebook.js"></script>
   <script src="js/tracer.js"></script>
   <script src="js/modules/interview.js"></script>
   <script src="js/modules/datastructures.js"></script>

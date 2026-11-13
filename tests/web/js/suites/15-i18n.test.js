@@ -109,8 +109,9 @@ module.exports = (t, { createEnv, read }) => {
       t.includes(read('web/css/styles.css'), '.i18n-wait body { visibility: hidden; }');
       t.includes(read('web/js/i18n.js'), "classList.remove('i18n-wait')");
     });
-    t.test('the top bar has a language button that is not itself translated', () => {
-      t.ok(/<button id="btnLang" class="round-btn lang-btn"[^>]*data-i18n="off">EN<\/button>/.test(html));
+    t.test('the language lives in the settings menu, which the dictionary leaves alone', () => {
+      const menu = html.match(/<div id="settingsMenu"[^>]*>[\s\S]*?\n {6}<\/div>/)[0];
+      t.includes(menu, 'data-i18n="off"'); t.includes(menu, '<button id="btnLang" class="settings-row"');
     });
     t.test('the button names the other language and toggles on click', () => {
       const run = (lang) => {
@@ -122,9 +123,10 @@ module.exports = (t, { createEnv, read }) => {
         const btn = env.document.getElementById('btnLang');
         return { btn, env, reloads: () => reloads };
       };
-      const es = run(); t.eq(es.btn.textContent, 'EN'); t.eq(es.btn.title, 'Switch to English');
+      const value = (b) => b.querySelector('.settings-value').textContent;
+      const es = run(); t.eq(value(es.btn), 'Español'); t.eq(es.btn.title, 'Switch to English');
       es.btn.click(); t.eq(es.env.localStorage.getItem('csworkshop-lang'), 'en'); t.eq(es.reloads(), 1);
-      const en = run('en'); t.eq(en.btn.textContent, 'ES'); t.eq(en.btn.title, 'Cambiar a español');
+      const en = run('en'); t.eq(value(en.btn), 'English'); t.eq(en.btn.title, 'Cambiar a español');
     });
   });
 
