@@ -600,7 +600,7 @@ code {
   position: fixed; top: 14px; left: 16px; z-index: 50;
 }
 
-.faq-board { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.8rem 1.6rem; padding-bottom: 2rem; }
+.faq-board { --row-gap: 1.6rem; gap: 1.8rem 1.6rem; padding-bottom: 2rem; }
 .faq {
   position: relative;
   background: var(--screws), var(--grain), var(--ply);
@@ -636,10 +636,15 @@ code {
    ================================================================ */
 .hub-head { padding: 84px 0 1rem; display: flex; align-items: flex-end; justify-content: center; gap: 1.2rem; flex-wrap: wrap; text-align: center; }
 
+/* Rows of equal cards: up to three per row, and a short last row is centred instead of leaving a gap */
+.faq-board, .benches, .progress-stations { display: flex; flex-wrap: wrap; justify-content: center; }
+.faq-board > *, .benches > *, .progress-stations > * { flex: 1 1 300px; min-width: 0; max-width: calc((100% - 2 * var(--row-gap)) / 3); }
+@media (max-width: 1100px) { .faq-board > *, .benches > *, .progress-stations > * { max-width: calc((100% - var(--row-gap)) / 2); } }
+@media (max-width: 720px) { .faq-board > *, .benches > *, .progress-stations > * { max-width: 100%; } }
+
 /* A bench = a big plywood sign with metal corner brackets */
 .benches {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  --row-gap: 1.8rem;
   gap: 1.8rem;
   padding: 1rem 0 5rem;
 }
@@ -677,13 +682,11 @@ code {
 
 /* Stations inside a bench: plywood plaques */
 .shelf {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 300px));
-  justify-content: center;
+  display: flex; flex-wrap: wrap; justify-content: center;
   gap: 1.8rem;
   padding: 1rem 0 5rem;
 }
-.station { position: relative; }
+.station { position: relative; flex: 0 1 300px; min-width: 250px; }
 .station-card {
   position: relative; width: 100%; height: 100%;
   display: flex; flex-direction: column; align-items: center; text-align: center;
@@ -918,7 +921,9 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
 .note strong { font-family: var(--font-display); font-weight: 400; font-size: 1.05rem; display: block; margin-bottom: .15rem; }
 
 /* ── Learn / Implement content ─────────────────────────────── */
-.learn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.6rem; }
+/* Cards share a row and the last row grows to fill it, so no row ends in an empty gap */
+.learn-grid { display: flex; flex-wrap: wrap; gap: 1.6rem; }
+.learn-grid > * { flex: 1 1 300px; min-width: 0; }
 .learn-card {
   position: relative;
   background: var(--screws), var(--grain), var(--ply);
@@ -927,7 +932,7 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
   box-shadow: var(--drop);
   padding: 1.8rem 1.7rem 1.6rem;
 }
-.learn-card.wide { grid-column: 1 / -1; }
+.learn-grid > .learn-card.wide { flex-basis: 100%; }
 .amdahl-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1.6rem; align-items: start; }
 .amdahl-grid .metrics-grid { margin-top: 0; }
 .sync-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 1.6rem; align-items: start; }
@@ -1298,7 +1303,6 @@ pre.code .t-k { color: var(--sun-y); }
   .tr-input { border-left: 0; padding-left: 0; border-top: 2px dashed var(--ply-edge); padding-top: 1rem; }
   .tr-left { position: static; }
   .tr-code { max-height: 300px; }
-  .benches { grid-template-columns: 1fr; }
 }
 @media (max-width: 1000px) {
   .lamp-l, .lamp-r { display: none; }
@@ -1505,7 +1509,7 @@ pre.code .t-k { color: var(--sun-y); }
 
 .progress-list { display: grid; gap: 1.6rem; }
 .progress-area h3 { font-family: var(--font-display); font-weight: 400; font-size: 1.4rem; color: var(--paper); -webkit-text-stroke: 1.5px var(--box-ink); paint-order: stroke fill; text-shadow: 0 3px 0 var(--box-ink); margin-bottom: .7rem; }
-.progress-stations { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem; }
+.progress-stations { --row-gap: 1.2rem; gap: 1.2rem; }
 .progress-station { display: flex; flex-direction: column; gap: .7rem; }
 .progress-station-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
 .progress-station-head a { font-family: var(--font-display); font-size: 1.25rem; color: var(--box-ink); text-decoration: none; }
