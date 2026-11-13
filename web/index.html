@@ -20,6 +20,7 @@
   <meta property="og:locale" content="es_CR">
   <meta name="twitter:card" content="summary">
   <script>try{if(localStorage.getItem('csworkshop-theme')==='madera')document.documentElement.setAttribute('data-theme','madera')}catch(e){}</script>
+  <script>try{if(localStorage.getItem('csworkshop-lang')==='en'){var d=document.documentElement;d.lang='en';d.classList.add('i18n-wait');setTimeout(function(){d.classList.remove('i18n-wait')},3000)}}catch(e){}</script>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="on-intro">
@@ -60,6 +61,7 @@
   <div class="corner-bar">
     <a href="#/profile" id="btnAccount" class="round-btn account-btn" title="Mi espacio" aria-label="Mi espacio"><svg class="ic"><use href="#i-user"/></svg></a>
     <button id="btnHelp" class="round-btn" title="Ayuda" aria-label="Ayuda"><svg class="ic"><use href="#i-help"/></svg></button>
+    <button id="btnLang" class="round-btn lang-btn" title="Switch to English" aria-label="Switch to English" data-i18n="off">EN</button>
     <button id="btnTheme" class="round-btn" title="Cambiar al taller de madera" aria-label="Cambiar al taller de madera" aria-pressed="false"><svg class="ic"><use href="#i-theme"/></svg></button>
     <button id="btnToggleSound" class="round-btn" title="Silenciar sonido" aria-label="Silenciar sonido"><svg class="ic"><use href="#i-sound"/></svg></button>
     <button id="btnToggleFullscreen" class="round-btn" title="Pantalla completa" aria-label="Pantalla completa"><svg class="ic"><use href="#i-expand"/></svg></button>
@@ -382,7 +384,7 @@
               <li><strong>Algoritmos y estructuras:</strong> 8 ordenamientos compitiendo; pilas, listas y árboles.</li>
               <li><strong>Concurrencia:</strong> hilos, mutex y semáforos en una rotonda.</li>
               <li><strong>Redes:</strong> sockets TCP, HTTP y un servidor con pool de hilos.</li>
-              <li><strong>Entrevistas:</strong> dos punteros, intervalos y ventanas deslizantes, de nivel medio a difícil.</li>
+              <li><strong>Problemas de código:</strong> palíndromos, islas, pilas, programación dinámica y ventanas deslizantes, de fáciles a difíciles.</li>
               <li><strong>Bases de datos:</strong> SQL ejecutado cláusula por cláusula.</li>
             </ul>
           </article>
@@ -420,9 +422,9 @@
         </header>
 
         <div class="benches">
-          <a href="#/area/algorithms" class="bench" style="--accent:#3d8fd6">
+          <a href="#/area/algorithms" class="bench" style="--accent:var(--sky-b)">
             <div class="bench-art">
-              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="12" y="46" width="14" height="26" rx="2" fill="#fbf3e2"/><rect x="32" y="30" width="14" height="42" rx="2" fill="#f6c33b"/><rect x="52" y="52" width="14" height="20" rx="2" fill="#fbf3e2"/><rect x="72" y="18" width="14" height="54" rx="2" fill="#e8512a"/><rect x="92" y="8" width="14" height="64" rx="2" fill="#4fb477"/></g></svg>
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="12" y="46" width="14" height="26" rx="2" style="fill:var(--paper)"/><rect x="32" y="30" width="14" height="42" rx="2" style="fill:var(--sun-y)"/><rect x="52" y="52" width="14" height="20" rx="2" style="fill:var(--paper)"/><rect x="72" y="18" width="14" height="54" rx="2" style="fill:var(--tomato)"/><rect x="92" y="8" width="14" height="64" rx="2" style="fill:var(--mint)"/></g></svg>
             </div>
             <span class="station-code">CI-0112</span>
             <h3 class="bench-name">Algoritmos y Estructuras de Datos</h3>
@@ -430,9 +432,9 @@
             <span class="bench-go">2 estaciones <svg class="ic"><use href="#i-arrow-r"/></svg></span>
           </a>
 
-          <a href="#/area/parallel" class="bench" style="--accent:#4fb477">
+          <a href="#/area/parallel" class="bench" style="--accent:var(--mint)">
             <div class="bench-art">
-              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5"><rect x="52" y="0" width="16" height="80" fill="#5b4a3d"/><rect x="0" y="32" width="120" height="16" fill="#5b4a3d"/><circle cx="60" cy="40" r="28" fill="#5b4a3d"/><circle cx="60" cy="40" r="13" fill="#8fd3a5"/></g><g stroke="#3d2414" stroke-width="4"><circle cx="60" cy="19" r="5" fill="#e8512a"/><circle cx="81" cy="40" r="5" fill="#f6c33b"/><circle cx="45" cy="55" r="5" fill="#3d8fd6"/></g></svg>
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="currentColor" stroke-width="5"><rect x="52" y="0" width="16" height="80" style="fill:var(--cv-road)"/><rect x="0" y="32" width="120" height="16" style="fill:var(--cv-road)"/><circle cx="60" cy="40" r="28" style="fill:var(--cv-road)"/><circle cx="60" cy="40" r="13" fill="#8fd3a5"/></g><g stroke="currentColor" stroke-width="4"><circle cx="60" cy="19" r="5" style="fill:var(--tomato)"/><circle cx="81" cy="40" r="5" style="fill:var(--sun-y)"/><circle cx="45" cy="55" r="5" style="fill:var(--sky-b)"/></g></svg>
             </div>
             <span class="station-code">CI-0117</span>
             <h3 class="bench-name">Programación Paralela y Concurrente</h3>
@@ -440,9 +442,9 @@
             <span class="bench-go">2 estaciones <svg class="ic"><use href="#i-arrow-r"/></svg></span>
           </a>
 
-          <a href="#/area/networking" class="bench" style="--accent:#8b5fbf">
+          <a href="#/area/networking" class="bench" style="--accent:var(--plum)">
             <div class="bench-art">
-              <svg viewBox="0 0 120 80" aria-hidden="true"><path d="M30 44c16 26 44 26 60 0" stroke="#3d2414" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="2 6"/><g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="6" y="14" width="40" height="30" rx="4" fill="#fbf3e2"/><rect x="74" y="14" width="40" height="30" rx="4" fill="#fbf3e2"/><rect x="12" y="20" width="28" height="18" rx="2" fill="#2b2119"/><rect x="80" y="20" width="28" height="18" rx="2" fill="#2b2119"/><rect x="54" y="58" width="12" height="9" rx="2" fill="#f6c33b"/></g></svg>
+              <svg viewBox="0 0 120 80" aria-hidden="true"><path d="M30 44c16 26 44 26 60 0" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="2 6"/><g stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="6" y="14" width="40" height="30" rx="4" style="fill:var(--paper)"/><rect x="74" y="14" width="40" height="30" rx="4" style="fill:var(--paper)"/><rect x="12" y="20" width="28" height="18" rx="2" style="fill:var(--code-bg)"/><rect x="80" y="20" width="28" height="18" rx="2" style="fill:var(--code-bg)"/><rect x="54" y="58" width="12" height="9" rx="2" style="fill:var(--sun-y)"/></g></svg>
             </div>
             <span class="station-code">CI-0123</span>
             <h3 class="bench-name">Redes</h3>
@@ -450,19 +452,19 @@
             <span class="bench-go">1 estación <svg class="ic"><use href="#i-arrow-r"/></svg></span>
           </a>
 
-          <a href="#/area/interviews" class="bench" style="--accent:#e8512a">
+          <a href="#/area/problems" class="bench" style="--accent:var(--tomato)">
             <div class="bench-art">
-              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="10" y="8" width="100" height="56" rx="5" fill="#fbf3e2"/><path d="M40 64v12M80 64v12" /></g><g stroke-width="5" stroke-linecap="round" fill="none"><path d="M30 26l-8 10 8 10" stroke="#3d8fd6"/><path d="M90 26l8 10-8 10" stroke="#3d8fd6"/><path d="M44 30h32M44 42h22" stroke="#3d2414"/></g></svg>
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="10" y="8" width="100" height="56" rx="5" style="fill:var(--paper)"/><path d="M40 64v12M80 64v12" /></g><g stroke-width="5" stroke-linecap="round" fill="none"><path d="M30 26l-8 10 8 10" style="stroke:var(--sky-b)"/><path d="M90 26l8 10-8 10" style="stroke:var(--sky-b)"/><path d="M44 30h32M44 42h22" stroke="currentColor"/></g></svg>
             </div>
-            <span class="station-code">PREPARACIÓN</span>
-            <h3 class="bench-name">Entrevistas Técnicas</h3>
-            <p class="bench-line">Dos punteros, intervalos, ventanas deslizantes</p>
+            <span class="station-code">PRÁCTICA</span>
+            <h3 class="bench-name">Problemas de Código</h3>
+            <p class="bench-line">Palíndromos, islas, pilas, ventanas y más</p>
             <span class="bench-go">1 estación <svg class="ic"><use href="#i-arrow-r"/></svg></span>
           </a>
 
-          <a href="#/area/databases" class="bench" style="--accent:#f6c33b">
+          <a href="#/area/databases" class="bench" style="--accent:var(--sun-y)">
             <div class="bench-art">
-              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5"><path d="M36 16v48c0 6 11 10 24 10s24-4 24-10V16" fill="#fbf3e2"/><ellipse cx="60" cy="16" rx="24" ry="9" fill="#fbf3e2"/><path d="M36 32c0 6 11 10 24 10s24-4 24-10M36 48c0 6 11 10 24 10s24-4 24-10" fill="none"/></g></svg>
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="currentColor" stroke-width="5"><path d="M36 16v48c0 6 11 10 24 10s24-4 24-10V16" style="fill:var(--paper)"/><ellipse cx="60" cy="16" rx="24" ry="9" style="fill:var(--paper)"/><path d="M36 32c0 6 11 10 24 10s24-4 24-10M36 48c0 6 11 10 24 10s24-4 24-10" fill="none"/></g></svg>
             </div>
             <span class="station-code">BASES DE DATOS</span>
             <h3 class="bench-name">Bases de Datos</h3>
@@ -470,9 +472,9 @@
             <span class="bench-go">1 estación <svg class="ic"><use href="#i-arrow-r"/></svg></span>
           </a>
 
-          <a href="#/workshop/cheatsheets" class="bench" data-tab="cheatsheets" style="--accent:#2aa7a0">
+          <a href="#/workshop/cheatsheets" class="bench" data-tab="cheatsheets" style="--accent:var(--teal)">
             <div class="bench-art">
-              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="32" y="6" width="56" height="68" rx="4" fill="#fbf3e2" transform="rotate(-4 60 40)"/></g><g stroke="#3d8fd6" stroke-width="2" opacity=".6" transform="rotate(-4 60 40)"><path d="M40 24h40M40 34h40M40 44h40M40 54h40"/></g><text x="44" y="42" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="#3d2414" transform="rotate(-4 60 40)">O(n)</text></svg>
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="32" y="6" width="56" height="68" rx="4" transform="rotate(-4 60 40)" style="fill:var(--paper)"/></g><g stroke-width="2" opacity=".6" transform="rotate(-4 60 40)" style="stroke:var(--sky-b)"><path d="M40 24h40M40 34h40M40 44h40M40 54h40"/></g><text x="44" y="42" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="currentColor" transform="rotate(-4 60 40)">O(n)</text></svg>
             </div>
             <span class="station-code">REPASO</span>
             <h3 class="bench-name">El Cuaderno</h3>
@@ -499,17 +501,17 @@
         <div class="shelf" id="areaShelf">
           <!-- Algoritmos -->
           <div class="station" data-area="algorithms">
-            <a href="#/workshop/algorithms" class="station-card" data-tab="algorithms" style="--accent:#3d8fd6">
+            <a href="#/workshop/algorithms" class="station-card" data-tab="algorithms" style="--accent:var(--sky-b)">
               <div class="station-art">
                 <svg viewBox="0 0 160 100" aria-hidden="true">
-                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round">
-                    <rect x="14" y="62" width="14" height="30" rx="2" fill="#fbf3e2"/>
-                    <rect x="34" y="40" width="14" height="52" rx="2" fill="#fbf3e2"/>
-                    <rect x="54" y="70" width="14" height="22" rx="2" fill="#f6c33b"/>
-                    <rect x="74" y="24" width="14" height="68" rx="2" fill="#e8512a"/>
-                    <rect x="94" y="50" width="14" height="42" rx="2" fill="#fbf3e2"/>
-                    <rect x="114" y="14" width="14" height="78" rx="2" fill="#4fb477"/>
-                    <rect x="134" y="8" width="14" height="84" rx="2" fill="#4fb477"/>
+                  <g stroke="currentColor" stroke-width="5" stroke-linejoin="round">
+                    <rect x="14" y="62" width="14" height="30" rx="2" style="fill:var(--paper)"/>
+                    <rect x="34" y="40" width="14" height="52" rx="2" style="fill:var(--paper)"/>
+                    <rect x="54" y="70" width="14" height="22" rx="2" style="fill:var(--sun-y)"/>
+                    <rect x="74" y="24" width="14" height="68" rx="2" style="fill:var(--tomato)"/>
+                    <rect x="94" y="50" width="14" height="42" rx="2" style="fill:var(--paper)"/>
+                    <rect x="114" y="14" width="14" height="78" rx="2" style="fill:var(--mint)"/>
+                    <rect x="134" y="8" width="14" height="84" rx="2" style="fill:var(--mint)"/>
                   </g>
                 </svg>
               </div>
@@ -521,11 +523,11 @@
           </div>
 
           <div class="station" data-area="algorithms">
-            <a href="#/workshop/datastructures" class="station-card" data-tab="datastructures" style="--accent:#4fb477">
+            <a href="#/workshop/datastructures" class="station-card" data-tab="datastructures" style="--accent:var(--mint)">
               <div class="station-art">
                 <svg viewBox="0 0 160 100" aria-hidden="true">
-                  <g stroke="#3d2414" stroke-width="5"><path d="M80 22 50 52M80 22l30 30M50 52 34 80M50 52l16 28M110 52l16 28"/></g>
-                  <g stroke="#3d2414" stroke-width="5"><circle cx="80" cy="22" r="12" fill="#f6c33b"/><circle cx="50" cy="52" r="12" fill="#fbf3e2"/><circle cx="110" cy="52" r="12" fill="#fbf3e2"/><circle cx="34" cy="80" r="11" fill="#fbf3e2"/><circle cx="66" cy="80" r="11" fill="#e8512a"/><circle cx="126" cy="80" r="11" fill="#fbf3e2"/></g>
+                  <g stroke="currentColor" stroke-width="5"><path d="M80 22 50 52M80 22l30 30M50 52 34 80M50 52l16 28M110 52l16 28"/></g>
+                  <g stroke="currentColor" stroke-width="5"><circle cx="80" cy="22" r="12" style="fill:var(--sun-y)"/><circle cx="50" cy="52" r="12" style="fill:var(--paper)"/><circle cx="110" cy="52" r="12" style="fill:var(--paper)"/><circle cx="34" cy="80" r="11" style="fill:var(--paper)"/><circle cx="66" cy="80" r="11" style="fill:var(--tomato)"/><circle cx="126" cy="80" r="11" style="fill:var(--paper)"/></g>
                 </svg>
               </div>
               <span class="station-code">DEPURADOR</span>
@@ -537,20 +539,20 @@
 
           <!-- Paralela -->
           <div class="station" data-area="parallel">
-            <a href="#/workshop/concurrency" class="station-card" data-tab="concurrency" style="--accent:#4fb477">
+            <a href="#/workshop/concurrency" class="station-card" data-tab="concurrency" style="--accent:var(--mint)">
               <div class="station-art">
                 <svg viewBox="0 0 160 100" aria-hidden="true">
-                  <g stroke="#3d2414" stroke-width="5">
-                    <rect x="70" y="0" width="20" height="100" fill="#5b4a3d"/>
-                    <rect x="0" y="40" width="160" height="20" fill="#5b4a3d"/>
-                    <circle cx="80" cy="50" r="36" fill="#5b4a3d"/>
+                  <g stroke="currentColor" stroke-width="5">
+                    <rect x="70" y="0" width="20" height="100" style="fill:var(--cv-road)"/>
+                    <rect x="0" y="40" width="160" height="20" style="fill:var(--cv-road)"/>
+                    <circle cx="80" cy="50" r="36" style="fill:var(--cv-road)"/>
                     <circle cx="80" cy="50" r="17" fill="#8fd3a5"/>
                   </g>
-                  <circle cx="80" cy="50" r="26.5" fill="none" stroke="#fbf3e2" stroke-width="2" stroke-dasharray="5 6"/>
-                  <g stroke="#3d2414" stroke-width="4">
-                    <circle cx="80" cy="23.5" r="6" fill="#e8512a"/>
-                    <circle cx="106.5" cy="50" r="6" fill="#f6c33b"/>
-                    <circle cx="61" cy="69" r="6" fill="#3d8fd6"/>
+                  <circle cx="80" cy="50" r="26.5" fill="none" stroke-width="2" stroke-dasharray="5 6" style="stroke:var(--paper)"/>
+                  <g stroke="currentColor" stroke-width="4">
+                    <circle cx="80" cy="23.5" r="6" style="fill:var(--tomato)"/>
+                    <circle cx="106.5" cy="50" r="6" style="fill:var(--sun-y)"/>
+                    <circle cx="61" cy="69" r="6" style="fill:var(--sky-b)"/>
                   </g>
                 </svg>
               </div>
@@ -562,17 +564,17 @@
           </div>
 
           <div class="station" data-area="parallel">
-            <a href="#/workshop/heat" class="station-card" data-tab="heat" style="--accent:#e8512a">
+            <a href="#/workshop/heat" class="station-card" data-tab="heat" style="--accent:var(--tomato)">
               <div class="station-art">
                 <svg viewBox="0 0 160 100" aria-hidden="true">
-                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round">
-                    <rect x="16" y="10" width="128" height="80" rx="6" fill="#3d8fd6"/>
-                    <rect x="16" y="10" width="128" height="22" rx="6" fill="#e8512a"/>
+                  <g stroke="currentColor" stroke-width="5" stroke-linejoin="round">
+                    <rect x="16" y="10" width="128" height="80" rx="6" style="fill:var(--sky-b)"/>
+                    <rect x="16" y="10" width="128" height="22" rx="6" style="fill:var(--tomato)"/>
                   </g>
-                  <rect x="19" y="30" width="122" height="16" fill="#f6c33b"/>
+                  <rect x="19" y="30" width="122" height="16" style="fill:var(--sun-y)"/>
                   <rect x="19" y="46" width="122" height="14" fill="#8fd3a5"/>
-                  <path d="M16 32h128M16 60h128" stroke="#3d2414" stroke-width="4" stroke-dasharray="8 6"/>
-                  <g stroke="#3d2414" stroke-width="3"><rect x="22" y="36" width="20" height="12" rx="6" fill="#3d8fd6"/><rect x="22" y="66" width="20" height="12" rx="6" fill="#4fb477"/></g>
+                  <path d="M16 32h128M16 60h128" stroke="currentColor" stroke-width="4" stroke-dasharray="8 6"/>
+                  <g stroke="currentColor" stroke-width="3"><rect x="22" y="36" width="20" height="12" rx="6" style="fill:var(--sky-b)"/><rect x="22" y="66" width="20" height="12" rx="6" style="fill:var(--mint)"/></g>
                 </svg>
               </div>
               <span class="station-code">SIMULACIÓN</span>
@@ -584,16 +586,16 @@
 
           <!-- Redes -->
           <div class="station" data-area="networking">
-            <a href="#/workshop/networking" class="station-card" data-tab="networking" style="--accent:#8b5fbf">
+            <a href="#/workshop/networking" class="station-card" data-tab="networking" style="--accent:var(--plum)">
               <div class="station-art">
                 <svg viewBox="0 0 160 100" aria-hidden="true">
-                  <path d="M44 56c22 30 50 30 72 0" stroke="#3d2414" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="2 8"/>
-                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round">
-                    <rect x="10" y="22" width="48" height="36" rx="5" fill="#fbf3e2"/>
-                    <rect x="102" y="22" width="48" height="36" rx="5" fill="#fbf3e2"/>
-                    <rect x="17" y="29" width="34" height="22" rx="2" fill="#2b2119"/>
-                    <rect x="109" y="29" width="34" height="22" rx="2" fill="#2b2119"/>
-                    <rect x="73" y="70" width="14" height="10" rx="2" fill="#f6c33b"/>
+                  <path d="M44 56c22 30 50 30 72 0" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="2 8"/>
+                  <g stroke="currentColor" stroke-width="5" stroke-linejoin="round">
+                    <rect x="10" y="22" width="48" height="36" rx="5" style="fill:var(--paper)"/>
+                    <rect x="102" y="22" width="48" height="36" rx="5" style="fill:var(--paper)"/>
+                    <rect x="17" y="29" width="34" height="22" rx="2" style="fill:var(--code-bg)"/>
+                    <rect x="109" y="29" width="34" height="22" rx="2" style="fill:var(--code-bg)"/>
+                    <rect x="73" y="70" width="14" height="10" rx="2" style="fill:var(--sun-y)"/>
                   </g>
                   <path d="M22 36h14M22 42h20M114 36h10M114 42h22" stroke="#8fd3a5" stroke-width="4" stroke-linecap="round"/>
                 </svg>
@@ -605,33 +607,33 @@
             </a>
           </div>
 
-          <!-- Entrevistas -->
-          <div class="station" data-area="interviews">
-            <a href="#/workshop/interview" class="station-card" data-tab="interview" style="--accent:#e8512a">
+          <!-- Problemas de código -->
+          <div class="station" data-area="problems">
+            <a href="#/workshop/interview" class="station-card" data-tab="interview" style="--accent:var(--tomato)">
               <div class="station-art">
                 <svg viewBox="0 0 160 100" aria-hidden="true">
-                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round">
-                    <rect x="10" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/><rect x="36" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/><rect x="62" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/><rect x="88" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/><rect x="114" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/>
+                  <g stroke="currentColor" stroke-width="5" stroke-linejoin="round">
+                    <rect x="10" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="36" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="62" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="88" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="114" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/>
                   </g>
-                  <g stroke="#3d2414" stroke-width="4"><rect x="8" y="66" width="26" height="16" rx="8" fill="#3d8fd6"/><rect x="112" y="66" width="26" height="16" rx="8" fill="#e8512a"/></g>
-                  <path d="M36 74h20M110 74H90" stroke="#3d2414" stroke-width="5" stroke-linecap="round"/><path d="m50 69 6 5-6 5M96 69l-6 5 6 5" stroke="#3d2414" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  <g stroke="currentColor" stroke-width="4"><rect x="8" y="66" width="26" height="16" rx="8" style="fill:var(--sky-b)"/><rect x="112" y="66" width="26" height="16" rx="8" style="fill:var(--tomato)"/></g>
+                  <path d="M36 74h20M110 74H90" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path d="m50 69 6 5-6 5M96 69l-6 5 6 5" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
               <span class="station-code">DEPURADOR</span>
-              <h3 class="station-name">Patrones de entrevista</h3>
-              <p class="station-line">Problemas medios y difíciles, recorridos línea por línea.</p>
+              <h3 class="station-name">Problemas clásicos</h3>
+              <p class="station-line">Fáciles, medios y difíciles, recorridos línea por línea.</p>
               <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
             </a>
           </div>
 
           <!-- Datos -->
           <div class="station" data-area="databases">
-            <a href="#/workshop/sql" class="station-card" data-tab="sql" style="--accent:#f6c33b">
+            <a href="#/workshop/sql" class="station-card" data-tab="sql" style="--accent:var(--sun-y)">
               <div class="station-art">
                 <svg viewBox="0 0 160 100" aria-hidden="true">
-                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="20" y="14" width="120" height="74" rx="6" fill="#fbf3e2"/><path d="M20 32h120M20 50h120M20 70h120M60 14v74M100 14v74"/></g>
-                  <rect x="22" y="52" width="116" height="16" fill="#e8512a" opacity=".35"/>
-                  <path d="M24 60h112" stroke="#b13817" stroke-width="5"/>
+                  <g stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="20" y="14" width="120" height="74" rx="6" style="fill:var(--paper)"/><path d="M20 32h120M20 50h120M20 70h120M60 14v74M100 14v74"/></g>
+                  <rect x="22" y="52" width="116" height="16" opacity=".35" style="fill:var(--tomato)"/>
+                  <path d="M24 60h112" stroke-width="5" style="stroke:var(--tomato-dark)"/>
                 </svg>
               </div>
               <span class="station-code">DEPURADOR</span>
@@ -645,7 +647,7 @@
           <div class="station soon" data-area="all">
             <div class="station-card" aria-label="Próximamente">
               <div class="station-art">
-                <svg viewBox="0 0 160 100" aria-hidden="true"><path d="M80 32v36M62 50h36" stroke="#3d2414" stroke-width="5" stroke-linecap="round" opacity=".6"/></svg>
+                <svg viewBox="0 0 160 100" aria-hidden="true"><path d="M80 32v36M62 50h36" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".6"/></svg>
               </div>
               <h3 class="station-name">Próximamente</h3>
               <p class="station-line">Más estaciones en construcción.</p>
@@ -1585,6 +1587,8 @@ atomic_fetch_add(&amp;contador, 1);</pre>
 
   <!-- Scripts -->
   <script src="js/theme.js"></script>
+  <script src="js/i18n/en.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/progress.js"></script>

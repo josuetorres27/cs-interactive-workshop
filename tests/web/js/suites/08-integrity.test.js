@@ -120,7 +120,7 @@ module.exports = (t, { read, WEB, createEnv }) => {
         .forEach((sel) => t.ok(/border\s*:\s*(var\(--outline\)|[34]px solid var\(--box-ink\))/.test(ruleFor(sel)), sel));
     });
     t.test('inline illustrations use thick ink strokes (3 or more)', () => {
-      [...html.matchAll(/stroke="#(?:1b2027|3d2414)" stroke-width="([\d.]+)"/g)].forEach((m) => t.ok(parseFloat(m[1]) >= 3, m[0]));
+      [...html.matchAll(/stroke="(?:#1b2027|#3d2414|currentColor)" stroke-width="([\d.]+)"/g)].forEach((m) => t.ok(parseFloat(m[1]) >= 3, m[0]));
     });
     t.test('both lamps (lab and wood) are outlined drawings, not gradients', () => {
       t.ok(/class="lamp theme-lab"[\s\S]{0,400}<svg/.test(html), 'lab lamp');
