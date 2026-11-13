@@ -1,7 +1,7 @@
 // CS Interactive Workshop - Tracer: a line-by-line code walkthrough ("debugger") engine.
 //
 // A station is a list of problems. Each problem provides:
-//   id, title, difficulty ('Fácil' | 'Media' | 'Difícil'), pattern, statement (html),
+//   id, title, difficulty ('Fácil' | 'Media' | 'Difícil'; list them in that order), pattern, statement (html),
 //   lang ('python' | 'sql'), code (array of lines),
 //   presets (array of input strings, optional), parse(text) -> args (throws Error),
 //   trace(args) -> frames [{ line, vars, viz, note }],
@@ -53,7 +53,8 @@
   }
 
   // ── Shared visual primitives (return html strings) ─────────────────────
-  const PTR_COLOR = { l: 'sky', left: 'sky', lo: 'sky', r: 'tomato', right: 'tomato', hi: 'tomato', i: 'plum', prev: 'plum', curr: 'sky', nxt: 'mint', top: 'tomato', head: 'mint' };
+  const PTR_COLOR = { l: 'sky', left: 'sky', lo: 'sky', r: 'tomato', right: 'tomato', hi: 'tomato', i: 'plum', prev: 'plum', curr: 'sky', nxt: 'mint', top: 'tomato', head: 'mint', min: 'mint' };
+  const ISLAND_COLORS = ['mint', 'sky', 'plum', 'tomato'];
 
   const viz = {
     esc,
@@ -65,6 +66,24 @@
           <div class="vz-cell ${state[i] || ''}">${esc(v)}</div>
           <div class="vz-ptrs">${(ptr[i] || []).map((p) => `<span class="vz-ptr c-${PTR_COLOR[p] || 'plum'}">${esc(p)}</span>`).join('')}</div>
         </div>`).join('')}</div>`;
+    },
+
+    // 2D grid (matrix) with row and column indices. state['r,c'] = extra classes for that cell
+    // (water, land, cur, pop, look); group['r,c'] = number of the group the cell belongs to (colours it).
+    grid(rows, { state = {}, group = {} } = {}) {
+      const cols = rows.length ? rows[0].length : 0;
+      if (!cols) return `<div class="vz-empty big">${T('matriz vacía', 'empty grid')}</div>`;
+      let s = `<div class="vz-matrix" style="--cols:${cols}" role="img" aria-label="${T(`matriz de ${rows.length} por ${cols}`, `${rows.length} by ${cols} grid`)}"><span></span>`;
+      for (let c = 0; c < cols; c++) s += `<span class="vz-mx-idx">${c}</span>`;
+      rows.forEach((row, r) => {
+        s += `<span class="vz-mx-idx">${r}</span>`;
+        row.forEach((v, c) => {
+          const k = `${r},${c}`;
+          const g = group[k] === undefined || group[k] === null ? '' : ` isl c-${ISLAND_COLORS[group[k] % ISLAND_COLORS.length]}`;
+          s += `<span class="vz-mx-cell ${state[k] || ''}${g}">${esc(v)}</span>`;
+        });
+      });
+      return s + '</div>';
     },
 
     // Bar chart (heights) as SVG, with optional water, container box and pointers.
@@ -79,7 +98,7 @@
       const H = top + chartH + 58;
       const x = (i) => padX + i * unit;
       const y = (h) => top + chartH - h * scale;
-      let s = `<svg class="vz-bars" viewBox="0 0 ${W} ${H}" role="img" aria-label="barras">`;
+      let s = `<svg class="vz-bars" viewBox="0 0 ${W} ${H}" role="img" aria-label="${T('barras', 'bars')}">`;
       if (best) s += `<rect x="${x(best.l) + unit / 2}" y="${y(best.h)}" width="${(best.r - best.l) * unit}" height="${best.h * scale}" class="vz-best"/>`;
       if (box) s += `<rect x="${x(box.l) + unit / 2}" y="${y(box.h)}" width="${(box.r - box.l) * unit}" height="${box.h * scale}" class="vz-box"/>`;
       heights.forEach((h, i) => {
@@ -101,18 +120,18 @@
     // Key/value chips for dictionaries / hash maps.
     map(obj, { title = '', hi = null } = {}) {
       const entries = Object.entries(obj);
-      return `<div class="vz-map"><span class="vz-label">${esc(title)}</span>${entries.length ? entries.map(([k, v]) => `<span class="vz-kv ${String(k) === String(hi) ? 'hi' : ''}"><b>${esc(k)}</b>${esc(v)}</span>`).join('') : '<span class="vz-empty">vacío</span>'}</div>`;
+      return `<div class="vz-map"><span class="vz-label">${esc(title)}</span>${entries.length ? entries.map(([k, v]) => `<span class="vz-kv ${String(k) === String(hi) ? 'hi' : ''}"><b>${esc(k)}</b>${esc(v)}</span>`).join('') : `<span class="vz-empty">${T('vacío', 'empty')}</span>`}</div>`;
     },
 
     // Horizontal list of chips (queues, output lists).
     list(items, { title = '', hiFirst = false, hiLast = false } = {}) {
-      return `<div class="vz-map"><span class="vz-label">${esc(title)}</span>${items.length ? items.map((v, i) => `<span class="vz-kv ${(hiFirst && i === 0) || (hiLast && i === items.length - 1) ? 'hi' : ''}">${esc(v)}</span>`).join('') : '<span class="vz-empty">vacío</span>'}</div>`;
+      return `<div class="vz-map"><span class="vz-label">${esc(title)}</span>${items.length ? items.map((v, i) => `<span class="vz-kv ${(hiFirst && i === 0) || (hiLast && i === items.length - 1) ? 'hi' : ''}">${esc(v)}</span>`).join('') : `<span class="vz-empty">${T('vacío', 'empty')}</span>`}</div>`;
     },
 
     // Vertical stack (top at the top).
     stack(items, { title = 'pila', hiTop = false } = {}) {
       const rev = items.slice().reverse();
-      return `<div class="vz-stack"><span class="vz-label">${esc(title)}</span><div class="vz-stack-body">${rev.length ? rev.map((v, i) => `<div class="vz-slot ${i === 0 && hiTop ? 'hi' : ''}">${esc(v)}${i === 0 ? '<span class="vz-top">tope</span>' : ''}</div>`).join('') : '<div class="vz-empty">vacía</div>'}</div></div>`;
+      return `<div class="vz-stack"><span class="vz-label">${esc(title)}</span><div class="vz-stack-body">${rev.length ? rev.map((v, i) => `<div class="vz-slot ${i === 0 && hiTop ? 'hi' : ''}">${esc(v)}${i === 0 ? `<span class="vz-top">${T('tope', 'top')}</span>` : ''}</div>`).join('') : `<div class="vz-empty">${T('vacía', 'empty')}</div>`}</div></div>`;
     },
 
     // Relational table. rows: arrays; rowCls: per-row class (drop, keep, new, g0..g4).
@@ -158,7 +177,7 @@
 
     // Binary tree. nodes: [{key,left,right}] (indices), root index. hi: path ids, cur: current id, fresh: new id.
     tree(nodes, root, { path = [], cur = null, fresh = null } = {}) {
-      if (root === null || root === undefined) return '<div class="vz-empty big">árbol vacío (root = None)</div>';
+      if (root === null || root === undefined) return `<div class="vz-empty big">${T('árbol vacío', 'empty tree')} (root = None)</div>`;
       const pos = {}; let order = 0, maxDepth = 0;
       const walk = (id, d) => { if (id === null || id === undefined) return; walk(nodes[id].left, d + 1); pos[id] = { x: order++, d }; maxDepth = Math.max(maxDepth, d); walk(nodes[id].right, d + 1); };
       walk(root, 0);
@@ -206,11 +225,21 @@
     }
 
     skeleton() {
-      const diffCls = { 'Fácil': 'easy', 'Media': 'mid', 'Difícil': 'hard' };
+      const diffCls = { 'Fácil': 'easy', 'Media': 'mid', 'Difícil': 'hard', Easy: 'easy', Medium: 'mid', Hard: 'hard' };
+      // Long catalogues get one row per difficulty; short ones keep a badge on every button.
+      const levels = [...new Set(this.problems.map((p) => p.difficulty))];
+      const grouped = this.problems.length > 6 && levels.length > 1;
+      const badge = (d, extra = '') => `<span class="diff ${diffCls[d] || 'mid'}${extra}">${esc(d)}</span>`;
+      const pick = (p) => `<button class="tr-pick" data-id="${p.id}" role="tab" title="${esc(p.difficulty)} · ${esc(p.pattern)}">${grouped ? '' : badge(p.difficulty)}${esc(p.title)}</button>`;
+      const picker = grouped
+        ? `<div class="tr-picker grouped">${levels.map((d) => `
+          <div class="tr-group" role="tablist" aria-label="${T('Dificultad', 'Difficulty')}: ${esc(d)}">${badge(d, ' tr-group-label')}${this.problems.filter((p) => p.difficulty === d).map(pick).join('')}</div>`).join('')}
+        </div>`
+        : `<div class="tr-picker" role="tablist">
+          ${this.problems.map(pick).join('')}
+        </div>`;
       return `
-        <div class="tr-picker" role="tablist">
-          ${this.problems.map((p) => `<button class="tr-pick" data-id="${p.id}" role="tab"><span class="diff ${diffCls[p.difficulty] || 'mid'}">${p.difficulty}</span>${esc(p.title)}</button>`).join('')}
-        </div>
+        ${picker}
         <div class="tr-brief">
           <div class="tr-statement">
             <span class="tr-pattern"></span>
@@ -218,11 +247,11 @@
             <div class="tr-text"></div>
           </div>
           <div class="tr-input">
-            <div class="ctl-label">Entrada</div>
+            <div class="ctl-label">${T('Entrada', 'Input')}</div>
             <div class="chips tr-presets"></div>
             <form class="tr-custom">
-              <input type="text" class="tr-field" spellcheck="false" aria-label="Entrada personalizada">
-              <button class="btn btn-sm" type="submit"><svg class="ic"><use href="#i-play"/></svg>Probar</button>
+              <input type="text" class="tr-field" spellcheck="false" aria-label="${T('Entrada personalizada', 'Custom input')}">
+              <button class="btn btn-sm" type="submit"><svg class="ic"><use href="#i-play"/></svg>${T('Probar', 'Try it')}</button>
             </form>
             <div class="tr-error" role="alert"></div>
           </div>
@@ -230,19 +259,19 @@
         <div class="tr-main">
           <div class="tr-left">
             <div class="tr-controls">
-              <button class="round-btn sm tr-first" title="Al inicio" aria-label="Al inicio"><svg class="ic"><use href="#i-first"/></svg></button>
-              <button class="round-btn sm tr-prev" title="Paso anterior (←)" aria-label="Paso anterior"><svg class="ic"><use href="#i-back"/></svg></button>
-              <button class="btn btn-primary btn-sm tr-play"><svg class="ic"><use href="#i-play"/></svg>Reproducir</button>
-              <button class="round-btn sm tr-next" title="Siguiente paso (→)" aria-label="Siguiente paso"><svg class="ic"><use href="#i-step"/></svg></button>
-              <button class="round-btn sm tr-last" title="Al final" aria-label="Al final"><svg class="ic"><use href="#i-last"/></svg></button>
+              <button class="round-btn sm tr-first" title="${T('Al inicio', 'To the start')}" aria-label="${T('Al inicio', 'To the start')}"><svg class="ic"><use href="#i-first"/></svg></button>
+              <button class="round-btn sm tr-prev" title="${T('Paso anterior', 'Previous step')} (←)" aria-label="${T('Paso anterior', 'Previous step')}"><svg class="ic"><use href="#i-back"/></svg></button>
+              <button class="btn btn-primary btn-sm tr-play"><svg class="ic"><use href="#i-play"/></svg>${T('Reproducir', 'Play')}</button>
+              <button class="round-btn sm tr-next" title="${T('Siguiente paso', 'Next step')} (→)" aria-label="${T('Siguiente paso', 'Next step')}"><svg class="ic"><use href="#i-step"/></svg></button>
+              <button class="round-btn sm tr-last" title="${T('Al final', 'To the end')}" aria-label="${T('Al final', 'To the end')}"><svg class="ic"><use href="#i-last"/></svg></button>
               <span class="tr-count"></span>
             </div>
-            <input type="range" class="tr-scrub" min="0" max="0" value="0" aria-label="Línea de tiempo">
+            <input type="range" class="tr-scrub" min="0" max="0" value="0" aria-label="${T('Línea de tiempo', 'Timeline')}">
             <div class="tr-code-wrap"><div class="tr-code-head"><span class="tr-lang"></span><span class="tr-line-no"></span></div><div class="tr-code" role="list"></div></div>
           </div>
           <div class="tr-right">
             <div class="tr-stage"><div class="tr-viz"></div></div>
-            <div class="note tr-note"><strong class="tr-note-title">Paso</strong><span class="tr-note-text"></span></div>
+            <div class="note tr-note"><strong class="tr-note-title">${T('Paso', 'Step')}</strong><span class="tr-note-text"></span></div>
             <div class="tr-vars"><div class="tr-vars-head">Variables</div><div class="tr-vars-body"></div></div>
           </div>
         </div>`;
@@ -281,7 +310,7 @@
       const hasInput = p.presets && p.presets.length;
       this.$('.tr-input').hidden = !hasInput;
       if (hasInput) {
-        this.$('.tr-presets').innerHTML = p.presets.map((v, i) => `<button class="chip ${i === 0 ? 'active' : ''}" data-value="${esc(v)}">Ejemplo ${i + 1}</button>`).join('');
+        this.$('.tr-presets').innerHTML = p.presets.map((v, i) => `<button class="chip ${i === 0 ? 'active' : ''}" data-value="${esc(v)}">${T(`Ejemplo ${i + 1}`, `Example ${i + 1}`)}</button>`).join('');
         this.$('.tr-field').value = p.presets[0];
         this.$('.tr-field').placeholder = p.presets[0];
       }
@@ -303,7 +332,7 @@
         this.$('.tr-field').classList.remove('bad');
         this.root.querySelectorAll('.tr-presets .chip').forEach((c) => c.classList.toggle('active', c.dataset.value === text));
       } catch (e) {
-        err.textContent = e.message || 'No pude leer esa entrada.';
+        err.textContent = e.message || T('No pude leer esa entrada.', 'I could not read that input.');
         this.$('.tr-field').classList.add('bad');
         return;
       }
@@ -335,7 +364,7 @@
     }
     setPlayButton(playing) {
       const b = this.$('.tr-play');
-      if (b) b.innerHTML = playing ? '<svg class="ic"><use href="#i-pause"/></svg>Pausar' : '<svg class="ic"><use href="#i-play"/></svg>Reproducir';
+      if (b) b.innerHTML = playing ? `<svg class="ic"><use href="#i-pause"/></svg>${T('Pausar', 'Pause')}` : `<svg class="ic"><use href="#i-play"/></svg>${T('Reproducir', 'Play')}`;
     }
 
     renderFrame() {
@@ -356,13 +385,13 @@
         const top = cur.offsetTop - code.offsetTop, h = code.clientHeight;
         if (top < code.scrollTop + 20 || top > code.scrollTop + h - 40) code.scrollTop = top - h / 3;
       }
-      this.$('.tr-line-no').textContent = `línea ${f.line}`;
+      this.$('.tr-line-no').textContent = T(`línea ${f.line}`, `line ${f.line}`);
 
       // Stage
       this.$('.tr-viz').innerHTML = p.render(f.viz, this.args);
 
       // Narration
-      this.$('.tr-note-title').textContent = `Paso ${this.idx + 1} de ${this.frames.length}`;
+      this.$('.tr-note-title').textContent = T(`Paso ${this.idx + 1} de ${this.frames.length}`, `Step ${this.idx + 1} of ${this.frames.length}`);
       this.$('.tr-note-text').innerHTML = f.note || '';
 
       // Variables (flag the ones that just changed)
@@ -371,7 +400,7 @@
       body.innerHTML = entries.length ? entries.map(([k, v]) => {
         const changed = prevF && JSON.stringify((prevF.vars || {})[k]) !== JSON.stringify(v);
         return `<div class="tr-var ${changed ? 'changed' : ''}"><span>${esc(k)}</span><code>${esc(fmt(v, p.lang))}</code></div>`;
-      }).join('') : '<div class="vz-empty">Todavía no hay variables.</div>';
+      }).join('') : `<div class="vz-empty">${T('Todavía no hay variables.', 'No variables yet.')}</div>`;
 
       this.$('.tr-scrub').value = this.idx;
       this.$('.tr-count').textContent = `${this.idx + 1} / ${this.frames.length}`;
@@ -389,16 +418,16 @@
         <div class="learn-grid">
           <article class="learn-card wide">
             <span class="tag">${esc(this.problem.pattern)}</span>
-            <h3>${esc(this.problem.title)}: la idea</h3>
+            <h3>${esc(this.problem.title)}: ${T('la idea', 'the idea')}</h3>
             ${L.idea}
           </article>
           <article class="learn-card">
-            <h3>¿Cómo lo reconozco?</h3>
+            <h3>${T('¿Cómo lo reconozco?', 'How do I spot it?')}</h3>
             <ul class="plain">${L.signals.map((s) => `<li>${s}</li>`).join('')}</ul>
           </article>
           <article class="learn-card">
-            <h3>¿Cuánto cuesta?</h3>
-            <dl class="kv"><dt>Tiempo</dt><dd>${esc(L.time)}</dd><dt>Memoria extra</dt><dd>${esc(L.space)}</dd></dl>
+            <h3>${T('¿Cuánto cuesta?', 'What does it cost?')}</h3>
+            <dl class="kv"><dt>${T('Tiempo', 'Time')}</dt><dd>${esc(L.time)}</dd><dt>${T('Memoria extra', 'Extra memory')}</dt><dd>${esc(L.space)}</dd></dl>
             <p style="margin-top:.8rem">${L.why}</p>
           </article>
         </div>`;
@@ -411,15 +440,15 @@
       this.buildEl.innerHTML = `
         <div class="learn-grid">
           <article class="learn-card wide">
-            <h3>${esc(B.templateTitle || 'Plantilla del patrón')}</h3>
+            <h3>${esc(B.templateTitle || T('Plantilla del patrón', 'Pattern template'))}</h3>
             <pre class="code">${B.template.split('\n').map((l) => highlight(l, lang)).join('\n')}</pre>
           </article>
           <article class="learn-card">
-            <h3>Consejos para la entrevista</h3>
+            <h3>${T('Consejos para la entrevista', 'Interview tips')}</h3>
             <ul class="plain">${B.tips.map((t) => `<li>${t}</li>`).join('')}</ul>
           </article>
           <article class="learn-card">
-            <h3>Practica con problemas parecidos</h3>
+            <h3>${T('Practica con problemas parecidos', 'Practice with similar problems')}</h3>
             <ul class="plain">${B.similar.map((t) => `<li>${t}</li>`).join('')}</ul>
           </article>
         </div>`;
