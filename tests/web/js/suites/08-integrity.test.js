@@ -114,7 +114,7 @@ module.exports = (t, { read, WEB, createEnv }) => {
     t.test('no blurred drop-shadow filters on illustrations', () => t.notIncludes(css, 'drop-shadow('));
     t.test('buttons are flat colours, not gradients', () => t.ok(!/gradient/.test(ruleFor('.btn'))));
     t.test('screws are flat grey heads with an ink ring, like Bit', () => {
-      t.includes(css, '--screw-head: radial-gradient(circle, #c9ced6'); t.ok(!/\.screw::after/.test(css));
+      t.includes(css, '--screw-head: radial-gradient(circle, #9aa2ad'); t.ok(!/\.screw::after/.test(css));
     });
     t.test('every panel, card and board has a thick ink outline', () => {
       ['.bench', '.station-card', '.learn-card', '.stage', '.tr-brief', '.tr-stage', '.machine', '.faq', '.note', '.clipboard', '.pegboard', '.sign-board', '.tr-controls', '.net-cable']

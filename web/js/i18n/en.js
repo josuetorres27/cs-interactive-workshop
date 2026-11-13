@@ -23,7 +23,7 @@ window.I18N_EN = {
   "· plano n.º 1": "· blueprint no. 1",
   "hecho a mano": "handmade",
   "CS INTERACTIVE WORKSHOP": "<span class=\"logo-small\">CS INTERACTIVE</span> <span class=\"logo-name\">WORKSHOP</span>",
-  "un taller de computación para aprender haciendo": "a computer science workshop for learning by doing",
+  "Un taller de computación para aprender haciendo": "A computer science workshop for learning by doing",
   "¡Empecemos!": "Let's start!",
   "Hecho para estudiantes de computación · ECCI · UCRCreado por Josué Torres Sibaja": "Made for computer science students · ECCI · UCR<br><span class=\"intro-credit\">Created by <a href=\"https://www.linkedin.com/in/josue-torres-sibaja/\" target=\"_blank\" rel=\"noopener\">Josué Torres Sibaja</a></span>",
   "Hola, soy Bit. Te muestro el taller. ¿Qué es esto?": "Hi, I'm Bit. Let me show you around the workshop. <a href=\"#/about\" class=\"bubble-link\">What is this?</a>",
