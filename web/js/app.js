@@ -45,6 +45,7 @@ const TRACER_LINES = {
 const GUIDE_LINES = {
   workshop: T('Primero escoge una mesa de trabajo: cada una corresponde a un curso o tema. Si quieres practicar para entrevistas, prueba «Problemas de Código».', 'First pick a workbench: each one matches a course or topic. If you want to practice for interviews, try "Coding Problems".'),
   area: T('Estas son las estaciones de esta mesa. Toca una para entrar.', 'These are the stations at this workbench. Tap one to go in.'),
+  chooser: T('Escoge un problema. Cada uno tiene su idea, su recorrido paso a paso y su código para practicar.', 'Pick a problem. Each one has its idea, its step-by-step walkthrough and its code to practice.'),
   algorithms: {
     play: T('Escoge un algoritmo, dale a Iniciar y escucha: cada barra suena según su altura.', 'Pick an algorithm, press Start and listen: each bar sounds according to its height.'),
     learn: T('Aquí está la idea del algoritmo que elegiste y cuánto cuesta. Cambia de algoritmo en Experimenta y vuelve.', 'Here is the idea behind the algorithm you picked and how much it costs. Switch algorithms in Experiment and come back.'),
@@ -80,7 +81,7 @@ const GUIDE_LINES = {
 
 // First-visit walkthroughs (coach marks)
 const tracerTour = (id, what) => [
-  { sel: `#tracer-${id} .tr-picker`, title: T('Escoge un problema', 'Pick a problem'), text: T(`Cada tarjeta es ${what}. Todos son del mismo nivel; los demás niveles son otras estaciones.`, `Each card is ${what}. They are all the same level; the other levels are separate stations.`) },
+  { sel: `#tracer-${id} .tr-brief`, title: T('El problema', 'The problem'), text: T(`Esto es ${what}: lo que se pide y la entrada. Escoge un ejemplo o escribe la tuya.`, `This is ${what}: what is asked and the input. Pick an example or type your own.`) },
   { sel: `#tracer-${id} .tr-code-wrap`, title: T('El código', 'The code'), text: T('La línea resaltada es la que se está ejecutando. Las más claras ya se ejecutaron.', 'The highlighted line is the one running now. The lighter ones have already run.') },
   { sel: `#tracer-${id} .tr-controls`, title: T('Los controles', 'The controls'), text: T('Avanza o retrocede paso a paso, o dale Reproducir. Con el teclado: ← y →.', 'Go forward or back step by step, or press Play. With the keyboard: ← and →.') },
   { sel: `#tracer-${id} .tr-stage`, title: T('Lo que pasa en memoria', 'What happens in memory'), text: T('Aquí ves los datos en cada paso. Debajo, la explicación y las variables (las que cambian se iluminan).', 'Here you see the data at each step. Below, the explanation and the variables (the ones that change light up).') }
@@ -234,6 +235,15 @@ class App {
     if (parts[0] === 'profile') return this.openProfile();
     if (parts[0] === 'area' && AREAS[parts[1]]) return this.openArea(parts[1]);
     if (parts[0] === 'workshop' && MODULES[parts[1]]) {
+      // Stations made of problems: #/workshop/<station> is the problem shelf,
+      // #/workshop/<station>/<problem>[/<step>] is one problem with its three steps
+      const ps = this.problemStation(parts[1]);
+      if (ps) {
+        const problem = ps.problems.some((p) => p.id === parts[2]) ? parts[2] : null;
+        if (!problem && parts.length > 2) history.replaceState(null, '', `#/workshop/${parts[1]}`);
+        const step = problem && STEP_IDS.includes(parts[3]) ? parts[3] : 'learn';
+        return this.openModule(parts[1], step, problem);
+      }
       const step = STEP_IDS.includes(parts[2]) ? parts[2] : 'learn';
       return this.openModule(parts[1], step);
     }
@@ -274,12 +284,43 @@ class App {
     this.showScreen('area');
   }
 
-  openModule(tabId, step = 'learn') {
-    const isNewModule = this.currentTab !== tabId || this.route !== 'module';
+  openModule(tabId, step = 'learn', problem = null) {
+    const isNewModule = this.currentTab !== tabId || this.route !== 'module' || this.currentProblem !== problem;
+    const ps = this.problemStation(tabId);
+    this.currentProblem = ps ? problem : null;
+    this.choosing = !!ps && !problem;
     this.switchTab(tabId);
+    if (ps) this.showProblem(tabId, ps, problem);
     this.showScreen('module');
-    this.setStep(MODULES[tabId].steps ? step : 'play');
+    if (this.choosing) this.currentStep = null;
+    else this.setStep(MODULES[tabId].steps ? step : 'play');
+    if (this.choosing) this.updateGuide();
     if (isNewModule) window.soundController.playTone(720, 'sine', 0.04, 0.4);
+  }
+
+  // A tracer station whose problems are picked from a shelf before the steps
+  problemStation(tabId) {
+    const mod = MODULES[tabId];
+    const st = mod && mod.tracer ? stationAt(mod.tracer) : null;
+    return st && typeof st.chooser === 'function' && Array.isArray(st.problems) ? st : null;
+  }
+
+  showProblem(tabId, ps, problem) {
+    const mod = MODULES[tabId];
+    const pane = document.getElementById(`tab-${tabId}`);
+    if (pane) pane.classList.toggle('choosing', !problem);
+    document.getElementById('modSteps').hidden = !problem;
+    if (!problem) return;
+    if (!ps.problem || ps.problem.id !== problem) ps.select(problem);
+    document.getElementById('activeMissionLabel').textContent = ps.problem.title;
+    document.getElementById('modCrumb').textContent = `${mod.area ? AREAS[mod.area].title + ' / ' : ''}${mod.title} /`;
+    document.getElementById('btnBackToWelcome').href = `#/workshop/${tabId}`;
+  }
+
+  // The address of the current station (and problem) at a given step
+  moduleHash(step) {
+    const base = `#/workshop/${this.currentTab}${this.currentProblem ? '/' + this.currentProblem : ''}`;
+    return step === 'learn' ? base : `${base}/${step}`;
   }
 
   switchTab(tabId) {
@@ -297,18 +338,24 @@ class App {
 
   tracer() {
     const mod = MODULES[this.currentTab];
+    if (this.choosing) return null;
     return mod && mod.tracer ? stationAt(mod.tracer) || null : null;
   }
   stopTracers() {
     Object.values(MODULES).forEach(m => { const st = m.tracer && stationAt(m.tracer); if (st) st.stop(); });
     if (window.networkingStation && window.networkingStation.exchange) window.networkingStation.stop();
+    // Running simulations end when you leave them (another screen, station or step)
+    const sorting = window.algorithmsStation;
+    if (sorting && sorting.isRunning) sorting.pause();
+    const heat = window.heatStation;
+    if (heat && heat.running) heat.pause();
   }
 
   setupSteps() {
     document.querySelectorAll('#modSteps .step').forEach(btn => {
       btn.addEventListener('click', () => {
         const step = btn.dataset.step;
-        history.replaceState(null, '', `#/workshop/${this.currentTab}${step === 'learn' ? '' : '/' + step}`);
+        history.replaceState(null, '', this.moduleHash(step));
         this.setStep(step);
         window.soundController.playTone(520, 'sine', 0.02, 0.3);
       });
@@ -344,11 +391,6 @@ class App {
     const acc = window.account;
     if (!acc) return;
     acc.onChange((ev) => {
-    // Running simulations end when you leave them (another screen, station or step)
-    const sorting = window.algorithmsStation;
-    if (sorting && sorting.isRunning) sorting.pause();
-    const heat = window.heatStation;
-    if (heat && heat.running) heat.pause();
       this.renderAccountButton();
       this.updateProgressBadges();
       if (this.route === 'profile') this.renderProfile();
@@ -482,6 +524,17 @@ class App {
       const sum = ids.reduce((acc2, id) => { const s = acc.stats(id); return { done: acc2.done + s.done, total: acc2.total + s.total }; }, { done: 0, total: 0 });
       if (sum.total) badge(bench, sum.done, sum.total);
     });
+    // Problem cards inside a station: a check once walked through to the end
+    const items = (id) => ((acc.progress && acc.progress.stations && acc.progress.stations[id]) || {}).items || {};
+    document.querySelectorAll('.problem-card[data-problem]').forEach((card) => {
+      const m = /#\/workshop\/([\w-]+)\//.exec(card.getAttribute('href') || '');
+      const solved = !!(m && items(m[1])[`solve:${card.dataset.problem}`]);
+      card.classList.toggle('solved', solved);
+      let b = card.querySelector('.card-progress');
+      if (!solved) { if (b) b.remove(); return; }
+      if (!b) { b = document.createElement('span'); b.className = 'card-progress complete'; card.appendChild(b); }
+      b.innerHTML = `<svg class="ic"><use href="#i-check"/></svg>${T('resuelto', 'solved')}`;
+    });
   }
 
   // ── Bit, the guide ───────────────────────────────────────
@@ -515,7 +568,8 @@ class App {
     let text = null;
     if (this.route === 'workshop') text = GUIDE_LINES.workshop;
     if (this.route === 'area') text = GUIDE_LINES.area;
-    if (this.route === 'module') {
+    if (this.route === 'module' && this.choosing) text = GUIDE_LINES.chooser;
+    else if (this.route === 'module') {
       const lines = GUIDE_LINES[this.currentTab];
       text = typeof lines === 'string' ? lines : lines[this.currentStep];
     }

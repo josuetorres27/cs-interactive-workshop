@@ -779,6 +779,23 @@ code {
 .tab-pane.active { display: block; }
 .step-pane { display: none; animation: screen-in .35s ease; }
 .step-pane.active { display: block; }
+
+/* A station's problems are sub-stations: the station opens on a shelf of problem cards,
+   and the steps only appear once a problem is chosen */
+.tab-pane.choosing .step-pane.active { display: none; }
+.tab-pane:not(.choosing) > .problem-chooser { display: none; }
+.problem-chooser { animation: screen-in .35s ease; }
+.problem-shelf { padding-top: .4rem; }
+.problem-peek {
+  display: flex; align-items: center; gap: .7rem; width: 100%; min-width: 0;
+  margin-bottom: .9rem; padding: .85rem 1rem;
+  background: var(--code-bg); color: var(--code-fg);
+  border: 3px solid var(--box-ink); border-radius: 12px;
+  font-family: var(--font-mono); font-size: .85rem; white-space: nowrap; overflow: hidden;
+}
+.problem-peek code { min-width: 0; background: none; padding: 0; color: inherit; font-size: inherit; overflow: hidden; text-overflow: ellipsis; }
+.problem-num { flex: none; font-weight: 800; color: var(--sun-y); }
+.problem-card.solved .problem-peek { border-color: var(--mint); }
 .mod-body { padding-bottom: 5rem; }
 
 /* Subtabs (inside a module) */
