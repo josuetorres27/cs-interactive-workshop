@@ -217,6 +217,8 @@
       this.root = document.getElementById(`tracer-${this.id}`);
       this.learnEl = document.getElementById(`tracer-${this.id}-learn`);
       this.buildEl = document.getElementById(`tracer-${this.id}-build`);
+      this.chooserEl = document.getElementById(`tracer-${this.id}-chooser`);
+      if (this.chooserEl) this.chooserEl.innerHTML = this.chooser();
       if (!this.root) return;
       this.root.innerHTML = this.skeleton();
       this.$ = (sel) => this.root.querySelector(sel);
@@ -225,23 +227,7 @@
     }
 
     skeleton() {
-      const diffCls = { 'Fácil': 'easy', 'Media': 'mid', 'Difícil': 'hard', Easy: 'easy', Medium: 'mid', Hard: 'hard' };
-      // Long mixed catalogues get one row per difficulty; short mixed ones keep a badge on every button.
-      // A station with a single level (the usual case) needs no badges: its name already says the level.
-      const levels = [...new Set(this.problems.map((p) => p.difficulty))];
-      const grouped = this.problems.length > 6 && levels.length > 1;
-      const badges = !grouped && levels.length > 1;
-      const badge = (d, extra = '') => `<span class="diff ${diffCls[d] || 'mid'}${extra}">${esc(d)}</span>`;
-      const pick = (p) => `<button class="tr-pick" data-id="${p.id}" role="tab" title="${esc(p.difficulty)} · ${esc(p.pattern)}">${badges ? badge(p.difficulty) : ''}${esc(p.title)}</button>`;
-      const picker = grouped
-        ? `<div class="tr-picker grouped">${levels.map((d) => `
-          <div class="tr-group" role="tablist" aria-label="${T('Dificultad', 'Difficulty')}: ${esc(d)}">${badge(d, ' tr-group-label')}${this.problems.filter((p) => p.difficulty === d).map(pick).join('')}</div>`).join('')}
-        </div>`
-        : `<div class="tr-picker" role="tablist">
-          ${this.problems.map(pick).join('')}
-        </div>`;
       return `
-        ${picker}
         <div class="tr-brief">
           <div class="tr-statement">
             <span class="tr-pattern"></span>
@@ -279,11 +265,30 @@
         </div>`;
     }
 
+    // The station's front page: one card per problem. Each problem is a sub-station with its own
+    // Entiende / Experimenta / Implementa steps, at #/workshop/<station>/<problem>[/<step>].
+    chooser() {
+      const summary = (html) => {
+        const text = String(html).replace(/<\/?(p|br|li|ul|ol|div)[^>]*>/gi, ' ').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ')
+          .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+        const first = (text.match(/^.*?[.?!](\s|$)/) || [text])[0].trim();
+        return first.length > 150 ? `${first.slice(0, 147).trim()}...` : first;
+      };
+      return `
+        <div class="shelf problem-shelf">${this.problems.map((p, i) => `
+          <div class="station">
+            <a href="#/workshop/${this.id}/${p.id}" class="station-card problem-card" data-problem="${p.id}">
+              <div class="problem-peek"><span class="problem-num">${String(i + 1).padStart(2, '0')}</span><code>${highlight(p.code[0], p.lang)}</code></div>
+              <div class="station-meta"><span class="station-code">${esc(p.pattern)}</span></div>
+              <h3 class="station-name">${esc(p.title)}</h3>
+              <p class="station-line">${esc(summary(p.statement))}</p>
+              <span class="station-go">${T('Resolver', 'Solve it')} <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            </a>
+          </div>`).join('')}
+        </div>`;
+    }
+
     bind() {
-      this.$('.tr-picker').addEventListener('click', (e) => {
-        const b = e.target.closest('.tr-pick');
-        if (b) { this.select(b.dataset.id); window.soundController.playTone(600, 'sine', 0.02, 0.3); }
-      });
       this.$('.tr-presets').addEventListener('click', (e) => {
         const b = e.target.closest('.chip');
         if (!b) return;
@@ -303,7 +308,6 @@
       this.stop();
       this.problem = this.problems.find((p) => p.id === id) || this.problems[0];
       const p = this.problem;
-      this.root.querySelectorAll('.tr-pick').forEach((b) => b.classList.toggle('active', b.dataset.id === p.id));
       this.$('.tr-pattern').textContent = p.pattern;
       this.$('.tr-title').textContent = p.title;
       this.$('.tr-text').innerHTML = p.statement;

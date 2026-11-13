@@ -1,5 +1,5 @@
 // Coding problems catalogue (web/js/modules/interview.js): the seven problems added on top of the
-// original six, the difficulty ordering, the grouped picker and the matrix visual.
+// original six, the difficulty ordering, the problem shelf and the matrix visual.
 'use strict';
 
 module.exports = (t, { createEnv, mulberry32, read }) => {
@@ -102,17 +102,24 @@ module.exports = (t, { createEnv, mulberry32, read }) => {
       const ids = ['easy', 'medium', 'hard'].flatMap((l) => levels[l].problems.map((p) => p.id));
       t.eq(ids.length, 13); t.eq(new Set(ids).size, 13);
     });
-    t.test('a single-level station has a flat picker with no difficulty badges', () => ['easy', 'medium', 'hard'].forEach((l) => {
-      const html = levels[l].skeleton();
-      t.notIncludes(html, 'tr-group', l); t.notIncludes(html, 'class="diff ', l);
-      levels[l].problems.forEach((p) => t.includes(html, `data-id="${p.id}"`, p.id));
+    t.test('each station opens on a shelf with one card per problem, in order', () => ['easy', 'medium', 'hard'].forEach((l) => {
+      const html = levels[l].chooser();
+      t.deepEq([...html.matchAll(/data-problem="([\w-]+)"/g)].map((m) => m[1]), levels[l].problems.map((p) => p.id), l);
+      levels[l].problems.forEach((p) => t.includes(html, `href="#/workshop/problems-${l}/${p.id}"`, p.id));
     }));
-    t.test('a mixed catalogue still gets badges (short) or rows (long)', () => {
-      const { TraceStation } = env.window.Tracer;
-      const mixed = [levels.easy.problems[0], levels.medium.problems[0], levels.hard.problems[0]];
-      t.eq((new TraceStation('demo', mixed).skeleton().match(/class="diff /g) || []).length, 3);
-      t.eq((new TraceStation('demo', stn.problems).skeleton().match(/class="tr-group"/g) || []).length, 3);
+    t.test('the problem cards are numbered and name their pattern', () => {
+      const html = levels.medium.chooser();
+      t.includes(html, '<span class="problem-num">01</span>'); t.includes(html, '<span class="problem-num">06</span>');
+      levels.medium.problems.forEach((p) => t.includes(html, `<span class="station-code">${p.pattern}</span>`, p.id));
     });
+    t.test('the card summary is the first sentence of the statement, as plain text', () => {
+      const html = levels.easy.chooser();
+      const lines = [...html.matchAll(/<p class="station-line">([^<]*)<\/p>/g)].map((m) => m[1]);
+      t.eq(lines.length, 4); lines.forEach((x) => { t.ok(x.length > 10 && x.length <= 150, x); t.ok(!/[<>]/.test(x), x); });
+    });
+    t.test('the Experimenta step no longer has a problem picker', () => ['easy', 'medium', 'hard'].forEach((l) => {
+      const html = levels[l].skeleton(); t.notIncludes(html, 'tr-picker', l); t.notIncludes(html, 'tr-pick', l);
+    }));
     t.test('byLevel skips levels with no problems', () => {
       const only = env.window.Tracer.byLevel('x', levels.easy.problems);
       t.ok(only.easy); t.eq(only.medium, undefined); t.eq(only.hard, undefined); t.eq(only.all.length, 4);
