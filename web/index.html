@@ -432,8 +432,8 @@
             </div>
             <span class="station-code">CI-0112</span>
             <h3 class="bench-name">Algoritmos y Estructuras de Datos</h3>
-            <p class="bench-line">Ordenamiento · Pilas, listas y árboles</p>
-            <span class="bench-go">3 estaciones <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            <p class="bench-line">Ordenamiento, carreras · Pilas, listas y árboles</p>
+            <span class="bench-go">4 estaciones <svg class="ic"><use href="#i-arrow-r"/></svg></span>
           </a>
 
           <a href="#/area/parallel" class="bench" style="--accent:var(--mint)">
@@ -522,6 +522,31 @@
               <span class="station-code">SIMULACIÓN</span>
               <h3 class="station-name">Ordenamiento</h3>
               <p class="station-line">¿Quién ordena más rápido? Míralos competir.</p>
+              <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            </a>
+          </div>
+
+          <div class="station" data-area="algorithms">
+            <a href="#/workshop/versus" class="station-card" data-tab="versus" style="--accent:var(--sun-y)">
+              <div class="station-art">
+                <svg viewBox="0 0 160 100" aria-hidden="true">
+                  <g stroke="currentColor" stroke-width="4" stroke-linejoin="round">
+                    <rect x="8" y="56" width="11" height="34" rx="2" style="fill:var(--paper)"/>
+                    <rect x="22" y="34" width="11" height="56" rx="2" style="fill:var(--tomato)"/>
+                    <rect x="36" y="64" width="11" height="26" rx="2" style="fill:var(--paper)"/>
+                    <rect x="50" y="44" width="11" height="46" rx="2" style="fill:var(--paper)"/>
+                    <rect x="99" y="64" width="11" height="26" rx="2" style="fill:var(--mint)"/>
+                    <rect x="113" y="52" width="11" height="38" rx="2" style="fill:var(--mint)"/>
+                    <rect x="127" y="40" width="11" height="50" rx="2" style="fill:var(--mint)"/>
+                    <rect x="141" y="26" width="11" height="64" rx="2" style="fill:var(--mint)"/>
+                    <circle cx="80" cy="50" r="15" style="fill:var(--sky-b)"/>
+                  </g>
+                  <path d="m72 43 4 14 4-14M90 44.5c-1.5-1.6-6.5-2-6.5 1.2 0 3.6 7 2.2 7 6.2 0 3.1-5 3.1-7 1.2" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="station-code">SIMULACIÓN</span>
+              <h3 class="station-name">Algoritmo vs. algoritmo</h3>
+              <p class="station-line">Dos algoritmos, el mismo arreglo: ¿cuál termina primero?</p>
               <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
             </a>
           </div>
@@ -909,6 +934,189 @@
                   <li><code>std::stable_sort</code> se basa en Merge Sort.</li>
                   <li>Python y Java (objetos) usan <strong>Timsort</strong>, un híbrido de Merge e Insertion.</li>
                   <li>Para enteros de tamaño fijo, Radix Sort puede ganarle a todos.</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ MODULE: ALGORITHM VS. ALGORITHM ============ -->
+        <section id="tab-versus" class="tab-pane">
+
+          <div class="step-pane active" data-step="play">
+            <div class="workspace-grid">
+              <div class="clipboard">
+                <div class="ctl" id="vsPicks">
+                  <label class="ctl-label" for="vsLeft">Retador 1</label>
+                  <select id="vsLeft">
+                    <option value="quick" selected>Quick Sort</option>
+                    <option value="merge">Merge Sort</option>
+                    <option value="heap">Heap Sort</option>
+                    <option value="shell">Shell Sort</option>
+                    <option value="insertion">Insertion Sort</option>
+                    <option value="selection">Selection Sort</option>
+                    <option value="bubble">Bubble Sort</option>
+                    <option value="radix">Radix Sort (LSD)</option>
+                  </select>
+                  <label class="ctl-label vs-second" for="vsRight">Retador 2</label>
+                  <select id="vsRight">
+                    <option value="quick">Quick Sort</option>
+                    <option value="merge">Merge Sort</option>
+                    <option value="heap">Heap Sort</option>
+                    <option value="shell">Shell Sort</option>
+                    <option value="insertion">Insertion Sort</option>
+                    <option value="selection">Selection Sort</option>
+                    <option value="bubble" selected>Bubble Sort</option>
+                    <option value="radix">Radix Sort (LSD)</option>
+                  </select>
+                </div>
+
+                <div class="ctl" id="vsPresets">
+                  <div class="ctl-label">Arreglo inicial</div>
+                  <div class="chips">
+                    <button class="chip active" data-dist="random">Aleatorio</button>
+                    <button class="chip" data-dist="nearly-sorted">Casi ordenado</button>
+                    <button class="chip" data-dist="reversed">Invertido</button>
+                    <button class="chip" data-dist="few-unique">Pocos valores</button>
+                  </div>
+                </div>
+
+                <div class="ctl">
+                  <div class="ctl-label"><label for="vsSize">Cantidad de elementos</label><span id="vsSizeVal" class="ctl-value">40</span></div>
+                  <input type="range" id="vsSize" min="10" max="120" value="40">
+                </div>
+
+                <div class="ctl">
+                  <div class="ctl-label"><label for="vsSpeed">Velocidad</label><span id="vsSpeedVal" class="ctl-value">60%</span></div>
+                  <input type="range" id="vsSpeed" min="1" max="100" value="60">
+                </div>
+
+                <div class="btn-row">
+                  <button id="btnVsRun" class="btn btn-primary"><svg class="ic"><use href="#i-play"/></svg>¡Arranquen!</button>
+                  <button id="btnVsShuffle" class="btn btn-sm" title="Generar otro arreglo"><svg class="ic"><use href="#i-shuffle"/></svg>Revolver</button>
+                </div>
+              </div>
+
+              <div class="stage" id="vsStage">
+                <div class="vs-lanes">
+                  <div class="vs-lane" data-side="left">
+                    <div class="vs-lane-head"><span class="vs-name" id="vsNameLeft">Quick Sort</span><span class="vs-flag">¡Primero!</span></div>
+                    <div class="canvas-container"><canvas></canvas></div>
+                    <div class="vs-bar"><i></i></div>
+                    <dl class="vs-stats">
+                      <div><dt>Comparaciones</dt><dd class="vs-cmp">0</dd></div>
+                      <div><dt>Escrituras</dt><dd class="vs-wr">0</dd></div>
+                      <div><dt>Operaciones</dt><dd class="vs-ops">0</dd></div>
+                    </dl>
+                  </div>
+                  <div class="vs-lane" data-side="right">
+                    <div class="vs-lane-head"><span class="vs-name" id="vsNameRight">Bubble Sort</span><span class="vs-flag">¡Primero!</span></div>
+                    <div class="canvas-container"><canvas></canvas></div>
+                    <div class="vs-bar"><i></i></div>
+                    <dl class="vs-stats">
+                      <div><dt>Comparaciones</dt><dd class="vs-cmp">0</dd></div>
+                      <div><dt>Escrituras</dt><dd class="vs-wr">0</dd></div>
+                      <div><dt>Operaciones</dt><dd class="vs-ops">0</dd></div>
+                    </dl>
+                  </div>
+                </div>
+                <div class="legend">
+                  <span><i style="background:#3d8fd6"></i>Sin ordenar</span>
+                  <span><i style="background:#f6c33b"></i>Comparando</span>
+                  <span><i style="background:#e8512a"></i>Escribiendo</span>
+                  <span><i style="background:#4fb477"></i>Terminó</span>
+                  <span class="vs-status"><span>Estado:</span> <b id="vsStatus">Listo</b></span>
+                </div>
+                <div class="note vs-result" id="vsResult" hidden><strong id="vsResultTitle"></strong><span id="vsResultText"></span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-pane" data-step="learn">
+            <div class="learn-grid">
+              <article class="learn-card">
+                <h3>Una carrera justa</h3>
+                <p>Los dos algoritmos ordenan <strong>exactamente el mismo arreglo</strong>. En cada tic, cada uno hace una sola operación: comparar dos valores o escribir uno. Gana el que necesita menos operaciones para terminar.</p>
+                <div class="note"><strong>Por eso no medimos segundos</strong>Los segundos dependen de tu computadora. Las operaciones no: son justo lo que cuenta la notación O.</div>
+              </article>
+
+              <article class="learn-card">
+                <h3>¿Cuánto cuesta cada uno?</h3>
+                <p>Así crece el trabajo cuando el arreglo crece.</p>
+                <table class="vs-table">
+                  <thead><tr><th>Algoritmo</th><th>Mejor</th><th>Promedio</th><th>Peor</th></tr></thead>
+                  <tbody>
+                    <tr><td>Quick Sort</td><td>n log n</td><td>n log n</td><td>n²</td></tr>
+                    <tr><td>Merge Sort</td><td>n log n</td><td>n log n</td><td>n log n</td></tr>
+                    <tr><td>Heap Sort</td><td>n log n</td><td>n log n</td><td>n log n</td></tr>
+                    <tr><td>Shell Sort</td><td>n log n</td><td>n^(4/3)</td><td>n²</td></tr>
+                    <tr><td>Insertion Sort</td><td>n</td><td>n²</td><td>n²</td></tr>
+                    <tr><td>Selection Sort</td><td>n²</td><td>n²</td><td>n²</td></tr>
+                    <tr><td>Bubble Sort</td><td>n</td><td>n²</td><td>n²</td></tr>
+                    <tr><td>Radix Sort</td><td>n·k</td><td>n·k</td><td>n·k</td></tr>
+                  </tbody>
+                </table>
+              </article>
+
+              <article class="learn-card wide">
+                <h3>Carreras para probar</h3>
+                <ol class="numbered">
+                  <li><strong>Quick Sort vs Bubble Sort, Aleatorio.</strong> n log n contra n². Sube a 120 elementos: la distancia entre los dos crece mucho más rápido que el arreglo.</li>
+                  <li><strong>Insertion Sort vs Quick Sort, Casi ordenado.</strong> Gana el «lento». Insertion casi no tiene que mover nada y Quick Sort, con el pivote al final, parte muy mal un arreglo casi ordenado.</li>
+                  <li><strong>Merge Sort vs Heap Sort.</strong> Los dos son n log n y aun así uno le saca ventaja al otro: la O esconde las constantes.</li>
+                  <li><strong>Selection Sort vs Insertion Sort, Invertido.</strong> Mira las escrituras: Selection compara muchísimo pero casi no escribe.</li>
+                </ol>
+              </article>
+            </div>
+          </div>
+
+          <div class="step-pane" data-step="build">
+            <div class="learn-grid">
+              <article class="learn-card wide">
+                <h3>Tu propia carrera en C++</h3>
+                <pre class="code">#include &lt;algorithm&gt;
+#include &lt;chrono&gt;
+#include &lt;iostream&gt;
+#include &lt;random&gt;
+#include &lt;vector&gt;
+
+long long comparaciones = 0;
+bool menor(int a, int b) { ++comparaciones; return a &lt; b; }  // cuenta cada comparación
+
+int main() {
+  std::mt19937 rng(42);                     // misma semilla: el mismo arreglo para todos
+  std::vector&lt;int&gt; base(100000);
+  for (int&amp; x : base) x = rng() % 1000;
+
+  auto correr = [&amp;](const char* nombre, auto ordenar) {
+    std::vector&lt;int&gt; a = base;               // cada retador ordena su propia copia
+    comparaciones = 0;
+    auto t0 = std::chrono::steady_clock::now();
+    ordenar(a);
+    auto t1 = std::chrono::steady_clock::now();
+    std::cout &lt;&lt; nombre &lt;&lt; ": " &lt;&lt; comparaciones &lt;&lt; " comparaciones, "
+              &lt;&lt; std::chrono::duration&lt;double, std::milli&gt;(t1 - t0).count() &lt;&lt; " ms\n";
+  };
+
+  correr("std::sort",        [](auto&amp; a) { std::sort(a.begin(), a.end(), menor); });
+  correr("std::stable_sort", [](auto&amp; a) { std::stable_sort(a.begin(), a.end(), menor); });
+}</pre>
+              </article>
+              <article class="learn-card">
+                <h3>Para que la carrera sea justa</h3>
+                <ul class="plain">
+                  <li>Dale a cada algoritmo <strong>una copia del mismo arreglo</strong>, nunca uno ya ordenado por el anterior.</li>
+                  <li>Usa una <strong>semilla fija</strong> para poder repetir el experimento.</li>
+                  <li>Compila con <code>-O2</code> y corre varias veces: la primera vuelta suele ser más lenta.</li>
+                  <li>Cuenta operaciones además de medir tiempo: el tiempo cambia de máquina a máquina, las operaciones no.</li>
+                </ul>
+              </article>
+              <article class="learn-card">
+                <h3>Lo que vas a notar</h3>
+                <ul class="plain">
+                  <li>Con n grande, un n² pierde siempre contra un n log n.</li>
+                  <li>Con n pequeño o casi ordenado, Insertion Sort puede ganarle a cualquiera.</li>
+                  <li>Dos algoritmos con la misma O pueden tardar distinto por la caché y las constantes.</li>
                 </ul>
               </article>
             </div>
@@ -1694,6 +1902,7 @@ atomic_fetch_add(&amp;contador, 1);</pre>
   <script src="js/account.js"></script>
   <script src="js/modules/figuresData.js"></script>
   <script src="js/modules/algorithms.js"></script>
+  <script src="js/modules/versus.js"></script>
   <script src="js/modules/concurrency.js"></script>
   <script src="js/modules/heatsim.js"></script>
   <script src="js/modules/heat.js"></script>

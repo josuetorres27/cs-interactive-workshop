@@ -19,6 +19,14 @@
       items: [run('quick', 'Quick Sort'), run('merge', 'Merge Sort'), run('heap', 'Heap Sort'), run('shell', 'Shell Sort'),
         run('insertion', 'Insertion Sort'), run('selection', 'Selection Sort'), run('bubble', 'Bubble Sort'), run('radix', 'Radix Sort')]
     },
+    versus: {
+      title: T('Algoritmo vs. algoritmo', 'Algorithm vs. algorithm'),
+      items: [
+        { id: 'race', label: T('Terminar una carrera', 'Finish a race') },
+        { id: 'nlogn', label: T('Ver a un O(n log n) ganarle a un O(n²)', 'Watch an O(n log n) beat an O(n²)') },
+        { id: 'upset', label: T('Ver a un O(n²) ganarle a un O(n log n)', 'Watch an O(n²) beat an O(n log n)') }
+      ]
+    },
     'datastructures-easy': {
       title: T('Estructuras de datos · Fácil', 'Data structures · Easy'),
       items: [walk('valid-parens', T('Paréntesis balanceados', 'Balanced parentheses')), walk('reverse-list', T('Invertir una lista enlazada', 'Reverse a linked list'))]
