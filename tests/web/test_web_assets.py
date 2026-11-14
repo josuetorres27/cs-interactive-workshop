@@ -82,14 +82,14 @@ def main():
     test("Index HTML Links favicon.ico", 'href="/favicon.ico"' in html)
     test("Index HTML Links favicon.svg", 'href="/favicon.svg"' in html)
     test("Index HTML Links apple-touch-icon", 'href="/apple-touch-icon.png"' in html)
-    test("Index HTML Has a Canonical Link", '<link rel="canonical" href="https://cs-interactive-workshop.web.app/">' in html)
+    test("Index HTML Has a Canonical Link", '<link rel="canonical" href="https://workshop.josuetorressibaja.com/">' in html)
     test("Index HTML Is Not Blocked From Indexing", "noindex" not in html.lower())
     with open(os.path.join(repo_root, "web", "robots.txt"), "r", encoding="utf-8") as f:
         robots = f.read()
-    test("robots.txt Allows Crawling and Lists the Sitemap", "Allow: /" in robots and "Sitemap: https://cs-interactive-workshop.web.app/sitemap.xml" in robots)
+    test("robots.txt Allows Crawling and Lists the Sitemap", "Allow: /" in robots and "Sitemap: https://workshop.josuetorressibaja.com/sitemap.xml" in robots)
     with open(os.path.join(repo_root, "web", "sitemap.xml"), "r", encoding="utf-8") as f:
         sitemap = f.read()
-    test("sitemap.xml Lists the Home Page", "<loc>https://cs-interactive-workshop.web.app/</loc>" in sitemap)
+    test("sitemap.xml Lists the Home Page", "<loc>https://workshop.josuetorressibaja.com/</loc>" in sitemap)
 
     # 4. firebase.json checks
     fb_path = os.path.join(repo_root, "firebase.json")
