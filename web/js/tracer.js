@@ -246,6 +246,8 @@
         </div>
         <div class="tr-main">
           <div class="tr-left">
+            <div class="tr-code-wrap"><div class="tr-code-head"><span class="tr-lang"></span><span class="tr-line-no"></span></div><div class="tr-code" role="list"></div></div>
+            <div class="tr-vars"><div class="tr-vars-head">Variables</div><div class="tr-vars-body"></div></div>
             <div class="tr-controls">
               <button class="round-btn sm tr-first" title="${T('Al inicio', 'To the start')}" aria-label="${T('Al inicio', 'To the start')}"><svg class="ic"><use href="#i-first"/></svg></button>
               <button class="round-btn sm tr-prev" title="${T('Paso anterior', 'Previous step')} (←)" aria-label="${T('Paso anterior', 'Previous step')}"><svg class="ic"><use href="#i-back"/></svg></button>
@@ -255,12 +257,10 @@
               <span class="tr-count"></span>
             </div>
             <input type="range" class="tr-scrub" min="0" max="0" value="0" aria-label="${T('Línea de tiempo', 'Timeline')}">
-            <div class="tr-code-wrap"><div class="tr-code-head"><span class="tr-lang"></span><span class="tr-line-no"></span></div><div class="tr-code" role="list"></div></div>
           </div>
           <div class="tr-right">
             <div class="tr-stage"><div class="tr-viz"></div></div>
             <div class="note tr-note"><strong class="tr-note-title">${T('Paso', 'Step')}</strong><span class="tr-note-text"></span></div>
-            <div class="tr-vars"><div class="tr-vars-head">Variables</div><div class="tr-vars-body"></div></div>
           </div>
         </div>`;
     }
