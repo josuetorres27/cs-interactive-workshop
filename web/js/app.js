@@ -273,6 +273,7 @@ class App {
     this.route = route;
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('is-active', s.dataset.route === route));
     document.body.classList.toggle('on-intro', route === 'intro');
+    document.body.dataset.route = route;
     if (prev !== route) window.scrollTo({ top: 0 });
     this.updateGuide();
   }
