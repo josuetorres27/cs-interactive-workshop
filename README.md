@@ -171,14 +171,14 @@ python3 -m http.server 8000 --directory web
 Then open `http://localhost:8000`.
 
 ### Deployment
-Every push to `main` runs the full test suite in GitHub Actions and, if it passes, deploys `web/` to Firebase Hosting at https://cs-interactive-workshop.web.app.
+Every push to `main` runs the full test suite in GitHub Actions and, if it passes, deploys `web/` to Firebase Hosting, served at https://workshop.josuetorressibaja.com (the default `cs-interactive-workshop.web.app` address keeps working too).
 
 ### Optional: accounts with Firebase
 Without configuration the workshop runs in guest mode. To enable Google sign-in and cloud progress:
 1. Create a Firebase project, enable Google sign-in and Firestore.
 2. Put the web app settings in `web/js/firebase-config.js`.
 3. Deploy the rules: `firebase deploy --only firestore:rules`.
-4. In Firebase Authentication, add any custom domain to the authorized domains (the *.web.app domain is already allowed).
+4. In Firebase Authentication, add any custom domain, such as workshop.josuetorressibaja.com, to the authorized domains (the *.web.app domain is already allowed).
 
 The included `firebase.json` can also host the site: `firebase deploy --only hosting`.
 
