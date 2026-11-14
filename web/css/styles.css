@@ -758,13 +758,17 @@ body > main { flex: 1 0 auto; }
   -webkit-text-stroke: 2px var(--box-ink); paint-order: stroke fill;
   text-shadow: 0 3px 0 var(--box-ink);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  /* Room inside the clip box for the outline and the drop shadow, so no letter looks cut */
+  padding: .14em .2em .24em .08em; margin: -.14em 0 -.24em -.08em;
 }
 
 /* Three steps: Experimenta / Entiende / Implementa */
 .steps {
   display: flex; gap: 6px;
   padding: 5px;
-  background: rgba(var(--rgb-shade), .22);
+  background: var(--tr-bar);
+  border: var(--outline);
+  box-shadow: var(--lift);
   border-radius: var(--pill);
   margin: .4rem 0 1.4rem;
   width: max-content; max-width: 100%;
@@ -946,7 +950,6 @@ input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius
   padding-top: 1.45rem;
   border-radius: 4px;
   box-shadow: var(--lift);
-  transform: rotate(-.6deg);
   font-family: var(--font-hand); font-size: calc(1.15rem * var(--hand-scale)); line-height: 1.3; color: var(--box-ink);
 }
 .note strong { font-family: var(--font-display); font-weight: 400; font-size: 1.05rem; display: block; margin-bottom: .15rem; }
@@ -1211,7 +1214,7 @@ pre.code .t-k { color: var(--sun-y); }
   overflow-x: auto;
 }
 .tr-viz { display: grid; gap: 1rem; justify-items: center; }
-.tr-note { margin-top: 0; transform: rotate(-.4deg); }
+.tr-note { margin-top: 0; }
 .tr-note-text b { font-family: var(--font-sans); font-weight: 800; }
 .tr-note-text code { font-size: .8em; }
 
