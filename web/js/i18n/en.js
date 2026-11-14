@@ -25,7 +25,7 @@ window.I18N_EN = {
   "CS INTERACTIVE WORKSHOP": "<span class=\"logo-small\">CS INTERACTIVE</span> <span class=\"logo-name\">WORKSHOP</span>",
   "Un taller de computación para aprender haciendo": "A computer science workshop for learning by doing",
   "¡Empecemos!": "Let's start!",
-  "Hecho para estudiantes de computación · ECCI · UCRCreado por Josué Torres Sibaja": "Made for computer science students · ECCI · UCR<br><span class=\"intro-credit\">Created by <a href=\"https://www.linkedin.com/in/josue-torres-sibaja/\" target=\"_blank\" rel=\"noopener\">Josué Torres Sibaja</a></span>",
+  "Hecho para estudiantes de computación · ECCI · UCRCreado por Josué Torres Sibaja": "Made for computer science students · ECCI · UCR<br><span class=\"intro-credit\">Created by <a href=\"https://www.linkedin.com/in/josue-torres-sibaja/\" target=\"_blank\" rel=\"noopener\">Josue Torres Sibaja</a></span>",
   "Hola, soy Bit. Te muestro el taller. ¿Qué es esto?": "Hi, I'm Bit. Let me show you around the workshop. <a href=\"#/about\" class=\"bubble-link\">What is this?</a>",
   "Volver": "Back",
   "Volver al inicio": "Back to home",
@@ -49,7 +49,7 @@ window.I18N_EN = {
   "¿Tengo que instalar algo?": "Do I need to install anything?",
   "No. Todo corre en tu navegador. Si quieres ir más lejos, el repositorio incluye los motores originales en C y C++ para compilarlos en tu máquina.": "No. Everything runs in your browser. If you want to go further, the repository includes the original C and C++ engines so you can compile them on your own machine.",
   "¿Quién lo hizo?": "Who made it?",
-  "Lo creó Josué Torres Sibaja, estudiante de la ECCI, a partir de proyectos reales de sus cursos. Es código abierto (MIT): puedes usarlo, mejorarlo y proponer estaciones nuevas.": "It was created by <a href=\"https://josuetorres.tech/\" target=\"_blank\" rel=\"noopener\">Josué Torres Sibaja</a>, an ECCI student, based on real projects from his courses. It is open source (MIT): you can use it, improve it and propose new stations.",
+  "Lo creó Josué Torres Sibaja, estudiante de la ECCI, a partir de proyectos reales de sus cursos. Es código abierto (MIT): puedes usarlo, mejorarlo y proponer estaciones nuevas.": "It was created by <a href=\"https://josuetorressibaja.com/\" target=\"_blank\" rel=\"noopener\">Josue Torres Sibaja</a>, an ECCI student, based on real projects from his courses. It is open source (MIT): you can use it, improve it and propose new stations.",
   "Ver el código en GitHub": "See the code on GitHub",
   "Entrar al taller": "Enter the workshop",
   "Inicio": "Home",
@@ -460,5 +460,5 @@ window.I18N_EN = {
   "Paso 1 de 4": "Step 1 of 4",
   "Siguiente": "Next",
   "Saltar": "Skip",
-  "CS Interactive Workshop · Creado por Josué Torres Sibaja": "CS Interactive Workshop · Created by <a href=\"https://www.linkedin.com/in/josue-torres-sibaja/\" target=\"_blank\" rel=\"noopener\">Josué Torres Sibaja</a>"
+  "CS Interactive Workshop · Creado por Josué Torres Sibaja": "CS Interactive Workshop · Created by <a href=\"https://www.linkedin.com/in/josue-torres-sibaja/\" target=\"_blank\" rel=\"noopener\">Josue Torres Sibaja</a>"
 };
