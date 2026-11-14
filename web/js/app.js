@@ -12,6 +12,7 @@ const AREAS = {
 
 const MODULES = {
   algorithms:     { title: T('Ordenamiento', 'Sorting'),                 area: 'algorithms',   steps: true },
+  versus:         { title: T('Algoritmo vs. algoritmo', 'Algorithm vs. algorithm'), area: 'algorithms', steps: true },
   'datastructures-easy':   { title: T('Estructuras de datos · Fácil', 'Data structures · Easy'),   area: 'algorithms', steps: true, tracer: 'dsStations.easy' },
   'datastructures-medium': { title: T('Estructuras de datos · Media', 'Data structures · Medium'), area: 'algorithms', steps: true, tracer: 'dsStations.medium' },
   concurrency:    { title: T('La Rotonda', 'The Roundabout'),            area: 'parallel',      steps: true },
@@ -23,7 +24,7 @@ const MODULES = {
   sql:            { title: T('SQL paso a paso', 'SQL step by step'),     area: 'databases',     steps: true, tracer: 'sqlStation' },
   cheatsheets:    { title: T('El Cuaderno', 'The Notebook'),             area: null,          steps: false }
 };
-const MODULE_ORDER = ['algorithms', 'datastructures-easy', 'datastructures-medium', 'concurrency', 'heat', 'networking',
+const MODULE_ORDER = ['algorithms', 'versus', 'datastructures-easy', 'datastructures-medium', 'concurrency', 'heat', 'networking',
   'problems-easy', 'problems-medium', 'problems-hard', 'sql', 'cheatsheets'];
 const STEP_IDS = ['play', 'learn', 'build'];
 const MAX_TOASTS = 3;
@@ -50,6 +51,11 @@ const GUIDE_LINES = {
     play: T('Escoge un algoritmo, dale a Iniciar y escucha: cada barra suena según su altura.', 'Pick an algorithm, press Start and listen: each bar sounds according to its height.'),
     learn: T('Aquí está la idea del algoritmo que elegiste y cuánto cuesta. Cambia de algoritmo en Experimenta y vuelve.', 'Here is the idea behind the algorithm you picked and how much it costs. Switch algorithms in Experiment and come back.'),
     build: T('Este código cambia según el algoritmo que tengas seleccionado.', 'This code changes with the algorithm you have selected.')
+  },
+  versus: {
+    play: T('Escoge dos algoritmos y dale a ¡Arranquen!: los dos ordenan el mismo arreglo, una operación a la vez.', 'Pick two algorithms and press Go!: both sort the same array, one operation at a time.'),
+    learn: T('Gana el que hace menos operaciones. Aquí ves por qué, y cuánto cuesta cada algoritmo.', 'The one that makes fewer operations wins. Here you see why, and how much each algorithm costs.'),
+    build: T('Arma tu propia carrera en C++: cuenta comparaciones y mide el tiempo.', 'Build your own race in C++: count comparisons and measure the time.')
   },
   concurrency: {
     play: T('Los autos son hilos. Apaga los semáforos o pulsa «Provocar deadlock» para ver la rotonda trabarse.', 'The cars are threads. Turn off the semaphores or press "Cause deadlock" to watch the roundabout lock up.'),
@@ -93,6 +99,12 @@ const TOURS = {
     { sel: '#btnRunAlgo', title: T('¡Dale play!', 'Press play!'), text: T('Mira y escucha. Puedes pausar cuando quieras.', 'Watch and listen. You can pause whenever you like.') },
     { sel: '#algoStage', title: T('El escenario', 'The stage'), text: T('Amarillo compara, rojo intercambia y verde ya está en su lugar. Abajo ves el marcador.', 'Yellow compares, red swaps and green is already in place. The scoreboard is below.') },
     { sel: '#modSteps', title: T('Después, entiende', 'Then, understand'), text: T('En «Entiende» está la idea y su costo. En «Implementa», el código.', 'The idea and its cost are in "Understand". The code is in "Implement".') }
+  ],
+  versus: [
+    { sel: '#vsPicks', title: T('Escoge a los retadores', 'Pick the challengers'), text: T('Dos de los ocho algoritmos. Empieza con Quick Sort contra Bubble Sort.', 'Two of the eight algorithms. Start with Quick Sort against Bubble Sort.') },
+    { sel: '#vsPresets', title: T('La misma pista para los dos', 'The same track for both'), text: T('Los dos ordenan exactamente el mismo arreglo. Prueba también Casi ordenado.', 'Both sort exactly the same array. Also try Nearly sorted.') },
+    { sel: '#btnVsRun', title: T('¡Arranquen!', 'Go!'), text: T('En cada tic, cada uno hace una operación: comparar o escribir.', 'On every tick, each one makes one operation: a comparison or a write.') },
+    { sel: '#vsStage', title: T('La pista', 'The track'), text: T('La barra de abajo muestra cuánto le falta a cada uno. Gana el que necesita menos operaciones.', 'The bar below shows how much each one has left. The one that needs fewer operations wins.') }
   ],
   concurrency: [
     { sel: '#concSubtabs', title: T('Dos simulaciones', 'Two simulations'), text: T('La rotonda y dos patrones clásicos: el buffer acotado y los filósofos comensales.', 'The roundabout and two classic patterns: the bounded buffer and the dining philosophers.') },
@@ -193,7 +205,7 @@ class App {
   init() {
     document.querySelectorAll('.bit-slot').forEach(el => { el.innerHTML = BIT_SVG; });
 
-    ['algorithmsStation', 'concurrencyStation', 'heatStation', 'networkingStation', 'cheatsheetsStation', 'notebookStation', 'sqlStation']
+    ['algorithmsStation', 'versusStation', 'concurrencyStation', 'heatStation', 'networkingStation', 'cheatsheetsStation', 'notebookStation', 'sqlStation']
       .forEach(name => { if (window[name]) window[name].init(); });
     Object.values(MODULES).forEach(m => { const st = m.tracer && m.tracer.includes('.') && stationAt(m.tracer); if (st) st.init(); });
 
@@ -347,6 +359,8 @@ class App {
     // Running simulations end when you leave them (another screen, station or step)
     const sorting = window.algorithmsStation;
     if (sorting && sorting.isRunning) sorting.pause();
+    const race = window.versusStation;
+    if (race && race.isRunning) race.pause();
     const heat = window.heatStation;
     if (heat && heat.running) heat.pause();
   }
@@ -375,6 +389,7 @@ class App {
     if (step === 'play') {
       requestAnimationFrame(() => {
         if (this.currentTab === 'algorithms' && window.algorithmsStation) window.algorithmsStation.resizeCanvas();
+        if (this.currentTab === 'versus' && window.versusStation) window.versusStation.resizeCanvas();
         if (this.currentTab === 'concurrency' && window.concurrencyStation) window.concurrencyStation.resizeCanvas();
       });
     }
