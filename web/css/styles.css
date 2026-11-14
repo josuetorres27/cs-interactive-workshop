@@ -1373,7 +1373,12 @@ pre.code .t-k { color: var(--sun-y); }
 @media (max-width: 900px) {
   .tr-main, .tr-brief { grid-template-columns: 1fr; }
   .tr-input { border-left: 0; padding-left: 0; border-top: 2px dashed var(--ply-edge); padding-top: 1rem; }
-  .tr-left { position: static; }
+  /* One column: code, variables, player, timeline, then the stage and the note. The columns
+     dissolve into it so the player can stay in reach (stuck under the corner buttons) while
+     you scroll down to watch the stage. */
+  .tr-left, .tr-right { display: contents; }
+  .tr-main { gap: .9rem; }
+  .tr-main .tr-controls { position: sticky; top: 64px; z-index: 6; }
   .tr-code { max-height: 300px; }
 }
 @media (max-width: 1000px) {
@@ -1667,6 +1672,8 @@ pre.code .t-k { color: var(--sun-y); }
   .heat-panels { grid-template-columns: 1fr; }
   .stencil { grid-template-columns: 1fr; justify-items: center; }
   .stencil svg { max-width: 180px; }
+  /* The code under the drawing keeps the card's width (it scrolls inside) instead of spilling out */
+  .stencil > pre { justify-self: stretch; min-width: 0; max-width: 100%; }
 }
 
 /* ── Art direction: outlines for paper surfaces ───────────── */
@@ -1677,8 +1684,17 @@ pre.code .t-k { color: var(--sun-y); }
 @media (max-width: 900px) {
   .workspace-grid { grid-template-columns: 1fr; }
   .mod-bar .wrap { padding-right: 0; flex-wrap: wrap; }
-  .mod-bar { padding-top: 70px; }
+  /* The title sits under the corner buttons and scrolls away with the page instead of
+     covering a third of a small screen */
+  .mod-bar { position: relative; padding-top: 70px; }
+  /* In a station Bit would sit on top of the code, the legend and the player, so only his
+     bubble shows (the ? button opens it, or starts the tour) */
+  body[data-route="module"] #guideBit { display: none; }
+  /* Race counters: two per row, the operations count gets the whole row */
+  .vs-stats { grid-template-columns: 1fr 1fr; }
+  .vs-stats > div:last-child { grid-column: 1 / -1; }
 }
+
 @media (max-width: 600px) {
   .corner-bar { top: 10px; right: 10px; gap: 6px; }
   .round-btn { width: 40px; height: 40px; }
@@ -1686,8 +1702,15 @@ pre.code .t-k { color: var(--sun-y); }
   #screen-intro { --bit-w: 104px; }
   .lab-deco.blueprint, .wood-deco.plan { top: 72px; left: 10px; width: 112px; }
   .steps { width: 100%; }
-  .step { flex: 1; justify-content: center; gap: .3rem; padding: .4rem .5rem; font-size: .88rem; }
-  .step-n { width: 20px; height: 20px; font-size: .72rem; }
+  /* The three step tabs share the bar without scrolling sideways */
+  .step { flex: 1 1 0; min-width: 0; justify-content: center; gap: .25rem; padding: .4rem .25rem; font-size: .82rem; }
+  .step-n { flex: none; width: 18px; height: 18px; font-size: .68rem; }
+  /* Long problem names wrap instead of being cut with "…" */
+  .mod-title h2 { white-space: normal; font-size: 1.35rem; line-height: 1.12; }
+  /* The player fits on one row: smaller round buttons, the play button takes what is left */
+  .tr-controls { gap: .35rem; padding: .55rem .6rem; }
+  .tr-controls .round-btn.sm { width: 34px; height: 34px; }
+  .tr-controls .tr-play { flex: 1; min-width: 0; padding-inline: .5rem; }
   .workspace-grid > .stage, .workspace-grid > .net-stack { order: -1; }
   .guide .bit { width: 60px; }
   .guide .bubble { max-width: calc(100vw - 110px); margin-bottom: 1.45rem; font-size: 1.05rem; }
