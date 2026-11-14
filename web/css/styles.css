@@ -1524,12 +1524,17 @@ pre.code .t-k { color: var(--sun-y); }
 .lg-start { background: #ffd9cc; } .lg-head { background: #d6eafa; } .lg-crlf { background: #fff; border-color: var(--tomato-dark) !important; } .lg-body { background: #ddf2e3; }
 
 @media (max-width: 900px) {
+  /* Tablet: client and server stay side by side, with a shorter cable between them */
+  .net-scene { grid-template-columns: minmax(0, 1fr) 96px minmax(0, 1fr); }
+  .net-bottom { grid-template-columns: 1fr; }
+  .net-timeline { grid-template-columns: repeat(5, minmax(84px, 1fr)); overflow-x: auto; }
+}
+@media (max-width: 700px) {
+  /* Phone: client on top, server below, the cable runs down between them */
   .net-scene { grid-template-columns: 1fr; }
   .net-wire { min-height: 150px; }
   .net-cable { left: 50%; right: auto; top: -6px; bottom: -6px; width: 14px; height: auto; margin: 0 0 0 -7px; background: #56616c; }
   .net-wire-label { top: auto; left: calc(50% + 18px); text-align: left; }
-  .net-bottom { grid-template-columns: 1fr; }
-  .net-timeline { grid-template-columns: repeat(5, minmax(84px, 1fr)); overflow-x: auto; }
 }
 
 /* ================================================================
@@ -1695,6 +1700,26 @@ pre.code .t-k { color: var(--sun-y); }
   .vs-stats > div:last-child { grid-column: 1 / -1; }
 }
 
+/* ── Tablet (portrait, ~834×1194) ─────────────────────────────
+   One column like a phone, but with room to spare: the control clipboards use two columns,
+   and cards keep their bigger drawings. */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .bench { grid-template-columns: 100px 1fr; padding: 1.4rem 1.3rem 1.2rem 1.5rem; }
+  .bench-art { width: 100px; }
+  .bench-name { font-size: 1.35rem; }
+  .bench-line { font-size: calc(1.1rem * var(--hand-scale)); }
+  #areaShelf { gap: 1.4rem; }
+  #areaShelf .station { flex: 0 1 240px; }
+  #areaShelf .station-name { font-size: 1.32rem; }
+  .problem-shelf .station { flex-basis: 340px; }
+}
+@media (min-width: 601px) and (max-width: 900px) {
+  /* The controls sit above the stage here, so they spread over two columns */
+  .workspace-grid > .clipboard { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.6rem; align-content: start; }
+  .workspace-grid > .clipboard > :is(.divider, .btn-row, .subtabs, h3, h4, p, .alert, .status-note) { grid-column: 1 / -1; }
+  /* Control groups that the station swaps in and out (the Rotonda's two simulations) keep the full width */
+  .workspace-grid > .clipboard > div:not(.ctl) { grid-column: 1 / -1; }
+}
 @media (max-width: 600px) {
   .corner-bar { top: 10px; right: 10px; gap: 6px; }
   .round-btn { width: 40px; height: 40px; }
