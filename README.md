@@ -1,21 +1,24 @@
 # CS Interactive Workshop
 
+[![Live Site](https://img.shields.io/badge/Live_Site-workshop.josuetorressibaja.com-3b82f6?logo=firebase&logoColor=white)](https://workshop.josuetorressibaja.com/)
 [![Standard](https://img.shields.io/badge/Language-C99%20%2F%20C11%20%2F%20C%2B%2B17-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B17)
 [![Concurrency](https://img.shields.io/badge/Concurrency-POSIX%20Threads%20%7C%20OpenMP%20%7C%20Atomics-orange.svg)](https://computing.llnl.gov/tutorials/pthreads/)
 [![Networking](https://img.shields.io/badge/Networking-BSD%20Sockets%20%7C%20HTTP%201.1-purple.svg)](docs/networking/Protocol_Specification.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build & Tests](https://img.shields.io/badge/Tests-870%2B%20Passing-brightgreen.svg)](tests/)
-[![Author](https://img.shields.io/badge/Author-Josue%20Torres%20Sibaja-0ea5e9.svg)](https://josuetorres.tech/)
+[![Build & Tests](https://img.shields.io/badge/Tests-1%2C376%20Passing-brightgreen.svg)](#test-suite-1376-tests)
+[![Author](https://img.shields.io/badge/Author-Josu%C3%A9%20Torres%20Sibaja-0ea5e9.svg)](https://josuetorressibaja.com/)
 
-An interactive workshop for Computer Science students at the ECCI (Universidad de Costa Rica). It covers **algorithms and data structures**, **parallel and concurrent programming**, **networking**, **technical interview patterns** and **SQL**, through visual simulations in the browser backed by real C and C++ engines.
+An interactive workshop for Computer Science students at the ECCI (Universidad de Costa Rica). It covers **algorithms and data structures**, **parallel and concurrent programming**, **networking**, **classic coding problems** and **SQL**, through visual simulations in the browser backed by real C and C++ engines.
 
-The web workshop is a wooden room with workbenches (work areas) and stations. Every station has three steps:
+**Live:** [https://workshop.josuetorressibaja.com](https://workshop.josuetorressibaja.com/)
+
+The web workshop is a lab with workbenches (work areas) and stations. Every station has three steps:
 
 - **Experimenta:** play with a live simulation.
 - **Entiende:** the theory behind it, with diagrams.
 - **Implementa:** the real code from the C/C++ engines and how to run it.
 
-Accounts are optional. Guests keep their progress on their own device; students who sign in with Google keep it in the cloud.
+The workshop is written in Spanish with a full English translation, has two looks (the tech lab and the original wooden workshop), works on phones, tablets and desktops, and includes Bit, a robot guide with a tour for every station. Accounts are optional: guests keep their progress on their own device, and students who sign in with Google keep it in the cloud.
 
 ---
 
@@ -25,8 +28,8 @@ Accounts are optional. Guests keep their progress on their own device; students 
 cs-interactive-workshop/
 ├── Makefile                            # Builds every native engine and runs all tests
 ├── LICENSE                             # MIT License
-├── firebase.json                       # Firebase Hosting configuration (optional)
-├── firestore.rules                     # Firestore rules for student progress (optional)
+├── firebase.json                       # Firebase Hosting configuration and cache headers
+├── firestore.rules                     # Firestore rules for student progress
 ├── .github/workflows/deploy.yml        # CI: runs every test, then deploys web/ to Firebase Hosting
 ├── docs/                               # Theory and specifications
 │   ├── algorithms/                     # Sorting guide, complexity analysis
@@ -44,9 +47,12 @@ cs-interactive-workshop/
 ├── tests/                              # C/C++ suites, Python checks, and the web workshop runner
 └── web/                                # The web workshop (static, no build step)
     ├── index.html                      # Every screen and station
-    ├── css/styles.css                  # Workshop theme, drawn like Bit the robot
+    ├── sitemap.xml, robots.txt         # Search engine files for the custom domain
+    ├── css/styles.css                  # Both themes, responsive layouts for phone, tablet and desktop
     ├── js/
-    │   ├── app.js                      # Router, work areas, guide, tours
+    │   ├── app.js                      # Router, work areas, Bit the guide, tours
+    │   ├── i18n.js, i18n/en.js         # Spanish source text and the English translation
+    │   ├── theme.js                    # Tech lab and wooden workshop themes
     │   ├── progress.js                 # Progress model (pure data)
     │   ├── account.js                  # Optional Google sign-in and sync
     │   ├── firebase-config.js          # Firebase settings (null = guest mode only)
@@ -54,13 +60,15 @@ cs-interactive-workshop/
     │   ├── audio.js                    # Web Audio sound effects
     │   └── modules/                    # One file per station (plus pure models)
     │       ├── algorithms.js           # Ordenamiento
+    │       ├── versus.js               # Algoritmo vs. algoritmo
     │       ├── datastructures.js       # Estructuras de datos (tracer)
     │       ├── concurrency.js          # La Rotonda
-    │       ├── heatsim.js, heat.js     # Difusion de calor: model and station
+    │       ├── heatsim.js, heat.js     # Difusión de calor: model and station
     │       ├── httpsim.js, networking.js # Sockets TCP: model and station
-    │       ├── interview.js            # Patrones de entrevista (tracer)
+    │       ├── interview.js            # Problemas clásicos (tracer)
     │       ├── sql.js                  # SQL paso a paso (tracer)
     │       ├── cheatsheets.js          # El Cuaderno
+    │       ├── notebook.js             # Mis apuntes, the notebook inside El Cuaderno
     │       └── figuresData.js          # Embedded copy of the ASCII figures
     └── assets/ascii_figures/           # ASCII figures served to the web workshop
 ```
@@ -69,25 +77,28 @@ cs-interactive-workshop/
 
 ## Stations
 
+Twelve stations: eleven on five workbenches, plus El Cuaderno. Each one has a checklist, and finishing it completes the station.
+
 ### Algoritmos y Estructuras de Datos
 - **Ordenamiento:** Quick, Merge, Heap, Shell, Insertion, Selection, Bubble and Radix (LSD) sort on a live array, with input presets (random, nearly sorted, reversed, few unique), counters and sound mapped to values.
-- **Estructuras de datos:** balanced parentheses, reversing a linked list and inserting into a BST, traced line by line like a debugger.
+- **Algoritmo vs. algoritmo:** two of the eight algorithms race on the same array, one operation per tick each, with live comparison and write counters and a verdict that explains who won and why.
+- **Estructuras de datos · Fácil y Media:** balanced parentheses, reversing a linked list and inserting into a BST, traced line by line like a debugger.
 
-### Programacion Paralela y Concurrente
+### Programación Paralela y Concurrente
 - **La Rotonda:** a four-quadrant roundabout guarded by counting semaphores (`sem_t`). Turn the guard off to cause a deadlock (circular wait), turn it on to fix it, and explore the classic patterns.
-- **Difusion de calor:** a metal plate solved by threads. Each thread owns a band of rows and must wait at a barrier every iteration; you can see which threads are working and which are waiting, change the number of threads, split the rows unevenly, slow one thread down, paint heat sources and break stability with r > 1/4. It shows live speedup, efficiency and time spent at the barrier.
+- **Difusión de calor:** a metal plate solved by threads. Each thread owns a band of rows and must wait at a barrier every iteration; you can see which threads are working and which are waiting, change the number of threads, split the rows unevenly, slow one thread down, paint heat sources and break stability with r > 1/4. It shows live speedup, efficiency and time spent at the barrier.
 
 ### Redes
 - **Sockets TCP:** a client and a server exchanging HTTP over TCP, step by step: handshake, segments with seq/ack numbers, the request, the server thread that handles it, the response and the teardown. The model follows the routing of `Server.cc` (200, 404, 400 and `LIST`).
 
-### Entrevistas Tecnicas
-- **Patrones de entrevista:** two pointers, sliding window, interval merging and monotonic deque, on six classic problems, traced line by line.
+### Problemas de Código
+- **Problemas clásicos · Fácil, Media y Difícil:** thirteen classic problems (palindromes, binary search, two pointers, sliding window, interval merging, islands, coin change, trapping rain water, largest rectangle and more), traced line by line on your own input.
 
 ### Bases de Datos
 - **SQL paso a paso:** queries run clause by clause in logical order (`FROM`, `JOIN`, `WHERE`, `GROUP BY`, `HAVING`, `SELECT`, `ORDER BY`, `LIMIT`).
 
 ### El Cuaderno
-- Amdahl's law calculator, the Coffman conditions and a Big-O reference.
+- Amdahl's law calculator, the Coffman conditions, a Big-O reference and a personal notebook saved on the device.
 
 ---
 
@@ -145,7 +156,7 @@ make -C pthreads && make -C openmp
 
 ---
 
-## Test suite (888 tests)
+## Test suite (1,376 tests)
 
 A zero-dependency C/C++ assertion harness (`tests/runner.h`), Python checks and a dependency-free JavaScript runner that loads the real web files inside a fake DOM:
 
@@ -156,9 +167,9 @@ A zero-dependency C/C++ assertion harness (`tests/runner.h`), Python checks and 
 | **Concurrency: heat** | `tests/concurrency/test_heat_diffusion.c` | **70** | The real library: borders, maximum principle, symmetry, row partitioning, the kernel, convergence, input validation, and pthreads (both barriers) and OpenMP matching serial bit for bit. |
 | **Concurrency: patterns** | `tests/concurrency/test_patterns.c` | **50** | Bounded buffer FIFO order, no deadlock among philosophers, the 2:1 H2O ratio, atomic fetch-and-add without races. |
 | **Networking** | `tests/networking/test_networking.cpp` | **50** | Request line parsing, headers, response framing, file system chunking, all 12 figures. |
-| **Web assets** | `tests/web/test_web_assets.py` | **35** | Page anchors, CSS variables, JS syntax, audio and hosting configuration. |
-| **Web workshop** | `tests/web/run.js` | **513** | Every station and model (sorting, roundabout, heat, HTTP over TCP, tracer problems against reference solutions), progress and accounts against a fake Firebase backend, Firestore rules, the router, art direction and page integrity. |
-| **Total** | **7 suites** | **888** | **All passing** |
+| **Web assets** | `tests/web/test_web_assets.py` | **35** | Page anchors, CSS variables, JS syntax, audio, hosting configuration and search engine files. |
+| **Web workshop** | `tests/web/run.js` | **1,001** | Every station and model (sorting, races, roundabout, heat, HTTP over TCP, tracer problems against reference solutions), progress and accounts against a fake Firebase backend, Firestore rules, the router, both languages, both themes, responsive layouts and page integrity. |
+| **Total** | **7 suites** | **1,376** | **All passing** |
 
 ---
 
@@ -187,4 +198,4 @@ The included `firebase.json` can also host the site: `firebase deploy --only hos
 ## License
 MIT. See [LICENSE](LICENSE).
 
-Created by **Josue Torres Sibaja** ([portfolio](https://josuetorres.tech/) · [LinkedIn](https://www.linkedin.com/in/josue-torres-sibaja/)).
+Created by **Josué Torres Sibaja** ([portfolio](https://josuetorressibaja.com/) · [LinkedIn](https://www.linkedin.com/in/josue-torres-sibaja/)).
