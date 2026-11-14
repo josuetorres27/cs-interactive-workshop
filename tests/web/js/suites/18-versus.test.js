@@ -171,6 +171,13 @@ module.exports = (t, { createEnv, read }) => {
       t.includes(css, '.screen { position: relative; z-index: 1; display: none; }');
       t.includes(css, '#screen-intro { min-height: 100vh; }');
     });
+    t.test('a screen that fits the window shares the spare height above and below its content', () => {
+      t.includes(css, 'body > main { display: flex; flex-direction: column; }');
+      t.includes(css, '.screen.is-active:not(#screen-intro) { flex: 1 0 auto; display: flex; flex-direction: column; }');
+      t.includes(css, '.screen.is-active:not(#screen-intro):not(#screen-module) > .wrap { margin-block: auto; }');
+      // In a station only the problem shelf is centred, so the steps never jump around
+      t.includes(css, '#screen-module.is-active:has(.tab-pane.active.choosing) > .mod-body { margin-block: auto;');
+    });
     t.test('benches and bench stations are compact enough to fit one screen', () => {
       t.ok(/\.bench \{[^}]*grid-template-columns: 84px 1fr;/.test(css));
       t.includes(css, '#areaShelf .station { flex: 0 1 216px; min-width: 196px; }');
