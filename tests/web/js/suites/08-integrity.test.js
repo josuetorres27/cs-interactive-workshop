@@ -53,7 +53,7 @@ module.exports = (t, { read, WEB, createEnv }) => {
     });
     t.test('the FAQ links the author name to the portfolio, plus the code on GitHub', () => {
       const faq = html.match(/<h3>¿Quién lo hizo\?<\/h3>[\s\S]*?<\/article>/)[0];
-      t.includes(faq, '<a href="https://josuetorres.tech/" target="_blank" rel="noopener">Josué Torres Sibaja</a>');
+      t.includes(faq, '<a href="https://josuetorressibaja.com/" target="_blank" rel="noopener">Josué Torres Sibaja</a>');
       t.includes(faq, 'href="https://github.com/josuetorres27/cs-interactive-workshop"');
       t.eq((faq.match(/<a /g) || []).length, 2);
     });
