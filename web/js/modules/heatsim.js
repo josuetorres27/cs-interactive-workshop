@@ -11,10 +11,10 @@
 // and a small cost model to show busy vs. waiting time at the barrier.
 (function (root) {
   const SCENARIOS = {
-    edge: { label: 'Borde caliente', borders: { top: 100, bottom: 0, left: 0, right: 0 }, interior: 0, sources: [] },
-    center: { label: 'Fuente central', borders: { top: 0, bottom: 0, left: 0, right: 0 }, interior: 0, sources: [{ y: 0.5, x: 0.5, r: 0.13, t: 100 }] },
-    two: { label: 'Dos fuentes', borders: { top: 0, bottom: 0, left: 0, right: 0 }, interior: 0, sources: [{ y: 0.32, x: 0.25, r: 0.1, t: 100 }, { y: 0.68, x: 0.75, r: 0.1, t: 100 }] },
-    cooling: { label: 'Placa que se enfría', borders: { top: 0, bottom: 0, left: 0, right: 0 }, interior: 100, sources: [] }
+    edge: { label: T('Borde caliente', 'Hot edge'), borders: { top: 100, bottom: 0, left: 0, right: 0 }, interior: 0, sources: [] },
+    center: { label: T('Fuente central', 'Central source'), borders: { top: 0, bottom: 0, left: 0, right: 0 }, interior: 0, sources: [{ y: 0.5, x: 0.5, r: 0.13, t: 100 }] },
+    two: { label: T('Dos fuentes', 'Two sources'), borders: { top: 0, bottom: 0, left: 0, right: 0 }, interior: 0, sources: [{ y: 0.32, x: 0.25, r: 0.1, t: 100 }, { y: 0.68, x: 0.75, r: 0.1, t: 100 }] },
+    cooling: { label: T('Placa que se enfría', 'Cooling plate'), borders: { top: 0, bottom: 0, left: 0, right: 0 }, interior: 100, sources: [] }
   };
 
   const STABLE_R = 0.25;
@@ -22,7 +22,7 @@
 
   // ── Plate ──────────────────────────────────────────────────────────
   function createPlate(rows, cols, scenarioId = 'edge') {
-    if (rows < 3 || cols < 3) throw new Error('La placa necesita al menos 3x3 celdas.');
+    if (rows < 3 || cols < 3) throw new Error(T('La placa necesita al menos 3x3 celdas.', 'The plate needs at least 3x3 cells.'));
     const sc = SCENARIOS[scenarioId] || SCENARIOS.edge;
     const n = rows * cols;
     const plate = { rows, cols, scenario: scenarioId, cur: new Float64Array(n), next: new Float64Array(n), fixed: new Uint8Array(n), iteration: 0, lastDelta: Infinity };

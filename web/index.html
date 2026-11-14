@@ -6,7 +6,7 @@
   <title>CS Interactive Workshop | Taller interactivo de Ciencias de la Computación</title>
   <meta name="description" content="Un taller de cartón para experimentar con algoritmos de ordenamiento, concurrencia y redes: simulaciones interactivas, explicaciones y consejos de implementación para estudiantes de computación.">
   <meta name="author" content="Josue Torres Sibaja">
-  <meta name="theme-color" content="#8a9096">
+  <meta name="theme-color" content="#a9b0b7">
   <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -20,6 +20,7 @@
   <meta property="og:locale" content="es_CR">
   <meta name="twitter:card" content="summary">
   <script>try{if(localStorage.getItem('csworkshop-theme')==='madera')document.documentElement.setAttribute('data-theme','madera')}catch(e){}</script>
+  <script>try{if(localStorage.getItem('csworkshop-lang')==='en'){var d=document.documentElement;d.lang='en';d.classList.add('i18n-wait');setTimeout(function(){d.classList.remove('i18n-wait')},3000)}}catch(e){}</script>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="on-intro">
@@ -34,6 +35,9 @@
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
     <symbol id="i-arrow-r" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
     <symbol id="i-arrow-l" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><path d="M19.15 10.08 L21.88 10.44 L21.88 13.56 L19.15 13.92 L18.41 15.70 L20.09 17.88 L17.88 20.09 L15.70 18.41 L13.92 19.15 L13.56 21.88 L10.44 21.88 L10.08 19.15 L8.30 18.41 L6.12 20.09 L3.91 17.88 L5.59 15.70 L4.85 13.92 L2.12 13.56 L2.12 10.44 L4.85 10.08 L5.59 8.30 L3.91 6.12 L6.12 3.91 L8.30 5.59 L10.08 4.85 L10.44 2.12 L13.56 2.12 L13.92 4.85 L15.70 5.59 L17.88 3.91 L20.09 6.12 L18.41 8.30Z"/><circle cx="12" cy="12" r="3.2"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.8 5.6 3.8 9s-1.2 6.4-3.8 9c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5"/></symbol>
     <symbol id="i-theme" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></symbol>
     <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4.5 4.5 0 0 1 0 6M18 6.5a8 8 0 0 1 0 11"/></symbol>
     <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></symbol>
@@ -60,10 +64,15 @@
   <div class="corner-bar">
     <a href="#/profile" id="btnAccount" class="round-btn account-btn" title="Mi espacio" aria-label="Mi espacio"><svg class="ic"><use href="#i-user"/></svg></a>
     <button id="btnHelp" class="round-btn" title="Ayuda" aria-label="Ayuda"><svg class="ic"><use href="#i-help"/></svg></button>
-    <button id="btnTheme" class="round-btn" title="Cambiar al taller de madera" aria-label="Cambiar al taller de madera" aria-pressed="false"><svg class="ic"><use href="#i-theme"/></svg></button>
-    <button id="btnToggleSound" class="round-btn" title="Silenciar sonido" aria-label="Silenciar sonido"><svg class="ic"><use href="#i-sound"/></svg></button>
     <button id="btnToggleFullscreen" class="round-btn" title="Pantalla completa" aria-label="Pantalla completa"><svg class="ic"><use href="#i-expand"/></svg></button>
-    <a href="https://github.com/josuetorres27/cs-interactive-workshop" target="_blank" rel="noopener" class="round-btn" title="Código en GitHub" aria-label="Código en GitHub"><svg class="ic"><use href="#i-github"/></svg></a>
+    <div class="settings">
+      <button id="btnSettings" class="round-btn" title="Ajustes" aria-label="Ajustes" aria-haspopup="true" aria-expanded="false" aria-controls="settingsMenu"><svg class="ic"><use href="#i-gear"/></svg></button>
+      <div id="settingsMenu" class="settings-menu" role="menu" hidden data-i18n="off">
+        <button id="btnLang" class="settings-row" role="menuitem"><svg class="ic"><use href="#i-globe"/></svg><span class="settings-label"></span><span class="settings-value"></span></button>
+        <button id="btnTheme" class="settings-row" role="menuitemcheckbox" aria-pressed="false"><svg class="ic"><use href="#i-theme"/></svg><span class="settings-label"></span><span class="settings-value"></span></button>
+        <button id="btnToggleSound" class="settings-row" role="menuitemcheckbox"><svg class="ic"><use href="#i-sound"/></svg><span class="settings-label"></span><span class="settings-value"></span></button>
+      </div>
+    </div>
   </div>
 
   <main>
@@ -72,14 +81,35 @@
          SCREEN 1 · INTRO  (#/)
          ====================================================== -->
     <section id="screen-intro" class="screen is-active" data-route="intro">
+      <!-- Lab lighting: three black lamps, each with a soft cone of light -->
       <div class="lamp theme-lab" aria-hidden="true">
-        <span class="lamp-glow"></span>
+        <span class="lamp-cone"></span><span class="lamp-glow"></span>
         <svg viewBox="0 0 120 120">
           <line x1="60" y1="0" x2="60" y2="40" stroke="#1b2027" stroke-width="4" stroke-linecap="round"/>
-          <rect x="52" y="36" width="16" height="12" rx="3" fill="#8a949e" stroke="#1b2027" stroke-width="4"/>
+          <rect x="52" y="36" width="16" height="12" rx="3" fill="#5a636e" stroke="#1b2027" stroke-width="4"/>
           <circle cx="60" cy="86" r="13" fill="#f2f8ff" stroke="#1b2027" stroke-width="4"/>
-          <path d="M44 48h32l22 34H22z" fill="#3a434e" stroke="#1b2027" stroke-width="5" stroke-linejoin="round"/>
-          <path d="M34 72h52" stroke="#5a6572" stroke-width="3" stroke-linecap="round"/>
+          <path d="M44 48h32l22 34H22z" fill="#20262e" stroke="#1b2027" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M33 73h54" stroke="#3a434e" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="lamp lamp-l theme-lab" aria-hidden="true">
+        <span class="lamp-cone"></span><span class="lamp-glow"></span>
+        <svg viewBox="0 0 120 120">
+          <line x1="60" y1="0" x2="60" y2="40" stroke="#1b2027" stroke-width="4" stroke-linecap="round"/>
+          <rect x="52" y="36" width="16" height="12" rx="3" fill="#5a636e" stroke="#1b2027" stroke-width="4"/>
+          <circle cx="60" cy="86" r="13" fill="#f2f8ff" stroke="#1b2027" stroke-width="4"/>
+          <path d="M44 48h32l22 34H22z" fill="#20262e" stroke="#1b2027" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M33 73h54" stroke="#3a434e" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="lamp lamp-r theme-lab" aria-hidden="true">
+        <span class="lamp-cone"></span><span class="lamp-glow"></span>
+        <svg viewBox="0 0 120 120">
+          <line x1="60" y1="0" x2="60" y2="40" stroke="#1b2027" stroke-width="4" stroke-linecap="round"/>
+          <rect x="52" y="36" width="16" height="12" rx="3" fill="#5a636e" stroke="#1b2027" stroke-width="4"/>
+          <circle cx="60" cy="86" r="13" fill="#f2f8ff" stroke="#1b2027" stroke-width="4"/>
+          <path d="M44 48h32l22 34H22z" fill="#20262e" stroke="#1b2027" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M33 73h54" stroke="#3a434e" stroke-width="3" stroke-linecap="round"/>
         </svg>
       </div>
 
@@ -99,11 +129,14 @@
             <line x1="60" y1="30" x2="60" y2="12"/>
             <circle cx="60" cy="10" r="7"/>
             <path d="M30 108 14 126M90 108 106 90"/>
-            <rect x="30" y="98" width="60" height="46" rx="6"/>
-            <circle cx="46" cy="126" r="5"/><circle cx="60" cy="126" r="5"/><circle cx="74" cy="126" r="5"/>
+            <circle cx="13" cy="127" r="5"/><circle cx="107" cy="89" r="5"/>
+            <rect x="30" y="98" width="60" height="46" rx="8"/>
+            <rect x="38" y="105" width="44" height="32" rx="5"/>
+            <circle cx="60" cy="121" r="9"/><circle cx="60" cy="121" r="4"/>
             <rect x="50" y="92" width="20" height="8"/>
-            <rect x="14" y="30" width="92" height="66" rx="9"/>
-            <rect x="27" y="44" width="66" height="42" rx="9"/>
+            <rect x="6" y="54" width="8" height="18" rx="3"/><rect x="106" y="54" width="8" height="18" rx="3"/>
+            <rect x="14" y="30" width="92" height="66" rx="12"/>
+            <rect x="27" y="44" width="66" height="42" rx="10"/>
             <rect x="40" y="55" width="11" height="15" rx="5"/>
             <rect x="69" y="55" width="11" height="15" rx="5"/>
             <path d="M51 76q9 6 18 0"/>
@@ -113,54 +146,67 @@
             <path d="M124 20V133M120 20h8M120 133h8"/>
             <path d="M74 70 L150 54H158"/>
             <path d="M80 24 L150 34H158"/>
+            <path d="M82 114 L150 92H158"/>
           </g>
           <g fill="#fff" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600">
             <text x="74" y="162" text-anchor="middle">92</text>
             <text x="129" y="80">150</text>
             <text x="160" y="57">VISOR LED</text>
             <text x="160" y="37">ANTENA</text>
+            <text x="160" y="95">NÚCLEO</text>
           </g>
           <g transform="translate(150 118)">
             <rect width="78" height="48" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.8)" stroke-width="1.2"/>
             <path d="M0 20H78M0 34H78" stroke="rgba(255,255,255,.5)" stroke-width="1"/>
-            <text x="6" y="14" fill="#fff" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">BIT · MK I</text>
+            <text x="6" y="14" fill="#fff" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">BIT · MK II</text>
             <text x="6" y="30" fill="#fff" font-family="JetBrains Mono, monospace" font-size="6.5">PROTOTIPO</text>
-            <text x="6" y="44" fill="#fff" font-family="JetBrains Mono, monospace" font-size="6.5">ESC 1:4 · REV 3</text>
+            <text x="6" y="44" fill="#fff" font-family="JetBrains Mono, monospace" font-size="6.5">ESC 1:4 · REV 4</text>
           </g>
           <rect x="-8" y="-2" width="46" height="14" fill="rgba(245,197,24,.9)" stroke="#1b2027" stroke-width="3" transform="rotate(-22 15 5)"/>
           <rect x="202" y="-2" width="46" height="14" fill="rgba(245,197,24,.9)" stroke="#1b2027" stroke-width="3" transform="rotate(22 225 5)"/>
         </svg>
       </div>
 
-      <!-- Workshop robot arm holding a chip -->
-      <div class="lab-deco robot-arm theme-lab" aria-hidden="true">
-        <svg viewBox="0 0 200 240">
-          <g stroke="#1b2027" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
-            <path d="M126 150 C170 150 172 96 118 92" fill="none" stroke="#2a3038" stroke-width="7"/>
-            <rect x="26" y="200" width="148" height="16" rx="5" fill="#5a636e"/>
-            <circle cx="42" cy="222" r="9" fill="#2a3038"/>
-            <circle cx="158" cy="222" r="9" fill="#2a3038"/>
-            <rect x="68" y="130" width="64" height="72" rx="9" fill="#8a949e"/>
-            <rect x="60" y="154" width="80" height="22" rx="5" fill="#6b7480"/>
-            <path d="M92 126 L58 70 L76 60 L110 118z" fill="#c9d0d8"/>
-            <path d="M62 52 L124 22 L132 38 L70 70z" fill="#c9d0d8"/>
-            <path d="M100 116 l15 6 6 15 -6 15 -15 6 -15 -6 -6 -15 6 -15z" fill="#f5c518"/>
-            <circle cx="66" cy="62" r="14" fill="#f5c518"/>
-            <circle cx="130" cy="30" r="10" fill="#5a636e"/>
-            <path d="M138 22 l14 -10 M138 38 l14 8" stroke-width="6"/>
-            <rect x="148" y="18" width="22" height="22" rx="3" fill="#2a3038"/>
+      <!-- Diagnostics monitor bolted to the wall -->
+      <div class="lab-deco wall-monitor theme-lab" aria-hidden="true">
+        <svg viewBox="0 0 220 166">
+          <defs>
+            <pattern id="hud-grid" width="10" height="10" patternUnits="userSpaceOnUse">
+              <path d="M10 0H0V10" fill="none" stroke="rgba(95,216,255,.10)" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect x="2" y="8" width="216" height="154" rx="10" fill="#1b2027"/>
+          <rect x="2" y="2" width="216" height="154" rx="10" fill="#2a3038" stroke="#1b2027" stroke-width="4"/>
+          <rect x="18" y="16" width="184" height="112" rx="6" fill="#0f1720" stroke="#1b2027" stroke-width="3"/>
+          <rect x="20" y="18" width="180" height="108" rx="5" fill="url(#hud-grid)"/>
+          <g fill="#c9d0d8" stroke="#1b2027" stroke-width="3">
+            <circle cx="11" cy="11" r="4"/><circle cx="209" cy="11" r="4"/><circle cx="11" cy="147" r="4"/><circle cx="209" cy="147" r="4"/>
           </g>
-          <g stroke="#1b2027" stroke-width="3" stroke-linecap="round">
-            <path d="M152 14v-4M159 14v-4M166 14v-4M152 44v4M159 44v4M166 44v4"/>
+          <!-- Ring gauge -->
+          <g fill="none" stroke-linecap="round">
+            <circle cx="64" cy="72" r="32" stroke="rgba(95,216,255,.22)" stroke-width="4"/>
+            <circle class="hud-spin" cx="64" cy="72" r="32" stroke="#5fd8ff" stroke-width="4" stroke-dasharray="58 143"/>
+            <circle class="hud-spin rev" cx="64" cy="72" r="23" stroke="#7fe6ff" stroke-width="2" stroke-dasharray="3 7"/>
+            <circle cx="64" cy="72" r="14" stroke="rgba(95,216,255,.5)" stroke-width="1.5"/>
           </g>
-          <circle cx="159" cy="29" r="4" fill="#5fd8ff"/>
-          <circle cx="100" cy="137" r="5" fill="#1b2027"/>
-          <circle cx="66" cy="62" r="4" fill="#1b2027"/>
-          <circle cx="116" cy="188" r="4" fill="#5fd8ff" stroke="#1b2027" stroke-width="3"/>
+          <text x="64" y="76" text-anchor="middle" fill="#e8fbff" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">BIT</text>
+          <!-- Sorted bars -->
+          <text x="112" y="34" fill="#7fe6ff" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600">DIAGNÓSTICO</text>
+          <path d="M112 40h80" stroke="rgba(95,216,255,.4)" stroke-width="1"/>
+          <g class="hud-bars" fill="#5fd8ff">
+            <rect x="113" y="88" width="8" height="12"/><rect x="125" y="82" width="8" height="18"/><rect x="137" y="75" width="8" height="25"/>
+            <rect x="149" y="68" width="8" height="32" fill="#f5c518"/><rect x="161" y="61" width="8" height="39"/><rect x="173" y="54" width="8" height="46"/><rect x="185" y="48" width="8" height="52"/>
+          </g>
+          <path d="M112 102h82" stroke="#5fd8ff" stroke-width="1.5"/>
+          <text x="112" y="116" fill="#e8fbff" font-family="JetBrains Mono, monospace" font-size="8">O(n log n)</text>
+          <!-- Bezel: status LED and buttons -->
+          <circle class="hud-led" cx="196" cy="142" r="4" fill="#2db886" stroke="#1b2027" stroke-width="3"/>
+          <rect x="22" y="138" width="22" height="8" rx="4" fill="#5a636e" stroke="#1b2027" stroke-width="3"/>
+          <rect x="50" y="138" width="22" height="8" rx="4" fill="#5a636e" stroke="#1b2027" stroke-width="3"/>
         </svg>
       </div>
 
-      <!-- Wooden theme decor: hanging lamp and pegboards with tools -->
+      <!-- Wooden theme decor: lamp, Bit's hand-drawn plan, a board full of tools and a shelf -->
       <div class="lamp theme-wood" aria-hidden="true">
         <span class="lamp-glow"></span>
         <svg viewBox="0 0 120 120">
@@ -172,35 +218,112 @@
         </svg>
       </div>
 
-      <div class="pegboard theme-wood" style="top:12%; left:4%; width:210px; height:170px" aria-hidden="true">
-        <!-- Screwdriver -->
-        <svg class="peg-tool" viewBox="0 0 120 120" style="left:26px; top:20px; width:78px">
-          <g stroke="#3d2414" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
-            <rect x="52" y="8" width="16" height="56" rx="4" fill="#c9ced6"/>
-            <path d="M52 8h16v-2" fill="none"/>
-            <rect x="42" y="62" width="36" height="50" rx="12" fill="#e8512a"/>
+      <!-- Bit's plan, sketched in pencil on kraft paper -->
+      <div class="wood-deco plan theme-wood" aria-hidden="true">
+        <svg viewBox="0 0 240 190">
+          <rect x="6" y="14" width="230" height="170" rx="3" fill="#3d2414"/>
+          <rect x="4" y="8" width="230" height="170" rx="3" fill="#f2dfbb" stroke="#3d2414" stroke-width="4"/>
+          <path d="M119 10v166M6 93h226" stroke="rgba(94,55,23,.16)" stroke-width="1.5"/>
+          <circle cx="204" cy="46" r="15" fill="none" stroke="rgba(143,90,45,.22)" stroke-width="3"/>
+          <g fill="none" stroke="#6f4a2a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" transform="translate(22 26) scale(.8)">
+            <line x1="60" y1="30" x2="60" y2="12"/>
+            <circle cx="60" cy="10" r="7"/>
+            <path d="M30 108 14 126M90 108 106 90"/>
+            <rect x="30" y="98" width="60" height="46" rx="6"/>
+            <path d="M34 108h52M34 136h52" stroke-width="1.4"/>
+            <circle cx="46" cy="124" r="5"/><circle cx="60" cy="124" r="5"/><circle cx="74" cy="124" r="5"/>
+            <rect x="50" y="92" width="20" height="8"/>
+            <rect x="14" y="30" width="92" height="66" rx="9"/>
+            <rect x="27" y="44" width="66" height="42" rx="9"/>
+            <rect x="40" y="55" width="11" height="15" rx="5"/>
+            <rect x="69" y="55" width="11" height="15" rx="5"/>
+            <path d="M51 76q9 6 18 0"/>
           </g>
-          <path d="M54 76v22M66 76v22" stroke="#b13817" stroke-width="4" stroke-linecap="round"/>
-        </svg>
-        <!-- Hammer -->
-        <svg class="peg-tool" viewBox="0 0 120 120" style="left:108px; top:16px; width:82px; transform:rotate(14deg)">
-          <g stroke="#3d2414" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
-            <rect x="53" y="38" width="14" height="74" rx="5" fill="#c68a50"/>
-            <path d="M26 14h56l12 10v18H26z" fill="#8d939c"/>
+          <g stroke="#9c7c5a" stroke-width="1.3" fill="none" stroke-linecap="round">
+            <path d="M33 158H107M33 154v8M107 154v8"/>
+            <path d="M120 30V142M116 30h8M116 142h8"/>
+            <path d="M72 34q40-12 62 0"/>
+            <path d="M92 80q26-6 42 2"/>
+            <path d="M80 128q30 8 54-2"/>
           </g>
-          <path d="M60 52v50" stroke="#a96f3c" stroke-width="3" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="pegboard theme-wood" style="top:46%; right:4%; width:180px; height:220px" aria-hidden="true">
-        <!-- Gear -->
-        <svg class="peg-tool" viewBox="0 0 120 120" style="left:34px; top:40px; width:110px">
-          <g stroke="#3d2414" stroke-width="6" stroke-linejoin="round">
-            <path d="M52 10h16l3 14 11 5 12-8 11 11-8 12 5 11 14 3v16l-14 3-5 11 8 12-11 11-12-8-11 5-3 14H52l-3-14-11-5-12 8-11-11 8-12-5-11-14-3V52l14-3 5-11-8-12 11-11 12 8 11-5z" fill="#f6c33b"/>
-            <circle cx="60" cy="60" r="16" fill="#c68a50"/>
+          <g fill="#5e3717" font-family="Patrick Hand, cursive" font-size="12">
+            <text x="70" y="172" text-anchor="middle">92 mm</text>
+            <text x="138" y="38">antena</text>
+            <text x="138" y="86">cara de pino</text>
+            <text x="138" y="130">3 botones</text>
+            <text x="138" y="158" font-size="19">Bit</text>
+            <text x="164" y="158" font-size="10.5">· plano n.º 1</text>
+            <text x="138" y="170" font-size="10.5">hecho a mano</text>
           </g>
+          <g fill="#8d939c" stroke="#3d2414" stroke-width="3"><circle cx="26" cy="16" r="5"/><circle cx="212" cy="16" r="5"/></g>
         </svg>
       </div>
 
+      <!-- Pegboard full of tools -->
+      <div class="pegboard theme-wood" aria-hidden="true">
+        <svg viewBox="0 0 230 330">
+          <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+            <!-- Hammer -->
+            <g transform="translate(20 20)">
+              <rect x="24" y="30" width="12" height="84" rx="4" fill="#c68a50"/>
+              <path d="M4 6h42l12 9v15H4z" fill="#8d939c"/>
+            </g>
+            <!-- Screwdriver -->
+            <g transform="translate(96 20)">
+              <rect x="10" y="2" width="8" height="54" rx="2" fill="#c9ced6"/>
+              <rect x="2" y="54" width="24" height="48" rx="9" fill="#e8512a"/>
+            </g>
+            <!-- Wrench -->
+            <g transform="translate(152 18)">
+              <rect x="16" y="30" width="12" height="62" rx="4" fill="#c9ced6"/>
+              <circle cx="22" cy="22" r="17" fill="#c9ced6"/>
+              <path d="M15 4v17h14V4" fill="#c4935e"/>
+              <circle cx="22" cy="98" r="11" fill="#c9ced6"/>
+              <circle cx="22" cy="98" r="3" fill="#c4935e" stroke-width="3"/>
+            </g>
+            <!-- Pliers -->
+            <g transform="translate(22 152)">
+              <path d="M24 44 12 96" stroke-width="15"/><path d="M36 44 48 96" stroke-width="15"/>
+              <path d="M24 44 12 96" stroke="#e8512a" stroke-width="7"/><path d="M36 44 48 96" stroke="#e8512a" stroke-width="7"/>
+              <path d="M22 40 17 6h9l4 22 4-22h9l-5 34z" fill="#c9ced6"/>
+              <circle cx="30" cy="42" r="7" fill="#8d939c"/>
+            </g>
+            <!-- Try square -->
+            <g transform="translate(104 156)">
+              <path d="M0 0h18v70h78v18H0z" fill="#f6c33b"/>
+            </g>
+            <!-- Handsaw -->
+            <g transform="translate(14 264)">
+              <path d="M54 6 200 14v16l-6 7-6-7-6 7-6-7-6 7-6-7-6 7-6-7-6 7-6-7-6 7-6-7-6 7-6-7-6 7-6-7-6 7-6-7-6 7-6-7-6 7-6-7-2 2z" fill="#c9ced6"/>
+              <rect x="4" y="2" width="54" height="46" rx="11" fill="#c68a50"/>
+              <rect x="19" y="15" width="24" height="20" rx="8" fill="#c4935e" stroke-width="4"/>
+            </g>
+          </g>
+          <g stroke="#3d2414" stroke-width="3" stroke-linecap="round">
+            <path d="M112 172h6M112 186h10M112 200h6M112 214h10M134 234v-6M150 234v-10M166 234v-6M182 234v-10"/>
+          </g>
+          <path d="M50 62v44M104 86v10M112 86v10" stroke="#a96f3c" stroke-width="3" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
+
+      <!-- Shelf with pencils and a spare gear -->
+      <div class="wood-deco shelf-deco theme-wood" aria-hidden="true">
+        <svg viewBox="0 0 200 150">
+          <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+            <g transform="rotate(-11 56 100)"><rect x="50" y="34" width="11" height="62" fill="#f6c33b"/><path d="M50 34l5.5-14 5.5 14z" fill="#e6bd85"/></g>
+            <g><rect x="63" y="26" width="11" height="70" fill="#e8512a"/><path d="M63 26l5.5-14 5.5 14z" fill="#e6bd85"/></g>
+            <g transform="rotate(12 82 100)"><rect x="77" y="36" width="11" height="60" fill="#3d8fd6"/><path d="M77 36l5.5-14 5.5 14z" fill="#e6bd85"/></g>
+            <path d="M40 66h58l-6 46H46z" fill="#8d939c"/>
+            <path d="M42 80h54" fill="none" stroke-width="3"/>
+            <g transform="translate(112 54) scale(.5)">
+              <path d="M52 10h16l3 14 11 5 12-8 11 11-8 12 5 11 14 3v16l-14 3-5 11 8 12-11 11-12-8-11 5-3 14H52l-3-14-11-5-12 8-11-11 8-12-5-11-14-3V52l14-3 5-11-8-12 11-11 12 8 11-5z" fill="#f6c33b" stroke-width="10"/>
+              <circle cx="60" cy="60" r="16" fill="#c68a50" stroke-width="10"/>
+            </g>
+            <path d="M34 128v16l16-16zM166 128v16l-16-16z" fill="#8d939c"/>
+            <rect x="4" y="112" width="192" height="16" rx="3" fill="#c68a50"/>
+          </g>
+        </svg>
+      </div>
 
       <div class="sign">
         <div class="sign-board">
@@ -210,7 +333,7 @@
             <span class="logo-small">CS INTERACTIVE</span>
             <span class="logo-name">WORKSHOP</span>
           </h1>
-          <p class="sign-sub">un taller de computación para aprender haciendo</p>
+          <p class="sign-sub">Un taller de computación para aprender haciendo</p>
         </div>
       </div>
 
@@ -218,13 +341,12 @@
         <a href="#/workshop" class="btn btn-hero" id="btnEnterWorkshopHero">
           ¡Empecemos! <svg class="ic"><use href="#i-arrow-r"/></svg>
         </a>
-        <a href="#/about" class="link-btn">¿Qué es esto?</a>
       </div>
 
       <p class="intro-foot">Hecho para estudiantes de computación · ECCI · UCR<br><span class="intro-credit">Creado por <a href="https://www.linkedin.com/in/josue-torres-sibaja/" target="_blank" rel="noopener">Josué Torres Sibaja</a></span></p>
 
       <div class="bit-slot intro-bit" aria-hidden="true"></div>
-      <div class="intro-bubble bubble" aria-hidden="true">Hola, soy Bit. Te muestro el taller.</div>
+      <div class="intro-bubble bubble">Hola, soy Bit. Te muestro el taller. <a href="#/about" class="bubble-link">¿Qué es esto?</a></div>
     </section>
 
     <!-- ======================================================
@@ -240,7 +362,7 @@
         </header>
 
         <div class="faq-board">
-          <article class="faq lined">
+          <article class="faq">
             <div class="faq-q"><span class="faq-num">1</span><h3>¿Qué es CS Interactive Workshop?</h3></div>
             <p>Un taller en el navegador donde los temas difíciles de computación se <strong>ven, se oyen y se tocan</strong>. En vez de leer sobre un deadlock, lo provocas. En vez de memorizar Big-O, ves la diferencia.</p>
           </article>
@@ -260,13 +382,13 @@
             </ul>
           </article>
 
-          <article class="faq lined">
+          <article class="faq">
             <div class="faq-q"><span class="faq-num">4</span><h3>¿Qué voy a aprender?</h3></div>
             <ul>
               <li><strong>Algoritmos y estructuras:</strong> 8 ordenamientos compitiendo; pilas, listas y árboles.</li>
               <li><strong>Concurrencia:</strong> hilos, mutex y semáforos en una rotonda.</li>
               <li><strong>Redes:</strong> sockets TCP, HTTP y un servidor con pool de hilos.</li>
-              <li><strong>Entrevistas:</strong> dos punteros, intervalos y ventanas deslizantes, de nivel medio a difícil.</li>
+              <li><strong>Problemas de código:</strong> palíndromos, islas, pilas, programación dinámica y ventanas deslizantes, de fáciles a difíciles.</li>
               <li><strong>Bases de datos:</strong> SQL ejecutado cláusula por cláusula.</li>
             </ul>
           </article>
@@ -279,11 +401,11 @@
           <article class="faq">
             <div class="faq-q"><span class="faq-num">6</span><h3>¿Quién lo hizo?</h3></div>
             <p>Lo creó <a href="https://josuetorres.tech/" target="_blank" rel="noopener">Josué Torres Sibaja</a>, estudiante de la ECCI, a partir de proyectos reales de sus cursos. Es código abierto (MIT): puedes usarlo, mejorarlo y proponer estaciones nuevas.</p>
+            <a href="https://github.com/josuetorres27/cs-interactive-workshop" target="_blank" rel="noopener" class="btn btn-ghost btn-sm faq-link"><svg class="ic"><use href="#i-github"/></svg>Ver el código en GitHub</a>
           </article>
         </div>
 
         <div class="faq-cta">
-          <span class="hand">¿Listo?</span>
           <a href="#/workshop" class="btn btn-hero">Entrar al taller <svg class="ic"><use href="#i-arrow-r"/></svg></a>
         </div>
       </div>
@@ -304,19 +426,19 @@
         </header>
 
         <div class="benches">
-          <a href="#/area/algorithms" class="bench" style="--accent:#3d8fd6">
+          <a href="#/area/algorithms" class="bench" style="--accent:var(--sky-b)">
             <div class="bench-art">
-              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="12" y="46" width="14" height="26" rx="2" fill="#fbf3e2"/><rect x="32" y="30" width="14" height="42" rx="2" fill="#f6c33b"/><rect x="52" y="52" width="14" height="20" rx="2" fill="#fbf3e2"/><rect x="72" y="18" width="14" height="54" rx="2" fill="#e8512a"/><rect x="92" y="8" width="14" height="64" rx="2" fill="#4fb477"/></g></svg>
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="12" y="46" width="14" height="26" rx="2" style="fill:var(--paper)"/><rect x="32" y="30" width="14" height="42" rx="2" style="fill:var(--sun-y)"/><rect x="52" y="52" width="14" height="20" rx="2" style="fill:var(--paper)"/><rect x="72" y="18" width="14" height="54" rx="2" style="fill:var(--tomato)"/><rect x="92" y="8" width="14" height="64" rx="2" style="fill:var(--mint)"/></g></svg>
             </div>
             <span class="station-code">CI-0112</span>
             <h3 class="bench-name">Algoritmos y Estructuras de Datos</h3>
-            <p class="bench-line">Ordenamiento · Pilas, listas y árboles</p>
-            <span class="bench-go">2 estaciones <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            <p class="bench-line">Ordenamiento, carreras · Pilas, listas y árboles</p>
+            <span class="bench-go">4 estaciones <svg class="ic"><use href="#i-arrow-r"/></svg></span>
           </a>
 
-          <a href="#/area/parallel" class="bench" style="--accent:#4fb477">
+          <a href="#/area/parallel" class="bench" style="--accent:var(--mint)">
             <div class="bench-art">
-              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5"><rect x="52" y="0" width="16" height="80" fill="#5b4a3d"/><rect x="0" y="32" width="120" height="16" fill="#5b4a3d"/><circle cx="60" cy="40" r="28" fill="#5b4a3d"/><circle cx="60" cy="40" r="13" fill="#8fd3a5"/></g><g stroke="#3d2414" stroke-width="4"><circle cx="60" cy="19" r="5" fill="#e8512a"/><circle cx="81" cy="40" r="5" fill="#f6c33b"/><circle cx="45" cy="55" r="5" fill="#3d8fd6"/></g></svg>
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="currentColor" stroke-width="5"><rect x="52" y="0" width="16" height="80" style="fill:var(--cv-road)"/><rect x="0" y="32" width="120" height="16" style="fill:var(--cv-road)"/><circle cx="60" cy="40" r="28" style="fill:var(--cv-road)"/><circle cx="60" cy="40" r="13" fill="#8fd3a5"/></g><g stroke="currentColor" stroke-width="4"><circle cx="60" cy="19" r="5" style="fill:var(--tomato)"/><circle cx="81" cy="40" r="5" style="fill:var(--sun-y)"/><circle cx="45" cy="55" r="5" style="fill:var(--sky-b)"/></g></svg>
             </div>
             <span class="station-code">CI-0117</span>
             <h3 class="bench-name">Programación Paralela y Concurrente</h3>
@@ -324,9 +446,9 @@
             <span class="bench-go">2 estaciones <svg class="ic"><use href="#i-arrow-r"/></svg></span>
           </a>
 
-          <a href="#/area/networking" class="bench" style="--accent:#8b5fbf">
+          <a href="#/area/networking" class="bench" style="--accent:var(--plum)">
             <div class="bench-art">
-              <svg viewBox="0 0 120 80" aria-hidden="true"><path d="M30 44c16 26 44 26 60 0" stroke="#3d2414" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="2 6"/><g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="6" y="14" width="40" height="30" rx="4" fill="#fbf3e2"/><rect x="74" y="14" width="40" height="30" rx="4" fill="#fbf3e2"/><rect x="12" y="20" width="28" height="18" rx="2" fill="#2b2119"/><rect x="80" y="20" width="28" height="18" rx="2" fill="#2b2119"/><rect x="54" y="58" width="12" height="9" rx="2" fill="#f6c33b"/></g></svg>
+              <svg viewBox="0 0 120 80" aria-hidden="true"><path d="M30 44c16 26 44 26 60 0" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="2 6"/><g stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="6" y="14" width="40" height="30" rx="4" style="fill:var(--paper)"/><rect x="74" y="14" width="40" height="30" rx="4" style="fill:var(--paper)"/><rect x="12" y="20" width="28" height="18" rx="2" style="fill:var(--code-bg)"/><rect x="80" y="20" width="28" height="18" rx="2" style="fill:var(--code-bg)"/><rect x="54" y="58" width="12" height="9" rx="2" style="fill:var(--sun-y)"/></g></svg>
             </div>
             <span class="station-code">CI-0123</span>
             <h3 class="bench-name">Redes</h3>
@@ -334,19 +456,19 @@
             <span class="bench-go">1 estación <svg class="ic"><use href="#i-arrow-r"/></svg></span>
           </a>
 
-          <a href="#/area/interviews" class="bench" style="--accent:#e8512a">
+          <a href="#/area/problems" class="bench" style="--accent:var(--tomato)">
             <div class="bench-art">
-              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="10" y="8" width="100" height="56" rx="5" fill="#fbf3e2"/><path d="M40 64v12M80 64v12" /></g><g stroke-width="5" stroke-linecap="round" fill="none"><path d="M30 26l-8 10 8 10" stroke="#3d8fd6"/><path d="M90 26l8 10-8 10" stroke="#3d8fd6"/><path d="M44 30h32M44 42h22" stroke="#3d2414"/></g></svg>
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="10" y="8" width="100" height="56" rx="5" style="fill:var(--paper)"/><path d="M40 64v12M80 64v12" /></g><g stroke-width="5" stroke-linecap="round" fill="none"><path d="M30 26l-8 10 8 10" style="stroke:var(--sky-b)"/><path d="M90 26l8 10-8 10" style="stroke:var(--sky-b)"/><path d="M44 30h32M44 42h22" stroke="currentColor"/></g></svg>
             </div>
-            <span class="station-code">PREPARACIÓN</span>
-            <h3 class="bench-name">Entrevistas Técnicas</h3>
-            <p class="bench-line">Dos punteros, intervalos, ventanas deslizantes</p>
-            <span class="bench-go">1 estación <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            <span class="station-code">PRÁCTICA</span>
+            <h3 class="bench-name">Problemas de Código</h3>
+            <p class="bench-line">Fáciles, medios y difíciles: palíndromos, islas, ventanas y más</p>
+            <span class="bench-go">3 estaciones <svg class="ic"><use href="#i-arrow-r"/></svg></span>
           </a>
 
-          <a href="#/area/databases" class="bench" style="--accent:#f6c33b">
+          <a href="#/area/databases" class="bench" style="--accent:var(--sun-y)">
             <div class="bench-art">
-              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5"><path d="M36 16v48c0 6 11 10 24 10s24-4 24-10V16" fill="#fbf3e2"/><ellipse cx="60" cy="16" rx="24" ry="9" fill="#fbf3e2"/><path d="M36 32c0 6 11 10 24 10s24-4 24-10M36 48c0 6 11 10 24 10s24-4 24-10" fill="none"/></g></svg>
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="currentColor" stroke-width="5"><path d="M36 16v48c0 6 11 10 24 10s24-4 24-10V16" style="fill:var(--paper)"/><ellipse cx="60" cy="16" rx="24" ry="9" style="fill:var(--paper)"/><path d="M36 32c0 6 11 10 24 10s24-4 24-10M36 48c0 6 11 10 24 10s24-4 24-10" fill="none"/></g></svg>
             </div>
             <span class="station-code">BASES DE DATOS</span>
             <h3 class="bench-name">Bases de Datos</h3>
@@ -354,9 +476,9 @@
             <span class="bench-go">1 estación <svg class="ic"><use href="#i-arrow-r"/></svg></span>
           </a>
 
-          <a href="#/workshop/cheatsheets" class="bench notebook" data-tab="cheatsheets" style="--accent:#c9975c">
+          <a href="#/workshop/cheatsheets" class="bench" data-tab="cheatsheets" style="--accent:var(--teal)">
             <div class="bench-art">
-              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="32" y="6" width="56" height="68" rx="4" fill="#fbf3e2" transform="rotate(-4 60 40)"/></g><g stroke="#3d8fd6" stroke-width="2" opacity=".6" transform="rotate(-4 60 40)"><path d="M40 24h40M40 34h40M40 44h40M40 54h40"/></g><text x="44" y="42" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="#3d2414" transform="rotate(-4 60 40)">O(n)</text></svg>
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="32" y="6" width="56" height="68" rx="4" transform="rotate(-4 60 40)" style="fill:var(--paper)"/></g><g stroke-width="2" opacity=".6" transform="rotate(-4 60 40)" style="stroke:var(--sky-b)"><path d="M40 24h40M40 34h40M40 44h40M40 54h40"/></g><text x="44" y="42" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" fill="currentColor" transform="rotate(-4 60 40)">O(n)</text></svg>
             </div>
             <span class="station-code">REPASO</span>
             <h3 class="bench-name">El Cuaderno</h3>
@@ -383,17 +505,17 @@
         <div class="shelf" id="areaShelf">
           <!-- Algoritmos -->
           <div class="station" data-area="algorithms">
-            <a href="#/workshop/algorithms" class="station-card" data-tab="algorithms" style="--accent:#3d8fd6">
+            <a href="#/workshop/algorithms" class="station-card" data-tab="algorithms" style="--accent:var(--sky-b)">
               <div class="station-art">
                 <svg viewBox="0 0 160 100" aria-hidden="true">
-                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round">
-                    <rect x="14" y="62" width="14" height="30" rx="2" fill="#fbf3e2"/>
-                    <rect x="34" y="40" width="14" height="52" rx="2" fill="#fbf3e2"/>
-                    <rect x="54" y="70" width="14" height="22" rx="2" fill="#f6c33b"/>
-                    <rect x="74" y="24" width="14" height="68" rx="2" fill="#e8512a"/>
-                    <rect x="94" y="50" width="14" height="42" rx="2" fill="#fbf3e2"/>
-                    <rect x="114" y="14" width="14" height="78" rx="2" fill="#4fb477"/>
-                    <rect x="134" y="8" width="14" height="84" rx="2" fill="#4fb477"/>
+                  <g stroke="currentColor" stroke-width="5" stroke-linejoin="round">
+                    <rect x="14" y="62" width="14" height="30" rx="2" style="fill:var(--paper)"/>
+                    <rect x="34" y="40" width="14" height="52" rx="2" style="fill:var(--paper)"/>
+                    <rect x="54" y="70" width="14" height="22" rx="2" style="fill:var(--sun-y)"/>
+                    <rect x="74" y="24" width="14" height="68" rx="2" style="fill:var(--tomato)"/>
+                    <rect x="94" y="50" width="14" height="42" rx="2" style="fill:var(--paper)"/>
+                    <rect x="114" y="14" width="14" height="78" rx="2" style="fill:var(--mint)"/>
+                    <rect x="134" y="8" width="14" height="84" rx="2" style="fill:var(--mint)"/>
                   </g>
                 </svg>
               </div>
@@ -405,36 +527,76 @@
           </div>
 
           <div class="station" data-area="algorithms">
-            <a href="#/workshop/datastructures" class="station-card" data-tab="datastructures" style="--accent:#4fb477">
+            <a href="#/workshop/versus" class="station-card" data-tab="versus" style="--accent:var(--sun-y)">
               <div class="station-art">
                 <svg viewBox="0 0 160 100" aria-hidden="true">
-                  <g stroke="#3d2414" stroke-width="5"><path d="M80 22 50 52M80 22l30 30M50 52 34 80M50 52l16 28M110 52l16 28"/></g>
-                  <g stroke="#3d2414" stroke-width="5"><circle cx="80" cy="22" r="12" fill="#f6c33b"/><circle cx="50" cy="52" r="12" fill="#fbf3e2"/><circle cx="110" cy="52" r="12" fill="#fbf3e2"/><circle cx="34" cy="80" r="11" fill="#fbf3e2"/><circle cx="66" cy="80" r="11" fill="#e8512a"/><circle cx="126" cy="80" r="11" fill="#fbf3e2"/></g>
+                  <g stroke="currentColor" stroke-width="4" stroke-linejoin="round">
+                    <rect x="8" y="56" width="11" height="34" rx="2" style="fill:var(--paper)"/>
+                    <rect x="22" y="34" width="11" height="56" rx="2" style="fill:var(--tomato)"/>
+                    <rect x="36" y="64" width="11" height="26" rx="2" style="fill:var(--paper)"/>
+                    <rect x="50" y="44" width="11" height="46" rx="2" style="fill:var(--paper)"/>
+                    <rect x="99" y="64" width="11" height="26" rx="2" style="fill:var(--mint)"/>
+                    <rect x="113" y="52" width="11" height="38" rx="2" style="fill:var(--mint)"/>
+                    <rect x="127" y="40" width="11" height="50" rx="2" style="fill:var(--mint)"/>
+                    <rect x="141" y="26" width="11" height="64" rx="2" style="fill:var(--mint)"/>
+                    <circle cx="80" cy="50" r="15" style="fill:var(--sky-b)"/>
+                  </g>
+                  <path d="m72 43 4 14 4-14M90 44.5c-1.5-1.6-6.5-2-6.5 1.2 0 3.6 7 2.2 7 6.2 0 3.1-5 3.1-7 1.2" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
-              <span class="station-code">DEPURADOR</span>
-              <h3 class="station-name">Estructuras de datos</h3>
-              <p class="station-line">Pilas, listas enlazadas y árboles, línea por línea.</p>
+              <span class="station-code">SIMULACIÓN</span>
+              <h3 class="station-name">Algoritmo vs. algoritmo</h3>
+              <p class="station-line">Dos algoritmos, el mismo arreglo: ¿cuál termina primero?</p>
+              <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            </a>
+          </div>
+
+          <div class="station" data-area="algorithms">
+            <a href="#/workshop/datastructures-easy" class="station-card" data-tab="datastructures-easy" style="--accent:var(--mint)">
+              <div class="station-art">
+                <svg viewBox="0 0 160 100" aria-hidden="true">
+                  <g stroke="currentColor" stroke-width="5"><path d="M80 22 50 52M80 22l30 30M50 52 34 80M50 52l16 28M110 52l16 28"/></g>
+                  <g stroke="currentColor" stroke-width="5"><circle cx="80" cy="22" r="12" style="fill:var(--sun-y)"/><circle cx="50" cy="52" r="12" style="fill:var(--paper)"/><circle cx="110" cy="52" r="12" style="fill:var(--paper)"/><circle cx="34" cy="80" r="11" style="fill:var(--paper)"/><circle cx="66" cy="80" r="11" style="fill:var(--tomato)"/><circle cx="126" cy="80" r="11" style="fill:var(--paper)"/></g>
+                </svg>
+              </div>
+              <div class="station-meta"><span class="station-code">DEPURADOR</span><span class="diff easy">Fácil</span></div>
+              <h3 class="station-name">Estructuras de datos · Fácil</h3>
+              <p class="station-line">Pilas y listas enlazadas, línea por línea.</p>
+              <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            </a>
+          </div>
+
+          <div class="station" data-area="algorithms">
+            <a href="#/workshop/datastructures-medium" class="station-card" data-tab="datastructures-medium" style="--accent:var(--sky-b)">
+              <div class="station-art">
+                <svg viewBox="0 0 160 100" aria-hidden="true">
+                  <g stroke="currentColor" stroke-width="5"><path d="M80 22 50 52M80 22l30 30M50 52 34 80M50 52l16 28M110 52l16 28"/></g>
+                  <g stroke="currentColor" stroke-width="5"><circle cx="80" cy="22" r="12" style="fill:var(--sun-y)"/><circle cx="50" cy="52" r="12" style="fill:var(--paper)"/><circle cx="110" cy="52" r="12" style="fill:var(--paper)"/><circle cx="34" cy="80" r="11" style="fill:var(--paper)"/><circle cx="66" cy="80" r="11" style="fill:var(--tomato)"/><circle cx="126" cy="80" r="11" style="fill:var(--paper)"/></g>
+                </svg>
+              </div>
+              <div class="station-meta"><span class="station-code">DEPURADOR</span><span class="diff mid">Media</span></div>
+              <h3 class="station-name">Estructuras de datos · Media</h3>
+              <p class="station-line">Árboles binarios de búsqueda, línea por línea.</p>
               <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
             </a>
           </div>
 
           <!-- Paralela -->
           <div class="station" data-area="parallel">
-            <a href="#/workshop/concurrency" class="station-card" data-tab="concurrency" style="--accent:#4fb477">
+            <a href="#/workshop/concurrency" class="station-card" data-tab="concurrency" style="--accent:var(--mint)">
               <div class="station-art">
                 <svg viewBox="0 0 160 100" aria-hidden="true">
-                  <g stroke="#3d2414" stroke-width="5">
-                    <rect x="70" y="0" width="20" height="100" fill="#5b4a3d"/>
-                    <rect x="0" y="40" width="160" height="20" fill="#5b4a3d"/>
-                    <circle cx="80" cy="50" r="36" fill="#5b4a3d"/>
+                  <g stroke="currentColor" stroke-width="5">
+                    <rect x="70" y="0" width="20" height="100" style="fill:var(--cv-road)"/>
+                    <rect x="0" y="40" width="160" height="20" style="fill:var(--cv-road)"/>
+                    <circle cx="80" cy="50" r="36" style="fill:var(--cv-road)"/>
                     <circle cx="80" cy="50" r="17" fill="#8fd3a5"/>
                   </g>
-                  <circle cx="80" cy="50" r="26.5" fill="none" stroke="#fbf3e2" stroke-width="2" stroke-dasharray="5 6"/>
-                  <g stroke="#3d2414" stroke-width="4">
-                    <circle cx="80" cy="23.5" r="6" fill="#e8512a"/>
-                    <circle cx="106.5" cy="50" r="6" fill="#f6c33b"/>
-                    <circle cx="61" cy="69" r="6" fill="#3d8fd6"/>
+                  <circle cx="80" cy="50" r="26.5" fill="none" stroke-width="2" stroke-dasharray="5 6" style="stroke:var(--paper)"/>
+                  <g stroke="currentColor" stroke-width="4">
+                    <circle cx="80" cy="23.5" r="6" style="fill:var(--tomato)"/>
+                    <circle cx="106.5" cy="50" r="6" style="fill:var(--sun-y)"/>
+                    <circle cx="61" cy="69" r="6" style="fill:var(--sky-b)"/>
                   </g>
                 </svg>
               </div>
@@ -446,17 +608,17 @@
           </div>
 
           <div class="station" data-area="parallel">
-            <a href="#/workshop/heat" class="station-card" data-tab="heat" style="--accent:#e8512a">
+            <a href="#/workshop/heat" class="station-card" data-tab="heat" style="--accent:var(--tomato)">
               <div class="station-art">
                 <svg viewBox="0 0 160 100" aria-hidden="true">
-                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round">
-                    <rect x="16" y="10" width="128" height="80" rx="6" fill="#3d8fd6"/>
-                    <rect x="16" y="10" width="128" height="22" rx="6" fill="#e8512a"/>
+                  <g stroke="currentColor" stroke-width="5" stroke-linejoin="round">
+                    <rect x="16" y="10" width="128" height="80" rx="6" style="fill:var(--sky-b)"/>
+                    <rect x="16" y="10" width="128" height="22" rx="6" style="fill:var(--tomato)"/>
                   </g>
-                  <rect x="19" y="30" width="122" height="16" fill="#f6c33b"/>
+                  <rect x="19" y="30" width="122" height="16" style="fill:var(--sun-y)"/>
                   <rect x="19" y="46" width="122" height="14" fill="#8fd3a5"/>
-                  <path d="M16 32h128M16 60h128" stroke="#3d2414" stroke-width="4" stroke-dasharray="8 6"/>
-                  <g stroke="#3d2414" stroke-width="3"><rect x="22" y="36" width="20" height="12" rx="6" fill="#3d8fd6"/><rect x="22" y="66" width="20" height="12" rx="6" fill="#4fb477"/></g>
+                  <path d="M16 32h128M16 60h128" stroke="currentColor" stroke-width="4" stroke-dasharray="8 6"/>
+                  <g stroke="currentColor" stroke-width="3"><rect x="22" y="36" width="20" height="12" rx="6" style="fill:var(--sky-b)"/><rect x="22" y="66" width="20" height="12" rx="6" style="fill:var(--mint)"/></g>
                 </svg>
               </div>
               <span class="station-code">SIMULACIÓN</span>
@@ -468,16 +630,16 @@
 
           <!-- Redes -->
           <div class="station" data-area="networking">
-            <a href="#/workshop/networking" class="station-card" data-tab="networking" style="--accent:#8b5fbf">
+            <a href="#/workshop/networking" class="station-card" data-tab="networking" style="--accent:var(--plum)">
               <div class="station-art">
                 <svg viewBox="0 0 160 100" aria-hidden="true">
-                  <path d="M44 56c22 30 50 30 72 0" stroke="#3d2414" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="2 8"/>
-                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round">
-                    <rect x="10" y="22" width="48" height="36" rx="5" fill="#fbf3e2"/>
-                    <rect x="102" y="22" width="48" height="36" rx="5" fill="#fbf3e2"/>
-                    <rect x="17" y="29" width="34" height="22" rx="2" fill="#2b2119"/>
-                    <rect x="109" y="29" width="34" height="22" rx="2" fill="#2b2119"/>
-                    <rect x="73" y="70" width="14" height="10" rx="2" fill="#f6c33b"/>
+                  <path d="M44 56c22 30 50 30 72 0" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" stroke-dasharray="2 8"/>
+                  <g stroke="currentColor" stroke-width="5" stroke-linejoin="round">
+                    <rect x="10" y="22" width="48" height="36" rx="5" style="fill:var(--paper)"/>
+                    <rect x="102" y="22" width="48" height="36" rx="5" style="fill:var(--paper)"/>
+                    <rect x="17" y="29" width="34" height="22" rx="2" style="fill:var(--code-bg)"/>
+                    <rect x="109" y="29" width="34" height="22" rx="2" style="fill:var(--code-bg)"/>
+                    <rect x="73" y="70" width="14" height="10" rx="2" style="fill:var(--sun-y)"/>
                   </g>
                   <path d="M22 36h14M22 42h20M114 36h10M114 42h22" stroke="#8fd3a5" stroke-width="4" stroke-linecap="round"/>
                 </svg>
@@ -489,33 +651,69 @@
             </a>
           </div>
 
-          <!-- Entrevistas -->
-          <div class="station" data-area="interviews">
-            <a href="#/workshop/interview" class="station-card" data-tab="interview" style="--accent:#e8512a">
+          <!-- Problemas de código -->
+          <div class="station" data-area="problems">
+            <a href="#/workshop/problems-easy" class="station-card" data-tab="problems-easy" style="--accent:var(--mint)">
               <div class="station-art">
                 <svg viewBox="0 0 160 100" aria-hidden="true">
-                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round">
-                    <rect x="10" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/><rect x="36" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/><rect x="62" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/><rect x="88" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/><rect x="114" y="30" width="22" height="26" rx="4" fill="#fbf3e2"/>
+                  <g stroke="currentColor" stroke-width="5" stroke-linejoin="round">
+                    <rect x="10" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="36" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="62" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="88" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="114" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/>
                   </g>
-                  <g stroke="#3d2414" stroke-width="4"><rect x="8" y="66" width="26" height="16" rx="8" fill="#3d8fd6"/><rect x="112" y="66" width="26" height="16" rx="8" fill="#e8512a"/></g>
-                  <path d="M36 74h20M110 74H90" stroke="#3d2414" stroke-width="5" stroke-linecap="round"/><path d="m50 69 6 5-6 5M96 69l-6 5 6 5" stroke="#3d2414" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                  <g stroke="currentColor" stroke-width="4"><rect x="8" y="66" width="26" height="16" rx="8" style="fill:var(--sky-b)"/><rect x="112" y="66" width="26" height="16" rx="8" style="fill:var(--tomato)"/></g>
+                  <path d="M36 74h20M110 74H90" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path d="m50 69 6 5-6 5M96 69l-6 5 6 5" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
-              <span class="station-code">DEPURADOR</span>
-              <h3 class="station-name">Patrones de entrevista</h3>
-              <p class="station-line">Problemas medios y difíciles, recorridos línea por línea.</p>
+              <div class="station-meta"><span class="station-code">DEPURADOR</span><span class="diff easy">Fácil</span></div>
+              <h3 class="station-name">Problemas clásicos · Fácil</h3>
+              <p class="station-line">Palíndromos, paréntesis, búsqueda binaria y acciones.</p>
+              <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            </a>
+          </div>
+
+          <div class="station" data-area="problems">
+            <a href="#/workshop/problems-medium" class="station-card" data-tab="problems-medium" style="--accent:var(--sun-y)">
+              <div class="station-art">
+                <svg viewBox="0 0 160 100" aria-hidden="true">
+                  <g stroke="currentColor" stroke-width="5" stroke-linejoin="round">
+                    <rect x="10" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="36" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="62" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="88" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="114" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/>
+                  </g>
+                  <g stroke="currentColor" stroke-width="4"><rect x="8" y="66" width="26" height="16" rx="8" style="fill:var(--sky-b)"/><rect x="112" y="66" width="26" height="16" rx="8" style="fill:var(--tomato)"/></g>
+                  <path d="M36 74h20M110 74H90" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path d="m50 69 6 5-6 5M96 69l-6 5 6 5" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="station-meta"><span class="station-code">DEPURADOR</span><span class="diff mid">Media</span></div>
+              <h3 class="station-name">Problemas clásicos · Media</h3>
+              <p class="station-line">Dos punteros, ventanas, intervalos, islas y monedas.</p>
+              <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            </a>
+          </div>
+
+          <div class="station" data-area="problems">
+            <a href="#/workshop/problems-hard" class="station-card" data-tab="problems-hard" style="--accent:var(--tomato)">
+              <div class="station-art">
+                <svg viewBox="0 0 160 100" aria-hidden="true">
+                  <g stroke="currentColor" stroke-width="5" stroke-linejoin="round">
+                    <rect x="10" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="36" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="62" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="88" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/><rect x="114" y="30" width="22" height="26" rx="4" style="fill:var(--paper)"/>
+                  </g>
+                  <g stroke="currentColor" stroke-width="4"><rect x="8" y="66" width="26" height="16" rx="8" style="fill:var(--sky-b)"/><rect x="112" y="66" width="26" height="16" rx="8" style="fill:var(--tomato)"/></g>
+                  <path d="M36 74h20M110 74H90" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path d="m50 69 6 5-6 5M96 69l-6 5 6 5" stroke="currentColor" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="station-meta"><span class="station-code">DEPURADOR</span><span class="diff hard">Difícil</span></div>
+              <h3 class="station-name">Problemas clásicos · Difícil</h3>
+              <p class="station-line">Agua de lluvia, máximos en ventana e histogramas.</p>
               <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
             </a>
           </div>
 
           <!-- Datos -->
           <div class="station" data-area="databases">
-            <a href="#/workshop/sql" class="station-card" data-tab="sql" style="--accent:#f6c33b">
+            <a href="#/workshop/sql" class="station-card" data-tab="sql" style="--accent:var(--sun-y)">
               <div class="station-art">
                 <svg viewBox="0 0 160 100" aria-hidden="true">
-                  <g stroke="#3d2414" stroke-width="5" stroke-linejoin="round"><rect x="20" y="14" width="120" height="74" rx="6" fill="#fbf3e2"/><path d="M20 32h120M20 50h120M20 70h120M60 14v74M100 14v74"/></g>
-                  <rect x="22" y="52" width="116" height="16" fill="#e8512a" opacity=".35"/>
-                  <path d="M24 60h112" stroke="#b13817" stroke-width="5"/>
+                  <g stroke="currentColor" stroke-width="5" stroke-linejoin="round"><rect x="20" y="14" width="120" height="74" rx="6" style="fill:var(--paper)"/><path d="M20 32h120M20 50h120M20 70h120M60 14v74M100 14v74"/></g>
+                  <rect x="22" y="52" width="116" height="16" opacity=".35" style="fill:var(--tomato)"/>
+                  <path d="M24 60h112" stroke-width="5" style="stroke:var(--tomato-dark)"/>
                 </svg>
               </div>
               <span class="station-code">DEPURADOR</span>
@@ -529,7 +727,7 @@
           <div class="station soon" data-area="all">
             <div class="station-card" aria-label="Próximamente">
               <div class="station-art">
-                <svg viewBox="0 0 160 100" aria-hidden="true"><path d="M80 32v36M62 50h36" stroke="#3d2414" stroke-width="5" stroke-linecap="round" opacity=".6"/></svg>
+                <svg viewBox="0 0 160 100" aria-hidden="true"><path d="M80 32v36M62 50h36" stroke="currentColor" stroke-width="5" stroke-linecap="round" opacity=".6"/></svg>
               </div>
               <h3 class="station-name">Próximamente</h3>
               <p class="station-line">Más estaciones en construcción.</p>
@@ -736,6 +934,189 @@
                   <li><code>std::stable_sort</code> se basa en Merge Sort.</li>
                   <li>Python y Java (objetos) usan <strong>Timsort</strong>, un híbrido de Merge e Insertion.</li>
                   <li>Para enteros de tamaño fijo, Radix Sort puede ganarle a todos.</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============ MODULE: ALGORITHM VS. ALGORITHM ============ -->
+        <section id="tab-versus" class="tab-pane">
+
+          <div class="step-pane active" data-step="play">
+            <div class="workspace-grid">
+              <div class="clipboard">
+                <div class="ctl" id="vsPicks">
+                  <label class="ctl-label" for="vsLeft">Retador 1</label>
+                  <select id="vsLeft">
+                    <option value="quick" selected>Quick Sort</option>
+                    <option value="merge">Merge Sort</option>
+                    <option value="heap">Heap Sort</option>
+                    <option value="shell">Shell Sort</option>
+                    <option value="insertion">Insertion Sort</option>
+                    <option value="selection">Selection Sort</option>
+                    <option value="bubble">Bubble Sort</option>
+                    <option value="radix">Radix Sort (LSD)</option>
+                  </select>
+                  <label class="ctl-label vs-second" for="vsRight">Retador 2</label>
+                  <select id="vsRight">
+                    <option value="quick">Quick Sort</option>
+                    <option value="merge">Merge Sort</option>
+                    <option value="heap">Heap Sort</option>
+                    <option value="shell">Shell Sort</option>
+                    <option value="insertion">Insertion Sort</option>
+                    <option value="selection">Selection Sort</option>
+                    <option value="bubble" selected>Bubble Sort</option>
+                    <option value="radix">Radix Sort (LSD)</option>
+                  </select>
+                </div>
+
+                <div class="ctl" id="vsPresets">
+                  <div class="ctl-label">Arreglo inicial</div>
+                  <div class="chips">
+                    <button class="chip active" data-dist="random">Aleatorio</button>
+                    <button class="chip" data-dist="nearly-sorted">Casi ordenado</button>
+                    <button class="chip" data-dist="reversed">Invertido</button>
+                    <button class="chip" data-dist="few-unique">Pocos valores</button>
+                  </div>
+                </div>
+
+                <div class="ctl">
+                  <div class="ctl-label"><label for="vsSize">Cantidad de elementos</label><span id="vsSizeVal" class="ctl-value">40</span></div>
+                  <input type="range" id="vsSize" min="10" max="120" value="40">
+                </div>
+
+                <div class="ctl">
+                  <div class="ctl-label"><label for="vsSpeed">Velocidad</label><span id="vsSpeedVal" class="ctl-value">60%</span></div>
+                  <input type="range" id="vsSpeed" min="1" max="100" value="60">
+                </div>
+
+                <div class="btn-row">
+                  <button id="btnVsRun" class="btn btn-primary"><svg class="ic"><use href="#i-play"/></svg>¡Arranquen!</button>
+                  <button id="btnVsShuffle" class="btn btn-sm" title="Generar otro arreglo"><svg class="ic"><use href="#i-shuffle"/></svg>Revolver</button>
+                </div>
+              </div>
+
+              <div class="stage" id="vsStage">
+                <div class="vs-lanes">
+                  <div class="vs-lane" data-side="left">
+                    <div class="vs-lane-head"><span class="vs-name" id="vsNameLeft">Quick Sort</span><span class="vs-flag">¡Primero!</span></div>
+                    <div class="canvas-container"><canvas></canvas></div>
+                    <div class="vs-bar"><i></i></div>
+                    <dl class="vs-stats">
+                      <div><dt>Comparaciones</dt><dd class="vs-cmp">0</dd></div>
+                      <div><dt>Escrituras</dt><dd class="vs-wr">0</dd></div>
+                      <div><dt>Operaciones</dt><dd class="vs-ops">0</dd></div>
+                    </dl>
+                  </div>
+                  <div class="vs-lane" data-side="right">
+                    <div class="vs-lane-head"><span class="vs-name" id="vsNameRight">Bubble Sort</span><span class="vs-flag">¡Primero!</span></div>
+                    <div class="canvas-container"><canvas></canvas></div>
+                    <div class="vs-bar"><i></i></div>
+                    <dl class="vs-stats">
+                      <div><dt>Comparaciones</dt><dd class="vs-cmp">0</dd></div>
+                      <div><dt>Escrituras</dt><dd class="vs-wr">0</dd></div>
+                      <div><dt>Operaciones</dt><dd class="vs-ops">0</dd></div>
+                    </dl>
+                  </div>
+                </div>
+                <div class="legend">
+                  <span><i style="background:#3d8fd6"></i>Sin ordenar</span>
+                  <span><i style="background:#f6c33b"></i>Comparando</span>
+                  <span><i style="background:#e8512a"></i>Escribiendo</span>
+                  <span><i style="background:#4fb477"></i>Terminó</span>
+                  <span class="vs-status"><span>Estado:</span> <b id="vsStatus">Listo</b></span>
+                </div>
+                <div class="note vs-result" id="vsResult" hidden><strong id="vsResultTitle"></strong><span id="vsResultText"></span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-pane" data-step="learn">
+            <div class="learn-grid">
+              <article class="learn-card">
+                <h3>Una carrera justa</h3>
+                <p>Los dos algoritmos ordenan <strong>exactamente el mismo arreglo</strong>. En cada tic, cada uno hace una sola operación: comparar dos valores o escribir uno. Gana el que necesita menos operaciones para terminar.</p>
+                <div class="note"><strong>Por eso no medimos segundos</strong>Los segundos dependen de tu computadora. Las operaciones no: son justo lo que cuenta la notación O.</div>
+              </article>
+
+              <article class="learn-card">
+                <h3>¿Cuánto cuesta cada uno?</h3>
+                <p>Así crece el trabajo cuando el arreglo crece.</p>
+                <table class="vs-table">
+                  <thead><tr><th>Algoritmo</th><th>Mejor</th><th>Promedio</th><th>Peor</th></tr></thead>
+                  <tbody>
+                    <tr><td>Quick Sort</td><td>n log n</td><td>n log n</td><td>n²</td></tr>
+                    <tr><td>Merge Sort</td><td>n log n</td><td>n log n</td><td>n log n</td></tr>
+                    <tr><td>Heap Sort</td><td>n log n</td><td>n log n</td><td>n log n</td></tr>
+                    <tr><td>Shell Sort</td><td>n log n</td><td>n^(4/3)</td><td>n²</td></tr>
+                    <tr><td>Insertion Sort</td><td>n</td><td>n²</td><td>n²</td></tr>
+                    <tr><td>Selection Sort</td><td>n²</td><td>n²</td><td>n²</td></tr>
+                    <tr><td>Bubble Sort</td><td>n</td><td>n²</td><td>n²</td></tr>
+                    <tr><td>Radix Sort</td><td>n·k</td><td>n·k</td><td>n·k</td></tr>
+                  </tbody>
+                </table>
+              </article>
+
+              <article class="learn-card wide">
+                <h3>Carreras para probar</h3>
+                <ol class="numbered">
+                  <li><strong>Quick Sort vs Bubble Sort, Aleatorio.</strong> n log n contra n². Sube a 120 elementos: la distancia entre los dos crece mucho más rápido que el arreglo.</li>
+                  <li><strong>Insertion Sort vs Quick Sort, Casi ordenado.</strong> Gana el «lento». Insertion casi no tiene que mover nada y Quick Sort, con el pivote al final, parte muy mal un arreglo casi ordenado.</li>
+                  <li><strong>Merge Sort vs Heap Sort.</strong> Los dos son n log n y aun así uno le saca ventaja al otro: la O esconde las constantes.</li>
+                  <li><strong>Selection Sort vs Insertion Sort, Invertido.</strong> Mira las escrituras: Selection compara muchísimo pero casi no escribe.</li>
+                </ol>
+              </article>
+            </div>
+          </div>
+
+          <div class="step-pane" data-step="build">
+            <div class="learn-grid">
+              <article class="learn-card wide">
+                <h3>Tu propia carrera en C++</h3>
+                <pre class="code">#include &lt;algorithm&gt;
+#include &lt;chrono&gt;
+#include &lt;iostream&gt;
+#include &lt;random&gt;
+#include &lt;vector&gt;
+
+long long comparaciones = 0;
+bool menor(int a, int b) { ++comparaciones; return a &lt; b; }  // cuenta cada comparación
+
+int main() {
+  std::mt19937 rng(42);                     // misma semilla: el mismo arreglo para todos
+  std::vector&lt;int&gt; base(100000);
+  for (int&amp; x : base) x = rng() % 1000;
+
+  auto correr = [&amp;](const char* nombre, auto ordenar) {
+    std::vector&lt;int&gt; a = base;               // cada retador ordena su propia copia
+    comparaciones = 0;
+    auto t0 = std::chrono::steady_clock::now();
+    ordenar(a);
+    auto t1 = std::chrono::steady_clock::now();
+    std::cout &lt;&lt; nombre &lt;&lt; ": " &lt;&lt; comparaciones &lt;&lt; " comparaciones, "
+              &lt;&lt; std::chrono::duration&lt;double, std::milli&gt;(t1 - t0).count() &lt;&lt; " ms\n";
+  };
+
+  correr("std::sort",        [](auto&amp; a) { std::sort(a.begin(), a.end(), menor); });
+  correr("std::stable_sort", [](auto&amp; a) { std::stable_sort(a.begin(), a.end(), menor); });
+}</pre>
+              </article>
+              <article class="learn-card">
+                <h3>Para que la carrera sea justa</h3>
+                <ul class="plain">
+                  <li>Dale a cada algoritmo <strong>una copia del mismo arreglo</strong>, nunca uno ya ordenado por el anterior.</li>
+                  <li>Usa una <strong>semilla fija</strong> para poder repetir el experimento.</li>
+                  <li>Compila con <code>-O2</code> y corre varias veces: la primera vuelta suele ser más lenta.</li>
+                  <li>Cuenta operaciones además de medir tiempo: el tiempo cambia de máquina a máquina, las operaciones no.</li>
+                </ul>
+              </article>
+              <article class="learn-card">
+                <h3>Lo que vas a notar</h3>
+                <ul class="plain">
+                  <li>Con n grande, un n² pierde siempre contra un n log n.</li>
+                  <li>Con n pequeño o casi ordenado, Insertion Sort puede ganarle a cualquiera.</li>
+                  <li>Dos algoritmos con la misma O pueden tardar distinto por la caché y las constantes.</li>
                 </ul>
               </article>
             </div>
@@ -1351,22 +1732,46 @@ make -C pthreads &amp;&amp; make -C openmp
           </div>
         </section>
 
-        <!-- ============ MODULE: INTERVIEW PATTERNS (tracer) ============ -->
-        <section id="tab-interview" class="tab-pane">
-          <div class="step-pane active" data-step="play"><div class="tracer" id="tracer-interview"></div></div>
-          <div class="step-pane" data-step="learn"><div id="tracer-interview-learn"></div></div>
-          <div class="step-pane" data-step="build"><div id="tracer-interview-build"></div></div>
+        <!-- ============ MODULE: CODING PROBLEMS, one station per difficulty (tracer) ============ -->
+        <section id="tab-problems-easy" class="tab-pane">
+          <div class="problem-chooser" id="tracer-problems-easy-chooser"></div>
+          <div class="step-pane active" data-step="play"><div class="tracer" id="tracer-problems-easy"></div></div>
+          <div class="step-pane" data-step="learn"><div id="tracer-problems-easy-learn"></div></div>
+          <div class="step-pane" data-step="build"><div id="tracer-problems-easy-build"></div></div>
+        </section>
+
+        <section id="tab-problems-medium" class="tab-pane">
+          <div class="problem-chooser" id="tracer-problems-medium-chooser"></div>
+          <div class="step-pane active" data-step="play"><div class="tracer" id="tracer-problems-medium"></div></div>
+          <div class="step-pane" data-step="learn"><div id="tracer-problems-medium-learn"></div></div>
+          <div class="step-pane" data-step="build"><div id="tracer-problems-medium-build"></div></div>
+        </section>
+
+        <section id="tab-problems-hard" class="tab-pane">
+          <div class="problem-chooser" id="tracer-problems-hard-chooser"></div>
+          <div class="step-pane active" data-step="play"><div class="tracer" id="tracer-problems-hard"></div></div>
+          <div class="step-pane" data-step="learn"><div id="tracer-problems-hard-learn"></div></div>
+          <div class="step-pane" data-step="build"><div id="tracer-problems-hard-build"></div></div>
         </section>
 
         <!-- ============ MODULE: DATA STRUCTURES (tracer) ============ -->
-        <section id="tab-datastructures" class="tab-pane">
-          <div class="step-pane active" data-step="play"><div class="tracer" id="tracer-datastructures"></div></div>
-          <div class="step-pane" data-step="learn"><div id="tracer-datastructures-learn"></div></div>
-          <div class="step-pane" data-step="build"><div id="tracer-datastructures-build"></div></div>
+        <section id="tab-datastructures-easy" class="tab-pane">
+          <div class="problem-chooser" id="tracer-datastructures-easy-chooser"></div>
+          <div class="step-pane active" data-step="play"><div class="tracer" id="tracer-datastructures-easy"></div></div>
+          <div class="step-pane" data-step="learn"><div id="tracer-datastructures-easy-learn"></div></div>
+          <div class="step-pane" data-step="build"><div id="tracer-datastructures-easy-build"></div></div>
+        </section>
+
+        <section id="tab-datastructures-medium" class="tab-pane">
+          <div class="problem-chooser" id="tracer-datastructures-medium-chooser"></div>
+          <div class="step-pane active" data-step="play"><div class="tracer" id="tracer-datastructures-medium"></div></div>
+          <div class="step-pane" data-step="learn"><div id="tracer-datastructures-medium-learn"></div></div>
+          <div class="step-pane" data-step="build"><div id="tracer-datastructures-medium-build"></div></div>
         </section>
 
         <!-- ============ MODULE: SQL (tracer) ============ -->
         <section id="tab-sql" class="tab-pane">
+          <div class="problem-chooser" id="tracer-sql-chooser"></div>
           <div class="step-pane active" data-step="play"><div class="tracer" id="tracer-sql"></div></div>
           <div class="step-pane" data-step="learn"><div id="tracer-sql-learn"></div></div>
           <div class="step-pane" data-step="build"><div id="tracer-sql-build"></div></div>
@@ -1375,27 +1780,42 @@ make -C pthreads &amp;&amp; make -C openmp
         <!-- ============ MODULE: NOTEBOOK (resources) ============ -->
         <section id="tab-cheatsheets" class="tab-pane">
           <div class="learn-grid">
-            <article class="learn-card">
-              <h3>Ley de Amdahl</h3>
-              <p>¿Cuánto más rápido va tu programa si lo paralelizas? Depende de la parte que <strong>no</strong> se puede paralelizar.</p>
-              <div class="ctl" style="margin-top:1rem">
-                <div class="ctl-label"><label for="amdahlFraction">Parte paralela (f)</label><span id="amdahlFractionVal" class="ctl-value">85%</span></div>
-                <input type="range" id="amdahlFraction" min="10" max="99" value="85">
-              </div>
-              <div class="ctl">
-                <div class="ctl-label"><label for="amdahlProcessors">Núcleos (N)</label><span id="amdahlProcVal" class="ctl-value">8 núcleos</span></div>
-                <input type="range" id="amdahlProcessors" min="1" max="64" value="8">
-              </div>
-              <div class="metrics-grid">
-                <div class="metric-box"><div class="metric-label">Aceleración</div><div id="amdahlSpeedupVal" class="metric-value">3.90x</div></div>
-                <div class="metric-box"><div class="metric-label">Límite</div><div id="amdahlMaxSpeedupVal" class="metric-value">6.67x</div></div>
-                <div class="metric-box"><div class="metric-label">Eficiencia</div><div id="amdahlEfficiencyVal" class="metric-value">48.8%</div></div>
-              </div>
-              <div class="note"><strong>Fórmula</strong>S(N) = 1 / ((1 − f) + f / N)</div>
+            <article class="learn-card wide notebook-card">
+              <h3>Mis apuntes</h3>
+              <p>Anota lo que quieras recordar de cada tema. Tus notas se guardan solas en este dispositivo.</p>
+              <div id="notebook"></div>
             </article>
 
-            <article class="learn-card">
-              <h3>Chuleta de sincronización</h3>
+            <article class="learn-card wide amdahl-card">
+              <h3>Ley de Amdahl</h3>
+              <p>¿Cuánto más rápido va tu programa si lo paralelizas? Depende de la parte que <strong>no</strong> se puede paralelizar.</p>
+              <div class="amdahl-grid">
+                <div class="amdahl-ctls">
+                <div class="ctl" style="margin-top:1rem">
+                  <div class="ctl-label"><label for="amdahlFraction">Parte paralela (f)</label><span id="amdahlFractionVal" class="ctl-value">85%</span></div>
+                  <input type="range" id="amdahlFraction" min="10" max="99" value="85">
+                </div>
+                <div class="ctl">
+                  <div class="ctl-label"><label for="amdahlProcessors">Núcleos (N)</label><span id="amdahlProcVal" class="ctl-value">8 núcleos</span></div>
+                  <input type="range" id="amdahlProcessors" min="1" max="64" value="8">
+                </div>
+                  </div>
+                <div class="amdahl-out">
+                <div class="metrics-grid">
+                  <div class="metric-box"><div class="metric-label">Aceleración</div><div id="amdahlSpeedupVal" class="metric-value">3.90x</div></div>
+                  <div class="metric-box"><div class="metric-label">Límite</div><div id="amdahlMaxSpeedupVal" class="metric-value">6.67x</div></div>
+                  <div class="metric-box"><div class="metric-label">Eficiencia</div><div id="amdahlEfficiencyVal" class="metric-value">48.8%</div></div>
+                </div>
+                  <div class="note"><strong>Fórmula</strong>S(N) = 1 / ((1 − f) + f / N)</div>
+                  </div>
+              </div>
+            </article>
+
+            <article class="learn-card wide sync-card">
+              <h3>Sincronización y sockets de un vistazo</h3>
+              <div class="sync-grid">
+                <div>
+                  <h4>Hilos</h4>
 <pre class="code"><span class="c">// Mutex</span>
 pthread_mutex_lock(&amp;m);  <span class="c">/* ... */</span>  pthread_mutex_unlock(&amp;m);
 <span class="c">// Semáforo</span>
@@ -1404,8 +1824,13 @@ sem_wait(&amp;s);  <span class="c">/* ... */</span>  sem_post(&amp;s);
 pthread_barrier_wait(&amp;b);
 <span class="c">// Atómico</span>
 atomic_fetch_add(&amp;contador, 1);</pre>
-              <h4>Sockets</h4>
-              <div class="flow"><span>socket</span><span>bind</span><span>listen</span><span>accept</span><span>recv/send</span><span>close</span></div>
+                </div>
+                <div>
+                  <h4>Sockets</h4>
+                  <div class="flow"><span>socket</span><span>bind</span><span>listen</span><span>accept</span><span>recv/send</span><span>close</span></div>
+                  <p>El servidor hace las seis llamadas en ese orden; el cliente solo necesita <code>socket</code>, <code>connect</code>, <code>send/recv</code> y <code>close</code>.</p>
+                </div>
+              </div>
             </article>
 
             <article class="learn-card wide">
@@ -1462,25 +1887,29 @@ atomic_fetch_add(&amp;contador, 1);</pre>
   </div>
 
   <footer class="footer">
-    CS Interactive Workshop · hecho por <a href="https://www.linkedin.com/in/josue-torres-sibaja/" target="_blank" rel="noopener">Josué Torres Sibaja</a> · código abierto (MIT)
+    CS Interactive Workshop · Creado por <a href="https://www.linkedin.com/in/josue-torres-sibaja/" target="_blank" rel="noopener">Josué Torres Sibaja</a>
   </footer>
 
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
   <!-- Scripts -->
   <script src="js/theme.js"></script>
+  <script src="js/i18n/en.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/progress.js"></script>
   <script src="js/account.js"></script>
   <script src="js/modules/figuresData.js"></script>
   <script src="js/modules/algorithms.js"></script>
+  <script src="js/modules/versus.js"></script>
   <script src="js/modules/concurrency.js"></script>
   <script src="js/modules/heatsim.js"></script>
   <script src="js/modules/heat.js"></script>
   <script src="js/modules/httpsim.js"></script>
   <script src="js/modules/networking.js"></script>
   <script src="js/modules/cheatsheets.js"></script>
+  <script src="js/modules/notebook.js"></script>
   <script src="js/tracer.js"></script>
   <script src="js/modules/interview.js"></script>
   <script src="js/modules/datastructures.js"></script>
