@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   test:
-    name: Run 870+ Automated Tests
+    name: Run 1,376 Automated Tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code

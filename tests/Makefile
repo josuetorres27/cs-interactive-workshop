@@ -56,5 +56,5 @@ run: all
 	@python3 web/test_web_assets.py
 	@node web/run.js
 	@echo "\n===================================================================="
-	@echo "                 ALL 876 TESTS PASSED SUCCESSFULLY!                 "
+	@echo "                 ALL 1376 TESTS PASSED SUCCESSFULLY!                "
 	@echo "===================================================================="
