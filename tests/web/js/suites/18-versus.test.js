@@ -178,6 +178,13 @@ module.exports = (t, { createEnv, read }) => {
       // In a station only the problem shelf is centred, so the steps never jump around
       t.includes(css, '#screen-module.is-active:has(.tab-pane.active.choosing) > .mod-body { margin-block: auto;');
     });
+    t.test('browsers check for a new version on every visit, so a redeploy shows at once', () => {
+      const headers = JSON.parse(read('firebase.json')).hosting.headers;
+      ['**/*.@(css|js|txt)', '**/*.html', '/'].forEach((src) => {
+        const h = headers.find((x) => x.source === src);
+        t.ok(h, src); t.eq(h.headers.find((x) => x.key === 'Cache-Control').value, 'no-cache', src);
+      });
+    });
     t.test('benches and bench stations are compact enough to fit one screen', () => {
       t.ok(/\.bench \{[^}]*grid-template-columns: 84px 1fr;/.test(css));
       t.includes(css, '#areaShelf .station { flex: 0 1 216px; min-width: 196px; }');
