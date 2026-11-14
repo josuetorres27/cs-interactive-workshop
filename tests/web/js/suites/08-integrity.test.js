@@ -33,7 +33,7 @@ module.exports = (t, { read, WEB, createEnv }) => {
     });
     t.test('every station card has a matching station pane', () => [...html.matchAll(/data-tab="([^"]+)"/g)].forEach((m) => t.includes(html, `id="tab-${m[1]}"`, m[1])));
     t.test('stations with steps have Experimenta, Entiende and Implementa panes', () => {
-      ['algorithms', 'concurrency', 'networking', 'interview', 'datastructures', 'sql'].forEach((id) => {
+      ['algorithms', 'concurrency', 'networking', 'problems-easy', 'problems-medium', 'problems-hard', 'datastructures-easy', 'datastructures-medium', 'sql'].forEach((id) => {
         const start = html.indexOf(`id="tab-${id}"`); const end = html.indexOf('<section id="tab-', start + 10);
         const pane = html.slice(start, end === -1 ? undefined : end);
         ['play', 'learn', 'build'].forEach((s) => t.includes(pane, `data-step="${s}"`, `${id}.${s}`));
@@ -51,10 +51,11 @@ module.exports = (t, { read, WEB, createEnv }) => {
       t.includes(foot, 'Josué Torres Sibaja');
       t.eq((foot.match(/<a /g) || []).length, 1);
     });
-    t.test('the FAQ links the author name to the portfolio and nothing else', () => {
+    t.test('the FAQ links the author name to the portfolio, plus the code on GitHub', () => {
       const faq = html.match(/<h3>¿Quién lo hizo\?<\/h3>[\s\S]*?<\/article>/)[0];
       t.includes(faq, '<a href="https://josuetorres.tech/" target="_blank" rel="noopener">Josué Torres Sibaja</a>');
-      t.eq((faq.match(/<a /g) || []).length, 1);
+      t.includes(faq, 'href="https://github.com/josuetorres27/cs-interactive-workshop"');
+      t.eq((faq.match(/<a /g) || []).length, 2);
     });
     t.test('the networking station no longer advertises port 8080', () => t.notIncludes(html, '8080'));
   });
@@ -113,14 +114,14 @@ module.exports = (t, { read, WEB, createEnv }) => {
     t.test('no blurred drop-shadow filters on illustrations', () => t.notIncludes(css, 'drop-shadow('));
     t.test('buttons are flat colours, not gradients', () => t.ok(!/gradient/.test(ruleFor('.btn'))));
     t.test('screws are flat grey heads with an ink ring, like Bit', () => {
-      t.includes(css, '--screw-head: radial-gradient(circle, #c9ced6'); t.ok(!/\.screw::after/.test(css));
+      t.includes(css, '--screw-head: radial-gradient(circle, #9aa2ad'); t.ok(!/\.screw::after/.test(css));
     });
     t.test('every panel, card and board has a thick ink outline', () => {
       ['.bench', '.station-card', '.learn-card', '.stage', '.tr-brief', '.tr-stage', '.machine', '.faq', '.note', '.clipboard', '.pegboard', '.sign-board', '.tr-controls', '.net-cable']
         .forEach((sel) => t.ok(/border\s*:\s*(var\(--outline\)|[34]px solid var\(--box-ink\))/.test(ruleFor(sel)), sel));
     });
     t.test('inline illustrations use thick ink strokes (3 or more)', () => {
-      [...html.matchAll(/stroke="#(?:1b2027|3d2414)" stroke-width="([\d.]+)"/g)].forEach((m) => t.ok(parseFloat(m[1]) >= 3, m[0]));
+      [...html.matchAll(/stroke="(?:#1b2027|#3d2414|currentColor)" stroke-width="([\d.]+)"/g)].forEach((m) => t.ok(parseFloat(m[1]) >= 3, m[0]));
     });
     t.test('both lamps (lab and wood) are outlined drawings, not gradients', () => {
       t.ok(/class="lamp theme-lab"[\s\S]{0,400}<svg/.test(html), 'lab lamp');

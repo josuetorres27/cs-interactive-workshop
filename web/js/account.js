@@ -17,7 +17,7 @@
       const s = doc.createElement('script');
       s.src = src; s.async = true;
       s.onload = resolve;
-      s.onerror = () => reject(new Error(`No se pudo cargar ${src}`));
+      s.onerror = () => reject(new Error(T(`No se pudo cargar ${src}`, `Could not load ${src}`)));
       doc.head.appendChild(s);
     });
   }
@@ -37,7 +37,7 @@
         db = fb.firestore();
       },
       onAuth(cb) {
-        auth.onAuthStateChanged((u) => cb(u ? { uid: u.uid, name: u.displayName || 'Estudiante', photoURL: u.photoURL || null } : null));
+        auth.onAuthStateChanged((u) => cb(u ? { uid: u.uid, name: u.displayName || T('Estudiante', 'Student'), photoURL: u.photoURL || null } : null));
       },
       async signIn() {
         const provider = new fb.auth.GoogleAuthProvider();
@@ -135,7 +135,7 @@
     }
 
     async signIn() {
-      if (!this.backend) throw new Error('Las cuentas todavía no están activadas en este sitio.');
+      if (!this.backend) throw new Error(T('Las cuentas todavía no están activadas en este sitio.', 'Accounts are not enabled on this site yet.'));
       await this.backend.signIn();
     }
 

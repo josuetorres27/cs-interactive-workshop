@@ -129,7 +129,7 @@
 
     let cSeq = CLIENT_ISN, sSeq = SERVER_ISN;
     const steps = [];
-    const st = { client: 'CLOSED', server: 'LISTEN', conn: null, screen: '', log: ['main: socket() → bind(1234) → listen()', 'main: accept() bloqueado, esperando clientes…'], threads: [{ name: 'main', state: 'accept()' }] };
+    const st = { client: 'CLOSED', server: 'LISTEN', conn: null, screen: '', log: ['main: socket() → bind(1234) → listen()', T('main: accept() bloqueado, esperando clientes…', 'main: accept() blocked, waiting for clients…')], threads: [{ name: 'main', state: 'accept()' }] };
     const tcp = (dir, flags, seq, ack, len = 0) => ({
       src: dir === 'c2s' ? `[${CLIENT.ip}]:${CLIENT.port}` : `[${SERVER.ip}]:${SERVER.port}`,
       dst: dir === 'c2s' ? `[${SERVER.ip}]:${SERVER.port}` : `[${CLIENT.ip}]:${CLIENT.port}`,
@@ -141,62 +141,62 @@
       screen: st.screen, log: st.log.slice(), threads: st.threads.map((t) => ({ ...t }))
     });
 
-    push({ phase: 'ready', title: 'Todo listo', packet: null,
-      note: `El servidor ya hizo <code>bind()</code> y <code>listen()</code> en el puerto ${SERVER.port} y espera en <code>accept()</code>. El cliente todavía no tiene conexión.` });
+    push({ phase: 'ready', title: T('Todo listo', 'All set'), packet: null,
+      note: T(`El servidor ya hizo <code>bind()</code> y <code>listen()</code> en el puerto ${SERVER.port} y espera en <code>accept()</code>. El cliente todavía no tiene conexión.`, `The server has already called <code>bind()</code> and <code>listen()</code> on port ${SERVER.port} and is waiting in <code>accept()</code>. The client has no connection yet.`) });
 
     // 1. Three-way handshake
     st.client = 'SYN_SENT';
-    st.screen = `$ ./client ${opts.command === 'LIST' ? 'LIST' : `GET ${opts.figure || ''}`}\nConectando a ${SERVER.name} (puerto ${SERVER.port})…`;
+    st.screen = `$ ./client ${opts.command === 'LIST' ? 'LIST' : `GET ${opts.figure || ''}`}\n${T(`Conectando a ${SERVER.name} (puerto ${SERVER.port})…`, `Connecting to ${SERVER.name} (port ${SERVER.port})…`)}`;
     push({ phase: 'open', title: 'SYN', packet: { dir: 'c2s', label: 'SYN', tcp: tcp('c2s', ['SYN'], cSeq, null), payload: null },
-      note: `El cliente llama a <code>connect()</code>. El sistema operativo envía un segmento <b>SYN</b> con su número de secuencia inicial (${cSeq}): "quiero hablar contigo".` });
+      note: T(`El cliente llama a <code>connect()</code>. El sistema operativo envía un segmento <b>SYN</b> con su número de secuencia inicial (${cSeq}): "quiero hablar contigo".`, `The client calls <code>connect()</code>. The operating system sends a <b>SYN</b> segment with its initial sequence number (${cSeq}): "I want to talk to you".`) });
     st.conn = 'SYN_RCVD';
     push({ phase: 'open', title: 'SYN-ACK', packet: { dir: 's2c', label: 'SYN-ACK', tcp: tcp('s2c', ['SYN', 'ACK'], sSeq, cSeq + 1), payload: null },
-      note: `El servidor responde <b>SYN-ACK</b>: confirma el SYN (ack = ${cSeq + 1}) y propone su propio número inicial (${sSeq}).` });
+      note: T(`El servidor responde <b>SYN-ACK</b>: confirma el SYN (ack = ${cSeq + 1}) y propone su propio número inicial (${sSeq}).`, `The server replies with <b>SYN-ACK</b>: it acknowledges the SYN (ack = ${cSeq + 1}) and proposes its own initial number (${sSeq}).`) });
     cSeq += 1; sSeq += 1;
     st.client = 'ESTABLISHED';
     st.conn = 'ESTABLISHED';
-    st.screen += '\nConectado.';
+    st.screen += `\n${T('Conectado.', 'Connected.')}`;
     push({ phase: 'open', title: 'ACK', packet: { dir: 'c2s', label: 'ACK', tcp: tcp('c2s', ['ACK'], cSeq, sSeq), payload: null },
-      note: 'El cliente confirma con <b>ACK</b>. Listo el <b>saludo de tres vías</b>: la conexión TCP está establecida en ambos lados.' });
+      note: T('El cliente confirma con <b>ACK</b>. Listo el <b>saludo de tres vías</b>: la conexión TCP está establecida en ambos lados.', 'The client acknowledges with <b>ACK</b>. That completes the <b>three-way handshake</b>: the TCP connection is established on both sides.') });
 
-    st.log.push('main: accept() devolvió un socket nuevo para el cliente');
-    st.log.push(`main: std::thread(task, client).detach() → hilo #${thread}`);
-    st.threads = [{ name: 'main', state: 'accept()' }, { name: `hilo #${thread}`, state: 'task()' }];
-    push({ phase: 'server', title: 'Nuevo hilo', packet: null,
-      note: `<code>accept()</code> entrega un socket nuevo solo para este cliente. El servidor crea un <b>hilo</b> que ejecuta <code>task()</code>, y el hilo principal vuelve a esperar más clientes.` });
+    st.log.push(T('main: accept() devolvió un socket nuevo para el cliente', 'main: accept() returned a new socket for the client'));
+    st.log.push(T(`main: std::thread(task, client).detach() → hilo #${thread}`, `main: std::thread(task, client).detach() → thread #${thread}`));
+    st.threads = [{ name: 'main', state: 'accept()' }, { name: T(`hilo #${thread}`, `thread #${thread}`), state: 'task()' }];
+    push({ phase: 'server', title: T('Nuevo hilo', 'New thread'), packet: null,
+      note: T(`<code>accept()</code> entrega un socket nuevo solo para este cliente. El servidor crea un <b>hilo</b> que ejecuta <code>task()</code>, y el hilo principal vuelve a esperar más clientes.`, `<code>accept()</code> hands over a new socket just for this client. The server creates a <b>thread</b> that runs <code>task()</code>, and the main thread goes back to waiting for more clients.`) });
 
     // 2. HTTP request
-    push({ phase: 'request', title: 'Arma la petición', packet: null, preview: { kind: 'request', raw: request },
-      note: `El cliente escribe la petición HTTP: una <b>línea de petición</b> (método, ruta y versión), los <b>encabezados</b> y una <b>línea vacía</b> que marca el final. Son ${reqLen} bytes de texto.` });
-    push({ phase: 'request', title: 'Petición HTTP', packet: { dir: 'c2s', label: opts.method && opts.method !== 'GET' ? `HTTP ${opts.method}` : 'HTTP GET', tcp: tcp('c2s', ['PSH', 'ACK'], cSeq, sSeq, reqLen), payload: request, kind: 'request' },
-      note: `La petición viaja <b>dentro</b> de un segmento TCP (flags PSH, ACK). El campo seq avanza por bytes: el siguiente segmento del cliente empezará en ${cSeq + reqLen}.` });
+    push({ phase: 'request', title: T('Arma la petición', 'Builds the request'), packet: null, preview: { kind: 'request', raw: request },
+      note: T(`El cliente escribe la petición HTTP: una <b>línea de petición</b> (método, ruta y versión), los <b>encabezados</b> y una <b>línea vacía</b> que marca el final. Son ${reqLen} bytes de texto.`, `The client writes the HTTP request: a <b>request line</b> (method, path and version), the <b>headers</b> and an <b>empty line</b> that marks the end. That is ${reqLen} bytes of text.`) });
+    push({ phase: 'request', title: T('Petición HTTP', 'HTTP request'), packet: { dir: 'c2s', label: opts.method && opts.method !== 'GET' ? `HTTP ${opts.method}` : 'HTTP GET', tcp: tcp('c2s', ['PSH', 'ACK'], cSeq, sSeq, reqLen), payload: request, kind: 'request' },
+      note: T(`La petición viaja <b>dentro</b> de un segmento TCP (flags PSH, ACK). El campo seq avanza por bytes: el siguiente segmento del cliente empezará en ${cSeq + reqLen}.`, `The request travels <b>inside</b> a TCP segment (flags PSH, ACK). The seq field advances by bytes: the client's next segment will start at ${cSeq + reqLen}.`) });
     cSeq += reqLen;
 
     // 3. Server work
-    st.log.push(`hilo #${thread}: Read() → "${request.split('\r\n')[0]}"`);
+    st.log.push(T(`hilo #${thread}: Read() → "${request.split('\r\n')[0]}"`, `thread #${thread}: Read() → "${request.split('\r\n')[0]}"`));
     const parsed = response.route === 'bad'
-      ? `No empieza con "GET ": el servidor no sabe qué hacer.`
-      : response.route === 'list' ? 'La ruta es <code>/LIST</code>: hay que listar el disco.' : `La ruta es <code>${response.url}</code>: piden la figura <b>${response.figure}</b>.`;
-    push({ phase: 'server', title: 'Lee la petición', packet: null,
-      note: `El hilo hace <code>Read()</code> y revisa la primera línea. ${parsed}` });
+      ? T(`No empieza con "GET ": el servidor no sabe qué hacer.`, `It does not start with "GET ": the server does not know what to do.`)
+      : response.route === 'list' ? T('La ruta es <code>/LIST</code>: hay que listar el disco.', 'The path is <code>/LIST</code>: the disk has to be listed.') : T(`La ruta es <code>${response.url}</code>: piden la figura <b>${response.figure}</b>.`, `The path is <code>${response.url}</code>: the figure <b>${response.figure}</b> is being requested.`);
+    push({ phase: 'server', title: T('Lee la petición', 'Reads the request'), packet: null,
+      note: T(`El hilo hace <code>Read()</code> y revisa la primera línea. ${parsed}`, `The thread calls <code>Read()</code> and checks the first line. ${parsed}`) });
 
-    if (response.route === 'figure') st.log.push(`hilo #${thread}: fs.getFigureContent("${response.figure}") → ${byteLength(response.body)} bytes`);
-    else if (response.route === 'notfound') st.log.push(`hilo #${thread}: fs.getFigureContent("${response.figure}") → no existe`);
-    else if (response.route === 'list') st.log.push(`hilo #${thread}: fs.getFigureList()`);
-    else st.log.push(`hilo #${thread}: método no soportado`);
+    if (response.route === 'figure') st.log.push(T(`hilo #${thread}: fs.getFigureContent("${response.figure}") → ${byteLength(response.body)} bytes`, `thread #${thread}: fs.getFigureContent("${response.figure}") → ${byteLength(response.body)} bytes`));
+    else if (response.route === 'notfound') st.log.push(T(`hilo #${thread}: fs.getFigureContent("${response.figure}") → no existe`, `thread #${thread}: fs.getFigureContent("${response.figure}") → does not exist`));
+    else if (response.route === 'list') st.log.push(T(`hilo #${thread}: fs.getFigureList()`, `thread #${thread}: fs.getFigureList()`));
+    else st.log.push(T(`hilo #${thread}: método no soportado`, `thread #${thread}: method not supported`));
     const work = {
-      figure: `Busca la figura en su sistema de archivos (<code>disk.bin</code>, en bloques de ${BLOCK_SIZE} bytes) y la encuentra.`,
-      notfound: `Busca "${response.figure}" en el disco y <b>no existe</b>.`,
-      list: 'Recorre los bloques de directorio del disco y arma la lista de figuras.',
-      bad: 'No hay nada que buscar: la petición es inválida.',
-      api: 'Arma la lista de figuras en formato JSON.'
+      figure: T(`Busca la figura en su sistema de archivos (<code>disk.bin</code>, en bloques de ${BLOCK_SIZE} bytes) y la encuentra.`, `It looks for the figure in its file system (<code>disk.bin</code>, in blocks of ${BLOCK_SIZE} bytes) and finds it.`),
+      notfound: T(`Busca "${response.figure}" en el disco y <b>no existe</b>.`, `It looks for "${response.figure}" on the disk and it <b>does not exist</b>.`),
+      list: T('Recorre los bloques de directorio del disco y arma la lista de figuras.', 'It walks through the directory blocks of the disk and builds the list of figures.'),
+      bad: T('No hay nada que buscar: la petición es inválida.', 'There is nothing to look for: the request is invalid.'),
+      api: T('Arma la lista de figuras en formato JSON.', 'It builds the list of figures in JSON format.')
     }[response.route];
-    push({ phase: 'server', title: response.route === 'bad' ? 'Rechaza' : 'Busca en disco', packet: null, highlight: response.figure || null, note: work });
+    push({ phase: 'server', title: response.route === 'bad' ? T('Rechaza', 'Rejects') : T('Busca en disco', 'Searches the disk'), packet: null, highlight: response.figure || null, note: work });
 
-    push({ phase: 'response', title: 'Arma la respuesta', packet: null, preview: { kind: 'response', raw: responseRaw },
-      note: `Respuesta <b>${response.status} ${response.reason}</b>. ${response.headers.some(([k]) => k === 'Content-Length')
-        ? 'Incluye Content-Length, así el cliente sabe cuántos bytes esperar.'
-        : 'No trae Content-Length: el cliente sabrá que terminó cuando el servidor cierre la conexión (<code>Connection: close</code>).'}` });
+    push({ phase: 'response', title: T('Arma la respuesta', 'Builds the response'), packet: null, preview: { kind: 'response', raw: responseRaw },
+      note: `${T('Respuesta', 'Response')} <b>${response.status} ${response.reason}</b>. ${response.headers.some(([k]) => k === 'Content-Length')
+        ? T('Incluye Content-Length, así el cliente sabe cuántos bytes esperar.', 'It includes Content-Length, so the client knows how many bytes to expect.')
+        : T('No trae Content-Length: el cliente sabrá que terminó cuando el servidor cierre la conexión (<code>Connection: close</code>).', 'It has no Content-Length: the client will know it is over when the server closes the connection (<code>Connection: close</code>).')}` });
 
     // 4. Response segments
     let received = '';
@@ -211,32 +211,32 @@
         ? streamDecoder.decode(allBytes.slice(sg.offset, sg.offset + sg.len), { stream: i < segs.length - 1 })
         : sliceBytes(responseRaw, sg.offset, sg.len);
       received += chunk;
-      if (i === 0) st.log.push(`hilo #${thread}: Write() → ${resLen} bytes`);
+      if (i === 0) st.log.push(T(`hilo #${thread}: Write() → ${resLen} bytes`, `thread #${thread}: Write() → ${resLen} bytes`));
       const shownBody = received.length > bodyStart ? received.slice(bodyStart) : '';
       st.screen = `$ ./client ${opts.command === 'LIST' ? 'LIST' : `GET ${opts.figure || ''}`}\n${shownBody}`;
-      push({ phase: 'response', title: segs.length > 1 ? `Respuesta ${i + 1}/${segs.length}` : 'Respuesta HTTP',
-        packet: { dir: 's2c', label: i === 0 ? `HTTP ${response.status}` : `datos ${i + 1}/${segs.length}`, tcp: tcp('s2c', ['PSH', 'ACK'], sSeq + sg.offset, cSeq, sg.len), payload: chunk, kind: 'response', part: segs.length > 1 ? `segmento ${i + 1} de ${segs.length}` : null },
+      push({ phase: 'response', title: segs.length > 1 ? T(`Respuesta ${i + 1}/${segs.length}`, `Response ${i + 1}/${segs.length}`) : T('Respuesta HTTP', 'HTTP response'),
+        packet: { dir: 's2c', label: i === 0 ? `HTTP ${response.status}` : T(`datos ${i + 1}/${segs.length}`, `data ${i + 1}/${segs.length}`), tcp: tcp('s2c', ['PSH', 'ACK'], sSeq + sg.offset, cSeq, sg.len), payload: chunk, kind: 'response', part: segs.length > 1 ? T(`segmento ${i + 1} de ${segs.length}`, `segment ${i + 1} of ${segs.length}`) : null },
         note: segs.length > 1
-          ? `La respuesta mide ${resLen} bytes y no cabe en un solo segmento (máximo ${MSS} bytes de datos, el MSS). TCP la parte: este es el segmento ${i + 1} de ${segs.length}, seq = ${sSeq + sg.offset}.`
-          : `La respuesta (${resLen} bytes) cabe en un solo segmento TCP. Su ack = ${cSeq} confirma que la petición llegó completa.` });
+          ? T(`La respuesta mide ${resLen} bytes y no cabe en un solo segmento (máximo ${MSS} bytes de datos, el MSS). TCP la parte: este es el segmento ${i + 1} de ${segs.length}, seq = ${sSeq + sg.offset}.`, `The response is ${resLen} bytes long and does not fit in a single segment (at most ${MSS} bytes of data, the MSS). TCP splits it: this is segment ${i + 1} of ${segs.length}, seq = ${sSeq + sg.offset}.`)
+          : T(`La respuesta (${resLen} bytes) cabe en un solo segmento TCP. Su ack = ${cSeq} confirma que la petición llegó completa.`, `The response (${resLen} bytes) fits in a single TCP segment. Its ack = ${cSeq} confirms that the whole request arrived.`) });
     });
     sSeq += resLen;
     push({ phase: 'response', title: 'ACK', packet: { dir: 'c2s', label: 'ACK', tcp: tcp('c2s', ['ACK'], cSeq, sSeq), payload: null },
-      note: `El cliente confirma que recibió todo: ack = ${sSeq}, el siguiente byte que espera.` });
+      note: T(`El cliente confirma que recibió todo: ack = ${sSeq}, el siguiente byte que espera.`, `The client confirms it received everything: ack = ${sSeq}, the next byte it expects.`) });
 
     // 5. Teardown: the server closes first (client->Close() in task())
     st.conn = 'FIN_WAIT_1';
-    st.log.push(`hilo #${thread}: Close() y termina`);
-    st.threads = [{ name: 'main', state: 'accept()' }, { name: `hilo #${thread}`, state: 'terminado' }];
+    st.log.push(T(`hilo #${thread}: Close() y termina`, `thread #${thread}: Close() and finishes`));
+    st.threads = [{ name: 'main', state: 'accept()' }, { name: T(`hilo #${thread}`, `thread #${thread}`), state: 'terminado' }];
     push({ phase: 'close', title: 'FIN', packet: { dir: 's2c', label: 'FIN', tcp: tcp('s2c', ['FIN', 'ACK'], sSeq, cSeq), payload: null },
-      note: 'El hilo llama a <code>Close()</code>: el servidor envía <b>FIN</b>, "ya no tengo más que decir". El hilo termina.' });
+      note: T('El hilo llama a <code>Close()</code>: el servidor envía <b>FIN</b>, "ya no tengo más que decir". El hilo termina.', 'The thread calls <code>Close()</code>: the server sends <b>FIN</b>, "I have nothing more to say". The thread finishes.') });
     st.client = 'LAST_ACK';
     push({ phase: 'close', title: 'FIN-ACK', packet: { dir: 'c2s', label: 'FIN-ACK', tcp: tcp('c2s', ['FIN', 'ACK'], cSeq, sSeq + 1), payload: null },
-      note: `Al recibir el FIN, <code>Read()</code> del cliente devuelve 0: así sabe que la respuesta terminó${response.headers.some(([k]) => k === 'Content-Length') ? '' : ' (por eso no hacía falta Content-Length)'}. Confirma y cierra su lado con otro <b>FIN</b>.` });
+      note: T(`Al recibir el FIN, <code>Read()</code> del cliente devuelve 0: así sabe que la respuesta terminó${response.headers.some(([k]) => k === 'Content-Length') ? '' : ' (por eso no hacía falta Content-Length)'}. Confirma y cierra su lado con otro <b>FIN</b>.`, `When the FIN arrives, the client's <code>Read()</code> returns 0: that is how it knows the response is over${response.headers.some(([k]) => k === 'Content-Length') ? '' : ' (which is why Content-Length was not needed)'}. It acknowledges and closes its side with another <b>FIN</b>.`) });
     st.client = 'CLOSED';
     st.conn = 'TIME_WAIT';
-    push({ phase: 'close', title: 'ACK final', packet: { dir: 's2c', label: 'ACK', tcp: tcp('s2c', ['ACK'], sSeq + 1, cSeq + 1), payload: null },
-      note: 'El servidor confirma el último FIN. La conexión queda en <b>TIME_WAIT</b> un momento (por si algún paquete viejo llega tarde) y luego se libera.' });
+    push({ phase: 'close', title: T('ACK final', 'Final ACK'), packet: { dir: 's2c', label: 'ACK', tcp: tcp('s2c', ['ACK'], sSeq + 1, cSeq + 1), payload: null },
+      note: T('El servidor confirma el último FIN. La conexión queda en <b>TIME_WAIT</b> un momento (por si algún paquete viejo llega tarde) y luego se libera.', 'The server acknowledges the last FIN. The connection stays in <b>TIME_WAIT</b> for a moment (in case an old packet arrives late) and is then released.') });
 
     return { request, response, responseRaw, requestBytes: reqLen, responseBytes: resLen, segments: segs.length, steps };
   }
