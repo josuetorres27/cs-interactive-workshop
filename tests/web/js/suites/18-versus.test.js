@@ -175,8 +175,11 @@ module.exports = (t, { createEnv, read }) => {
       t.includes(css, 'body > main { display: flex; flex-direction: column; }');
       t.includes(css, '.screen.is-active:not(#screen-intro) { flex: 1 0 auto; display: flex; flex-direction: column; }');
       t.includes(css, '.screen.is-active:not(#screen-intro):not(#screen-module) > .wrap { margin-block: auto; }');
-      // In a station only the problem shelf is centred, so the steps never jump around
-      t.includes(css, '#screen-module.is-active:has(.tab-pane.active.choosing) > .mod-body { margin-block: auto;');
+      // In a station the title and step tabs stay put; the shelf or the open step is centred below them
+      t.includes(css, '#screen-module.is-active > .mod-body { flex: 1 0 auto; display: flex; flex-direction: column; }');
+      t.includes(css, '#screen-module .tab-pane.active { flex: 1 0 auto; display: flex; flex-direction: column; }');
+      t.ok(/#screen-module \.tab-pane\.active > \.step-pane\.active,\r?\n#screen-module \.tab-pane\.active\.choosing > \.problem-chooser \{ margin-block: auto; \}/.test(css));
+      t.notIncludes(css, ':has(');
     });
     t.test('browsers check for a new version on every visit, so a redeploy shows at once', () => {
       const headers = JSON.parse(read('firebase.json')).hosting.headers;

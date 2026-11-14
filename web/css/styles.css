@@ -394,9 +394,13 @@ body > main { flex: 1 0 auto; }
 body > main { display: flex; flex-direction: column; }
 .screen.is-active:not(#screen-intro) { flex: 1 0 auto; display: flex; flex-direction: column; }
 .screen.is-active:not(#screen-intro):not(#screen-module) > .wrap { margin-block: auto; }
-/* In a station, only the problem shelf is centred: the steps keep their place under the title */
-#screen-module.is-active:has(.tab-pane.active.choosing) > .mod-body { margin-block: auto; padding-bottom: 2.5rem; }
-.problem-shelf { padding-bottom: 1rem; }
+/* In a station the title and the step tabs stay at the top; what is under them (the problem
+   shelf or the open step) takes the room that is left and sits in its middle when it fits */
+#screen-module.is-active > .mod-body { flex: 1 0 auto; display: flex; flex-direction: column; }
+#screen-module .tab-pane.active { flex: 1 0 auto; display: flex; flex-direction: column; }
+#screen-module .tab-pane.active > .step-pane.active,
+#screen-module .tab-pane.active.choosing > .problem-chooser { margin-block: auto; }
+#screen-module .problem-chooser > .problem-shelf { padding-bottom: .4rem; }
 .screen.is-active { display: block; animation: screen-in .45s cubic-bezier(.2, .8, .2, 1); }
 @keyframes screen-in { from { opacity: 0; transform: translateY(14px) scale(.99); } to { opacity: 1; transform: none; } }
 .wrap { width: min(1180px, 100% - 32px); margin-inline: auto; }
@@ -822,7 +826,7 @@ body > main { display: flex; flex-direction: column; }
 .problem-peek code { min-width: 0; background: none; padding: 0; color: inherit; font-size: inherit; overflow: hidden; text-overflow: ellipsis; }
 .problem-num { flex: none; font-weight: 800; color: var(--sun-y); }
 .problem-card.solved .problem-peek { border-color: var(--mint); }
-.mod-body { padding-bottom: 5rem; }
+.mod-body { padding-bottom: 3rem; }
 
 /* Subtabs (inside a module) */
 .subtabs { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.1rem; }
