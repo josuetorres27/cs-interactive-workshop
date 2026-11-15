@@ -46,7 +46,7 @@ clean:
 run: all
 	@echo "\n===================================================================="
 	@echo "          RUNNING CS INTERACTIVE WORKSHOP MASTER TEST SUITE          "
-	@echo "                     (1,376 AUTOMATED TESTS)                        "
+	@echo "                     (1,382 AUTOMATED TESTS)                        "
 	@echo "===================================================================="
 	@./$(BINDIR)/test_sorting
 	@./$(BINDIR)/test_roundabout
@@ -56,5 +56,5 @@ run: all
 	@python3 web/test_web_assets.py
 	@node web/run.js
 	@echo "\n===================================================================="
-	@echo "                 ALL 1376 TESTS PASSED SUCCESSFULLY!                "
+	@echo "                 ALL 1382 TESTS PASSED SUCCESSFULLY!                "
 	@echo "===================================================================="
