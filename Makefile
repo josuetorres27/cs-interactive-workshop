@@ -4,9 +4,9 @@
 CC ?= gcc
 CXX ?= g++
 
-ENGINES := core-c-engines/algorithms core-c-engines/concurrency core-c-engines/networking
+ENGINES := core-c-engines/algorithms core-c-engines/concurrency core-c-engines/networking core-c-engines/vcs
 
-.PHONY: all clean test test-web algorithms concurrency networking $(ENGINES)
+.PHONY: all clean test test-web algorithms concurrency networking vcs $(ENGINES)
 
 all: $(ENGINES)
 	@echo "\n>>> All CS Interactive Workshop engines built successfully."
@@ -23,9 +23,14 @@ core-c-engines/networking:
 	@echo ">>> Building Networking & Distributed Systems Engine..."
 	@$(MAKE) -C $@
 
+core-c-engines/vcs:
+	@echo ">>> Building minigit (Version Control) Engine..."
+	@$(MAKE) -C $@
+
 algorithms: core-c-engines/algorithms
 concurrency: core-c-engines/concurrency
 networking: core-c-engines/networking
+vcs: core-c-engines/vcs
 
 clean:
 	@for dir in $(ENGINES); do \

@@ -13,7 +13,8 @@ TARGETS := \
 	$(BINDIR)/test_roundabout \
 	$(BINDIR)/test_heat_diffusion \
 	$(BINDIR)/test_patterns \
-	$(BINDIR)/test_networking
+	$(BINDIR)/test_networking \
+	$(BINDIR)/test_minigit
 
 .PHONY: all clean run $(TARGETS)
 
@@ -40,6 +41,12 @@ $(BINDIR)/test_patterns: concurrency/test_patterns.c | $(BINDIR)
 $(BINDIR)/test_networking: networking/test_networking.cpp ../core-c-engines/networking/src/FileSystem.cc | $(BINDIR)
 	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
 
+VCS_DIR := ../core-c-engines/vcs/src
+
+# Links the real minigit library, not a copy of it
+$(BINDIR)/test_minigit: vcs/test_minigit.c $(VCS_DIR)/minigit.c $(VCS_DIR)/sha1.c $(VCS_DIR)/minigit.h $(VCS_DIR)/sha1.h | $(BINDIR)
+	$(CC) $(CFLAGS) -I$(VCS_DIR) vcs/test_minigit.c $(VCS_DIR)/minigit.c $(VCS_DIR)/sha1.c -o $@
+
 clean:
 	rm -rf $(BINDIR) test_disk_tmp.bin
 
@@ -53,6 +60,7 @@ run: all
 	@./$(BINDIR)/test_heat_diffusion
 	@./$(BINDIR)/test_patterns
 	@./$(BINDIR)/test_networking
+	@./$(BINDIR)/test_minigit
 	@python3 web/test_web_assets.py
 	@node web/run.js
 	@echo "\n===================================================================="
