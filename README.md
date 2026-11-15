@@ -19,38 +19,38 @@ The workshop is written in Spanish with a full English translation, has two look
 
 The web workshop is a lab with workbenches (work areas) and stations. Every station has three steps:
 
-- **Experimenta:** Play with a live simulation.
-- **Entiende:** The theory behind it, with diagrams.
-- **Implementa:** The real code from the C/C++ engines and how to run it.
+- **Understand:** The theory behind it, with diagrams.
+- **Experiment:** Play with a live simulation.
+- **Implement:** The real code from the C/C++ engines and how to run it.
 
-Twelve stations: eleven on five workbenches, plus El Cuaderno. Each one has a checklist, and finishing it completes the station.
+Twelve stations: eleven on five workbenches, plus The Notebook. Each one has a checklist, and finishing it completes the station.
 
-### Algoritmos y Estructuras de Datos
+### Algorithms and Data Structures
 
-- **Ordenamiento:** Quick, Merge, Heap, Shell, Insertion, Selection, Bubble and Radix (LSD) sort on a live array, with input presets (random, nearly sorted, reversed, few unique), counters and sound mapped to values.
-- **Algoritmo vs. algoritmo:** Two of the eight algorithms race on the same array, one operation per tick each, with live comparison and write counters and a verdict that explains who won and why.
-- **Estructuras de datos · Fácil y Media:** Balanced parentheses, reversing a linked list and inserting into a BST, traced line by line like a debugger.
+- **Sorting:** Quick, Merge, Heap, Shell, Insertion, Selection, Bubble and Radix (LSD) sort on a live array, with input presets (random, nearly sorted, reversed, few unique), counters and sound mapped to values.
+- **Algorithm vs. Algorithm:** Two of the eight algorithms race on the same array, one operation per tick each, with live comparison and write counters and a verdict that explains who won and why.
+- **Data Structures · Easy and Medium:** Balanced parentheses, reversing a linked list and inserting into a BST, traced line by line like a debugger.
 
-### Programación Paralela y Concurrente
+### Parallel and Concurrent Programming
 
-- **La Rotonda:** A four-quadrant roundabout guarded by counting semaphores (`sem_t`). Turning the guard off causes a deadlock (circular wait), turning it on fixes it, and the station also explores the classic patterns.
-- **Difusión de calor:** A metal plate solved by threads. Each thread owns a band of rows and must wait at a barrier every iteration; the station shows which threads are working and which are waiting, and lets the student change the number of threads, split the rows unevenly, slow one thread down, paint heat sources and break stability with r > 1/4. It shows live speedup, efficiency and time spent at the barrier.
+- **The Roundabout:** A four-quadrant roundabout guarded by counting semaphores (`sem_t`). Turning the guard off causes a deadlock (circular wait), turning it on fixes it, and the station also explores the classic patterns.
+- **Heat Diffusion:** A metal plate solved by threads. Each thread owns a band of rows and must wait at a barrier every iteration; the station shows which threads are working and which are waiting, and lets the student change the number of threads, split the rows unevenly, slow one thread down, paint heat sources and break stability with r > 1/4. It shows live speedup, efficiency and time spent at the barrier.
 
-### Redes
+### Networking
 
-- **Sockets TCP:** A client and a server exchanging HTTP over TCP, step by step: handshake, segments with seq/ack numbers, the request, the server thread that handles it, the response and the teardown. The model follows the routing of `Server.cc` (200, 404, 400 and `LIST`).
+- **TCP Sockets:** A client and a server exchanging HTTP over TCP, step by step: handshake, segments with seq/ack numbers, the request, the server thread that handles it, the response and the teardown. The model follows the routing of `Server.cc` (200, 404, 400 and `LIST`).
 
-### Problemas de Código
+### Coding Problems
 
-- **Problemas clásicos · Fácil, Media y Difícil:** Thirteen classic problems (palindromes, binary search, two pointers, sliding window, interval merging, islands, coin change, trapping rain water, largest rectangle and more), traced line by line on the student's own input.
+- **Classic Problems · Easy, Medium and Hard:** Thirteen classic problems (palindromes, binary search, two pointers, sliding window, interval merging, islands, coin change, trapping rain water, largest rectangle and more), traced line by line on the student's own input.
 
-### Bases de Datos
+### Databases
 
-- **SQL paso a paso:** Queries run clause by clause in logical order (`FROM`, `JOIN`, `WHERE`, `GROUP BY`, `HAVING`, `SELECT`, `ORDER BY`, `LIMIT`).
+- **SQL Step by Step:** Queries run clause by clause in logical order (`FROM`, `JOIN`, `WHERE`, `GROUP BY`, `HAVING`, `SELECT`, `ORDER BY`, `LIMIT`).
 
-### El Cuaderno
+### The Notebook
 
-- **El Cuaderno:** Amdahl's law calculator, the Coffman conditions, a Big-O reference and a personal notebook saved on the device.
+- **The Notebook:** Amdahl's law calculator, the Coffman conditions, a Big-O reference and a personal notebook saved on the device.
 
 ---
 
@@ -130,16 +130,16 @@ cs-interactive-workshop/
     │   ├── tracer.js                     # Line-by-line code walkthrough engine
     │   ├── audio.js                      # Web Audio sound effects
     │   └── modules/                      # One file per station (plus pure models)
-    │       ├── algorithms.js             # Ordenamiento
-    │       ├── versus.js                 # Algoritmo vs. algoritmo
-    │       ├── datastructures.js         # Estructuras de datos (tracer)
-    │       ├── concurrency.js            # La Rotonda
-    │       ├── heatsim.js, heat.js       # Difusión de calor: model and station
-    │       ├── httpsim.js, networking.js # Sockets TCP: model and station
-    │       ├── interview.js              # Problemas clásicos (tracer)
-    │       ├── sql.js                    # SQL paso a paso (tracer)
-    │       ├── cheatsheets.js            # El Cuaderno
-    │       ├── notebook.js               # Mis apuntes, the notebook inside El Cuaderno
+    │       ├── algorithms.js             # Sorting station
+    │       ├── versus.js                 # Algorithm vs. Algorithm station
+    │       ├── datastructures.js         # Data Structures station (tracer)
+    │       ├── concurrency.js            # The Roundabout station
+    │       ├── heatsim.js, heat.js       # Heat Diffusion: model and station
+    │       ├── httpsim.js, networking.js # TCP Sockets: model and station
+    │       ├── interview.js              # Classic Problems station (tracer)
+    │       ├── sql.js                    # SQL Step by Step station (tracer)
+    │       ├── cheatsheets.js            # The Notebook station
+    │       ├── notebook.js               # My Notes, the notebook inside The Notebook
     │       └── figuresData.js            # Embedded copy of the ASCII figures
     └── assets/ascii_figures/             # ASCII figures served to the web workshop
 ```
