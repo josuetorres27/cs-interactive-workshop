@@ -1408,7 +1408,7 @@ pre.code .t-k { color: var(--sun-y); }
 }
 
 /* ================================================================
-   NETWORKING · client ↔ server over a cable, step by step
+   NETWORKING · client <-> server over a cable, step by step
    ================================================================ */
 .net-sim { display: grid; gap: 1.3rem; }
 
