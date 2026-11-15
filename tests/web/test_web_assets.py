@@ -82,6 +82,18 @@ def main():
     test("Index HTML Links favicon.ico", 'href="/favicon.ico"' in html)
     test("Index HTML Links favicon.svg", 'href="/favicon.svg"' in html)
     test("Index HTML Links apple-touch-icon", 'href="/apple-touch-icon.png"' in html)
+    test("Index HTML Links the Web Manifest", '<link rel="manifest" href="/site.webmanifest">' in html)
+    manifest_path = os.path.join(repo_root, "web", "site.webmanifest")
+    with open(manifest_path, "r", encoding="utf-8") as f:
+        manifest = json.load(f)
+    test("site.webmanifest Names the App and Lists Icons", bool(manifest.get("name")) and len(manifest.get("icons", [])) >= 2)
+    for size in (192, 512):
+        icon_file = os.path.join(repo_root, "web", f"icon-{size}.png")
+        with open(icon_file, "rb") as f:
+            head = f.read(24)
+        dims = (int.from_bytes(head[16:20], "big"), int.from_bytes(head[20:24], "big"))
+        test(f"icon-{size}.png Is a {size}x{size} PNG", head[:8] == b"\x89PNG\r\n\x1a\n" and dims == (size, size), str(dims))
+    test("Every Manifest Icon Exists on Disk", all(os.path.isfile(os.path.join(repo_root, "web", i["src"].lstrip("/"))) for i in manifest["icons"]))
     test("Index HTML Has a Canonical Link", '<link rel="canonical" href="https://workshop.josuetorressibaja.com/">' in html)
     test("Index HTML Is Not Blocked From Indexing", "noindex" not in html.lower())
     with open(os.path.join(repo_root, "web", "robots.txt"), "r", encoding="utf-8") as f:
@@ -97,6 +109,7 @@ def main():
     with open(fb_path, "r", encoding="utf-8") as f:
         fb_data = json.load(f)
     test("firebase.json Public Directory is 'web'", fb_data.get("hosting", {}).get("public") == "web")
+    test("firebase.json Revalidates the Web Manifest", any("webmanifest" in h.get("source", "") for h in fb_data.get("hosting", {}).get("headers", [])))
 
     print("----------------------------------------------------------------------")
     print(f"Summary: {PASSED_COUNT}/{TEST_COUNT} passed ({FAILED_COUNT} failed)")
