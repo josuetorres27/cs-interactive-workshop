@@ -86,6 +86,18 @@
       title: T('SQL paso a paso', 'SQL step by step'),
       items: [walk('join-where', T('JOIN, WHERE y ORDER BY', 'JOIN, WHERE and ORDER BY')), walk('group-having', T('GROUP BY y HAVING', 'GROUP BY and HAVING')), walk('left-join-null', T('LEFT JOIN para encontrar ausentes', 'LEFT JOIN to find what is missing'))]
     },
+    git: {
+      title: T('Git por dentro', 'Git inside out'),
+      items: [
+        { id: 'commit', label: T('Hacer tu primer commit', 'Make your first commit') },
+        { id: 'branch', label: T('Trabajar en una rama y volver a main', 'Work on a branch and go back to main') },
+        { id: 'conflict', label: T('Resolver un conflicto de merge', 'Resolve a merge conflict') },
+        { id: 'revert', label: T('Deshacer un commit con revert', 'Undo a commit with revert') },
+        { id: 'detached', label: T('Rescatar un commit hecho con HEAD separado', 'Rescue a commit made on a detached HEAD') },
+        { id: 'reflog', label: T('Recuperar commits perdidos con el reflog', 'Recover lost commits with the reflog') },
+        { id: 'rebase', label: T('Poner una rama al día con rebase', 'Bring a branch up to date with rebase') }
+      ]
+    },
     cheatsheets: {
       title: T('El Cuaderno', 'The Notebook'),
       items: [{ id: 'amdahl', label: T('Jugar con la Ley de Amdahl', 'Play with Amdahl\'s Law') }, { id: 'note', label: T('Escribir tu primera nota', 'Write your first note') }]

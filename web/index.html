@@ -406,6 +406,7 @@
               <li><strong>Redes:</strong> sockets TCP, HTTP y un servidor con pool de hilos.</li>
               <li><strong>Problemas de código:</strong> palíndromos, islas, pilas, programación dinámica y ventanas deslizantes, de fáciles a difíciles.</li>
               <li><strong>Bases de datos:</strong> SQL ejecutado cláusula por cláusula.</li>
+              <li><strong>Ingeniería de software:</strong> Git por dentro, de los commits a los conflictos.</li>
             </ul>
           </article>
 
@@ -489,6 +490,16 @@
             <span class="station-code">BASES DE DATOS</span>
             <h3 class="bench-name">Bases de Datos</h3>
             <p class="bench-line">SQL ejecutado cláusula por cláusula</p>
+            <span class="bench-go">1 estación <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+          </a>
+
+          <a href="#/area/engineering" class="bench" style="--accent:var(--amber)">
+            <div class="bench-art">
+              <svg viewBox="0 0 120 80" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M16 56h88"/><path d="M38 56c0-24 14-28 30-28h12"/></g><g stroke="currentColor" stroke-width="4"><circle cx="16" cy="56" r="8" style="fill:var(--sky-b)"/><circle cx="38" cy="56" r="8" style="fill:var(--sky-b)"/><circle cx="66" cy="56" r="8" style="fill:var(--sky-b)"/><circle cx="80" cy="28" r="8" style="fill:var(--plum)"/><circle cx="104" cy="56" r="8" style="fill:var(--sun-y)"/></g></svg>
+            </div>
+            <span class="station-code">HERRAMIENTAS</span>
+            <h3 class="bench-name">Ingeniería de Software</h3>
+            <p class="bench-line">Git por dentro: commits, ramas y merges</p>
             <span class="bench-go">1 estación <svg class="ic"><use href="#i-arrow-r"/></svg></span>
           </a>
 
@@ -735,6 +746,26 @@
               <span class="station-code">DEPURADOR</span>
               <h3 class="station-name">SQL paso a paso</h3>
               <p class="station-line">Mira en qué orden se ejecuta de verdad una consulta.</p>
+              <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
+            </a>
+          </div>
+
+          <!-- Software engineering -->
+          <div class="station" data-area="engineering">
+            <a href="#/workshop/git" class="station-card" data-tab="git" style="--accent:var(--amber)">
+              <div class="station-art">
+                <svg viewBox="0 0 160 100" aria-hidden="true">
+                  <g fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M18 70h124"/><path d="M50 70c0-30 18-36 38-36h22c14 0 20 16 20 36"/></g>
+                  <g stroke="currentColor" stroke-width="4">
+                    <circle cx="18" cy="70" r="10" style="fill:var(--sky-b)"/><circle cx="50" cy="70" r="10" style="fill:var(--sky-b)"/><circle cx="86" cy="70" r="10" style="fill:var(--sky-b)"/>
+                    <circle cx="90" cy="34" r="10" style="fill:var(--plum)"/><circle cx="130" cy="70" r="11" style="fill:var(--sun-y)"/>
+                  </g>
+                  <g stroke="currentColor" stroke-width="3"><rect x="104" y="10" width="46" height="16" rx="8" style="fill:var(--paper)"/></g>
+                </svg>
+              </div>
+              <span class="station-code">SIMULACIÓN</span>
+              <h3 class="station-name">Git por dentro</h3>
+              <p class="station-line">Commits, ramas y conflictos, con los hashes de Git real.</p>
               <span class="station-go">Entrar <svg class="ic"><use href="#i-arrow-r"/></svg></span>
             </a>
           </div>
@@ -1793,6 +1824,73 @@ make -C pthreads &amp;&amp; make -C openmp
           <div class="step-pane" data-step="build"><div id="tracer-sql-build"></div></div>
         </section>
 
+        <!-- ============ MODULE: GIT ============ -->
+        <section id="tab-git" class="tab-pane">
+
+          <div class="step-pane active" data-step="play">
+            <div class="git-sim" id="gitSim">
+
+              <div class="git-top">
+                <div class="git-missions board" id="gitMissionPicker">
+                  <div class="ctl-label">Misiones</div>
+                  <div class="chips" id="gitMissions"></div>
+                </div>
+                <div class="git-mission board" id="gitMission">
+                  <div class="git-mission-head"><h3 id="gitMissionTitle"></h3><span class="git-state" id="gitMissionState"></span></div>
+                  <p class="git-brief" id="gitMissionBrief"></p>
+                  <p class="git-goal"><b>Objetivo:</b> <span id="gitMissionGoal"></span></p>
+                  <p class="git-hint" id="gitHintText" hidden></p>
+                  <div class="git-mission-actions">
+                    <button type="button" class="btn btn-ghost btn-sm" id="gitHint"><svg class="ic"><use href="#i-help"/></svg>Pista</button>
+                    <button type="button" class="btn btn-ghost btn-sm" id="gitReset"><svg class="ic"><use href="#i-reset"/></svg>Reiniciar</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="git-main">
+                <div class="machine git-term" id="gitTerm">
+                  <div class="machine-head"><span class="machine-name">Terminal</span> <span class="machine-addr">~/proyecto</span></div>
+                  <pre class="git-out" id="gitOut" aria-live="polite"></pre>
+                  <form class="git-form" id="gitForm" autocomplete="off">
+                    <label class="git-prompt" id="gitPrompt" for="gitInput"></label>
+                    <input type="text" id="gitInput" spellcheck="false" autocapitalize="off" aria-label="Comando de la terminal">
+                    <button type="submit" class="round-btn sm git-run" id="gitRun" title="Ejecutar" aria-label="Ejecutar"><svg class="ic"><use href="#i-send"/></svg></button>
+                  </form>
+                  <div class="ctl-label">Prueba con</div>
+                  <div class="chips git-tries" id="gitTries"></div>
+                </div>
+
+                <div class="board git-graph" id="gitGraph">
+                  <div class="ctl-label">Historia de commits</div>
+                  <div class="git-graph-box" id="gitGraphBox"></div>
+                  <p class="ctl-hint">Los círculos en blanco ya no están en ninguna rama: solo el reflog los recuerda.</p>
+                </div>
+              </div>
+
+              <div class="git-inside">
+                <div class="board git-areas" id="gitAreas">
+                  <div class="git-area"><div class="ctl-label">Directorio de trabajo</div><div id="gitWork"></div></div>
+                  <div class="git-area"><div class="ctl-label">Índice (staging)</div><div id="gitIndex"></div></div>
+                  <div class="git-area"><div class="ctl-label">Repositorio</div><span class="git-sub" id="gitHeadLabel"></span><div id="gitHead"></div></div>
+                </div>
+                <div class="board git-objects" id="gitObjects">
+                  <div class="ctl-label">Referencias</div>
+                  <ul class="git-refs" id="gitRefs"></ul>
+                  <div class="ctl-label">Objetos</div>
+                  <span class="git-sub" id="gitObjCount"></span>
+                  <ul class="git-objlist" id="gitObjList"></ul>
+                  <div class="git-view" id="gitObjView"></div>
+                </div>
+              </div>
+
+              <div class="note git-note"><strong id="gitNoteTitle">Qué pasó</strong><span id="gitNote"></span></div>
+            </div>
+          </div>
+
+          <div class="step-pane" data-step="learn"><div class="learn-grid" id="gitLearn"></div></div>
+          <div class="step-pane" data-step="build"><div class="learn-grid" id="gitBuild"></div></div>
+        </section>
+
         <!-- ============ MODULE: NOTEBOOK (resources) ============ -->
         <section id="tab-cheatsheets" class="tab-pane">
           <div class="learn-grid">
@@ -1924,6 +2022,8 @@ atomic_fetch_add(&amp;contador, 1);</pre>
   <script src="js/modules/heat.js"></script>
   <script src="js/modules/httpsim.js"></script>
   <script src="js/modules/networking.js"></script>
+  <script src="js/modules/gitsim.js"></script>
+  <script src="js/modules/git.js"></script>
   <script src="js/modules/cheatsheets.js"></script>
   <script src="js/modules/notebook.js"></script>
   <script src="js/tracer.js"></script>

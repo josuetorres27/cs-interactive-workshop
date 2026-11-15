@@ -7,7 +7,8 @@ const AREAS = {
   parallel:    { title: T('Programación Paralela y Concurrente', 'Parallel and Concurrent Programming'), line: T('Hilos, sincronización y trabajo en paralelo.', 'Threads, synchronization and parallel work.') },
   networking:  { title: T('Redes', 'Networking'), line: T('Cómo viajan los datos entre computadoras.', 'How data travels between computers.') },
   problems:    { title: T('Problemas de Código', 'Coding Problems'), line: T('Problemas clásicos de programación, de fáciles a difíciles, paso a paso.', 'Classic programming problems, from easy to hard, step by step.') },
-  databases:   { title: T('Bases de Datos', 'Databases'), line: T('Consultas SQL, ejecutadas cláusula por cláusula.', 'SQL queries, executed clause by clause.') }
+  databases:   { title: T('Bases de Datos', 'Databases'), line: T('Consultas SQL, ejecutadas cláusula por cláusula.', 'SQL queries, executed clause by clause.') },
+  engineering: { title: T('Ingeniería de Software', 'Software Engineering'), line: T('Las herramientas con las que un equipo construye software.', 'The tools a team builds software with.') }
 };
 
 const MODULES = {
@@ -22,10 +23,11 @@ const MODULES = {
   'problems-medium': { title: T('Problemas clásicos · Media', 'Classic problems · Medium'),     area: 'problems', steps: true, tracer: 'problemStations.medium' },
   'problems-hard':   { title: T('Problemas clásicos · Difícil', 'Classic problems · Hard'),     area: 'problems', steps: true, tracer: 'problemStations.hard' },
   sql:            { title: T('SQL paso a paso', 'SQL step by step'),     area: 'databases',     steps: true, tracer: 'sqlStation' },
+  git:            { title: T('Git por dentro', 'Git inside out'),        area: 'engineering',   steps: true },
   cheatsheets:    { title: T('El Cuaderno', 'The Notebook'),             area: null,          steps: false }
 };
 const MODULE_ORDER = ['algorithms', 'versus', 'datastructures-easy', 'datastructures-medium', 'concurrency', 'heat', 'networking',
-  'problems-easy', 'problems-medium', 'problems-hard', 'sql', 'cheatsheets'];
+  'problems-easy', 'problems-medium', 'problems-hard', 'sql', 'git', 'cheatsheets'];
 const STEP_IDS = ['play', 'learn', 'build'];
 const MAX_TOASTS = 3;
 
@@ -82,6 +84,11 @@ const GUIDE_LINES = {
     learn: TRACER_LINES.learn,
     build: T('Plantillas y trampas comunes de SQL, sobre todo con NULL.', 'SQL templates and common pitfalls, especially with NULL.')
   },
+  git: {
+    play: T('Escoge una misión y escribe comandos de verdad. Mira qué objetos nacen y qué punteros se mueven con cada uno.', 'Pick a mission and type real commands. Watch which objects are born and which pointers move with each one.'),
+    learn: T('Blobs, árboles, commits y punteros: con esas cuatro piezas se explica todo Git.', 'Blobs, trees, commits and pointers: those four pieces explain all of Git.'),
+    build: T('El motor en C de este proyecto calcula los mismos hashes que Git. Compílalo y compruébalo.', 'This project\'s C engine computes the same hashes as Git. Build it and check for yourself.')
+  },
   cheatsheets: T('Mueve los controles de Amdahl: verás por qué más núcleos no siempre es más rápido.', 'Move the Amdahl controls: you will see why more cores is not always faster.')
 };
 
@@ -123,6 +130,12 @@ const TOURS = {
     { sel: '#netScene', title: T('Dos computadoras y un cable', 'Two computers and a wire'), text: T('A la izquierda el cliente, a la derecha el servidor con su disco, sus hilos y su registro. Los paquetes viajan por el cable.', 'On the left the client, on the right the server with its disk, its threads and its log. The packets travel along the wire.') },
     { sel: '#netPlayer', title: T('Paso a paso', 'Step by step'), text: T('Avanza, retrocede o reproduce. Los puntos muestran las fases: conexión, petición, servidor, respuesta y cierre.', 'Go forward, go back or play. The dots show the phases: connection, request, server, response and close.') },
     { sel: '#packetInspector', title: T('Abre el paquete', 'Open the packet'), text: T('Cada paquete por capas: direcciones IPv6, el encabezado TCP y, si lleva datos, el mensaje HTTP parte por parte.', 'Each packet layer by layer: IPv6 addresses, the TCP header and, if it carries data, the HTTP message part by part.') }
+  ],
+  git: [
+    { sel: '#gitMissionPicker', title: T('Escoge una misión', 'Pick a mission'), text: T('Cada una arma un repositorio con un problema típico de trabajar en equipo. Empieza por el primer commit.', 'Each one builds a repository with a typical teamwork problem. Start with the first commit.') },
+    { sel: '#gitTerm', title: T('Una terminal de verdad', 'A real terminal'), text: T('Escribe comandos de Git (o toca una sugerencia). Las flechas ↑ y ↓ repiten los anteriores.', 'Type Git commands (or tap a suggestion). The ↑ and ↓ arrows bring back earlier ones.') },
+    { sel: '#gitGraph', title: T('La historia', 'The history'), text: T('Cada círculo es un commit y las etiquetas son ramas. HEAD marca dónde estás.', 'Each circle is a commit and the labels are branches. HEAD marks where you are.') },
+    { sel: '#gitObjects', title: T('Git por dentro', 'Git inside'), text: T('Los objetos que Git guarda y los punteros que mueve. Toca uno para ver su contenido exacto.', 'The objects Git stores and the pointers it moves. Tap one to see its exact content.') }
   ],
   ...Object.fromEntries(['easy', 'medium', 'hard'].map((l) => [`problems-${l}`, tracerTour(`problems-${l}`, T('un problema clásico de programación', 'a classic programming problem'))])),
   ...Object.fromEntries(['easy', 'medium'].map((l) => [`datastructures-${l}`, tracerTour(`datastructures-${l}`, T('una estructura de datos con su operación típica', 'a data structure with its typical operation'))])),
@@ -205,7 +218,7 @@ class App {
   init() {
     document.querySelectorAll('.bit-slot').forEach(el => { el.innerHTML = BIT_SVG; });
 
-    ['algorithmsStation', 'versusStation', 'concurrencyStation', 'heatStation', 'networkingStation', 'cheatsheetsStation', 'notebookStation', 'sqlStation']
+    ['algorithmsStation', 'versusStation', 'concurrencyStation', 'heatStation', 'networkingStation', 'gitStation', 'cheatsheetsStation', 'notebookStation', 'sqlStation']
       .forEach(name => { if (window[name]) window[name].init(); });
     Object.values(MODULES).forEach(m => { const st = m.tracer && m.tracer.includes('.') && stationAt(m.tracer); if (st) st.init(); });
 
