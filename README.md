@@ -4,10 +4,10 @@
 [![Standard](https://img.shields.io/badge/Language-C99%20%2F%20C11%20%2F%20C%2B%2B17-blue?style=flat-square)](https://en.wikipedia.org/wiki/C%2B%2B17)
 [![Concurrency](https://img.shields.io/badge/Concurrency-POSIX%20Threads%20%7C%20OpenMP%20%7C%20Atomics-orange?style=flat-square)](https://computing.llnl.gov/tutorials/pthreads/)
 [![Networking](https://img.shields.io/badge/Networking-BSD%20Sockets%20%7C%20HTTP%201.1-purple?style=flat-square)](docs/networking/Protocol_Specification.md)
-[![Tests](https://img.shields.io/badge/Tests-1%2C376%20Passing-brightgreen?style=flat-square)](#testing)
+[![Tests](https://img.shields.io/badge/Tests-1%2C538%20Passing-brightgreen?style=flat-square)](#testing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](https://opensource.org/licenses/MIT)
 
-An interactive workshop for Computer Science students at the School of Computer Science and Informatics (ECCI) of the University of Costa Rica (UCR). It covers algorithms and data structures, parallel and concurrent programming, networking, classic coding problems and SQL, through visual simulations in the browser backed by real C and C++ engines.
+An interactive workshop for Computer Science students at the School of Computer Science and Informatics (ECCI) of the University of Costa Rica (UCR). It covers algorithms and data structures, parallel and concurrent programming, networking, classic coding problems, SQL and Git, through visual simulations in the browser backed by real C and C++ engines.
 
 The workshop is written in Spanish with a full English translation, has two looks (the tech lab and the original wooden workshop), works on phones, tablets and desktops, and includes Bit, a robot guide with a tour for every station. Accounts are optional: guests keep their progress on their own device, and students who sign in with Google keep it in the cloud.
 
@@ -23,7 +23,7 @@ The web workshop is a lab with workbenches (work areas) and stations. Every stat
 - **Experiment:** Play with a live simulation.
 - **Implement:** The real code from the C/C++ engines and how to run it.
 
-Twelve stations: eleven on five workbenches, plus The Notebook. Each one has a checklist, and finishing it completes the station.
+Thirteen stations: twelve on six workbenches, plus The Notebook. Each one has a checklist, and finishing it completes the station.
 
 ### Algorithms and Data Structures
 
@@ -47,6 +47,10 @@ Twelve stations: eleven on five workbenches, plus The Notebook. Each one has a c
 ### Databases
 
 - **SQL Step by Step:** Queries run clause by clause in logical order (`FROM`, `JOIN`, `WHERE`, `GROUP BY`, `HAVING`, `SELECT`, `ORDER BY`, `LIMIT`).
+
+### Software Engineering
+
+- **Git Inside Out:** A terminal where the student types real Git commands (`add`, `commit`, `branch`, `switch`, `merge`, `rebase`, `reset`, `revert`, `reflog`, `cat-file` and more) next to the commit graph, the three areas (working directory, index, last commit) and the object store. Blobs, trees and commits are hashed exactly like Git hashes them, so every hash on screen is the one real Git prints. Seven missions cover a first commit, branches as pointers, a merge conflict with a teammate, undoing with revert, rescuing a detached HEAD, recovering lost commits with the reflog and rebasing.
 
 ### The Notebook
 
@@ -73,6 +77,19 @@ C++17 implementations of the eight sorting algorithms with a benchmark harness.
 ### Networking (`core-c-engines/networking/`)
 
 A C++17 TCP server that starts one thread per client connection, on top of an object-oriented socket wrapper (`Socket`, `VSocket`) over the POSIX calls (`bind`, `listen`, `accept`, `connect`, `recv`, `send`). It serves the 12 ASCII figures over an HTTP/1.1-style protocol.
+
+### Version Control (`core-c-engines/vcs/`)
+
+`minigit`, Git's object model in C11 with its own SHA-1. It stores blobs, trees and commits in `.minigit/objects/` the way Git does, minus the zlib compression, so its hashes match real Git's, and keeps branches as 41-byte files under `refs/heads/`. Commands: `init`, `hash-object`, `cat-file`, `write-tree`, `commit-tree`, `commit`, `log` and `rev-parse`. With `MINIGIT_AUTHOR_DATE` set, its commit hashes match Git's too.
+
+```bash
+make -C core-c-engines/vcs
+mkdir demo && cd demo && printf 'hello\n' > hello.txt
+../core-c-engines/vcs/bin/minigit init
+../core-c-engines/vcs/bin/minigit hash-object -w hello.txt   # same hash as: git hash-object hello.txt
+../core-c-engines/vcs/bin/minigit commit -m "First commit"
+../core-c-engines/vcs/bin/minigit cat-file -p HEAD
+```
 
 ---
 
@@ -112,9 +129,10 @@ cs-interactive-workshop/
 │   │   ├── simulations/roundabout/       # Traffic roundabout with POSIX semaphores
 │   │   ├── simulations/heat-diffusion/   # Shared library (common/) + serial, pthreads, OpenMP programs
 │   │   └── patterns/                     # Bounded buffer, philosophers, H2O, sync benchmark
-│   └── networking/                       # Multi-threaded TCP server and client (C++17)
-│       ├── src/                          # Socket/VSocket wrappers, Server, Client, FileSystem
-│       └── ascii_figures/                # The 12 ASCII figures the server sends
+│   ├── networking/                       # Multi-threaded TCP server and client (C++17)
+│   │   ├── src/                          # Socket/VSocket wrappers, Server, Client, FileSystem
+│   │   └── ascii_figures/                # The 12 ASCII figures the server sends
+│   └── vcs/src/                          # minigit: SHA-1, Git objects, refs and its command line (C11)
 ├── tests/                                # C/C++ suites, Python checks, and the web workshop runner
 └── web/                                  # The web workshop (static, no build step)
     ├── index.html                        # Every screen and station
@@ -138,6 +156,7 @@ cs-interactive-workshop/
     │       ├── httpsim.js, networking.js # TCP Sockets: model and station
     │       ├── interview.js              # Classic Problems station (tracer)
     │       ├── sql.js                    # SQL Step by Step station (tracer)
+    │       ├── gitsim.js, git.js         # Git Inside Out: model and station
     │       ├── cheatsheets.js            # The Notebook station
     │       ├── notebook.js               # My Notes, the notebook inside The Notebook
     │       └── figuresData.js            # Embedded copy of the ASCII figures
@@ -186,7 +205,7 @@ make -C pthreads && make -C openmp
 
 ## Testing
 
-The test suite has 1,382 tests. It uses a zero-dependency C/C++ assertion harness (`tests/runner.h`), Python checks and a dependency-free JavaScript runner that loads the real web files inside a fake DOM.
+The test suite has 1,538 tests. It uses a zero-dependency C/C++ assertion harness (`tests/runner.h`), Python checks and a dependency-free JavaScript runner that loads the real web files inside a fake DOM.
 
 Run every test:
 
@@ -207,9 +226,10 @@ make test-web
 | **Concurrency: heat** | `tests/concurrency/test_heat_diffusion.c` | 70 | The real library: borders, maximum principle, symmetry, row partitioning, the kernel, convergence, input validation, and pthreads (both barriers) and OpenMP matching serial bit for bit. |
 | **Concurrency: patterns** | `tests/concurrency/test_patterns.c` | 50 | Bounded buffer FIFO order, no deadlock among philosophers, the 2:1 H2O ratio, atomic fetch-and-add without races. |
 | **Networking** | `tests/networking/test_networking.cpp` | 50 | Request line parsing, headers, response framing, file system chunking, all 12 figures. |
+| **Version control** | `tests/vcs/test_minigit.c` | 42 | SHA-1 vectors, blob, tree, commit and merge hashes checked against real Git, the object store on disk, corrupted objects, short hashes, refs and snapshots of a folder (hidden files, executable bit). |
 | **Web assets** | `tests/web/test_web_assets.py` | 41 | Page anchors, CSS variables, JS syntax, audio, hosting configuration and search engine files. |
-| **Web workshop** | `tests/web/run.js` | 1,001 | Every station and model (sorting, races, roundabout, heat, HTTP over TCP, tracer problems against reference solutions), progress and accounts against a fake Firebase backend, Firestore rules, the router, both languages, both themes, responsive layouts and page integrity. |
-| **Total** | **7 suites** | **1,382** | **All passing** |
+| **Web workshop** | `tests/web/run.js` | 1,115 | Every station and model (sorting, races, roundabout, heat, HTTP over TCP, tracer problems against reference solutions, Git hashes against real Git, merges, conflicts, rebase, reset, revert and every mission), progress and accounts against a fake Firebase backend, Firestore rules, the router, both languages, both themes, responsive layouts and page integrity. |
+| **Total** | **8 suites** | **1,538** | **All passing** |
 
 ---
 

@@ -1,5 +1,5 @@
 # CS Interactive Workshop - Test Suite Makefile
-# Compiles and runs all 720+ automated tests (C/C++, Python and JavaScript)
+# Compiles and runs all 1,538 automated tests (C/C++, Python and JavaScript)
 
 CC ?= gcc
 CXX ?= g++
@@ -53,7 +53,7 @@ clean:
 run: all
 	@echo "\n===================================================================="
 	@echo "          RUNNING CS INTERACTIVE WORKSHOP MASTER TEST SUITE          "
-	@echo "                     (1,382 AUTOMATED TESTS)                        "
+	@echo "                     (1,538 AUTOMATED TESTS)                        "
 	@echo "===================================================================="
 	@./$(BINDIR)/test_sorting
 	@./$(BINDIR)/test_roundabout
@@ -64,5 +64,5 @@ run: all
 	@python3 web/test_web_assets.py
 	@node web/run.js
 	@echo "\n===================================================================="
-	@echo "                 ALL 1382 TESTS PASSED SUCCESSFULLY!                "
+	@echo "                 ALL 1538 TESTS PASSED SUCCESSFULLY!                "
 	@echo "===================================================================="
