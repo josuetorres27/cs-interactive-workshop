@@ -46,7 +46,7 @@ clean:
 run: all
 	@echo "\n===================================================================="
 	@echo "          RUNNING CS INTERACTIVE WORKSHOP MASTER TEST SUITE          "
-	@echo "                     (870+ AUTOMATED TESTS)                         "
+	@echo "                     (1,376 AUTOMATED TESTS)                        "
 	@echo "===================================================================="
 	@./$(BINDIR)/test_sorting
 	@./$(BINDIR)/test_roundabout
