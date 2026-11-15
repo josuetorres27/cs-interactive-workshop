@@ -97,51 +97,51 @@ The included `firebase.json` can also host the site: `firebase deploy --only hos
 
 ```text
 cs-interactive-workshop/
-├── Makefile                            # Builds every native engine and runs all tests
-├── LICENSE                             # MIT License
-├── firebase.json                       # Firebase Hosting configuration and cache headers
-├── firestore.rules                     # Firestore rules for student progress
-├── .github/workflows/deploy.yml        # CI: runs every test, then deploys web/ to Firebase Hosting
-├── docs/                               # Theory and specifications
-│   ├── algorithms/                     # Sorting guide, complexity analysis
-│   ├── concurrency/                    # Heat diffusion, roundabout, concurrency patterns
-│   └── networking/                     # Protocol, compilation guide, test cases
-├── core-c-engines/                     # Native engines
-│   ├── algorithms/                     # C++17 sorting benchmark and sorters
+├── Makefile                              # Builds every native engine and runs all tests
+├── LICENSE                               # MIT License
+├── firebase.json                         # Firebase Hosting configuration and cache headers
+├── firestore.rules                       # Firestore rules for student progress
+├── .github/workflows/deploy.yml          # CI: runs every test, then deploys web/ to Firebase Hosting
+├── docs/                                 # Theory and specifications
+│   ├── algorithms/                       # Sorting guide, complexity analysis
+│   ├── concurrency/                      # Heat diffusion, roundabout, concurrency patterns
+│   └── networking/                       # Protocol, compilation guide, test cases
+├── core-c-engines/                       # Native engines
+│   ├── algorithms/                       # C++17 sorting benchmark and sorters
 │   ├── concurrency/
-│   │   ├── simulations/roundabout/     # Traffic roundabout with POSIX semaphores
-│   │   ├── simulations/heat-diffusion/ # Shared library (common/) + serial, pthreads, OpenMP programs
-│   │   └── patterns/                   # Bounded buffer, philosophers, H2O, sync benchmark
-│   └── networking/                     # Multi-threaded TCP server and client (C++17)
-│       ├── src/                        # Socket/VSocket wrappers, Server, Client, FileSystem
-│       └── ascii_figures/              # The 12 ASCII figures the server sends
-├── tests/                              # C/C++ suites, Python checks, and the web workshop runner
-└── web/                                # The web workshop (static, no build step)
-    ├── index.html                      # Every screen and station
-    ├── sitemap.xml, robots.txt         # Search engine files for the custom domain
-    ├── css/styles.css                  # Both themes, responsive layouts for phone, tablet and desktop
+│   │   ├── simulations/roundabout/       # Traffic roundabout with POSIX semaphores
+│   │   ├── simulations/heat-diffusion/   # Shared library (common/) + serial, pthreads, OpenMP programs
+│   │   └── patterns/                     # Bounded buffer, philosophers, H2O, sync benchmark
+│   └── networking/                       # Multi-threaded TCP server and client (C++17)
+│       ├── src/                          # Socket/VSocket wrappers, Server, Client, FileSystem
+│       └── ascii_figures/                # The 12 ASCII figures the server sends
+├── tests/                                # C/C++ suites, Python checks, and the web workshop runner
+└── web/                                  # The web workshop (static, no build step)
+    ├── index.html                        # Every screen and station
+    ├── sitemap.xml, robots.txt           # Search engine files for the custom domain
+    ├── css/styles.css                    # Both themes, responsive layouts for phone, tablet and desktop
     ├── js/
-    │   ├── app.js                      # Router, work areas, Bit the guide, tours
-    │   ├── i18n.js, i18n/en.js         # Spanish source text and the English translation
-    │   ├── theme.js                    # Tech lab and wooden workshop themes
-    │   ├── progress.js                 # Progress model (pure data)
-    │   ├── account.js                  # Optional Google sign-in and sync
-    │   ├── firebase-config.js          # Firebase settings (null = guest mode only)
-    │   ├── tracer.js                   # Line-by-line code walkthrough engine
-    │   ├── audio.js                    # Web Audio sound effects
-    │   └── modules/                    # One file per station (plus pure models)
-    │       ├── algorithms.js           # Ordenamiento
-    │       ├── versus.js               # Algoritmo vs. algoritmo
-    │       ├── datastructures.js       # Estructuras de datos (tracer)
-    │       ├── concurrency.js          # La Rotonda
-    │       ├── heatsim.js, heat.js     # Difusión de calor: model and station
+    │   ├── app.js                        # Router, work areas, Bit the guide, tours
+    │   ├── i18n.js, i18n/en.js           # Spanish source text and the English translation
+    │   ├── theme.js                      # Tech lab and wooden workshop themes
+    │   ├── progress.js                   # Progress model (pure data)
+    │   ├── account.js                    # Optional Google sign-in and sync
+    │   ├── firebase-config.js            # Firebase settings (null = guest mode only)
+    │   ├── tracer.js                     # Line-by-line code walkthrough engine
+    │   ├── audio.js                      # Web Audio sound effects
+    │   └── modules/                      # One file per station (plus pure models)
+    │       ├── algorithms.js             # Ordenamiento
+    │       ├── versus.js                 # Algoritmo vs. algoritmo
+    │       ├── datastructures.js         # Estructuras de datos (tracer)
+    │       ├── concurrency.js            # La Rotonda
+    │       ├── heatsim.js, heat.js       # Difusión de calor: model and station
     │       ├── httpsim.js, networking.js # Sockets TCP: model and station
-    │       ├── interview.js            # Problemas clásicos (tracer)
-    │       ├── sql.js                  # SQL paso a paso (tracer)
-    │       ├── cheatsheets.js          # El Cuaderno
-    │       ├── notebook.js             # Mis apuntes, the notebook inside El Cuaderno
-    │       └── figuresData.js          # Embedded copy of the ASCII figures
-    └── assets/ascii_figures/           # ASCII figures served to the web workshop
+    │       ├── interview.js              # Problemas clásicos (tracer)
+    │       ├── sql.js                    # SQL paso a paso (tracer)
+    │       ├── cheatsheets.js            # El Cuaderno
+    │       ├── notebook.js               # Mis apuntes, the notebook inside El Cuaderno
+    │       └── figuresData.js            # Embedded copy of the ASCII figures
+    └── assets/ascii_figures/             # ASCII figures served to the web workshop
 ```
 
 ---
