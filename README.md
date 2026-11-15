@@ -7,7 +7,7 @@
 [![Tests](https://img.shields.io/badge/Tests-1%2C376%20Passing-brightgreen?style=flat-square)](#testing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](https://opensource.org/licenses/MIT)
 
-An interactive workshop for Computer Science students at the ECCI (Universidad de Costa Rica). It covers algorithms and data structures, parallel and concurrent programming, networking, classic coding problems and SQL, through visual simulations in the browser backed by real C and C++ engines.
+An interactive workshop for Computer Science students at the School of Computer Science and Informatics (ECCI) of the University of Costa Rica (UCR). It covers algorithms and data structures, parallel and concurrent programming, networking, classic coding problems and SQL, through visual simulations in the browser backed by real C and C++ engines.
 
 The workshop is written in Spanish with a full English translation, has two looks (the tech lab and the original wooden workshop), works on phones, tablets and desktops, and includes Bit, a robot guide with a tour for every station. Accounts are optional: guests keep their progress on their own device, and students who sign in with Google keep it in the cloud.
 

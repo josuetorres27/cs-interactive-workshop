@@ -49,7 +49,7 @@ window.I18N_EN = {
   "¿Tengo que instalar algo?": "Do I need to install anything?",
   "No. Todo corre en tu navegador. Si quieres ir más lejos, el repositorio incluye los motores originales en C y C++ para compilarlos en tu máquina.": "No. Everything runs in your browser. If you want to go further, the repository includes the original C and C++ engines so you can compile them on your own machine.",
   "¿Quién lo hizo?": "Who made it?",
-  "Lo creó Josué Torres Sibaja, estudiante de la ECCI, a partir de proyectos reales de sus cursos. Es código abierto (MIT): puedes usarlo, mejorarlo y proponer estaciones nuevas.": "It was created by <a href=\"https://josuetorressibaja.com/\" target=\"_blank\" rel=\"noopener\">Josue Torres Sibaja</a>, an ECCI student, based on real projects from his courses. It is open source (MIT): you can use it, improve it and propose new stations.",
+  "Lo creó Josué Torres Sibaja, egresado en Ciencias de la Computación (énfasis en Ingeniería de Software) de la Universidad de Costa Rica (UCR), a partir de proyectos reales de sus cursos. Es código abierto (MIT): puedes usarlo, mejorarlo y proponer estaciones nuevas.": "It was created by <a href=\"https://josuetorressibaja.com/\" target=\"_blank\" rel=\"noopener\">Josue Torres Sibaja</a>, a Computer Science Graduating Senior (Software Engineering emphasis) at the University of Costa Rica (UCR), based on real projects from his courses. It is open source (MIT): you can use it, improve it and propose new stations.",
   "Ver el código en GitHub": "See the code on GitHub",
   "Entrar al taller": "Enter the workshop",
   "Inicio": "Home",
