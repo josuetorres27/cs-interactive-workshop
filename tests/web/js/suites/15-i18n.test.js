@@ -215,7 +215,7 @@ module.exports = (t, { createEnv, read }) => {
       noSpanish(strings(env.window.Progress.CHECKLISTS), 'progress.js');
     });
     t.test('no station file calls T() with a single argument by mistake', () => {
-      ['js/app.js', 'js/account.js', 'js/progress.js', 'js/tracer.js', 'js/modules/algorithms.js', 'js/modules/concurrency.js', 'js/modules/heat.js', 'js/modules/networking.js', 'js/modules/httpsim.js', 'js/modules/cheatsheets.js', 'js/modules/interview.js', 'js/modules/datastructures.js', 'js/modules/sql.js'].forEach((f) => {
+      ['js/app.js', 'js/account.js', 'js/progress.js', 'js/tracer.js', 'js/modules/algorithms.js', 'js/modules/concurrency.js', 'js/modules/heat.js', 'js/modules/networking.js', 'js/modules/httpsim.js', 'js/modules/cheatsheets.js', 'js/modules/interview.js', 'js/modules/datastructures.js', 'js/modules/sql.js', 'js/modules/gitsim.js', 'js/modules/git.js'].forEach((f) => {
         const src = read('web/' + f);
         t.ok(/\bT\(/.test(src), `${f} has translations`);
         [...src.matchAll(/\bT\('((?:[^'\\]|\\.)*)'\)/g)].forEach((m) => t.ok(false, `${f}: T('${m[1].slice(0, 50)}') has no English`));
