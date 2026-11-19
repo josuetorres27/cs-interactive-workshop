@@ -10,52 +10,45 @@
 (function (root) {
   const P = root.Progress;
   const GUEST_KEY = 'csworkshop-progress';
-  const SDK = 'https://www.gstatic.com/firebasejs/10.12.2';
 
-  function loadScript(src, doc) {
-    return new Promise((resolve, reject) => {
-      const s = doc.createElement('script');
-      s.src = src; s.async = true;
-      s.onload = resolve;
-      s.onerror = () => reject(new Error(T(`No se pudo cargar ${src}`, `Could not load ${src}`)));
-      doc.head.appendChild(s);
-    });
-  }
-
-  // Real backend: Firebase compat SDK, loaded only when a config exists.
-  function createFirebaseBackend(config, win = root) {
-    let auth = null, db = null, fb = null;
+  // Real backend: the modular Firebase SDK from npm. Vite splits it into its own
+  // chunks, which are only downloaded when a config exists (init runs).
+  function createFirebaseBackend(config) {
+    let auth = null, db = null, A = null, F = null;
     return {
       kind: 'firebase',
       async init() {
-        const doc = win.document;
-        await loadScript(`${SDK}/firebase-app-compat.js`, doc);
-        await Promise.all([loadScript(`${SDK}/firebase-auth-compat.js`, doc), loadScript(`${SDK}/firebase-firestore-compat.js`, doc)]);
-        fb = win.firebase;
-        fb.initializeApp(config);
-        auth = fb.auth();
-        db = fb.firestore();
+        const [app, authSdk, firestore] = await Promise.all([
+          import('firebase/app'),
+          import('firebase/auth'),
+          // Progress is read and written as a whole document, so Firestore Lite is enough.
+          import('firebase/firestore/lite')
+        ]);
+        A = authSdk; F = firestore;
+        const fbApp = app.initializeApp(config);
+        auth = A.getAuth(fbApp);
+        db = F.getFirestore(fbApp);
       },
       onAuth(cb) {
-        auth.onAuthStateChanged((u) => cb(u ? { uid: u.uid, name: u.displayName || T('Estudiante', 'Student'), photoURL: u.photoURL || null } : null));
+        A.onAuthStateChanged(auth, (u) => cb(u ? { uid: u.uid, name: u.displayName || T('Estudiante', 'Student'), photoURL: u.photoURL || null } : null));
       },
       async signIn() {
-        const provider = new fb.auth.GoogleAuthProvider();
+        const provider = new A.GoogleAuthProvider();
         provider.setCustomParameters({ prompt: 'select_account' });
         try {
-          await auth.signInWithPopup(provider);
+          await A.signInWithPopup(auth, provider);
         } catch (e) {
           // Popups are often blocked on phones: fall back to a full-page redirect.
-          if (e && (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment')) await auth.signInWithRedirect(provider);
+          if (e && (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment')) await A.signInWithRedirect(auth, provider);
           else throw e;
         }
       },
-      signOut() { return auth.signOut(); },
+      signOut() { return A.signOut(auth); },
       async load(uid) {
-        const snap = await db.collection('users').doc(uid).get();
-        return snap.exists ? snap.data() : null;
+        const snap = await F.getDoc(F.doc(db, 'users', uid));
+        return snap.exists() ? snap.data() : null;
       },
-      save(uid, data) { return db.collection('users').doc(uid).set(data, { merge: true }); }
+      save(uid, data) { return F.setDoc(F.doc(db, 'users', uid), data, { merge: true }); }
     };
   }
 
