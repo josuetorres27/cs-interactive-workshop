@@ -4,7 +4,8 @@
 [![Standard](https://img.shields.io/badge/Language-C99%20%2F%20C11%20%2F%20C%2B%2B17-blue?style=flat-square)](https://en.wikipedia.org/wiki/C%2B%2B17)
 [![Concurrency](https://img.shields.io/badge/Concurrency-POSIX%20Threads%20%7C%20OpenMP%20%7C%20Atomics-orange?style=flat-square)](https://computing.llnl.gov/tutorials/pthreads/)
 [![Networking](https://img.shields.io/badge/Networking-BSD%20Sockets%20%7C%20HTTP%201.1-purple?style=flat-square)](docs/networking/Protocol_Specification.md)
-[![Tests](https://img.shields.io/badge/Tests-1%2C538%20Passing-brightgreen?style=flat-square)](#testing)
+[![Vite](https://img.shields.io/badge/Build-Vite-646cff?style=flat-square&logo=vite&logoColor=white)](https://vite.dev/)
+[![Tests](https://img.shields.io/badge/Tests-1%2C542%20Passing-brightgreen?style=flat-square)](#testing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](https://opensource.org/licenses/MIT)
 
 An interactive workshop for Computer Science students at the School of Computer Science and Informatics (ECCI) of the University of Costa Rica (UCR). It covers algorithms and data structures, parallel and concurrent programming, networking, classic coding problems, SQL and Git, through visual simulations in the browser backed by real C and C++ engines.
@@ -95,7 +96,7 @@ mkdir demo && cd demo && printf 'hello\n' > hello.txt
 
 ## Deployment
 
-Every push to `main` runs the full test suite in GitHub Actions and, if it passes, deploys `web/` to Firebase Hosting, served at [https://workshop.josuetorressibaja.com/](https://workshop.josuetorressibaja.com/) (the default `cs-interactive-workshop.web.app` address keeps working too).
+Every push to `main` builds the web app with Vite, runs the full test suite in GitHub Actions and, if it passes, deploys `dist/` to Firebase Hosting, served at [https://workshop.josuetorressibaja.com/](https://workshop.josuetorressibaja.com/) (the default `cs-interactive-workshop.web.app` address keeps working too).
 
 ### Optional Firebase Accounts
 
@@ -106,7 +107,7 @@ Without configuration the workshop runs in guest mode. To enable Google sign-in 
 3. Deploy the rules: `firebase deploy --only firestore:rules`.
 4. In Firebase Authentication, add any custom domain, such as `workshop.josuetorressibaja.com`, to the authorized domains (the `*.web.app` domain is already allowed).
 
-The included `firebase.json` can also host the site: `firebase deploy --only hosting`.
+The included `firebase.json` can also host the site: run `npm run build`, then `firebase deploy --only hosting`. The hashed scripts and styles under `/static` are cached for a year; the page, the manifest and the text files are revalidated on every visit.
 
 ---
 
@@ -116,9 +117,11 @@ The included `firebase.json` can also host the site: `firebase deploy --only hos
 cs-interactive-workshop/
 ├── Makefile                              # Builds every native engine and runs all tests
 ├── LICENSE                               # MIT License
-├── firebase.json                         # Firebase Hosting configuration and cache headers
+├── package.json                          # Vite and the Firebase SDK, plus the dev, build and preview scripts
+├── vite.config.mjs                       # Builds web/ into dist/ (hashed files under static/)
+├── firebase.json                         # Firebase Hosting configuration (serves dist/) and cache headers
 ├── firestore.rules                       # Firestore rules for student progress
-├── .github/workflows/deploy.yml          # CI: runs every test, then deploys web/ to Firebase Hosting
+├── .github/workflows/deploy.yml          # CI: builds the web app, runs every test, then deploys dist/ to Firebase Hosting
 ├── docs/                                 # Theory and specifications
 │   ├── algorithms/                       # Sorting guide, complexity analysis
 │   ├── concurrency/                      # Heat diffusion, roundabout, concurrency patterns
@@ -134,16 +137,16 @@ cs-interactive-workshop/
 │   │   └── ascii_figures/                # The 12 ASCII figures the server sends
 │   └── vcs/src/                          # minigit: SHA-1, Git objects, refs and its command line (C11)
 ├── tests/                                # C/C++ suites, Python checks, and the web workshop runner
-└── web/                                  # The web workshop (static, no build step)
+└── web/                                  # The web workshop, bundled by Vite
     ├── index.html                        # Every screen and station
-    ├── sitemap.xml, robots.txt           # Search engine files for the custom domain
     ├── css/styles.css                    # Both themes, responsive layouts for phone, tablet and desktop
     ├── js/
+    │   ├── main.js                       # Entry point: imports every file in load order
     │   ├── app.js                        # Router, work areas, Bit the guide, tours
     │   ├── i18n.js, i18n/en.js           # Spanish source text and the English translation
     │   ├── theme.js                      # Tech lab and wooden workshop themes
     │   ├── progress.js                   # Progress model (pure data)
-    │   ├── account.js                    # Optional Google sign-in and sync
+    │   ├── account.js                    # Optional Google sign-in and sync (Firebase SDK loaded on demand)
     │   ├── firebase-config.js            # Firebase settings (null = guest mode only)
     │   ├── tracer.js                     # Line-by-line code walkthrough engine
     │   ├── audio.js                      # Web Audio sound effects
@@ -160,7 +163,10 @@ cs-interactive-workshop/
     │       ├── cheatsheets.js            # The Notebook station
     │       ├── notebook.js               # My Notes, the notebook inside The Notebook
     │       └── figuresData.js            # Embedded copy of the ASCII figures
-    └── assets/ascii_figures/             # ASCII figures served to the web workshop
+    └── public/                           # Copied as is to the root of dist/
+        ├── sitemap.xml, robots.txt       # Search engine files for the custom domain
+        ├── favicons, icons, site.webmanifest
+        └── assets/ascii_figures/         # ASCII figures served to the web workshop
 ```
 
 ---
@@ -172,7 +178,7 @@ cs-interactive-workshop/
 - GCC / G++ with C11, C++17, POSIX threads (`-pthread`) and OpenMP (`-fopenmp`).
 - Make.
 - Linux, macOS or WSL.
-- Node.js 18+ and Python 3 for the web workshop tests.
+- Node.js 20.19+ or 22+ for the web app (Vite), and Python 3 for the web workshop tests.
 
 ### Build
 
@@ -186,10 +192,18 @@ make all
 
 ### Run
 
-The web workshop is static. Serve the `web/` folder with any static server, then open `http://localhost:8000`:
+Install the web dependencies once, then start the Vite dev server at `http://localhost:5173`:
 
 ```bash
-python3 -m http.server 8000 --directory web
+npm install
+npm run dev
+```
+
+Build the static site into `dist/` and serve that build locally:
+
+```bash
+npm run build
+npm run preview
 ```
 
 Run the heat diffusion engines:
@@ -205,7 +219,7 @@ make -C pthreads && make -C openmp
 
 ## Testing
 
-The test suite has 1,538 tests. It uses a zero-dependency C/C++ assertion harness (`tests/runner.h`), Python checks and a dependency-free JavaScript runner that loads the real web files inside a fake DOM.
+The test suite has 1,542 tests. It uses a zero-dependency C/C++ assertion harness (`tests/runner.h`), Python checks and a dependency-free JavaScript runner that loads the real web files inside a fake DOM, in strict mode like the modules the browser runs.
 
 Run every test:
 
@@ -227,9 +241,9 @@ make test-web
 | **Concurrency: patterns** | `tests/concurrency/test_patterns.c` | 50 | Bounded buffer FIFO order, no deadlock among philosophers, the 2:1 H2O ratio, atomic fetch-and-add without races. |
 | **Networking** | `tests/networking/test_networking.cpp` | 50 | Request line parsing, headers, response framing, file system chunking, all 12 figures. |
 | **Version control** | `tests/vcs/test_minigit.c` | 42 | SHA-1 vectors, blob, tree, commit and merge hashes checked against real Git, the object store on disk, corrupted objects, short hashes, refs and snapshots of a folder (hidden files, executable bit). |
-| **Web assets** | `tests/web/test_web_assets.py` | 41 | Page anchors, CSS variables, JS syntax, audio, hosting configuration and search engine files. |
-| **Web workshop** | `tests/web/run.js` | 1,115 | Every station and model (sorting, races, roundabout, heat, HTTP over TCP, tracer problems against reference solutions, Git hashes against real Git, merges, conflicts, rebase, reset, revert and every mission), progress and accounts against a fake Firebase backend, Firestore rules, the router, both languages, both themes, responsive layouts and page integrity. |
-| **Total** | **8 suites** | **1,538** | **All passing** |
+| **Web assets** | `tests/web/test_web_assets.py` | 42 | Page anchors, CSS variables, JS syntax, audio, hosting configuration and search engine files. |
+| **Web workshop** | `tests/web/run.js` | 1,118 | Every station and model (sorting, races, roundabout, heat, HTTP over TCP, tracer problems against reference solutions, Git hashes against real Git, merges, conflicts, rebase, reset, revert and every mission), progress and accounts against a fake Firebase backend, Firestore rules, the router, the module load order, both languages, both themes, responsive layouts, cache headers and page integrity. |
+| **Total** | **8 suites** | **1,542** | **All passing** |
 
 ---
 
