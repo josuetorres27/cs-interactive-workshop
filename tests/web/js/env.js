@@ -12,6 +12,12 @@ const WEB = path.join(ROOT, 'web');
 
 function read(rel) { return fs.readFileSync(path.join(ROOT, rel), 'utf8'); }
 
+// The order the page runs its scripts in: the imports of web/js/main.js, the
+// entry Vite bundles, as paths like 'js/theme.js'.
+function loadOrder() {
+  return [...read('web/js/main.js').matchAll(/^import '\.\/([^']+)';$/gm)].map((m) => `js/${m[1]}`);
+}
+
 // Deterministic PRNG so "random" tests are reproducible.
 function mulberry32(seed) {
   let a = seed >>> 0;
@@ -187,7 +193,8 @@ function createEnv({ seed = 1 } = {}) {
   function load(rel, exports = []) {
     const src = read(path.join('web', rel));
     const names = Object.keys(globals);
-    const body = `${src}\n;return { ${exports.join(', ')} };`;
+    // Strict mode, like the ES modules the browser runs since the move to Vite.
+    const body = `'use strict';\n${src}\n;return { ${exports.join(', ')} };`;
     // eslint-disable-next-line no-new-func
     const fn = new Function(...names, body);
     return fn(...names.map((n) => globals[n]));
@@ -196,4 +203,4 @@ function createEnv({ seed = 1 } = {}) {
   return { window, document, globals, load, location, localStorage, rafs, random: seededMath.random, FakeElement };
 }
 
-module.exports = { createEnv, read, ROOT, WEB, mulberry32, FakeElement };
+module.exports = { createEnv, read, loadOrder, ROOT, WEB, mulberry32, FakeElement };

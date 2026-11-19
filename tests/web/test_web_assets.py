@@ -44,7 +44,10 @@ def main():
     test("Index HTML Has Cheatsheets Tab", 'data-tab="cheatsheets"' in html)
     test("Index HTML Has Algo Canvas Element", '<canvas id="algoCanvas">' in html)
     test("Index HTML Has Concurrency Canvas Element", '<canvas id="concurrencyCanvas">' in html)
-    test("Index HTML Has Sound Controller Script", '<script src="js/audio.js"></script>' in html)
+    test("Index HTML Loads the Module Entry", '<script type="module" src="js/main.js"></script>' in html)
+    with open(os.path.join(repo_root, "web", "js", "main.js"), "r", encoding="utf-8") as f:
+        main_js = f.read()
+    test("main.js Imports the Sound Controller", "import './audio.js';" in main_js)
 
     # 2. CSS checks
     css_path = os.path.join(repo_root, "web", "css", "styles.css")
@@ -67,7 +70,7 @@ def main():
         test(f"figuresData.js Contains Figure '{fig}'", f'"{fig}":' in js_data)
 
     # 5. Favicons, robots.txt and sitemap.xml
-    ico_path = os.path.join(repo_root, "web", "favicon.ico")
+    ico_path = os.path.join(repo_root, "web", "public", "favicon.ico")
     test("favicon.ico File Exists", os.path.isfile(ico_path))
     with open(ico_path, "rb") as f:
         ico = f.read()
@@ -75,31 +78,31 @@ def main():
     ico_sizes = [(ico[6 + 16 * i] or 256) for i in range(ico_count)]
     test("favicon.ico Is a Valid ICO File", ico[:4] == b"\x00\x00\x01\x00" and ico_count > 0)
     test("favicon.ico Sizes Are Multiples of 48px", bool(ico_sizes) and all(s % 48 == 0 for s in ico_sizes), str(ico_sizes))
-    test("favicon.svg File Exists", os.path.isfile(os.path.join(repo_root, "web", "favicon.svg")))
-    apple_path = os.path.join(repo_root, "web", "apple-touch-icon.png")
+    test("favicon.svg File Exists", os.path.isfile(os.path.join(repo_root, "web", "public", "favicon.svg")))
+    apple_path = os.path.join(repo_root, "web", "public", "apple-touch-icon.png")
     with open(apple_path, "rb") as f:
         test("apple-touch-icon.png Is a PNG File", f.read(8) == b"\x89PNG\r\n\x1a\n")
     test("Index HTML Links favicon.ico", 'href="/favicon.ico"' in html)
     test("Index HTML Links favicon.svg", 'href="/favicon.svg"' in html)
     test("Index HTML Links apple-touch-icon", 'href="/apple-touch-icon.png"' in html)
     test("Index HTML Links the Web Manifest", '<link rel="manifest" href="/site.webmanifest">' in html)
-    manifest_path = os.path.join(repo_root, "web", "site.webmanifest")
+    manifest_path = os.path.join(repo_root, "web", "public", "site.webmanifest")
     with open(manifest_path, "r", encoding="utf-8") as f:
         manifest = json.load(f)
     test("site.webmanifest Names the App and Lists Icons", bool(manifest.get("name")) and len(manifest.get("icons", [])) >= 2)
     for size in (192, 512):
-        icon_file = os.path.join(repo_root, "web", f"icon-{size}.png")
+        icon_file = os.path.join(repo_root, "web", "public", f"icon-{size}.png")
         with open(icon_file, "rb") as f:
             head = f.read(24)
         dims = (int.from_bytes(head[16:20], "big"), int.from_bytes(head[20:24], "big"))
         test(f"icon-{size}.png Is a {size}x{size} PNG", head[:8] == b"\x89PNG\r\n\x1a\n" and dims == (size, size), str(dims))
-    test("Every Manifest Icon Exists on Disk", all(os.path.isfile(os.path.join(repo_root, "web", i["src"].lstrip("/"))) for i in manifest["icons"]))
+    test("Every Manifest Icon Exists on Disk", all(os.path.isfile(os.path.join(repo_root, "web", "public", i["src"].lstrip("/"))) for i in manifest["icons"]))
     test("Index HTML Has a Canonical Link", '<link rel="canonical" href="https://workshop.josuetorressibaja.com/">' in html)
     test("Index HTML Is Not Blocked From Indexing", "noindex" not in html.lower())
-    with open(os.path.join(repo_root, "web", "robots.txt"), "r", encoding="utf-8") as f:
+    with open(os.path.join(repo_root, "web", "public", "robots.txt"), "r", encoding="utf-8") as f:
         robots = f.read()
     test("robots.txt Allows Crawling and Lists the Sitemap", "Allow: /" in robots and "Sitemap: https://workshop.josuetorressibaja.com/sitemap.xml" in robots)
-    with open(os.path.join(repo_root, "web", "sitemap.xml"), "r", encoding="utf-8") as f:
+    with open(os.path.join(repo_root, "web", "public", "sitemap.xml"), "r", encoding="utf-8") as f:
         sitemap = f.read()
     test("sitemap.xml Lists the Home Page", "<loc>https://workshop.josuetorressibaja.com/</loc>" in sitemap)
 
@@ -108,7 +111,7 @@ def main():
     test("firebase.json File Exists", os.path.isfile(fb_path))
     with open(fb_path, "r", encoding="utf-8") as f:
         fb_data = json.load(f)
-    test("firebase.json Public Directory is 'web'", fb_data.get("hosting", {}).get("public") == "web")
+    test("firebase.json Public Directory is 'dist'", fb_data.get("hosting", {}).get("public") == "dist")
     test("firebase.json Revalidates the Web Manifest", any("webmanifest" in h.get("source", "") for h in fb_data.get("hosting", {}).get("headers", [])))
 
     print("----------------------------------------------------------------------")

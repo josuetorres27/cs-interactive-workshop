@@ -1,7 +1,7 @@
 // Optional accounts: progress model, account service, station hooks, rules.
 'use strict';
 
-module.exports = (t, { createEnv, read }) => {
+module.exports = (t, { createEnv, read, loadOrder }) => {
   const base = createEnv();
   base.load('js/progress.js');
   const P = base.window.Progress;
@@ -285,8 +285,13 @@ module.exports = (t, { createEnv, read }) => {
       t.eq(env.document.getElementById('profileName').textContent, 'Ana Pérez'); t.eq(env.document.getElementById('btnSignOut').hidden, false);
     });
     t.test('every corner of the page links to "Mi espacio"', () => t.includes(html, 'href="#/profile" id="btnAccount"'));
-    t.test('account scripts load before the stations', () => ['firebase-config.js', 'progress.js', 'account.js'].forEach((f) => t.ok(html.indexOf(`js/${f}`) < html.indexOf('js/modules/algorithms.js'), f)));
-    t.test('the Firebase SDK version is pinned', () => t.ok(/firebasejs\/\d+\.\d+\.\d+/.test(read('web/js/account.js'))));
+    t.test('account scripts load before the stations', () => { const order = loadOrder(); ['firebase-config.js', 'progress.js', 'account.js'].forEach((f) => t.ok(order.indexOf(`js/${f}`) !== -1 && order.indexOf(`js/${f}`) < order.indexOf('js/modules/algorithms.js'), f)); });
+    t.test('the Firebase SDK version is pinned', () => t.ok(/^\d+\.\d+\.\d+$/.test(JSON.parse(read('package.json')).dependencies.firebase)));
+    t.test('the Firebase SDK is loaded on demand from npm, not from a CDN', () => {
+      const src = read('web/js/account.js');
+      ['firebase/app', 'firebase/auth', 'firebase/firestore/lite'].forEach((m) => t.includes(src, `import('${m}')`, m));
+      t.ok(!/gstatic|<script/.test(src));
+    });
     t.test('rules only open users/{uid} to its owner', () => { t.includes(rules, 'match /users/{uid}'); t.includes(rules, 'request.auth.uid == uid'); });
     t.test('rules deny everything else by default', () => t.includes(rules, 'allow read, write: if false;'));
     t.test('rules only accept the expected fields', () => t.includes(rules, "hasOnly(['name', 'photoURL', 'progress', 'createdAt', 'updatedAt'])"));

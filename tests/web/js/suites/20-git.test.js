@@ -2,7 +2,7 @@
 // Git, and the station UI (web/js/modules/git.js) on a fake DOM.
 'use strict';
 
-module.exports = (t, { createEnv, read }) => {
+module.exports = (t, { createEnv, read, loadOrder }) => {
   const load = (lang) => {
     const env = createEnv();
     if (lang) { env.localStorage.setItem('csworkshop-lang', lang); env.window.location.reload = () => {}; env.load('js/i18n.js'); }
@@ -421,7 +421,7 @@ module.exports = (t, { createEnv, read }) => {
 
   t.suite('git · wiring', () => {
     const html = read('web/index.html');
-    t.test('the model loads before the station', () => t.ok(html.indexOf('modules/gitsim.js') < html.indexOf('modules/git.js"')));
+    t.test('the model loads before the station', () => { const order = loadOrder(); t.ok(order.indexOf('js/modules/gitsim.js') !== -1 && order.indexOf('js/modules/gitsim.js') < order.indexOf('js/modules/git.js')); });
     t.test('the station lives on its own bench', () => {
       const env = createEnv(); const { MODULES, AREAS } = env.load('js/app.js', ['MODULES', 'AREAS']);
       t.eq(MODULES.git.area, 'engineering'); t.ok(!!AREAS.engineering); t.includes(html, 'href="#/area/engineering" class="bench"');
