@@ -183,10 +183,15 @@ module.exports = (t, { createEnv, read, loadOrder }) => {
     });
     t.test('browsers check for a new version on every visit, so a redeploy shows at once', () => {
       const headers = JSON.parse(read('firebase.json')).hosting.headers;
-      ['**/*.@(css|js|txt)', '**/*.html', '/'].forEach((src) => {
+      ['**/*.txt', '**/*.html', '/'].forEach((src) => {
         const h = headers.find((x) => x.source === src);
         t.ok(h, src); t.eq(h.headers.find((x) => x.key === 'Cache-Control').value, 'no-cache', src);
       });
+    });
+    t.test('the hashed scripts and styles Vite builds are cached for good', () => {
+      const h = JSON.parse(read('firebase.json')).hosting.headers.find((x) => x.source === '/static/**');
+      t.ok(h); t.eq(h.headers.find((x) => x.key === 'Cache-Control').value, 'public, max-age=31536000, immutable');
+      t.includes(read('vite.config.mjs'), "assetsDir: 'static'");
     });
     t.test('benches and bench stations are compact enough to fit one screen', () => {
       t.ok(/\.bench \{[^}]*grid-template-columns: 84px 1fr;/.test(css));
