@@ -1,7 +1,7 @@
 // Visual theme: the lab (default) and the optional wooden workshop.
 'use strict';
 
-module.exports = (t, { createEnv, read }) => {
+module.exports = (t, { createEnv, read, loadOrder }) => {
   const html = read('web/index.html');
   const css = read('web/css/styles.css');
 
@@ -78,8 +78,7 @@ module.exports = (t, { createEnv, read }) => {
       t.ok(head.indexOf('csworkshop-theme') !== -1 && head.indexOf('csworkshop-theme') < head.indexOf('css/styles.css'));
     });
     t.test('theme.js loads before every other script', () => {
-      const scripts = [...html.matchAll(/<script src="([^"]+)"/g)].map((m) => m[1]);
-      t.eq(scripts[0], 'js/theme.js');
+      t.eq(loadOrder()[0], 'js/theme.js');
     });
     t.test('the top bar has a theme button with an icon and pressed state', () => {
       t.ok(/<button id="btnTheme"[^>]*aria-pressed="false"[^>]*><svg class="ic"><use href="#i-theme"\/>/.test(html));

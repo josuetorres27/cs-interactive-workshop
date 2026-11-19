@@ -2,7 +2,7 @@
 // controls), outlined step tabs, titles that are never cut, straight notes and pages that fit.
 'use strict';
 
-module.exports = (t, { createEnv, read }) => {
+module.exports = (t, { createEnv, read, loadOrder }) => {
   const html = read('web/index.html');
   const css = read('web/css/styles.css');
   const ALGOS = ['quick', 'merge', 'heap', 'shell', 'insertion', 'selection', 'bubble', 'radix'];
@@ -120,7 +120,7 @@ module.exports = (t, { createEnv, read }) => {
       t.includes(html, '<a href="#/workshop/versus" class="station-card" data-tab="versus"');
       t.includes(html, '<section id="tab-versus" class="tab-pane">');
       ['play', 'learn', 'build'].forEach((s) => t.ok(new RegExp(`id="tab-versus"[\\s\\S]*?data-step="${s}"[\\s\\S]*?MODULE: CONCURRENCY`).test(html), s));
-      t.includes(html, '<script src="js/modules/versus.js"></script>');
+      t.ok(loadOrder().includes('js/modules/versus.js'));
       const env = createEnv(); env.load('js/progress.js');
       t.deepEq(env.window.Progress.CHECKLISTS.versus.items.map((i) => i.id), ['race', 'nlogn', 'upset']);
     });

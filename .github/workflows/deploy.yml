@@ -32,10 +32,16 @@ jobs:
             sudo apt-get install -y -o Acquire::Retries=5 build-essential gcc g++ python3
           fi
 
-      - name: Set up Node.js for the web workshop tests
+      - name: Set up Node.js for the web build and tests
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          cache: npm
+
+      - name: Build the web app with Vite
+        run: |
+          npm ci
+          npm run build
 
       - name: Build All Engines & Run Master Test Suite
         run: |
@@ -49,6 +55,17 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Build the web app into dist/
+        run: |
+          npm ci
+          npm run build
 
       - name: Deploy to the live channel
         uses: FirebaseExtended/action-hosting-deploy@v0

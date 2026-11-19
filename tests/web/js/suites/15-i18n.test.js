@@ -1,7 +1,7 @@
 // Languages: the engine (js/i18n.js), the markup dictionary (js/i18n/en.js) and the inline T() texts.
 'use strict';
 
-module.exports = (t, { createEnv, read }) => {
+module.exports = (t, { createEnv, read, loadOrder }) => {
   const html = read('web/index.html');
   const SPANISH = /[áéíóúñÁÉÍÓÚÑ¿¡]/;
   // Proper names keep their accents in English
@@ -99,7 +99,7 @@ module.exports = (t, { createEnv, read }) => {
   });
 
   t.suite('i18n · page wiring', () => {
-    const scripts = [...html.matchAll(/<script src="([^"]+)"/g)].map((m) => m[1]);
+    const scripts = loadOrder();
     t.test('the dictionary and the engine load right after the theme, before every station', () => {
       t.deepEq(scripts.slice(0, 3), ['js/theme.js', 'js/i18n/en.js', 'js/i18n.js']);
     });

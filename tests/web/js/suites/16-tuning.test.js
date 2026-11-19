@@ -1,7 +1,7 @@
 // Fine-tuning: the settings menu, the home credits, the About page, the footer and El Cuaderno (with its notebook).
 'use strict';
 
-module.exports = (t, { createEnv, read }) => {
+module.exports = (t, { createEnv, read, loadOrder }) => {
   const html = read('web/index.html');
   const css = read('web/css/styles.css');
   const block = (selector) => { const i = css.indexOf(selector + ' {'); return css.slice(i, css.indexOf('\n}', i)); };
@@ -116,7 +116,7 @@ module.exports = (t, { createEnv, read }) => {
       ['amdahlFraction', 'amdahlProcessors', 'amdahlSpeedupVal', 'amdahlMaxSpeedupVal', 'amdahlEfficiencyVal'].forEach((id) => t.includes(cuaderno, `id="${id}"`));
     });
     t.test('the notebook loads after El Cuaderno and starts with the other stations', () => {
-      const scripts = [...html.matchAll(/<script src="([^"]+)"/g)].map((m) => m[1]);
+      const scripts = loadOrder();
       t.ok(scripts.indexOf('js/modules/notebook.js') > scripts.indexOf('js/modules/cheatsheets.js'));
       t.ok(scripts.indexOf('js/modules/notebook.js') < scripts.indexOf('js/app.js'));
       t.includes(read('web/js/app.js'), "'notebookStation'");

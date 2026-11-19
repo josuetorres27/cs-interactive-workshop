@@ -3,8 +3,9 @@
 const fs = require('fs');
 const path = require('path');
 
-module.exports = (t, { read, WEB, createEnv }) => {
+module.exports = (t, { read, loadOrder, WEB, createEnv }) => {
   const html = read('web/index.html');
+  const order = loadOrder();
   const css = read('web/css/styles.css');
   const jsFiles = ['js/app.js', 'js/audio.js', 'js/tracer.js', ...fs.readdirSync(path.join(WEB, 'js', 'modules')).filter((f) => f.endsWith('.js')).map((f) => `js/modules/${f}`)];
   const js = Object.fromEntries(jsFiles.map((f) => [f, read(`web/${f}`)]));
@@ -16,10 +17,11 @@ module.exports = (t, { read, WEB, createEnv }) => {
     t.test('the title starts with the product name', () => t.includes(html, '<title>CS Interactive Workshop'));
     t.test('attributes are separated by spaces (no "a"b= glitches)', () => t.deepEq(html.match(/="[^"\n]*"[a-zA-Z-]+=/g) || [], []));
     t.test('element ids are unique', () => { const dup = ids.filter((id, i) => ids.indexOf(id) !== i); t.deepEq(dup, []); });
-    t.test('every script tag points to an existing file', () => [...html.matchAll(/<script src="([^"]+)"/g)].forEach((m) => t.ok(fs.existsSync(path.join(WEB, m[1])), m[1])));
-    t.test('the HTTP model loads before the networking station', () => t.ok(html.indexOf('httpsim.js') < html.indexOf('modules/networking.js')));
-    t.test('the tracer engine loads before the tracer stations', () => ['interview', 'datastructures', 'sql'].forEach((m) => t.ok(html.indexOf('js/tracer.js') < html.indexOf(`modules/${m}.js`))));
-    t.test('app.js loads last', () => { const srcs = [...html.matchAll(/<script src="([^"]+)"/g)].map((m) => m[1]); t.eq(srcs[srcs.length - 1], 'js/app.js'); });
+    t.test('the page loads one module entry, js/main.js', () => t.deepEq([...html.matchAll(/<script\b[^>]*\bsrc="([^"]+)"[^>]*>/g)].map((m) => m[0]), ['<script type="module" src="js/main.js">']));
+    t.test('every import in main.js points to an existing file', () => { t.ok(order.length > 20); order.forEach((f) => t.ok(fs.existsSync(path.join(WEB, f)), f)); });
+    t.test('the HTTP model loads before the networking station', () => t.ok(order.indexOf('js/modules/httpsim.js') < order.indexOf('js/modules/networking.js')));
+    t.test('the tracer engine loads before the tracer stations', () => ['interview', 'datastructures', 'sql'].forEach((m) => t.ok(order.indexOf('js/tracer.js') < order.indexOf(`js/modules/${m}.js`))));
+    t.test('app.js loads last', () => t.eq(order[order.length - 1], 'js/app.js'));
     t.test('every icon used has a symbol in the sprite', () => {
       const used = new Set([...(html + Object.values(js).join('\n')).matchAll(/href="#(i-[\w-]+)"/g)].map((m) => m[1]));
       used.forEach((i) => t.includes(html, `<symbol id="${i}"`, i));
@@ -133,7 +135,7 @@ module.exports = (t, { read, WEB, createEnv }) => {
   t.suite('integrity · ASCII figures', () => {
     const env = createEnv(); env.load('js/modules/figuresData.js');
     const embedded = env.window.EMBEDDED_ASSETS;
-    const dir = path.join(WEB, 'assets', 'ascii_figures');
+    const dir = path.join(WEB, 'public', 'assets', 'ascii_figures');
     const files = fs.readdirSync(dir).filter((f) => f.endsWith('.txt'));
     t.test('there are 12 figures', () => t.eq(Object.keys(embedded).length, 12));
     t.test('every asset file has an embedded copy', () => files.forEach((f) => t.ok(embedded[f.replace('.txt', '')], f)));
